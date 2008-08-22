@@ -52,12 +52,12 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
 
             // if this headerfile not defined define it 
-            this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
-            this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            c_writer.write("#if !defined(__" + c_classname.toUpperCase() + "_H__INCLUDED_)\n");
+            c_writer.write("#define __" + c_classname.toUpperCase() + "_H__INCLUDED_\n\n");
             
             if (type.isSimpleType())
                 writeSimpleTypeWithRestrictions();
@@ -65,27 +65,27 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 writePreprocessorStatements();
 
-                this.writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
+                c_writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
 
-                writer.write("\n");
-                writer.write("/* ********************************************************************* */\n");
-                writer.write("/* --- Custom type                                                   --- */\n");
-                writer.write("/* ********************************************************************* */\n");
-                writer.write("\n");                
+                c_writer.write("\n");
+                c_writer.write("/* ********************************************************************* */\n");
+                c_writer.write("/* --- Custom type                                                   --- */\n");
+                c_writer.write("/* ********************************************************************* */\n");
+                c_writer.write("\n");                
                 
-                this.writer.write("typedef struct " + classname + "Tag {\n");
+                c_writer.write("typedef struct " + c_classname + "Tag {\n");
                 writeAttributes();
-                this.writer.write("} " + classname + ";\n\n");
+                c_writer.write("} " + c_classname + ";\n\n");
                 
                 writeFunctionPrototypes();
-                this.writer.write("\n#ifdef __cplusplus\n }\n#endif\n");
+                c_writer.write("\n#ifdef __cplusplus\n }\n#endif\n");
             }
             
-            writer.write("\n");
-            this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)*/\n");
+            c_writer.write("\n");
+            c_writer.write("#endif /* !defined(__" + c_classname.toUpperCase() + "_H__INCLUDED_)*/\n");
             
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
@@ -104,7 +104,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <axis/AxisUserAPI.h>\n");
+            c_writer.write("#include <axis/AxisUserAPI.h>\n");
 
             Vector restrictionData = type.getEnumerationdata();
             if (restrictionData == null)
@@ -123,18 +123,18 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (null != restrictionBaseType )
             {  
                 langTypeName = CUtils.sanitizeString(restrictionBaseType);               
-                writer.write( "#include \"" + langTypeName + ".hpp\"\n\n");
+                c_writer.write( "#include \"" + langTypeName + ".hpp\"\n\n");
             }
             else
                 langTypeName = baseTypeName;
             
 
 
-            writer.write("\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("/* --- Simple types and restrictions                                 --- */\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("\n");  
+            c_writer.write("\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("/* --- Simple types and restrictions                                 --- */\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("\n");  
             
             // Need to determine what to use for enumeration identifiers.  That is, if a string
             // enumeration value is "foobar", then we can generate an enumerator identifer of 
@@ -151,43 +151,43 @@ public class ParmHeaderFileWriter extends ParamWriter
                     break;
             }
             
-            writer.write("typedef ");
+            c_writer.write("typedef ");
             if (CUtils.isPointerType(baseTypeName) 
                     || "xsdc__base64Binary".equals(baseTypeName) 
                     || "xsdc__hexBinary".equals(baseTypeName))
             {
-                writer.write(langTypeName + " " + classname + ";\n");
-                writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
-                writer.write("\n");
+                c_writer.write(langTypeName + " " + c_classname + ";\n");
+                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
+                c_writer.write("\n");
                 
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
                     QName value = (QName) restrictionData.elementAt(i);
                     if ("enumeration".equals(value.getLocalPart()))
                     {
-                        writer.write("static const " + classname + " " + classname + "_");
+                        c_writer.write("static const " + c_classname + " " + c_classname + "_");
                         if (validEnumIdentifier)
-                            writer.write(value.getNamespaceURI());
+                            c_writer.write(value.getNamespaceURI());
                         else
-                            writer.write("ENUM" + i);
-                        writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
+                            c_writer.write("ENUM" + i);
+                        c_writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
                     } 
                     else if ("maxLength".equals(value.getLocalPart()))
                     {
-                        writer.write("static const int " + classname
+                        c_writer.write("static const int " + c_classname
                                 + "_MaxLength = " + value.getNamespaceURI() + ";\n");
                     } 
                     else if ("minLength".equals(value.getLocalPart()))
                     {
-                        writer.write("static const int " + classname
+                        c_writer.write("static const int " + c_classname
                                 + "_MinLength = " + value.getNamespaceURI() + ";\n");
                     }
                 }
             } 
             else if ("int".equals(baseType.getLocalPart()))
             {
-                writer.write(langTypeName + " " + classname + ";\n");
-                writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
+                c_writer.write(langTypeName + " " + c_classname + ";\n");
+                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
             
                 if (restrictionData.size() > 1)
                 {
@@ -201,46 +201,46 @@ public class ParmHeaderFileWriter extends ParamWriter
                         {
                             isEnum = true;
                             if (i > 1)
-                                writer.write(", ");
+                                c_writer.write(", ");
                             else
-                                writer.write("typedef enum { ");
+                                c_writer.write("typedef enum { ");
 
-                            writer.write("ENUM" + classname.toUpperCase() + "_"
+                            c_writer.write("ENUM" + c_classname.toUpperCase() + "_"
                                     + value.getNamespaceURI() + "="
                                     + value.getNamespaceURI());
                         } 
                         else if ("minInclusive".equals(value.getLocalPart()))
                         {
-                            writer.write("static const int " + classname
+                            c_writer.write("static const int " + c_classname
                                     + "_MinInclusive = " + value.getNamespaceURI() + ";\n");
                         } 
                         else if ("maxInclusive".equals(value.getLocalPart()))
                         {
-                            writer.write("static const int " + classname
+                            c_writer.write("static const int " + c_classname
                                     + "_MaxInclusive = " + value.getNamespaceURI() + ";\n");
                         }
                     }
                     
                     if (isEnum)
-                        writer.write("} " + classname + "_Enum;\n");
+                        c_writer.write("} " + c_classname + "_Enum;\n");
                 } 
             } 
             else
             {
-                writer.write(langTypeName + " " + classname + ";\n");
-                writer.write("typedef " + langTypeName + "_Array " + classname + "_Array;\n");
+                c_writer.write(langTypeName + " " + c_classname + ";\n");
+                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
                 
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
                     QName value = (QName) restrictionData.elementAt(i);
                     if ("enumeration".equals(value.getLocalPart()))
                     {
-                        writer.write("static const " + classname + " " + classname + "_");
+                        c_writer.write("static const " + c_classname + " " + c_classname + "_");
                         if (validEnumIdentifier)
-                            writer.write(value.getNamespaceURI());
+                            c_writer.write(value.getNamespaceURI());
                         else
-                            writer.write("ENUM" + i);
-                        writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
+                            c_writer.write("ENUM" + i);
+                        c_writer.write(" = \"" + value.getNamespaceURI() + "\";\n");
                     }
                 }
             }
@@ -285,13 +285,13 @@ public class ParmHeaderFileWriter extends ParamWriter
                 }
 
                 // Print out field.
-                writer.write("\t" + paramType + " " + paramName + ";\n");
+                c_writer.write("\t" + paramType + " " + paramName + ";\n");
             }
             
             if (extensionBaseAttrib != null &&
                 getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
-                writer.write("\t"
+                c_writer.write("\t"
                              + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
                              + "  "
                              + extensionBaseAttrib.getParamNameAsMember() + ";\n");
@@ -329,13 +329,13 @@ public class ParmHeaderFileWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getHeaderFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
             fileName = targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename() + "_"
-                    + classname + CUtils.getHeaderFileExtension();
+                    + c_classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);
@@ -361,7 +361,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 
                 typeName = type.getLanguageSpecificName();
                 if ((type.isAnonymous() && !type.isExternalized())
-                        || !typeName.equals(classname))
+                        || !typeName.equals(c_classname))
                     continue;
                 
                 typeSet.add(typeName);
@@ -371,22 +371,22 @@ public class ParmHeaderFileWriter extends ParamWriter
             
             if (itr.hasNext())
             {
-                writer.write("\n");
-                writer.write("/* ********************************************************************* */\n");
-                writer.write("/* --- Functions to create/delete, serialize/deserialize custom type --- */\n");
-                writer.write("/* ********************************************************************* */\n");
-                writer.write("\n");                
+                c_writer.write("\n");
+                c_writer.write("/* ********************************************************************* */\n");
+                c_writer.write("/* --- Functions to create/delete, serialize/deserialize custom type --- */\n");
+                c_writer.write("/* ********************************************************************* */\n");
+                c_writer.write("\n");                
             }
             
             while (itr.hasNext())
             {
                 typeName = itr.next().toString();
-                this.writer.write("extern int Axis_DeSerialize_" + typeName
+                c_writer.write("extern int Axis_DeSerialize_" + typeName
                              + "(" + typeName + "* param, AXISCHANDLE pDZ);\n");
-                this.writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
-                this.writer.write("extern void Axis_Delete_" + typeName
+                c_writer.write("extern void* Axis_Create_" + typeName + "(int nSize);\n");
+                c_writer.write("extern void Axis_Delete_" + typeName
                              + "(" + typeName + "* param, int nSize);\n");
-                this.writer.write("extern int Axis_Serialize_" + typeName
+                c_writer.write("extern int Axis_Serialize_" + typeName
                              + "(" + typeName + "* param, AXISCHANDLE pSZ, AxiscBool bArray);\n\n");
             }
         }
@@ -404,15 +404,15 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <axis/Axis.h>\n");
-            writer.write("#include <axis/GDefine.h>\n");
-            writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/SoapEnvVersions.h>\n");
-            writer.write("#include <axis/WSDDDefines.h>\n");
-            writer.write("#include <axis/TypeMapping.h>\n");
+            c_writer.write("#include <axis/Axis.h>\n");
+            c_writer.write("#include <axis/GDefine.h>\n");
+            c_writer.write("#include <axis/AxisUserAPI.h>\n");
+            c_writer.write("#include <axis/SoapEnvVersions.h>\n");
+            c_writer.write("#include <axis/WSDDDefines.h>\n");
+            c_writer.write("#include <axis/TypeMapping.h>\n");
 
             if (this.type.isFault())
-                writer.write("#include <axis/SoapFaultException.h>\n");
+                c_writer.write("#include <axis/SoapFaultException.h>\n");
             
             HashSet typeSet = new HashSet();
             for (int i = 0; i < attribs.length; i++)
@@ -448,22 +448,22 @@ public class ParmHeaderFileWriter extends ParamWriter
             
             Iterator itr = typeSet.iterator();
             if (itr.hasNext())
-                writer.write("\n");    
+                c_writer.write("\n");    
             
             while (itr.hasNext())
             {
                 // Do not want to include the header file we are generating!
                 String includeFile = itr.next().toString();
-                if (!includeFile.equals(classname))
-                   writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
+                if (!includeFile.equals(c_classname))
+                   c_writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
-            writer.write("\n");
+            c_writer.write("\n");
             //Local name and the URI for the type
-            writer.write("/* Local name and the URI for the type */\n");
-            writer.write("static const char Axis_URI_" + classname + "[] = \""
+            c_writer.write("/* Local name and the URI for the type */\n");
+            c_writer.write("static const char Axis_URI_" + c_classname + "[] = \""
                     + type.getName().getNamespaceURI() + "\";\n");
-            writer.write("static const char Axis_TypeName_" + classname
+            c_writer.write("static const char Axis_TypeName_" + c_classname
                     + "[] = \"" + type.getName().getLocalPart() + "\";\n\n");
         }
         catch (IOException e)

@@ -28,19 +28,25 @@ import java.io.File;
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 
-public abstract class BasicFileWriter implements SourceWriter{
-	protected String classname;
-	protected BufferedWriter writer;
+/**
+ * Basic file writer.
+ *
+ */
+public abstract class BasicFileWriter implements SourceWriter
+{
+	protected String c_classname;
+	protected String c_fileExtension;
+	protected BufferedWriter c_writer;
 	public BasicFileWriter(String classname)throws WrapperFault{
-		this.classname = classname;
+		c_classname = classname;
 	}
 	public abstract void writeSource()throws WrapperFault;
-	protected void writeClassComment()throws WrapperFault{}
-	protected void writePreprocessorStatements()throws WrapperFault{}
-	protected void writeAttributes()throws WrapperFault{}
-	protected void writeConstructors()throws WrapperFault {};
-	protected void writeDestructors()throws WrapperFault {};
-	protected abstract void writeMethods()throws WrapperFault;
+	protected void writeClassComment() throws WrapperFault {}
+	protected void writePreprocessorStatements() throws WrapperFault {}
+	protected void writeAttributes() throws WrapperFault {}
+	protected void writeConstructors() throws WrapperFault {};
+	protected void writeDestructors() throws WrapperFault {};
+	protected abstract void writeMethods() throws WrapperFault;
 	protected File getFilePath() throws WrapperFault
 	{
 	    return getFilePath(false);

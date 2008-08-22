@@ -49,35 +49,35 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
 
-            this.writer.write("#if !defined(__"  + classname.toUpperCase()
+            c_writer.write("#if !defined(__"  + c_classname.toUpperCase()
                     + "_"  + getFileType().toUpperCase() + "_H__INCLUDED_)\n");
-            this.writer.write("#define __" + classname.toUpperCase()
+            c_writer.write("#define __" + c_classname.toUpperCase()
                     + "_" + getFileType().toUpperCase() + "_H__INCLUDED_\n\n");
             
             if (attribs.length != 1)
             {
-                System.out.println( "Array " + classname + " contains unexpected no of variables");
-                throw new WrapperFault("Array type " + classname + " contain unexpected no of types");
+                System.out.println( "Array " + c_classname + " contains unexpected no of variables");
+                throw new WrapperFault("Array type " + c_classname + " contain unexpected no of types");
             }
             
             //include header file for the contained type
             QName qname = CUtils.getArrayType(type).getName();
 
             if (!CUtils.isSimpleType(qname))
-                writer.write("#include \""+ attribs[0].getTypeName() + ".hpp\"\n");
+                c_writer.write("#include \""+ attribs[0].getTypeName() + ".hpp\"\n");
 
-            writer.write("#include <axis/AxisUserAPI.hpp>\n\n");
+            c_writer.write("#include <axis/AxisUserAPI.hpp>\n\n");
 
             writeArrayClassDefinition();
             
-            this.writer.write("#endif /* !defined(__" + classname.toUpperCase()
+            c_writer.write("#endif /* !defined(__" + c_classname.toUpperCase()
                     + "_" + getFileType().toUpperCase() + "_H__INCLUDED_)*/\n");
             
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -98,13 +98,13 @@ public class ArrayParamHeaderWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getHeaderFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
             fileName =  targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + classname + CUtils.getHeaderFileExtension();
+                    + "_" + c_classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);
@@ -114,13 +114,13 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("class STORAGE_CLASS_INFO " + classname + " : public Axis_Array\n");
-            writer.write("{\n");
-            writer.write("\tpublic:\n");
+            c_writer.write("class STORAGE_CLASS_INFO " + c_classname + " : public Axis_Array\n");
+            c_writer.write("{\n");
+            c_writer.write("\tpublic:\n");
             this.writeConstructors();
             this.writeDestructors();
             this.writeMethods();
-            writer.write("};\n\n");
+            c_writer.write("};\n\n");
         }
         catch (IOException e)
         {
@@ -132,8 +132,8 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t\t" + classname +"();\n");
-            writer.write("\t\t" + classname + "(const " + classname + " & original);\n");
+            c_writer.write("\t\t" + c_classname +"();\n");
+            c_writer.write("\t\t" + c_classname + "(const " + c_classname + " & original);\n");
         }
         catch (IOException e)
         {
@@ -145,7 +145,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t\tvirtual ~" + classname + "();\n");
+            c_writer.write("\t\tvirtual ~" + c_classname + "();\n");
         }
         catch (IOException e)
         {
@@ -157,11 +157,11 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         try
         {
-            writer.write("\t\tvoid set( class " + attribs[0].getTypeName() + "** array, const int size);\n");
-            writer.write("\t\tclass "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
-            writer.write("\t\tvoid clone(const " + classname + " & original);\n");
-            writer.write("\t\tvirtual Axis_Array * clone() const;\n");
-            writer.write("\t\tvoid clear();\n");
+            c_writer.write("\t\tvoid set( class " + attribs[0].getTypeName() + "** array, const int size);\n");
+            c_writer.write("\t\tclass "+ attribs[0].getTypeName() + "** get(int & size) const;\n");
+            c_writer.write("\t\tvoid clone(const " + c_classname + " & original);\n");
+            c_writer.write("\t\tvirtual Axis_Array * clone() const;\n");
+            c_writer.write("\t\tvoid clear();\n");
         }
         catch (IOException e)
         {

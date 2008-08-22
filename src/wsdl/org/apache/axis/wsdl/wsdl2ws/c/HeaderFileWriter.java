@@ -53,30 +53,30 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             
             writeClassComment();
             
             // if this headerfile not defined define it 
-            this.writer.write("#if !defined(__" + classname.toUpperCase() + "_H__INCLUDED_)\n");
-            this.writer.write("#define __" + classname.toUpperCase() + "_H__INCLUDED_\n\n");
+            c_writer.write("#if !defined(__" + c_classname.toUpperCase() + "_H__INCLUDED_)\n");
+            c_writer.write("#define __" + c_classname.toUpperCase() + "_H__INCLUDED_\n\n");
             
             //includes
             writePreprocessorStatements();
             
-            this.writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
+            c_writer.write("\n#ifdef __cplusplus\n extern \"C\" {\n#endif\n\n");
 
             //class
             writeAttributes();
             writeMethods();
             
-            this.writer.write("\n");
-            this.writer.write("#ifdef __cplusplus\n }\n#endif\n\n");
-            this.writer.write("#endif /* !defined(__" + classname.toUpperCase() + "_H__INCLUDED_) */\n");
+            c_writer.write("\n");
+            c_writer.write("#ifdef __cplusplus\n }\n#endif\n\n");
+            c_writer.write("#endif /* !defined(__" + c_classname.toUpperCase() + "_H__INCLUDED_) */\n");
             
             //cleanup
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -95,10 +95,10 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + ".h";
+        String fileName = targetOutputLocation + "/" + c_classname + ".h";
 
         if (useServiceName)
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + classname + ".h";
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + c_classname + ".h";
 
         return new File(fileName);
     }

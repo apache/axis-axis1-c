@@ -59,7 +59,7 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
             if (type.isSimpleType())
@@ -71,8 +71,8 @@ public abstract class ParamCFileWriter extends ParamWriter
                 writeMethods();
             }
             //cleanup
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -100,8 +100,8 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + this.classname + CUtils.getImplFileExtension();
-        this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
+        String fileName = targetOutputLocation + "/" + this.c_classname + CUtils.getImplFileExtension();
+        this.wscontext.addGeneratedFile(c_classname + CUtils.getImplFileExtension());
         return new File(fileName);
     }
 
@@ -112,19 +112,19 @@ public abstract class ParamCFileWriter extends ParamWriter
     {
         try
         {
-            writer.write("#include <stdlib.h>\n");
-            writer.write("#include <string.h>\n");
-            writer.write("\n");
+            c_writer.write("#include <stdlib.h>\n");
+            c_writer.write("#include <string.h>\n");
+            c_writer.write("\n");
             
-            writer.write("#include \"" + this.classname + CUtils.getHeaderFileExtension() + "\"\n");
-            writer.write("\n");
+            c_writer.write("#include \"" + this.c_classname + CUtils.getHeaderFileExtension() + "\"\n");
+            c_writer.write("\n");
 
-            writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/client/Call.h>\n");
-            writer.write("#include <axis/AxisWrapperAPI.h>\n");
-            writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
-            writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
-            writer.write("\n");
+            c_writer.write("#include <axis/client/Stub.h>\n");
+            c_writer.write("#include <axis/client/Call.h>\n");
+            c_writer.write("#include <axis/AxisWrapperAPI.h>\n");
+            c_writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+            c_writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+            c_writer.write("\n");
         }
         catch (IOException e)
         {

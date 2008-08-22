@@ -52,18 +52,18 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("/*\n");
-            writer.write(
+            c_writer.write("/*\n");
+            c_writer.write(
                 " * This is the Service Class genarated by the tool WSDL2Ws\n");
-            writer.write(
+            c_writer.write(
                 " * "
-                    + classname
+                    + c_classname
                     + CUtils.getHeaderFileExtension()
                     + ": interface for the "
-                    + classname
+                    + c_classname
                     + "class.\n");
-            writer.write(" *\n");
-            writer.write(" */\n");
+            c_writer.write(" *\n");
+            c_writer.write(" */\n");
         }
         catch (IOException e)
         {
@@ -78,7 +78,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("\tpublic:\n\t\t" + classname + "();\n");
+            c_writer.write("\tpublic:\n\t\t" + c_classname + "();\n");
         }
         catch (IOException e)
         {
@@ -93,7 +93,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     {
         try
         {
-            writer.write("\tpublic:\n\t\tvirtual ~" + classname + "();\n");
+            c_writer.write("\tpublic:\n\t\tvirtual ~" + c_classname + "();\n");
         }
         catch (IOException e)
         {
@@ -109,8 +109,8 @@ public class ServiceHeaderWriter extends HeaderFileWriter
         MethodInfo minfo;
         try
         {
-            writer.write("\tpublic: \n");
-            writer.write("\t\tvoid onFault();\n");
+            c_writer.write("\tpublic: \n");
+            c_writer.write("\t\tvoid onFault();\n");
             //writer.write("\t\tvoid init();\n");
             //writer.write("\t\tvoid fini();\n");
             for (int i = 0; i < methods.size(); i++)
@@ -122,7 +122,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 if (0 == noOfOutParams)
                 {
                     returntype = null;
-                    writer.write("\t\tvoid ");
+                    c_writer.write("\t\tvoid ");
                 }
                 else
                 {
@@ -141,14 +141,14 @@ public class ServiceHeaderWriter extends HeaderFileWriter
     							&& (returntype.isNillable() || returntype.isOptional())
     							&& !(CUtils.isPointerType(returnTypeName))))
                         {
-                        	writer.write(
+                        	c_writer.write(
     	                            "\t\t"
     	                                + returnType
     	                                + " * ");
                         }
                         else
                         {
-	                        writer.write(
+	                        c_writer.write(
 	                            "\t\t"
 	                                + returnType
 	                                + " ");
@@ -157,11 +157,11 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     else
                     {
                         isAllTreatedAsOutParams = true;
-                        writer.write("\t\tvoid ");
+                        c_writer.write("\t\tvoid ");
                     }
                 }
                 //write return type
-                writer.write(minfo.getMethodname() + "(");
+                c_writer.write(minfo.getMethodname() + "(");
                 //write parameter names 
                 
                 boolean hasInputParms = false;
@@ -175,21 +175,21 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     
                     if (fparam.getType().isAttachment())
                     {
-                    	writer.write("ISoapAttachment *Value" + 0);
+                    	c_writer.write("ISoapAttachment *Value" + 0);
                     }
                     
                     else if ((paramType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
                     		&& (fparam.isNillable() || fparam.isOptional())
 							&& !(CUtils.isPointerType(paramTypeName))))
                     {
-                    	writer.write(
+                    	c_writer.write(
                     			paramType
     	                            + " * Value"
     	                            + 0);
                     }
                     else
                     {
-	                    writer.write(
+	                    c_writer.write(
 	                            CUtils
 	                            .getClassNameFromParamInfoConsideringArrays(
 	                            fparam,
@@ -207,14 +207,14 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     
                     if (nparam.getType().isAttachment())
                     {
-                    	writer.write(", ISoapAttachment *Value" + j);
+                    	c_writer.write(", ISoapAttachment *Value" + j);
                     }
                                         
                     else if ((typeName.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
                     		&& (nparam.isNillable()|| nparam.isOptional())
 							&& !(CUtils.isPointerType(paramTypeName))))
                     {
-                    	writer.write(
+                    	c_writer.write(
     	                        ","
     	                            + typeName
     	                            + " * Value"
@@ -222,7 +222,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     }
                     else
                     {
-	                    writer.write(
+	                    c_writer.write(
 	                        ","
 	                            + typeName
 	                            + " Value"
@@ -238,13 +238,13 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                         
                         if (0 != j || hasInputParms)
                         {
-                            writer.write(",");
+                            c_writer.write(",");
                         }
                         
                         String typeName = CUtils.getClassNameFromParamInfoConsideringArrays(
                                         	nparam, wscontext);
                         
-                        writer.write(" AXIS_OUT_PARAM "
+                        c_writer.write(" AXIS_OUT_PARAM "
                                 + typeName + " ");
                         
                         
@@ -254,13 +254,13 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                                 && !CUtils.isPointerType(typeName)
                                 && !nparam.isArray())
                         {
-                            writer.write("*");
+                            c_writer.write("*");
                         }
                         
-                        writer.write("* OutValue" + j);
+                        c_writer.write("* OutValue" + j);
                     }
                 }
-                writer.write(");\n");
+                c_writer.write(");\n");
             }
         }
         catch (Exception e)
@@ -281,10 +281,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             HashSet typeSet = new HashSet();
             HashSet removeSet = new HashSet();
             
-            writer.write("#include <axis/AxisUserAPI.hpp>\n");
-            writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
-            writer.write("#include <axis/ISoapAttachment.hpp>\n");
-            writer.write("#include \"AxisServiceException.hpp\" \n\n");
+            c_writer.write("#include <axis/AxisUserAPI.hpp>\n");
+            c_writer.write("#include <axis/AxisUserAPIArrays.hpp>\n");
+            c_writer.write("#include <axis/ISoapAttachment.hpp>\n");
+            c_writer.write("#include \"AxisServiceException.hpp\" \n\n");
             String typeName = null;
             while (types.hasNext())
             {
@@ -308,10 +308,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
+                c_writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
             //writeFaultHeaders();
-            writer.write("\n");
+            c_writer.write("\n");
         }
         catch (IOException e)
         {
@@ -337,7 +337,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                 {
                     FaultInfo info = (FaultInfo) fault.next();
                     faultInfoName = info.getFaultInfo();
-                    writer.write(
+                    c_writer.write(
                         "#include \"Axis"
                             + faultInfoName.toString()
                             + "Exception"
@@ -345,7 +345,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                             + "\"\n");
                 }
             }
-            writer.write("\n");
+            c_writer.write("\n");
         }
         catch (IOException e)
         {

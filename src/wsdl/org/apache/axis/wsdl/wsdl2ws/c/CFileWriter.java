@@ -53,14 +53,14 @@ public abstract class CFileWriter extends BasicFileWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             writeClassComment();
             writePreprocessorStatements();
             writeGlobalCodes();
             writeAttributes();
             writeMethods();
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -84,16 +84,16 @@ public abstract class CFileWriter extends BasicFileWriter
     {
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getImplFileExtension();
 
         if (useServiceName)
         {
             String serviceName = this.wscontext.getServiceInfo().getServicename();
-            fileName = targetOutputLocation + "/" + serviceName + "_" + classname + CUtils.getImplFileExtension();
-            this.wscontext.addGeneratedFile(serviceName + "_" + classname + CUtils.getImplFileExtension());
+            fileName = targetOutputLocation + "/" + serviceName + "_" + c_classname + CUtils.getImplFileExtension();
+            this.wscontext.addGeneratedFile(serviceName + "_" + c_classname + CUtils.getImplFileExtension());
         }
         else
-            this.wscontext.addGeneratedFile(classname + CUtils.getImplFileExtension());
+            this.wscontext.addGeneratedFile(c_classname + CUtils.getImplFileExtension());
 
         return new File(fileName);
     }

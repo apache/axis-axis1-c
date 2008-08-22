@@ -47,7 +47,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         {
             String filename = getFilePath().getName();
 
-            this.writer =
+            c_writer =
                 new BufferedWriter(
                     new FileWriter(
                         getFilePath(filename.startsWith("AxisClientException")),
@@ -55,15 +55,15 @@ public abstract class HeaderFileWriter extends BasicFileWriter
 
             writeClassComment();
             // if this headerfile not defined define it 
-            this.writer.write(
+            c_writer.write(
                 "#if !defined(__"
-                    + classname.toUpperCase()
+                    + c_classname.toUpperCase()
                     + "_"
                     + getFileType().toUpperCase()
                     + "_H__INCLUDED_)\n");
-            this.writer.write(
+            c_writer.write(
                 "#define __"
-                    + classname.toUpperCase()
+                    + c_classname.toUpperCase()
                     + "_"
                     + getFileType().toUpperCase()
                     + "_H__INCLUDED_\n\n");
@@ -71,35 +71,35 @@ public abstract class HeaderFileWriter extends BasicFileWriter
             writePreprocessorStatements();
             //class
 
-            if ("AxisClientException".equals(classname))
+            if ("AxisClientException".equals(c_classname))
             {
-                this.writer.write(
+                c_writer.write(
                     "class "
                         + getServiceName()
                         + "_"
-                        + classname
+                        + c_classname
                         + getExtendsPart()
                         + "\n{\n");
             }
             else
             {
-                this.writer.write(
-                    "class " + classname + getExtendsPart() + "\n{\n");
+                c_writer.write(
+                    "class " + c_classname + getExtendsPart() + "\n{\n");
             }
             writeAttributes();
             writeConstructors();
             writeDestructors();
             writeMethods();
-            this.writer.write("};\n\n");
-            this.writer.write(
+            c_writer.write("};\n\n");
+            c_writer.write(
                 "#endif /* !defined(__"
-                    + classname.toUpperCase()
+                    + c_classname.toUpperCase()
                     + "_"
                     + getFileType().toUpperCase()
                     + "_H__INCLUDED_)*/\n");
             //cleanup
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(
                     getFilePath().getAbsolutePath() + " created.....");
@@ -119,11 +119,11 @@ public abstract class HeaderFileWriter extends BasicFileWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getHeaderFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
 
         if (useServiceName)
         {
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + classname + CUtils.getHeaderFileExtension();
+            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + c_classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);

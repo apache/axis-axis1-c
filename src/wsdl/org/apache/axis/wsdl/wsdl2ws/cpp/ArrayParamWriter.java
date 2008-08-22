@@ -51,13 +51,13 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             
             writeClassComment();            
-            writer.write("#include \"" + classname + ".hpp\"\n\n");
+            c_writer.write("#include \"" + c_classname + ".hpp\"\n\n");
             this.writeMethods();
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -88,37 +88,37 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Method to delete allocated resources.");
+            CUtils.printMethodComment(c_writer, "Method to delete allocated resources.");
             
-            writer.write("void " + classname + "::\nclear()\n");
-            writer.write("{\n");
-            writer.write("\tif (m_Array != NULL)\n");
-            writer.write("\t{\n");
-            writer.write("\t\tif (m_Size > 0)\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\tfor (int count = 0 ; count < m_Size ; count++)\n");
-            writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\tif (m_Array[count] != NULL)\n");
-            writer.write("\t\t\t\t{\n");
-            writer.write("\t\t\t\t\tdelete ((" + attribs[0].getTypeName() + "**) m_Array)[count];\n");
-            writer.write("\t\t\t\t\tm_Array[count] = NULL;\n");
-            writer.write("\t\t\t\t}\n");
-            writer.write("\t\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\t\tif (m_belongsToAxisEngine == false)\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\tdelete [] m_Array;\n");
-            writer.write("\t\t\tm_Array = NULL;\n");
-            writer.write("\t\t\tm_Size = 0;\n");
-            writer.write("\t\t}\n");
-            writer.write("\t\telse\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\t// Allow the engine to clear up it's memory\n");
-            writer.write("\t\t\tAxis_Array::clear();\n");
-            writer.write("\t\t}\n");
-            writer.write("\t\tm_belongsToAxisEngine = false;\n");
-            writer.write("\t}\n");
-            writer.write("}\n");
+            c_writer.write("void " + c_classname + "::\nclear()\n");
+            c_writer.write("{\n");
+            c_writer.write("\tif (m_Array != NULL)\n");
+            c_writer.write("\t{\n");
+            c_writer.write("\t\tif (m_Size > 0)\n");
+            c_writer.write("\t\t{\n");
+            c_writer.write("\t\t\tfor (int count = 0 ; count < m_Size ; count++)\n");
+            c_writer.write("\t\t\t{\n");
+            c_writer.write("\t\t\t\tif (m_Array[count] != NULL)\n");
+            c_writer.write("\t\t\t\t{\n");
+            c_writer.write("\t\t\t\t\tdelete ((" + attribs[0].getTypeName() + "**) m_Array)[count];\n");
+            c_writer.write("\t\t\t\t\tm_Array[count] = NULL;\n");
+            c_writer.write("\t\t\t\t}\n");
+            c_writer.write("\t\t\t}\n");
+            c_writer.write("\t\t}\n");
+            c_writer.write("\t\tif (m_belongsToAxisEngine == false)\n");
+            c_writer.write("\t\t{\n");
+            c_writer.write("\t\t\tdelete [] m_Array;\n");
+            c_writer.write("\t\t\tm_Array = NULL;\n");
+            c_writer.write("\t\t\tm_Size = 0;\n");
+            c_writer.write("\t\t}\n");
+            c_writer.write("\t\telse\n");
+            c_writer.write("\t\t{\n");
+            c_writer.write("\t\t\t// Allow the engine to clear up it's memory\n");
+            c_writer.write("\t\t\tAxis_Array::clear();\n");
+            c_writer.write("\t\t}\n");
+            c_writer.write("\t\tm_belongsToAxisEngine = false;\n");
+            c_writer.write("\t}\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -133,19 +133,19 @@ public class ArrayParamWriter extends ParamWriter
         // Write clone method
         try
         {
-            CUtils.printMethodComment(writer, "Method to initialize object from another object of type " + classname + ".");
+            CUtils.printMethodComment(c_writer, "Method to initialize object from another object of type " + c_classname + ".");
             
-            writer.write("void " + classname + "::\nclone(const " + classname + " & original)\n");
-            writer.write("{\n");
-            writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
-            writer.write("}\n\n");
+            c_writer.write("void " + c_classname + "::\nclone(const " + c_classname + " & original)\n");
+            c_writer.write("{\n");
+            c_writer.write("\tset((" + attribs[0].getTypeName() + "**) original.m_Array, original.m_Size);\n");
+            c_writer.write("}\n\n");
 
-            CUtils.printMethodComment(writer, "Method to clone objects of type " + classname + ".");
+            CUtils.printMethodComment(c_writer, "Method to clone objects of type " + c_classname + ".");
             
-            writer.write("Axis_Array * " + classname + "::\nclone() const\n");
-            writer.write("{\n");
-            writer.write("\treturn new " + classname + "(*this);\n");
-            writer.write("}\n");
+            c_writer.write("Axis_Array * " + c_classname + "::\nclone() const\n");
+            c_writer.write("{\n");
+            c_writer.write("\treturn new " + c_classname + "(*this);\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -159,13 +159,13 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Getter method for class member field m_Array.");
+            CUtils.printMethodComment(c_writer, "Getter method for class member field m_Array.");
             
-            writer.write(attribs[0].getTypeName() + "** " + classname + "::\n" + "get(int & size) const\n");
-            writer.write("{\n");
-            writer.write("\tXSDTYPE type;\n");
-            writer.write("\treturn (" + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
-            writer.write("}\n");
+            c_writer.write(attribs[0].getTypeName() + "** " + c_classname + "::\n" + "get(int & size) const\n");
+            c_writer.write("{\n");
+            c_writer.write("\tXSDTYPE type;\n");
+            c_writer.write("\treturn (" + attribs[0].getTypeName() + "**) Axis_Array::get(size, type);\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -179,34 +179,34 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Setter method for class member field m_Array.");
+            CUtils.printMethodComment(c_writer, "Setter method for class member field m_Array.");
             
-            writer.write("void " + classname + "::\n" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
-            writer.write("{\n");
-            writer.write("\tclear();\n");
-            writer.write("\tm_Size = size;\n");
-            writer.write("\tm_Type = USER_TYPE;\n\n");
-            writer.write("\tif (m_Size == 0)\n");
-            writer.write("\t{\n");
-            writer.write("\t\tm_Array = NULL;\n");
-            writer.write("\t}\n");
-            writer.write("\telse\n");
-            writer.write("\t{\n");
-            writer.write("\t\tm_Array = new void*[m_Size];\n");
-            writer.write("\t\tfor (int count = 0 ; count < m_Size ; count++ )\n");
-            writer.write("\t\t{\n");
-            writer.write("\t\t\tif (array[count] == NULL)\n");
-            writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\tm_Array[count] = NULL;\n");
-            writer.write("\t\t\t}\n");
-            writer.write("\t\t\telse\n");
-            writer.write("\t\t\t{\n");
-            writer.write("\t\t\t\t((" + attribs[0].getTypeName() + "**) m_Array)[count] =\n");
-            writer.write("\t\t\t\t\tnew " + attribs[0].getTypeName() + "(*((" + attribs[0].getTypeName() + "**) array)[count]);\n");
-            writer.write("\t\t\t}\n");
-            writer.write("\t\t}\n");
-            writer.write("\t}\n");
-            writer.write("}\n");
+            c_writer.write("void " + c_classname + "::\n" + "set(" + attribs[0].getTypeName() + "** array, const int size)\n");
+            c_writer.write("{\n");
+            c_writer.write("\tclear();\n");
+            c_writer.write("\tm_Size = size;\n");
+            c_writer.write("\tm_Type = USER_TYPE;\n\n");
+            c_writer.write("\tif (m_Size == 0)\n");
+            c_writer.write("\t{\n");
+            c_writer.write("\t\tm_Array = NULL;\n");
+            c_writer.write("\t}\n");
+            c_writer.write("\telse\n");
+            c_writer.write("\t{\n");
+            c_writer.write("\t\tm_Array = new void*[m_Size];\n");
+            c_writer.write("\t\tfor (int count = 0 ; count < m_Size ; count++ )\n");
+            c_writer.write("\t\t{\n");
+            c_writer.write("\t\t\tif (array[count] == NULL)\n");
+            c_writer.write("\t\t\t{\n");
+            c_writer.write("\t\t\t\tm_Array[count] = NULL;\n");
+            c_writer.write("\t\t\t}\n");
+            c_writer.write("\t\t\telse\n");
+            c_writer.write("\t\t\t{\n");
+            c_writer.write("\t\t\t\t((" + attribs[0].getTypeName() + "**) m_Array)[count] =\n");
+            c_writer.write("\t\t\t\t\tnew " + attribs[0].getTypeName() + "(*((" + attribs[0].getTypeName() + "**) array)[count]);\n");
+            c_writer.write("\t\t\t}\n");
+            c_writer.write("\t\t}\n");
+            c_writer.write("\t}\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -217,22 +217,22 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Constructor for class " + classname + ".");
+            CUtils.printMethodComment(c_writer, "Constructor for class " + c_classname + ".");
             
-            writer.write(classname + "::\n" + classname + "()\n");
-            writer.write("{\n");
-            writer.write("\tm_Type = USER_TYPE;\n");
-            writer.write("\tm_belongsToAxisEngine = false;\n");
-            writer.write("}\n");
+            c_writer.write(c_classname + "::\n" + c_classname + "()\n");
+            c_writer.write("{\n");
+            c_writer.write("\tm_Type = USER_TYPE;\n");
+            c_writer.write("\tm_belongsToAxisEngine = false;\n");
+            c_writer.write("}\n");
             
-            CUtils.printMethodComment(writer, "Copy constructor for class " + classname + ".");
+            CUtils.printMethodComment(c_writer, "Copy constructor for class " + c_classname + ".");
             
-            writer.write(classname + "::\n" + classname + "(const " + classname + " & original)\n");
-            writer.write("{\n");
-            writer.write("\tm_Type = USER_TYPE;\n");
-            writer.write("\tm_belongsToAxisEngine = false;\n");
-            writer.write("\tclone(original);\n");
-            writer.write("}\n");
+            c_writer.write(c_classname + "::\n" + c_classname + "(const " + c_classname + " & original)\n");
+            c_writer.write("{\n");
+            c_writer.write("\tm_Type = USER_TYPE;\n");
+            c_writer.write("\tm_belongsToAxisEngine = false;\n");
+            c_writer.write("\tclone(original);\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -245,12 +245,12 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Destructor for class " + classname + ".");
+            CUtils.printMethodComment(c_writer, "Destructor for class " + c_classname + ".");
             
-            writer.write(classname + "::\n~" + classname + "()\n");
-            writer.write("{\n");
-            writer.write("\tclear();\n");
-            writer.write("}\n");
+            c_writer.write(c_classname + "::\n~" + c_classname + "()\n");
+            c_writer.write("{\n");
+            c_writer.write("\tclear();\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -266,13 +266,13 @@ public class ArrayParamWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getImplFileExtension();
 
         if (useServiceName)
         {
             fileName = targetOutputLocation + "/"
                     + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + classname + CUtils.getHeaderFileExtension();
+                    + "_" + c_classname + CUtils.getHeaderFileExtension();
         }
 
         return new File(fileName);

@@ -57,38 +57,38 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
             
             // Write prolog
             writeClassComment(); 
 
             // include system header files
-            writer.write("#include <stdlib.h>\n");
-            writer.write("#include <stdio.h>\n");
-            writer.write("#include <string.h>\n");
-            writer.write("\n");
+            c_writer.write("#include <stdlib.h>\n");
+            c_writer.write("#include <stdio.h>\n");
+            c_writer.write("#include <string.h>\n");
+            c_writer.write("\n");
             
             // include header file for datatype
-            writer.write("#include \"" + classname + ".h\"\n");
+            c_writer.write("#include \"" + c_classname + ".h\"\n");
             
             // include header file for the contained type
             QName qname = CUtils.getArrayType(type).getName();
             if (!CUtils.isSimpleType(qname))
-                writer.write("#include \"" + attribs[0].getTypeName() + CUtils.getHeaderFileExtension() + "\"\n");
-            this.writer.write("\n");
+                c_writer.write("#include \"" + attribs[0].getTypeName() + CUtils.getHeaderFileExtension() + "\"\n");
+            c_writer.write("\n");
             
-            writer.write("\n");
-            writer.write("#include <axis/AxisWrapperAPI.h>\n");
-            writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
-            writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
-            writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/client/Call.h>\n");
-            writer.write("\n");
+            c_writer.write("\n");
+            c_writer.write("#include <axis/AxisWrapperAPI.h>\n");
+            c_writer.write("#include <axis/IWrapperSoapSerializer.h>\n");
+            c_writer.write("#include <axis/IWrapperSoapDeSerializer.h>\n");
+            c_writer.write("#include <axis/client/Stub.h>\n");
+            c_writer.write("#include <axis/client/Call.h>\n");
+            c_writer.write("\n");
             
             this.writeMethods();
             
-            writer.flush();
-            writer.close();
+            c_writer.flush();
+            c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(getFilePath().getAbsolutePath() + " created.....");
         }
@@ -139,24 +139,24 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Function used to create objects of type " 
-                    + classname + ".");
+            CUtils.printMethodComment(c_writer, "Function used to create objects of type " 
+                    + c_classname + ".");
             
-            writer.write("extern void* Axis_Create_" + classname + "(int nSize)\n");
-            writer.write("{\n");
+            c_writer.write("extern void* Axis_Create_" + c_classname + "(int nSize)\n");
+            c_writer.write("{\n");
             
             // Begin function body
 
-            writer.write("\t/* Create array data type */\n");
-            writer.write("\t" + classname + " *pArray = (" + classname + "*)axiscAxisNew(XSDC_ARRAY, 0);\n");
-            writer.write("\tpArray->m_Type = C_USER_TYPE;\n");
-            writer.write("\n");
+            c_writer.write("\t/* Create array data type */\n");
+            c_writer.write("\t" + c_classname + " *pArray = (" + c_classname + "*)axiscAxisNew(XSDC_ARRAY, 0);\n");
+            c_writer.write("\tpArray->m_Type = C_USER_TYPE;\n");
+            c_writer.write("\n");
 
-            writer.write("\treturn pArray;\n");
+            c_writer.write("\treturn pArray;\n");
             
             // End function body
 
-            writer.write("}\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -169,35 +169,35 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            CUtils.printMethodComment(writer, "Function used to delete objects of type " 
-                    + classname + ".");
+            CUtils.printMethodComment(c_writer, "Function used to delete objects of type " 
+                    + c_classname + ".");
             
-            this.writer.write("extern void Axis_Delete_" + classname 
-                    + "(" + classname + "* param, int nSize)\n");
-            writer.write("{\n");
+            c_writer.write("extern void Axis_Delete_" + c_classname 
+                    + "(" + c_classname + "* param, int nSize)\n");
+            c_writer.write("{\n");
             
             // Begin function body
             
-            writer.write("\t/* If null, simply return */\n");
-            writer.write("\tif (param == NULL)\n");
-            writer.write("\t\treturn;\n");
-            writer.write("\n");
+            c_writer.write("\t/* If null, simply return */\n");
+            c_writer.write("\tif (param == NULL)\n");
+            c_writer.write("\t\treturn;\n");
+            c_writer.write("\n");
             
-            writer.write("\t/* Reclaim memory resources of array elements, if it exists */\n");
-            writer.write("\tif (param->m_Array && param->m_Size > 0)\n");
-            writer.write("\t{\n");            
-            writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
+            c_writer.write("\t/* Reclaim memory resources of array elements, if it exists */\n");
+            c_writer.write("\tif (param->m_Array && param->m_Size > 0)\n");
+            c_writer.write("\t{\n");            
+            c_writer.write("\t\tAxis_Delete_" +  attribs[0].getTypeName() 
                     + "((" + attribs[0].getTypeName() + " *)param->m_Array, param->m_Size);\n");
-            writer.write("\t\tparam->m_Array = NULL;\n");            
-            writer.write("\t}\n");                     
-            writer.write("\n");
+            c_writer.write("\t\tparam->m_Array = NULL;\n");            
+            c_writer.write("\t}\n");                     
+            c_writer.write("\n");
             
-            writer.write("\t/* Reclaim array data type memory resources */\n");
-            writer.write("\taxiscAxisDelete(param, XSDC_ARRAY);\n");
+            c_writer.write("\t/* Reclaim array data type memory resources */\n");
+            c_writer.write("\taxiscAxisDelete(param, XSDC_ARRAY);\n");
             
             // End function body            
             
-            writer.write("}\n");
+            c_writer.write("}\n");
         }
         catch (IOException e)
         {
@@ -213,7 +213,7 @@ public class ArrayParamWriter extends ParamWriter
         String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
 
-        String fileName = targetOutputLocation + "/" + classname + CUtils.getImplFileExtension();
+        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getImplFileExtension();
 
         return new File(fileName);
     }

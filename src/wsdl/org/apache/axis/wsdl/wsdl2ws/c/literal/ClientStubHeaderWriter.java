@@ -49,20 +49,20 @@ public class ClientStubHeaderWriter
         MethodInfo minfo;
         try
         {
-            writer.write("\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("/* --- Functions relating to web service client proxy                --- */\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("\n");
-            writer.write("extern AXISCHANDLE get_" + classname + "_stub(const char* pchEndPointUri);\n");
-            writer.write("extern void destroy_" + classname + "_stub(AXISCHANDLE pStub);\n");
-            writer.write("extern int get_" + classname + "_Status(AXISCHANDLE pStub);\n");
-            writer.write("extern void set_" + classname + "_ExceptionHandler(AXISCHANDLE pStub, AXIS_EXCEPTION_HANDLER_FUNCT fp);\n");
-            writer.write("\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("/* --- Functions relating to web service methods                     --- */\n");
-            writer.write("/* ********************************************************************* */\n");
-            writer.write("\n");
+            c_writer.write("\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("/* --- Functions relating to web service client proxy                --- */\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("\n");
+            c_writer.write("extern AXISCHANDLE get_" + c_classname + "_stub(const char* pchEndPointUri);\n");
+            c_writer.write("extern void destroy_" + c_classname + "_stub(AXISCHANDLE pStub);\n");
+            c_writer.write("extern int get_" + c_classname + "_Status(AXISCHANDLE pStub);\n");
+            c_writer.write("extern void set_" + c_classname + "_ExceptionHandler(AXISCHANDLE pStub, AXIS_EXCEPTION_HANDLER_FUNCT fp);\n");
+            c_writer.write("\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("/* --- Functions relating to web service methods                     --- */\n");
+            c_writer.write("/* ********************************************************************* */\n");
+            c_writer.write("\n");
 
             for (int i = 0; i < methods.size(); i++)
             {
@@ -72,7 +72,7 @@ public class ClientStubHeaderWriter
                 
                 //write return type
                 if (0 == noOfOutParams)
-                    writer.write("extern void ");
+                    c_writer.write("extern void ");
                 else if (1 == noOfOutParams)
                 {
                     ParameterInfo returnParam =
@@ -82,24 +82,24 @@ public class ClientStubHeaderWriter
                             || (CUtils.isSimpleType(outParamTypeName)
                             && (returnParam.isNillable() || returnParam.isOptional())
                             && !(CUtils.isPointerType(outParamTypeName))))
-                        writer.write("extern " + outParamTypeName + " * ");
+                        c_writer.write("extern " + outParamTypeName + " * ");
                     else
-                        writer.write("extern " + outParamTypeName + " ");
+                        c_writer.write("extern " + outParamTypeName + " ");
                 }
                 else
                 {
                     isAllTreatedAsOutParams = true;
-                    writer.write("extern void ");
+                    c_writer.write("extern void ");
                 }
                 
                 //write return type
-                writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
+                c_writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();
                 for (int j = 0; params.hasNext(); j++)
                 {
-                    writer.write(", ");
+                    c_writer.write(", ");
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
                     Type type = nparam.getType();
@@ -111,14 +111,14 @@ public class ClientStubHeaderWriter
                         baseTypeName = paramTypeName;
                     
                     if (nparam.getType().isAttachment())
-                        writer.write("AXISCHANDLE *Value" + j);
+                        c_writer.write("AXISCHANDLE *Value" + j);
                     else if ((paramTypeName.lastIndexOf ("_Array") > 0)
                                 || (CUtils.isSimpleType(baseTypeName)
                                         && (nparam.isNillable() || nparam.isOptional())
                                         && !(CUtils.isPointerType(baseTypeName))))
-                        writer.write(paramTypeName + " * Value" + j);
+                        c_writer.write(paramTypeName + " * Value" + j);
                     else
-                        writer.write(paramTypeName + " Value" + j);
+                        c_writer.write(paramTypeName + " Value" + j);
                 }
 
                 if (isAllTreatedAsOutParams)
@@ -139,9 +139,9 @@ public class ClientStubHeaderWriter
                         boolean bTypeHasStar = paramType.endsWith( "*");
                         
 
-                        writer.write(", ");
+                        c_writer.write(", ");
                         
-                        writer.write("AXISC_OUT_PARAM " + paramType);
+                        c_writer.write("AXISC_OUT_PARAM " + paramType);
                         if (CUtils.isSimpleType(baseTypeName))
                         {
                             if ((nparam.isOptional() 
@@ -149,22 +149,22 @@ public class ClientStubHeaderWriter
                                     && !CUtils.isPointerType(baseTypeName))
                             {
                                 if (bTypeHasStar)
-                                    writer.write(" *");
+                                    c_writer.write(" *");
                                 else
-                                    writer.write(" **");
+                                    c_writer.write(" **");
                             }
                             else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
-                                writer.write(" *");
+                                c_writer.write(" *");
                         }
                         else if(bTypeHasStar)
-                            writer.write(" *");
+                            c_writer.write(" *");
                         else
-                            writer.write(" **");
+                            c_writer.write(" **");
                         
-                        writer.write(" OutValue" + j);
+                        c_writer.write(" OutValue" + j);
                     } // for loop
                 }
-                writer.write(");\n");
+                c_writer.write(");\n");
             }
         }
         catch (Exception e)
@@ -180,16 +180,16 @@ public class ClientStubHeaderWriter
     {
         try
         {
-            writer.write("#include <axis/Axis.h>\n");
-            writer.write("#include <axis/GDefine.h>\n");
-            writer.write("#include <axis/AxisUserAPI.h>\n");
-            writer.write("#include <axis/SoapEnvVersions.h>\n");
-            writer.write("#include <axis/WSDDDefines.h>\n");
-            writer.write("#include <axis/TypeMapping.h>\n");
-            writer.write("#include <axis/ISoapFault.h>\n");
-            writer.write("#include <axis/client/Stub.h>\n");
-            writer.write("#include <axis/client/Call.h>\n");
-            writer.write("\n");
+            c_writer.write("#include <axis/Axis.h>\n");
+            c_writer.write("#include <axis/GDefine.h>\n");
+            c_writer.write("#include <axis/AxisUserAPI.h>\n");
+            c_writer.write("#include <axis/SoapEnvVersions.h>\n");
+            c_writer.write("#include <axis/WSDDDefines.h>\n");
+            c_writer.write("#include <axis/TypeMapping.h>\n");
+            c_writer.write("#include <axis/ISoapFault.h>\n");
+            c_writer.write("#include <axis/client/Stub.h>\n");
+            c_writer.write("#include <axis/client/Call.h>\n");
+            c_writer.write("\n");
             
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -224,9 +224,9 @@ public class ClientStubHeaderWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
+                c_writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
-            writer.write("\n");
+            c_writer.write("\n");
         }
         catch (IOException e)
         {

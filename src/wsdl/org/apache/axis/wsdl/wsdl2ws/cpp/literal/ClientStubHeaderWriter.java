@@ -56,7 +56,7 @@ public class ClientStubHeaderWriter
         MethodInfo minfo;
         try
         {
-            writer.write("public: \n");
+            c_writer.write("public: \n");
 
             for (int i = 0; i < methods.size(); i++)
             {
@@ -66,7 +66,7 @@ public class ClientStubHeaderWriter
                 
                 //write return type
                 if (0 == noOfOutParams)
-                    writer.write("\tSTORAGE_CLASS_INFO void ");
+                    c_writer.write("\tSTORAGE_CLASS_INFO void ");
                 else if (1 == noOfOutParams)
                 {
                     ParameterInfo returnParam =
@@ -76,17 +76,17 @@ public class ClientStubHeaderWriter
                             || (CUtils.isSimpleType(outParamTypeName)
                             && (returnParam.isNillable() || returnParam.isOptional())
                             && !(CUtils.isPointerType(outParamTypeName))))
-                        writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " * ");
+                        c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " * ");
                     else
-                        writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " ");
+                        c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " ");
                 }
                 else
                 {
                     isAllTreatedAsOutParams = true;
-                    writer.write("\tSTORAGE_CLASS_INFO void ");
+                    c_writer.write("\tSTORAGE_CLASS_INFO void ");
                 }
                 //write return type
-                writer.write(minfo.getMethodname() + "(");
+                c_writer.write(minfo.getMethodname() + "(");
 
                 //write parameter names 
                 boolean hasInputParms = false;
@@ -94,7 +94,7 @@ public class ClientStubHeaderWriter
                 for (int j = 0; params.hasNext(); j++)
                 {
                     if (j>0) 
-                        writer.write(", ");
+                        c_writer.write(", ");
                     hasInputParms = true;
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
@@ -107,14 +107,14 @@ public class ClientStubHeaderWriter
                         baseTypeName = paramTypeName;
                     
                     if (nparam.getType().isAttachment())
-                        writer.write("ISoapAttachment *Value" + j);
+                        c_writer.write("ISoapAttachment *Value" + j);
                     else if ((paramTypeName.lastIndexOf ("_Array") > 0)
                                 || (CUtils.isSimpleType(baseTypeName)
                                         && (nparam.isNillable() || nparam.isOptional())
                                         && !(CUtils.isPointerType(baseTypeName))))
-                        writer.write(paramTypeName + " * Value" + j);
+                        c_writer.write(paramTypeName + " * Value" + j);
                     else
-                        writer.write(paramTypeName + " Value" + j);
+                        c_writer.write(paramTypeName + " Value" + j);
                 }
 
                 if (isAllTreatedAsOutParams)
@@ -135,9 +135,9 @@ public class ClientStubHeaderWriter
                         boolean bTypeHasStar = paramType.endsWith( "*");
                         
                         if (hasInputParms || 0!=j)
-                            writer.write(", ");
+                            c_writer.write(", ");
                         
-                        writer.write("AXIS_OUT_PARAM " + paramType);
+                        c_writer.write("AXIS_OUT_PARAM " + paramType);
                         if (CUtils.isSimpleType(baseTypeName))
                         {
                             if ((nparam.isOptional() 
@@ -145,22 +145,22 @@ public class ClientStubHeaderWriter
                                     && !CUtils.isPointerType(baseTypeName))
                             {
                                 if (bTypeHasStar)
-                                    writer.write(" *");
+                                    c_writer.write(" *");
                                 else
-                                    writer.write(" **");
+                                    c_writer.write(" **");
                             }
                             else if (CUtils.isPointerType(baseTypeName) || !bTypeHasStar)
-                                writer.write(" *");
+                                c_writer.write(" *");
                         }
                         else if(bTypeHasStar)
-                            writer.write(" *");
+                            c_writer.write(" *");
                         else
-                            writer.write(" **");
+                            c_writer.write(" **");
                         
-                        writer.write(" OutValue" + j);
+                        c_writer.write(" OutValue" + j);
                     } // for loop
                 }
-                writer.write(");\n");
+                c_writer.write(");\n");
             }
         }
         catch (Exception e)
@@ -176,13 +176,13 @@ public class ClientStubHeaderWriter
     {
         try
         {
-            writer.write("#include <axis/client/Stub.hpp>\n");
-            writer.write("#include <axis/OtherFaultException.hpp>\n");
-            writer.write("#include <axis/ISoapAttachment.hpp>\n");
-            writer.write("#include <axis/ISoapFault.hpp>\n");
-            writer.write("\n");
-            writer.write("AXIS_CPP_NAMESPACE_USE\n");
-            writer.write("\n");
+            c_writer.write("#include <axis/client/Stub.hpp>\n");
+            c_writer.write("#include <axis/OtherFaultException.hpp>\n");
+            c_writer.write("#include <axis/ISoapAttachment.hpp>\n");
+            c_writer.write("#include <axis/ISoapFault.hpp>\n");
+            c_writer.write("\n");
+            c_writer.write("AXIS_CPP_NAMESPACE_USE\n");
+            c_writer.write("\n");
             
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
@@ -216,12 +216,12 @@ public class ClientStubHeaderWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
+                c_writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
             }
             
             //    Method to print the Fault Exception headers
             //writeFaultHeaders();
-            writer.write("\n");
+            c_writer.write("\n");
         }
         catch (IOException e)
         {
