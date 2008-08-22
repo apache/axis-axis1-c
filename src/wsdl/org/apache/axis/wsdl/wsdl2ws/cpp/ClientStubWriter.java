@@ -58,11 +58,6 @@ public class ClientStubWriter extends CPPClassWriter
         this.methods = wscontext.getServiceInfo().getMethods();
     }
 
-    protected String getServiceName() throws WrapperFault
-    {
-        return wscontext.getServiceInfo().getServicename();
-    }
-
     protected void writeClassComment() throws WrapperFault
     {
         try
@@ -158,7 +153,7 @@ public class ClientStubWriter extends CPPClassWriter
         {
             if ("AxisClientException".equals(c_classname))
             {
-                c_writer.write("#include \"" + getServiceName() + "_" + c_classname
+                c_writer.write("#include \"" + wscontext.getServiceInfo().getServicename() + "_" + c_classname
                         + CUtils.getHeaderFileExtension() + "\"\n\n");
             }
             else
@@ -902,13 +897,5 @@ public class ClientStubWriter extends CPPClassWriter
         {
             throw new WrapperFault(e);
         }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.cpp.CPPClassWriter#writeGlobalCodes()
-     * Used by literal code too!
-     */
-    protected void writeGlobalCodes() throws WrapperFault
-    {
     }
 }

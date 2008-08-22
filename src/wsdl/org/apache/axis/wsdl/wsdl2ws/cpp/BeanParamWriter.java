@@ -31,7 +31,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -1351,9 +1350,4 @@ public class BeanParamWriter extends ParamCPPFileWriter
             throw new WrapperFault(e);
         } 
     }    
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        return null;
-    }
 }

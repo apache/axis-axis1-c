@@ -23,7 +23,6 @@
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -31,19 +30,16 @@ import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class CFileWriter extends BasicFileWriter
 {
-    protected WebServiceContext wscontext;
-
     /**
      * @param classname
      * @throws WrapperFault
      */
     public CFileWriter(String classname) throws WrapperFault
     {
-        super(classname);
+        super(classname, CUtils.getImplFileExtension());
     }
 
     /* (non-Javadoc)
@@ -53,7 +49,7 @@ public abstract class CFileWriter extends BasicFileWriter
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             writeClassComment();
             writePreprocessorStatements();
             writeGlobalCodes();
@@ -62,7 +58,7 @@ public abstract class CFileWriter extends BasicFileWriter
             c_writer.flush();
             c_writer.close();
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -76,25 +72,4 @@ public abstract class CFileWriter extends BasicFileWriter
      */
     protected void writeGlobalCodes() throws WrapperFault
     {}
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getImplFileExtension();
-
-        if (useServiceName)
-        {
-            String serviceName = this.wscontext.getServiceInfo().getServicename();
-            fileName = targetOutputLocation + "/" + serviceName + "_" + c_classname + CUtils.getImplFileExtension();
-            this.wscontext.addGeneratedFile(serviceName + "_" + c_classname + CUtils.getImplFileExtension());
-        }
-        else
-            this.wscontext.addGeneratedFile(c_classname + CUtils.getImplFileExtension());
-
-        return new File(fileName);
-    }
 }

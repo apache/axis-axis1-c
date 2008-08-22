@@ -24,26 +24,23 @@
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class HeaderFileWriter extends BasicFileWriter
 {
-    protected WebServiceContext wscontext;
-
     /**
      * @param classname
      * @throws WrapperFault
      */
     public HeaderFileWriter(String classname) throws WrapperFault
     {
-        super(classname);
+        super(classname, CUtils.getHeaderFileExtension());
     }
 
     /* (non-Javadoc)
@@ -53,7 +50,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             
             writeClassComment();
             
@@ -78,32 +75,12 @@ public abstract class HeaderFileWriter extends BasicFileWriter
             c_writer.flush();
             c_writer.close();
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
             throw new WrapperFault(e);
         }
 
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + c_classname + ".h";
-
-        if (useServiceName)
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + c_classname + ".h";
-
-        return new File(fileName);
-    }
-    protected String getServiceName() throws WrapperFault
-    {
-        return wscontext.getServiceInfo().getServicename();
     }
 }

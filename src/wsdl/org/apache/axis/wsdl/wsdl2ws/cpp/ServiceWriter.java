@@ -44,8 +44,8 @@ public class ServiceWriter extends CPPClassWriter
 
     public void writeSource() throws WrapperFault
     {
-        // We should not overwrite the service file if it already exsists
-        if (! getFilePath().exists())
+        // We should not overwrite the service file if it already exists
+        if (! getFilePath(false).exists())
             super.writeSource();
     }
 

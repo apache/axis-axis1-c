@@ -24,7 +24,6 @@
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -32,20 +31,18 @@ import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.BasicFileWriter;
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
-import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public abstract class HeaderFileWriter extends BasicFileWriter
 {
-    protected WebServiceContext wscontext;
     public HeaderFileWriter(String classname) throws WrapperFault
     {
-        super(classname);
+        super(classname, CUtils.getHeaderFileExtension());
     }
     public void writeSource() throws WrapperFault
     {
         try
         {
-            String filename = getFilePath().getName();
+            String filename = getFilePath(false).getName();
 
             c_writer =
                 new BufferedWriter(
@@ -102,7 +99,7 @@ public abstract class HeaderFileWriter extends BasicFileWriter
             c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                    getFilePath(false).getAbsolutePath() + " created.....");
 
         }
         catch (IOException e)
@@ -114,20 +111,6 @@ public abstract class HeaderFileWriter extends BasicFileWriter
     protected abstract String getExtendsPart(); //{return " ";}
     protected abstract String getFileType();
 
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
-
-        if (useServiceName)
-        {
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + c_classname + CUtils.getHeaderFileExtension();
-        }
-
-        return new File(fileName);
-    }
     protected String getServiceName() throws WrapperFault
     {
         return wscontext.getServiceInfo().getServicename();

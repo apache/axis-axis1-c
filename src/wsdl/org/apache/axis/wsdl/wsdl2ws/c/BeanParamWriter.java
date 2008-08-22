@@ -22,7 +22,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws.c;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
@@ -989,10 +988,5 @@ public class BeanParamWriter extends ParamCFileWriter
         {
             throw new WrapperFault(e);
         }
-    }
-    
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        return null;
     }
 }

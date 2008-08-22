@@ -37,14 +37,12 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ExceptionWriter extends BasicFileWriter
 {
-    private WebServiceContext wscontext;
-
     private String faultInfoName;
 
     public ExceptionWriter(WebServiceContext wscontext, String faultInfoName)
         throws WrapperFault
     {
-        super(wscontext.getServiceInfo().getServicename());
+        super(wscontext.getServiceInfo().getServicename(), CUtils.getImplFileExtension());
         this.wscontext = wscontext;
         this.faultInfoName = "Axis" + faultInfoName + "Exception";
     }
@@ -54,20 +52,16 @@ public class ExceptionWriter extends BasicFileWriter
      */
     protected File getFilePath(boolean useServiceName) throws WrapperFault
     {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
+        String targetOutputLocation = wscontext.getWrapperInfo().getTargetOutputLocation();
         new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + faultInfoName + CUtils.getImplFileExtension();
-
+        
+        String serviceName = "";
         if (useServiceName)
-        {
-            fileName = targetOutputLocation + "/" + this.getServiceName() + "_" + faultInfoName + CUtils.getImplFileExtension();
-            this.wscontext.addGeneratedFile(this.getServiceName() + "_" + faultInfoName + CUtils.getImplFileExtension());
-        }
-        else
-        {
-            this.wscontext.addGeneratedFile(faultInfoName + CUtils.getImplFileExtension());
-        }
+            serviceName = wscontext.getServiceInfo().getServicename() + "_";
+        
+        String fileName = targetOutputLocation + "/" + serviceName + faultInfoName + c_fileExtension;
+        
+        wscontext.addGeneratedFile(fileName);
         return new File(fileName);
     }
 
@@ -261,7 +255,7 @@ public class ExceptionWriter extends BasicFileWriter
     {
         try
         {
-            String filename = getFilePath().getName();
+            String filename = getFilePath(false).getName();
 
             c_writer =
                 new BufferedWriter(
@@ -279,7 +273,7 @@ public class ExceptionWriter extends BasicFileWriter
             c_writer.close();
             if (WSDL2Ws.c_verbose)
                 System.out.println(
-                    getFilePath().getAbsolutePath() + " created.....");
+                    getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {

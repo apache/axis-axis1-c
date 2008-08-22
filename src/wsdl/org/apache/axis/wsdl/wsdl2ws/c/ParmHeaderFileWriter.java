@@ -24,7 +24,6 @@
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
@@ -45,14 +44,14 @@ public class ParmHeaderFileWriter extends ParamWriter
 {
     public ParmHeaderFileWriter(WebServiceContext wscontext, Type type) throws WrapperFault
     {
-        super(wscontext, type);
+        super(wscontext, type, CUtils.getHeaderFileExtension());
     }
 
     public void writeSource() throws WrapperFault
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             writeClassComment();
 
             // if this headerfile not defined define it 
@@ -88,7 +87,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             c_writer.close();
             
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -320,26 +319,6 @@ public class ParmHeaderFileWriter extends ParamWriter
      */
     protected void writeMethods() throws WrapperFault
     {}
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
-
-        if (useServiceName)
-        {
-            fileName = targetOutputLocation + "/"
-                    + this.wscontext.getServiceInfo().getServicename() + "_"
-                    + c_classname + CUtils.getHeaderFileExtension();
-        }
-
-        return new File(fileName);
-    }
 
     protected void writeFunctionPrototypes() throws WrapperFault
     {

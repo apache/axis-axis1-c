@@ -40,7 +40,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     public ParamCPPFileWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
-        super(wscontext, type);
+        super(wscontext, type, CUtils.getImplFileExtension());
     }
 
     protected void writeConstructors() throws WrapperFault
@@ -54,7 +54,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             writeClassComment();
             writePreprocessorStatements();
             
@@ -72,7 +72,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             c_writer.flush();
             c_writer.close();
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {

@@ -24,7 +24,6 @@
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -42,14 +41,14 @@ public class ArrayParamHeaderWriter extends ParamWriter
     public ArrayParamHeaderWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
-        super(wscontext, type);
+        super(wscontext, type, CUtils.getHeaderFileExtension());
     }
 
     public void writeSource() throws WrapperFault
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             writeClassComment();
 
             c_writer.write("#if !defined(__"  + c_classname.toUpperCase()
@@ -79,7 +78,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
             c_writer.flush();
             c_writer.close();
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -91,23 +90,6 @@ public class ArrayParamHeaderWriter extends ParamWriter
     {
         QName qname = CUtils.getArrayType(type).getName();
         return CUtils.isSimpleType(qname);
-    }
-
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getHeaderFileExtension();
-
-        if (useServiceName)
-        {
-            fileName =  targetOutputLocation + "/"
-                    + this.wscontext.getServiceInfo().getServicename()
-                    + "_" + c_classname + CUtils.getHeaderFileExtension();
-        }
-
-        return new File(fileName);
     }
 
     protected void writeArrayClassDefinition() throws WrapperFault

@@ -45,14 +45,12 @@ public abstract class ParamWriter extends BasicFileWriter
     // array of parameter types and attributes 
     protected ParameterInfo[] attribs;
 
-    protected WebServiceContext wscontext;
-
     // Type of this param 
     protected Type type;
 
-    public ParamWriter(WebServiceContext wscontext, Type type) throws WrapperFault
+    public ParamWriter(WebServiceContext wscontext, Type type, String fileExtension) throws WrapperFault
     {
-        super(CUtils.getLanguageTypeName4Type(type));
+        super(CUtils.getLanguageTypeName4Type(type), fileExtension);
         this.wscontext = wscontext;
         this.type = type;
         populateAttribList();

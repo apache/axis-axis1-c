@@ -27,6 +27,7 @@ import java.io.File;
 
 import org.apache.axis.wsdl.wsdl2ws.SourceWriter;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
+import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 /**
  * Basic file writer.
@@ -37,19 +38,37 @@ public abstract class BasicFileWriter implements SourceWriter
 	protected String c_classname;
 	protected String c_fileExtension;
 	protected BufferedWriter c_writer;
-	public BasicFileWriter(String classname)throws WrapperFault{
-		c_classname = classname;
+    protected WebServiceContext wscontext = null;
+    
+	public BasicFileWriter(String classname, String fileExtension) throws WrapperFault
+	{
+		c_classname     = classname;
+		c_fileExtension = fileExtension;
 	}
-	public abstract void writeSource()throws WrapperFault;
+	public abstract void writeSource() throws WrapperFault;
 	protected void writeClassComment() throws WrapperFault {}
 	protected void writePreprocessorStatements() throws WrapperFault {}
 	protected void writeAttributes() throws WrapperFault {}
 	protected void writeConstructors() throws WrapperFault {};
 	protected void writeDestructors() throws WrapperFault {};
 	protected abstract void writeMethods() throws WrapperFault;
-	protected File getFilePath() throws WrapperFault
+	
+	protected File getFilePath(boolean useServiceName) throws WrapperFault
 	{
-	    return getFilePath(false);
+	    if (wscontext == null)
+	        throw new WrapperFault("Context not set.");
+	    
+        String targetOutputLocation = wscontext.getWrapperInfo().getTargetOutputLocation();
+        new File(targetOutputLocation).mkdirs();
+        
+        String serviceName = "";
+        if (useServiceName)
+            serviceName = wscontext.getServiceInfo().getServicename() + "_";
+        
+        String fileName = targetOutputLocation + "/" + serviceName + c_classname + c_fileExtension;
+        
+        wscontext.addGeneratedFile(fileName);
+        
+        return new File(fileName);
 	}
-	protected abstract File getFilePath(boolean b)throws WrapperFault;
 }

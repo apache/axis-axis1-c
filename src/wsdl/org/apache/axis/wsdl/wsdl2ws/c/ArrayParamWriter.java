@@ -24,7 +24,6 @@
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -47,7 +46,7 @@ public class ArrayParamWriter extends ParamWriter
     public ArrayParamWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
-        super(wscontext, type);
+        super(wscontext, type, CUtils.getImplFileExtension());
     }
 
     /* (non-Javadoc)
@@ -57,7 +56,7 @@ public class ArrayParamWriter extends ParamWriter
     {
         try
         {
-            c_writer = new BufferedWriter(new FileWriter(getFilePath(), false));
+            c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             
             // Write prolog
             writeClassComment(); 
@@ -90,7 +89,7 @@ public class ArrayParamWriter extends ParamWriter
             c_writer.flush();
             c_writer.close();
             if (WSDL2Ws.c_verbose)
-                System.out.println(getFilePath().getAbsolutePath() + " created.....");
+                System.out.println(getFilePath(false).getAbsolutePath() + " created.....");
         }
         catch (IOException e)
         {
@@ -203,18 +202,5 @@ public class ArrayParamWriter extends ParamWriter
         {
             throw new WrapperFault(e);
         }
-    }
-
-    /* (non-Javadoc)
-     * @see org.apache.axis.wsdl.wsdl2ws.BasicFileWriter#getFilePath(boolean)
-     */
-    protected File getFilePath(boolean useServiceName) throws WrapperFault
-    {
-        String targetOutputLocation = this.wscontext.getWrapperInfo().getTargetOutputLocation();
-        new File(targetOutputLocation).mkdirs();
-
-        String fileName = targetOutputLocation + "/" + c_classname + CUtils.getImplFileExtension();
-
-        return new File(fileName);
     }
 }
