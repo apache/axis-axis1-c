@@ -140,6 +140,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 CUtils.printMethodComment(c_writer, "Setter method for class member field " 
                         + parameterName + ".");
                 
+                // TODO setter leaks memory if setting complex type!
                 if (attribs[i].isArray())
                 {   
                     c_writer.write("void " + c_classname + "::\nset"

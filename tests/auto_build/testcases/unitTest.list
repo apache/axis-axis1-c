@@ -141,14 +141,11 @@ ComplexTypeAllComplexChild.xml
 
 ComplexTypeOptionalAll.xml
 
-# these two tests started failing on the 20th of Dec 2005.
 SameComplexTypeAndElementName.xml
 SameComplexTypeAndNillableElementName.xml
 
-# There seem to be problems with very large chunk sizes
 LargeReturningString2.xml
 
-# Test added on 14 Sept 2006
 RestrictedPattern17667.xml
 
 # Tests to test Start/End element tags, with and without attributes.
@@ -166,5 +163,9 @@ NamespaceInBindingOperationsRpc.xml
 NamespaceInBindingOperationsRpcNoTypeInResponse.xml
 
 OneWayOperation.xml
+OneWayOperationUnwrapped.xml
+
 NoInputParams.xml
+NoInputParamsUnwrapped.xml
+
 inquire_v2.xml

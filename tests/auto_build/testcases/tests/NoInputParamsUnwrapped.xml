@@ -1,0 +1,16 @@
+<test>
+    <name>NoInputParamsUnwrapped</name>
+    <description>NoInputParamsUnwrapped</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>NoInputParamsUnwrappedClient.cpp</clientCode>
+    <wsdl>NoInputParamsUnwrapped.wsdl</wsdl>
+    <expected>
+        <serverResponse>
+            NoInputParams_ServerResponse.expected
+        </serverResponse>
+        <output>
+            NoInputParams.cpp.out
+        </output>
+    </expected>
+	<endpoint>http://localhost:80/axis/NoInputParamsUnwrapped</endpoint>
+</test>

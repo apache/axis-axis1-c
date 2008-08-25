@@ -681,10 +681,11 @@ public class WSDL2Ws
 
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        Iterator elementNames = type.getElementnames();
+        Iterator attributes   = type.getAttributes();
         if (!minfo.isUnwrapped())
         {
             // Add input elements to method info
-            Iterator elementNames = type.getElementnames();
             while (elementNames.hasNext())
             {
                 String elementname = (String) elementNames.next();
@@ -713,8 +714,7 @@ public class WSDL2Ws
                 minfo.addInputParameter(pinfo);
             }
             
-            // add input attributes to method info
-            Iterator attributes = type.getAttributes();
+            // add input attributes to method info - TODO probably can remove this chunk of code.
             if (attributes != null)
             {
                 while (attributes.hasNext())
@@ -734,27 +734,32 @@ public class WSDL2Ws
         }
         else
         { 
-            String elementName;
-            
-            if (element != null)
-                elementName = element.getQName().getLocalPart();
-            else
-                elementName = type.getName().getLocalPart();
-            
-            ParameterInfo pinfo = new ParameterInfo();
-            
-            pinfo.setType(type);
-            type.setIsUnwrappedInputType(true);
-            pinfo.setParamName(elementName, c_typeMap);
-            pinfo.setElementName(type.getName());
-            if (type.getName().equals(CUtils.anyTypeQname))
-                pinfo.setAnyType(true);
-
-            // Let us be nice and uppercase the first character in type name, 
-            // in addition to resolving method name/type conflicts.
-            type.setLanguageSpecificName(generateNewTypeName(type, minfo));
-            
-            minfo.addInputParameter(pinfo);
+            // If input element does not contain any sub-elements or attributes, we ignore.
+            if (elementNames.hasNext() 
+                    || (attributes != null && attributes.hasNext()))
+            {
+                String elementName;
+                
+                if (element != null)
+                    elementName = element.getQName().getLocalPart();
+                else
+                    elementName = type.getName().getLocalPart();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                
+                pinfo.setType(type);
+                type.setIsUnwrappedInputType(true);
+                pinfo.setParamName(elementName, c_typeMap);
+                pinfo.setElementName(type.getName());
+                if (type.getName().equals(CUtils.anyTypeQname))
+                    pinfo.setAnyType(true);
+    
+                // Let us be nice and uppercase the first character in type name, 
+                // in addition to resolving method name/type conflicts.
+                type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+                
+                minfo.addInputParameter(pinfo);
+            }
         }
     }
 

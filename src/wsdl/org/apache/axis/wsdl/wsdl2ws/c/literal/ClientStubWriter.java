@@ -364,20 +364,28 @@ public class ClientStubWriter
         
         if (namespaceURI == null)
             namespaceURI = "";
-             
-        if (minfo.isUnwrapped())
+
+        // Need to give indication to serializer whether wrapped or unwrapped style is being done.
+        // Note that the only time we override this if there are no input parameters.
+        if (minfo.isUnwrapped() && paramsB.size () > 0)
             c_writer.write("\taxiscCallSetOperationUnwrapped(call, \"");
         else
             c_writer.write("\taxiscCallSetOperation(call, \"");
         c_writer.write( minfo.getMethodname() + "\", \""
             + namespaceURI + "\");\n");
         
-        // new calls from stub base
+        //=============================================================================
+        // Apply user specified properties
+        //=============================================================================        
+
         CUtils.printBlockComment(c_writer, "Apply SSL configuration properties and user-set SOAP headers.");        
         c_writer.write ("\taxiscStubIncludeSecure(stub);\n");  
         c_writer.write ("\taxiscStubApplyUserPreferences(stub);\n");
-        
+
+        //=============================================================================
         // Process elements
+        //=============================================================================        
+        
         boolean commentIssued=false;
         String tab2;
         for (int i = 0; i < paramsB.size(); i++)

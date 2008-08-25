@@ -366,8 +366,10 @@ public class ClientStubWriter
         if (namespaceURI == null)
             namespaceURI = "";
 
+        // Need to give indication to serializer whether wrapped or unwrapped style is being done.
+        // Note that the only time we override this if there are no input parameters.
         String iswrapperstyle = "true";
-        if (minfo.isUnwrapped())
+        if (minfo.isUnwrapped() && paramsB.size () > 0)
             iswrapperstyle = "false";
         
          c_writer.write( "\t\tm_pCall->setOperation(\""
