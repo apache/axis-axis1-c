@@ -1126,7 +1126,7 @@ public class CUtils
      * @param fullyQualifiedName
      * @return only the class name 
      */
-    public static String getClassNameFromFullyQualifiedName(String fullyQualifiedName)
+    public static String getNameFromFullyQualifiedName(String fullyQualifiedName)
     {
         int index = fullyQualifiedName.indexOf('.');
         int lastIndex = 0;

@@ -17,15 +17,21 @@
 
 package org.apache.axis.wsdl.wsdl2ws.info;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingInput;
 import javax.wsdl.BindingOperation;
+import javax.wsdl.Fault;
+import javax.wsdl.Operation;
+import javax.wsdl.Part;
 import javax.wsdl.Port;
+import javax.wsdl.PortType;
 import javax.wsdl.Service;
 import javax.wsdl.WSDLElement;
 import javax.wsdl.extensions.soap.SOAPBinding;
@@ -45,6 +51,8 @@ import org.apache.axis.wsdl.symbolTable.CSchemaUtils;
 import org.apache.axis.wsdl.symbolTable.CollectionElement;
 import org.apache.axis.wsdl.symbolTable.CollectionType;
 import org.apache.axis.wsdl.symbolTable.DefinedElement;
+import org.apache.axis.wsdl.symbolTable.Element;
+import org.apache.axis.wsdl.symbolTable.Parameters;
 import org.apache.axis.wsdl.symbolTable.SchemaUtils;
 import org.apache.axis.wsdl.symbolTable.ServiceEntry;
 import org.apache.axis.wsdl.symbolTable.SymTabEntry;
@@ -92,6 +100,9 @@ public class WSDLInfo
     // Symbol table associated with the parser.
     private SymbolTable c_symbolTable = null;
     
+    // Types generated as result of symbolTable
+    private TypeMap c_typeMap = null;
+    
     // Target name space of WSDL 
     private String c_targetNameSpaceOfWSDL = null;
     
@@ -119,6 +130,10 @@ public class WSDLInfo
      */
     public SymbolTable parse() throws Exception
     {
+        // ==================================================
+        // Parse WSDL document
+        // ==================================================   
+        
         c_wsdlParser = new Parser();
         
         // Set verbose in WSDL parser
@@ -138,10 +153,55 @@ public class WSDLInfo
         if (c_verbose)
             c_symbolTable.dump(System.out);
         
+        // ==================================================        
         // Collect various bits of information from the document.
-        processWSDLDocument();
+        // ==================================================
 
+        // Get target name space of WSDL
+        c_targetNameSpaceOfWSDL = c_symbolTable.getDefinition().getTargetNamespace();
+
+        // Collect services and bindings.           
+        Iterator it = c_symbolTable.getHashMap().values().iterator();
+        while (it.hasNext())
+        {
+            Vector v = (Vector) it.next();
+            for (int i = 0; i < v.size(); ++i)
+            {
+                SymTabEntry entry = (SymTabEntry) v.elementAt(i);
+
+                if (entry instanceof org.apache.axis.wsdl.symbolTable.ServiceEntry)
+                    c_services.add(((ServiceEntry) entry).getService());
+                else if (entry instanceof org.apache.axis.wsdl.symbolTable.BindingEntry)
+                    c_bindings.add(entry);
+            }
+        }
+        
+        // Iterate through the symbol table, generating user-defined types and
+        // storing the types in a hash table.        
+        c_typeMap = new TypeMap();
+        if (c_symbolTable !=  null)
+        {
+            it = c_symbolTable.getTypeIndex().values().iterator();
+            while (it.hasNext())
+            {
+                TypeEntry type = (TypeEntry) it.next();
+                Node node = type.getNode();
+                if (node != null)
+                {
+                    if (c_verbose)
+                    {
+                        System.out.println( "==>getTypeInfo: Processing type...." + type.getQName());                    
+                    }
+                                    
+                    createTypeInfo(type);
+                }
+            }
+        }
+
+        // ==================================================
         // Return the symbol table
+        // ==================================================
+        
         return c_symbolTable;
     }
 
@@ -226,6 +286,14 @@ public class WSDLInfo
             return e.getTransportURI();
         return null;
     }
+    
+    /**
+     * @return the c_typeMap
+     */
+    public TypeMap getTypeMap()
+    {
+        return c_typeMap;
+    }
 
     /**
      * Updates MethodInfo with information from the binding operation element.
@@ -247,6 +315,22 @@ public class WSDLInfo
         {
             method.setInputNamespaceURI(body.getNamespaceURI());            
         }
+    }
+    
+    /**
+     * Generate service name given a binding.
+     * 
+     * @param bindingEntry
+     * @return
+     * @throws WrapperFault
+     */
+    public static String getServiceName(BindingEntry bindingEntry) throws WrapperFault
+    {
+        PortType portType         = bindingEntry.getBinding().getPortType();
+        if (portType == null)
+            throw new WrapperFault("Port type specified in binding '" + bindingEntry.getBinding().getQName().getLocalPart() + "' not found");
+            
+        return CUtils.getNameFromFullyQualifiedName(portType.getQName().getLocalPart());
     }
     
     /**
@@ -314,39 +398,6 @@ public class WSDLInfo
     {
         return getServicePorts(s, true, false, false, true);
     }
-
-    /**
-     * Iterates through the symbol table, generating user-defined types and
-     * storing the types in a hash table.
-     * 
-     * @return
-     * @throws WrapperFault
-     */
-    public TypeMap generateTypeMap() throws WrapperFault
-    {
-        TypeMap typeMap = new TypeMap();
-        if (c_symbolTable ==  null)
-            return typeMap;
-        
-        Iterator it = c_symbolTable.getTypeIndex().values().iterator();
-        while (it.hasNext())
-        {
-            TypeEntry type = (TypeEntry) it.next();
-            Node node = type.getNode();
-            if (node != null)
-            {
-                if (c_verbose)
-                {
-                    System.out.println( "==>getTypeInfo: Processing type...." + type.getQName());                    
-                }
-                                
-                createTypeInfo(type, typeMap);
-            }
-        }
-        
-        return typeMap;
-    }
-  
     
     /**
      * Returns list of Port objects in a service definition based on selection criteria.
@@ -410,31 +461,6 @@ public class WSDLInfo
     }
     
     /**
-     * Collects all the information by the wsdl2ws tool.
-     */
-    private void processWSDLDocument() throws Exception
-    {        
-        // Get target name space of WSDL
-        c_targetNameSpaceOfWSDL = c_symbolTable.getDefinition().getTargetNamespace();
-
-        // Collect services and bindings.           
-        Iterator it = c_symbolTable.getHashMap().values().iterator();
-        while (it.hasNext())
-        {
-            Vector v = (Vector) it.next();
-            for (int i = 0; i < v.size(); ++i)
-            {
-                SymTabEntry entry = (SymTabEntry) v.elementAt(i);
-
-                if (entry instanceof org.apache.axis.wsdl.symbolTable.ServiceEntry)
-                    c_services.add(((ServiceEntry) entry).getService());
-                else if (entry instanceof org.apache.axis.wsdl.symbolTable.BindingEntry)
-                    c_bindings.add(entry);
-            }
-        }
-    }
-    
-    /**
      * Helper function that returns requested extensibility element.
      * 
      * @param e element to retrieve extensibility elements from.
@@ -473,22 +499,17 @@ public class WSDLInfo
      * @return
      * @throws WrapperFault
      */
-    private Type createTypeInfo(QName typename, TypeMap typeMap)  throws WrapperFault
+    private Type createTypeInfo(QName typename)  throws WrapperFault
     {
         TypeEntry type = c_symbolTable.getType(typename);
         if (type == null)
         {
             type = c_symbolTable.getElement(typename);
             if (type == null)
-            {
-                throw new WrapperFault(
-                    "["
-                        + typename
-                        + "]unexpected condition occurred "
-                        + ".. please inform the axis-dev@apache.org mailing list ASAP");
-            }
+                throw new WrapperFault("[" + typename + "]unexpected condition occurred. ");
         }
-        return createTypeInfo(type, typeMap);
+        
+        return createTypeInfo(type);
     }
     
     /**
@@ -498,7 +519,7 @@ public class WSDLInfo
      * @return
      * @throws WrapperFault
      */
-    private Type createTypeInfo(TypeEntry type, TypeMap typeMap) throws WrapperFault
+    private Type createTypeInfo(TypeEntry type) throws WrapperFault
     {
         Type typedata = null;
         Type newSecondaryType = null;
@@ -521,7 +542,7 @@ public class WSDLInfo
                 if (c_verbose)
                     System.out.println("Attempting to create new type from element-ref: " + type.getRefType().getQName());
                 
-                return createTypeInfo(type.getRefType(), typeMap);
+                return createTypeInfo(type.getRefType());
             }
 
             return null;
@@ -542,7 +563,7 @@ public class WSDLInfo
             
             QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
             // type is a inbuilt type or a already created type?
-            typedata = typeMap.getType(newqn);
+            typedata = c_typeMap.getType(newqn);
             if (typedata != null)
             {
                 if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
@@ -561,7 +582,7 @@ public class WSDLInfo
         else
         {
             // type is a inbuilt type or a already created type?
-            typedata = typeMap.getType(type.getQName());
+            typedata = c_typeMap.getType(type.getQName());
             if (typedata != null)
             {
                 if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
@@ -577,7 +598,7 @@ public class WSDLInfo
         if (c_verbose)
             System.out.println("Created new type: " + typedata.getName());
         
-        typeMap.addType(typedata.getName(), typedata);
+        c_typeMap.addType(typedata.getName(), typedata);
         
         // TODO revisit...work out whether this type will be generated or not 
         typedata.externalize(isTypeGenerated(type, typedata));
@@ -592,7 +613,7 @@ public class WSDLInfo
             {
                 String localpart = type.getQName().getLocalPart() + "_value";
                 QName typeName =  new QName(type.getQName().getNamespaceURI(), localpart);
-                newSecondaryType = createTypeInfo(base.getQName(), typeMap);
+                newSecondaryType = createTypeInfo(base.getQName());
                 typedata.addRelatedType(newSecondaryType);
                 typedata.setExtensionBaseType(new CElementDecl(newSecondaryType, typeName));
                 if (c_verbose)
@@ -610,7 +631,7 @@ public class WSDLInfo
                 for (int j = 0; j < attributes.size(); j++)
                 {
                     CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
-                    newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName(), typeMap);
+                    newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName());
                     attr.setType(newSecondaryType);
                     typedata.addRelatedType(newSecondaryType);
                 }
@@ -619,7 +640,7 @@ public class WSDLInfo
         }
         else if (type instanceof CollectionType)
         {
-            newSecondaryType = createTypeInfo(type.getRefType().getQName(), typeMap);
+            newSecondaryType = createTypeInfo(type.getRefType().getQName());
             typedata.addRelatedType(newSecondaryType);
             typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, type.getQName()));
             typedata.setArray(true);
@@ -630,14 +651,14 @@ public class WSDLInfo
             QName arrayType = CSchemaUtils.getArrayComponentQName(node,new IntHolder(0),c_symbolTable);
             if (arrayType != null)
             {
-                newSecondaryType = createTypeInfo(arrayType, typeMap);
+                newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
                 typedata.setArray(true);
             }
             else if ((arrayType = CSchemaUtils.getCollectionComponentQName(node)) != null)
             {
-                newSecondaryType = createTypeInfo(arrayType, typeMap);
+                newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
                 typedata.setArray(true);
@@ -676,7 +697,7 @@ public class WSDLInfo
                         for (int j = 0; j < attributes.size(); j++)
                         {
                             CContainedAttribute attr = (CContainedAttribute)attributes.get(j);
-                            newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName(), typeMap);
+                            newSecondaryType = createTypeInfo(attr.getTypeEntry().getQName());
                             attr.setType(newSecondaryType);
                             typedata.addRelatedType(newSecondaryType);
                         }
@@ -722,12 +743,12 @@ public class WSDLInfo
                                     typeName = new QName(typeName.getNamespaceURI(), localpart);
                                     
                                     if (CUtils.isPrimitiveType(typeName))
-                                        newSecondaryType = createTypeInfo(typeName, typeMap);
+                                        newSecondaryType = createTypeInfo(typeName);
                                     else
-                                        newSecondaryType = createTypeInfo(elem.getTypeEntry(), typeMap);
+                                        newSecondaryType = createTypeInfo(elem.getTypeEntry());
                                 }
                                 else
-                                    newSecondaryType = createTypeInfo(typeName, typeMap);
+                                    newSecondaryType = createTypeInfo(typeName);
                             }
                             
                             typedata.addRelatedType(newSecondaryType);
@@ -970,5 +991,537 @@ public class WSDLInfo
             return false;
         else
             return true;
+    }
+    
+    
+    /**
+     * Process service operations, generating information about each operation.
+     *
+     * @param bindingEntry
+     * @return               array of MethodInfo objects.
+     * @throws WrapperFault
+     */
+    public ArrayList processServiceMethods(BindingEntry bindingEntry, 
+                                           boolean wsdlWrappingStyle,
+                                           boolean userRequestedWSDLWrappingStyle) throws WrapperFault
+    {
+        PortType portType         = bindingEntry.getBinding().getPortType();
+        if (portType == null)
+            throw new WrapperFault("Port type specified in binding '" + bindingEntry.getBinding().getQName().getLocalPart() + "' not found");
+        
+        ArrayList serviceMethods = new ArrayList();
+        
+        //get operation list
+        Iterator oplist = portType.getOperations().iterator();
+        while (oplist.hasNext())
+        {
+            Operation op     = (Operation) oplist.next();
+            MethodInfo minfo = new MethodInfo(op.getName());
+            
+            // This chunk of code is new and we hope to use it more in the future to replace some of the 
+            // things we do to process parameters.
+            // When getOperationParameters() is called, the code, assuming user did not request unwrapped,
+            // will determine whether the operation is eligible for wrapped-style.   The bad thing is that
+            // isWrapped() is a method on the SymbolTable class.  So before processing an operation, 
+            // we call setWrapped(false) before calling getOperationParameters() so that we can determine 
+            // on a per-operation basis whether the operation is eligible for wrapped-style processing.
+            c_symbolTable.setWrapped(false);
+            Parameters opParams=null;
+            try
+            {
+                opParams = c_symbolTable.getOperationParameters(op, "", bindingEntry);
+                minfo.setOperationParameters(opParams);
+                minfo.setEligibleForWrapped(c_symbolTable.isWrapped());
+                
+                // mark the method as wrapped or unwrapped.
+                if (!wsdlWrappingStyle || !minfo.isEligibleForWrapped())
+                {
+                    minfo.setIsUnwrapped(true);
+                    minfo.setConsumeBodyOnMessageValidation(false);
+                }
+            }
+            catch (IOException e)
+            {
+                throw new WrapperFault(e);
+            }
+
+            if (c_verbose)
+            {
+                System.out.println("\n\n-----------------------------------------------");
+                System.out.println("Parameters for operation: " + op.getName()); 
+                System.out.println("-----------------------------------------------");
+                System.out.println(opParams);
+                System.out.println("-----------------------------------------------");
+            }
+            
+            //setting the faults
+            addFaultInfo(op.getFaults(), minfo);
+            
+            //add each parameter to parameter list
+            if ("document".equals(bindingEntry.getBindingStyle().getName()))
+            {
+                if (userRequestedWSDLWrappingStyle && !minfo.isEligibleForWrapped())
+                    System.out.println("INFORMATIONAL: Operation '" + op.getName() + "' is not eligible for wrapper-style, generating non-wrapper style.");
+                addDocumentStyleInputMessageToMethodInfo(op, minfo);
+            }
+            else
+                addRPCStyleInputMessageToMethodInfo(op, minfo);
+
+            //get the return type
+            if (op.getOutput() != null)
+            {
+                Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
+                if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName()))
+                    addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
+                else
+                    addRPCStyleOutputMessageToMethodInfo(op, minfo);
+            }
+            
+            //add operation to operation List
+            serviceMethods.add(minfo); 
+        }
+        
+        // Need to get some stuff from binding element such as SOAPAction and namespace for 
+        // each operation - we store the information in the method. 
+        List operations = bindingEntry.getBinding().getBindingOperations();
+        if (operations != null)
+        {
+            for (int i = 0; i < operations.size(); i++)
+            {
+                //for the each binding operation found
+                if (operations.get(i) instanceof javax.wsdl.BindingOperation)
+                {
+                    javax.wsdl.BindingOperation bindinop = (javax.wsdl.BindingOperation) operations.get(i);
+                    
+                    String name = bindinop.getName();
+                    MethodInfo method = null;
+                    
+                    for (int ii = 0; ii < serviceMethods.size(); ii++)
+                        if (((MethodInfo) serviceMethods.get(ii)).getMethodname().equals(name))
+                            method = (MethodInfo) serviceMethods.get(ii);
+                    
+                    if (method == null)
+                        throw new WrapperFault("The binding and portType elements do not match.");                    
+                    
+                    // Get binding operation information and store in method for later use.
+                    WSDLInfo.updateMethodInfoFromBinding(bindinop, method);
+                }
+            }
+        }
+        
+        return serviceMethods;
+    }
+
+    /**
+     * @param op
+     * @param minfo MethodInfo object into which output message and it's elements are to be added
+     * @throws WrapperFault
+     */
+    private void addRPCStyleOutputMessageToMethodInfo(Operation op, MethodInfo minfo) throws WrapperFault
+    {
+        ParameterInfo pinfo;
+        Iterator returnlist;
+
+        minfo.setInputMessage(op.getInput().getMessage().getQName());
+        minfo.setOutputMessage(op.getOutput().getMessage().getQName());
+
+        if (op.getParameterOrdering() != null)
+        {
+            for (int ix = 0; ix < op.getParameterOrdering().size(); ix++)
+            {
+                Part p = (Part) (op.getOutput().getMessage().getParts().get((String) op.getParameterOrdering().get(ix)));
+                if (p == null)
+                    continue;
+                pinfo = createParameterInfo(p);
+                if (null != pinfo)
+                    minfo.addOutputParameter(pinfo);
+            }
+            
+            // TODO recheck parameter ordering logic....
+            // there can be more output parameters than in parameterOrder list (partial parameter ordering)
+            returnlist = op.getOutput().getMessage().getParts().values().iterator();
+            while (returnlist.hasNext())
+            { 
+                //RPC style messages can have multiple parts
+                Part p = (Part) returnlist.next();
+                if (op.getParameterOrdering().contains(p.getName()))
+                    continue;
+                pinfo = createParameterInfo(p);
+                if (null != pinfo)
+                    minfo.addOutputParameter(pinfo);
+            }
+        }
+        else
+        {
+            returnlist = op.getOutput().getMessage().getParts().values().iterator();
+            while (returnlist.hasNext())
+            { 
+                //RPC style messages can have multiple parts
+                Part p = ((Part) returnlist.next());
+                pinfo = createParameterInfo(p);
+                if (null != pinfo)
+                    minfo.addOutputParameter(pinfo);
+            }
+        }
+    }
+
+    /**
+     * @param minfo MethodInfo object into which output message and it's elements are to be added
+     * @param part
+     * @throws WrapperFault
+     */
+    private void addDocumentStyleOutputMessageToMethodInfo(MethodInfo minfo, Part part) throws WrapperFault
+    {
+        QName qname;
+        QName minfoqname;
+        TypeEntry elementTypeEntry;
+        
+        Element element = c_symbolTable.getElement(part.getElementName());
+
+        if (element == null)
+        {
+            elementTypeEntry = c_symbolTable.getType(part.getTypeName());
+            qname            = elementTypeEntry.getQName();
+            minfoqname       = elementTypeEntry.getQName();
+        }
+        else
+        {
+            elementTypeEntry = element.getRefType();
+            qname            = elementTypeEntry.getQName();
+            minfoqname       = element.getQName();
+        }
+        
+        minfo.setOutputMessage(minfoqname);
+
+        if (qname == null)
+            return;
+        
+        Type type = c_typeMap.getType(qname);
+        if (type == null)
+            throw new WrapperFault("Unregistered type " + qname + " referenced!");
+
+        // TODO - need to look into this more.
+        // For wrapped style, inner attributes and elements are added as parameters.
+        // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        
+        Iterator names = type.getElementnames();
+        if (!minfo.isUnwrapped())
+        {
+            if (!names.hasNext())
+            {
+                // TODO what if not simple?
+                if (type.isSimpleType())
+                {
+                    String elementName = (String) element.getQName().getLocalPart();
+                    ParameterInfo pinfo = new ParameterInfo();
+                    pinfo.setType(type);
+                    pinfo.setParamName(elementName, c_typeMap);
+                    pinfo.setElementName(element.getQName());
+                    if (type.getName().equals(CUtils.anyTypeQname))
+                        pinfo.setAnyType(true);
+                    minfo.addOutputParameter(pinfo);                    
+                    minfo.setConsumeBodyOnMessageValidation(false);
+                }
+            }
+            else
+            {
+                while (names.hasNext())
+                {
+                    String elementname  = (String) names.next();
+                    CElementDecl eleinfo = type.getElementForElementName(elementname);
+                    Type innerType      = eleinfo.getType();
+                    
+                    ParameterInfo pinfo = new ParameterInfo();
+                    pinfo.setType(innerType);
+                    pinfo.setParamName(elementname, c_typeMap);
+                    
+                    if (eleinfo.getMaxOccurs() > 1)
+                        pinfo.setArray(true);
+                    
+                    pinfo.setNillable(eleinfo.isNillable());
+                    
+                    if (eleinfo.getMinOccurs() == 0)
+                        pinfo.setOptional(true);
+                    else
+                        pinfo.setOptional(false);
+    
+                    pinfo.setElementName(type.getElementForElementName(elementname).getName());
+                    
+                    if (innerType.getName().equals(CUtils.anyTypeQname))
+                        pinfo.setAnyType(true);
+    
+                    minfo.addOutputParameter(pinfo);
+                }
+            }
+        }
+        else
+        { 
+            String elementName = (String) element.getQName().getLocalPart();
+            ParameterInfo pinfo = new ParameterInfo();
+            pinfo.setType(type);
+            type.setIsUnwrappedOutputType(true);
+            pinfo.setParamName(elementName, c_typeMap);
+            
+            if (!names.hasNext() && type.isSimpleType())
+                pinfo.setElementName(element.getQName());
+            else
+                pinfo.setElementName(type.getName());
+            
+            if (type.getName().equals(CUtils.anyTypeQname))
+                pinfo.setAnyType(true);
+            
+            // Let us be nice and uppercase the first character in type name, 
+            // in addition to resolving method name/type conflicts.
+            type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+            
+            minfo.addOutputParameter(pinfo);
+        }
+    }
+
+    /**
+     * @param op
+     * @param minfo
+     * @throws WrapperFault
+     */
+    private void addRPCStyleInputMessageToMethodInfo(Operation op, MethodInfo minfo)
+        throws WrapperFault
+    {
+        ParameterInfo pinfo;
+        Iterator paramlist;
+
+        minfo.setInputMessage(op.getInput().getMessage().getQName());
+        if (op.getParameterOrdering() != null)
+        {
+            for (int ix = 0; ix < op.getParameterOrdering().size(); ix++)
+            {
+                Part p = (Part) (op.getInput()
+                                   .getMessage()
+                                   .getParts()
+                                   .get((String) op.getParameterOrdering().get(ix)));
+                if (p == null)
+                    continue;
+
+                pinfo = createParameterInfo(p);
+                if (null != pinfo)
+                    minfo.addInputParameter(pinfo);
+            }
+        }
+        else
+        {
+            paramlist = op.getInput().getMessage().getParts().values().iterator();
+            while (paramlist.hasNext())
+            { 
+                //RPC style messages can have multiple parts
+                Part p = (Part) paramlist.next();
+                pinfo = createParameterInfo(p);
+                if (null != pinfo)
+                    minfo.addInputParameter(pinfo);
+            }
+        }
+    }
+
+    /**
+     * @param op
+     * @param minfo
+     * @throws WrapperFault
+     */
+    private void addDocumentStyleInputMessageToMethodInfo(Operation op, MethodInfo minfo)
+        throws WrapperFault
+    {   
+        // If no input parameters, simply return.
+        Iterator paramlist = op.getInput().getMessage().getParts().values().iterator();
+        if(!paramlist.hasNext())
+            return;
+        
+        Part part = (Part) paramlist.next();
+        
+        QName minfoqname;
+        QName qname;
+        
+        Element element = c_symbolTable.getElement(part.getElementName());
+        
+        if (element == null)
+        {
+            // the part reference a type.
+            qname = c_symbolTable.getType(part.getTypeName()).getQName();
+            minfoqname = c_symbolTable.getType(part.getTypeName()).getQName();
+        }
+        else
+        {
+            qname = element.getRefType().getQName();
+            minfoqname = element.getQName();
+        }
+        
+        minfo.setInputMessage(minfoqname);
+
+        if (qname == null)
+            return;
+        
+        Type type = c_typeMap.getType(qname);
+        if (type == null)
+            throw new WrapperFault("unregistered type " + qname + " referenced");
+
+        // For wrapped style, inner attributes and elements are added as parameters.
+        // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
+        Iterator elementNames = type.getElementnames();
+        Iterator attributes   = type.getAttributes();
+        if (!minfo.isUnwrapped())
+        {
+            // Add input elements to method info
+            while (elementNames.hasNext())
+            {
+                String elementname = (String) elementNames.next();
+                CElementDecl eleinfo = type.getElementForElementName(elementname);
+                Type innerType = eleinfo.getType();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                pinfo.setType(innerType);
+                pinfo.setParamName(elementname, c_typeMap);            
+                
+                if (eleinfo.getMaxOccurs() > 1)
+                    pinfo.setArray(true);
+
+                pinfo.setElementName(type.getElementForElementName(elementname).getName());
+                
+                if (innerType.getName().equals(CUtils.anyTypeQname))
+                    pinfo.setAnyType(true);
+                
+                pinfo.setNillable(eleinfo.isNillable());
+                
+                if (eleinfo.getMinOccurs() == 0)
+                    pinfo.setOptional(true);
+                else
+                    pinfo.setOptional(false);
+
+                minfo.addInputParameter(pinfo);
+            }
+            
+            // add input attributes to method info - TODO probably can remove this chunk of code.
+            if (attributes != null)
+            {
+                while (attributes.hasNext())
+                {
+                    CContainedAttribute attr = (CContainedAttribute)attributes.next();
+    
+                    ParameterInfo pinfo = new ParameterInfo();
+    
+                    pinfo.setType(attr.getType());
+                    pinfo.setParamName(attr.getName(), c_typeMap);
+                    pinfo.setElementName(attr.getType().getName());
+                    pinfo.setAttribute(true);
+                    
+                    minfo.addInputParameter(pinfo);
+                }
+            }
+        }
+        else
+        { 
+            // If input element does not contain any sub-elements or attributes, we ignore.
+            if (elementNames.hasNext() 
+                    || (attributes != null && attributes.hasNext()))
+            {
+                String elementName;
+                
+                if (element != null)
+                    elementName = element.getQName().getLocalPart();
+                else
+                    elementName = type.getName().getLocalPart();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                
+                pinfo.setType(type);
+                type.setIsUnwrappedInputType(true);
+                pinfo.setParamName(elementName, c_typeMap);
+                pinfo.setElementName(type.getName());
+                if (type.getName().equals(CUtils.anyTypeQname))
+                    pinfo.setAnyType(true);
+    
+                // Let us be nice and uppercase the first character in type name, 
+                // in addition to resolving method name/type conflicts.
+                type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+                
+                minfo.addInputParameter(pinfo);
+            }
+        }
+    }
+
+    /**
+     * Adds faults.
+     * 
+     * @param faults
+     * @param methodinfo
+     * @throws WrapperFault
+     */
+    private void addFaultInfo(Map faults, MethodInfo methodinfo)
+        throws WrapperFault
+    {
+        if (faults == null)
+            return;
+        
+        Iterator faultIt = faults.values().iterator();
+        while (faultIt.hasNext())
+        {
+            Fault fault = (Fault) faultIt.next();
+            FaultInfo faultinfo = new FaultInfo(fault.getName());
+
+            Map parts = fault.getMessage().getParts();
+            Iterator partIt = parts.values().iterator();
+            while (partIt.hasNext())
+            {
+                ParameterInfo pinfo = createParameterInfo((Part) partIt.next());
+                pinfo.getType().setAsFault(true);
+                faultinfo.addParam(pinfo);
+            }
+            
+            methodinfo.addFaultType(faultinfo);
+        }
+    }
+
+    /**
+     * 
+     * @param part
+     * @return
+     * @throws WrapperFault
+     */
+    private ParameterInfo createParameterInfo(Part part) throws WrapperFault
+    {
+        QName qname = part.getTypeName();
+        if (qname == null)
+        {
+            Element element = c_symbolTable.getElement(part.getElementName());
+            qname = element.getRefType().getQName();
+        }
+
+        Type type = c_typeMap.getType(qname);
+        if (type == null)
+            throw new WrapperFault("unregistered type " + qname + " referred");
+        
+        ParameterInfo pinfo = new ParameterInfo();
+        pinfo.setType(type);
+        pinfo.setParamName(part.getName(), c_typeMap);
+        pinfo.setElementName(part.getElementName());
+        return pinfo;
+    }
+    
+    /**
+     * Resolves name conflict between a method name and a type name. 
+     * When doing document-literal, usually the name of the wrapper element is same as the 
+     * operation name. 
+     * 
+     * @param type
+     * @param minfo
+     * @return the new type name that does not conflict with the operation name.
+     */
+    private String generateNewTypeName(Type type, MethodInfo minfo)
+    {
+        String minfo_nm = minfo.getMethodname();
+        String type_nm  = type.getLanguageSpecificName();
+        
+        String newName = CUtils.capitalizeFirstCharacter(type_nm);
+
+        if (!minfo_nm.equals(newName))
+            return newName;
+
+        return newName + "_t";
     }
 }
