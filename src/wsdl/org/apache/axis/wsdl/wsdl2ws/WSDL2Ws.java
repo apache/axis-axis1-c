@@ -17,7 +17,6 @@
 
 package org.apache.axis.wsdl.wsdl2ws;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -64,12 +63,9 @@ public class WSDL2Ws
 {
     public static boolean c_verbose = false;
 
-    private String  c_language;
-    private boolean c_wsdlWrappingStyle;
-    private boolean c_userRequestedWSDLWrappingStyle = false;
-    private String  c_targetoutputLocation = null;
-    private String  c_targetEngine = null;
-        
+    // Command line arguments
+    private CLArgParser c_cmdLineArgs = null;
+            
     // WSDL parser symbol table
     private SymbolTable c_symbolTable;
     
@@ -101,22 +97,11 @@ public class WSDL2Ws
      */
     public static void main(String[] args) throws Exception
     {
-        // Get parameters and validate
-        CLArgParser data = new CLArgParser(args);
-        
-        if (!data.areOptionsValid() || data.isSet("h") || data.getArgumentCount() != 1)
-        {
-            usage();
-            return;
-        }
-
         // Kick off code generation
         try
         {
-            WSDL2Ws gen = new WSDL2Ws(data);
+            WSDL2Ws gen = new WSDL2Ws(args);
             gen.generateWrappers();
-
-            System.out.println("\nCode generation completed. Generated files in directory '" + gen.getTargetOutputLocation() + "'.");
         }
         catch (Exception e)
         {
@@ -128,58 +113,40 @@ public class WSDL2Ws
     /**
      * Gathers the parameters passed in and parses the WSDL file, generating the symbol table. 
      * 
-     * @param cmdLineArgs
+     * @param args
      * @throws WrapperFault
      */
-    public WSDL2Ws(CLArgParser cmdLineArgs) throws WrapperFault
+    public WSDL2Ws(String[] args) throws WrapperFault
     {
         try
         {
             // ==================================================
             // Process the parameters
             // ==================================================            
+
+            // Get parameters and validate
+            c_cmdLineArgs = new CLArgParser(args);
+            if (!c_cmdLineArgs.areOptionsValid() 
+                    || c_cmdLineArgs.isSet("h") || c_cmdLineArgs.getArgumentCount() != 1)
+            {
+                usage();
+                return;
+            }
             
             // Verbose mode?
-            if (cmdLineArgs.isSet("v"))
-                c_verbose = true;
-            
-            // Target location - we resolve to canonical path and use path in completion message later on.
-            c_targetoutputLocation = cmdLineArgs.getOptionBykey("o");
-            if (c_targetoutputLocation == null)
-                c_targetoutputLocation = "." + File.separator;
-            c_targetoutputLocation = (new File(c_targetoutputLocation)).getCanonicalPath();
+            c_verbose = c_cmdLineArgs.beVerbose();
             
             // language c or c++ - CUtils.setLanguage MUST be invoked at the very beginning!
-            c_language = cmdLineArgs.getOptionBykey("l");
-            if (c_language == null)
-                c_language = "c++";
-            CUtils.setLanguage(c_language);
-            
-            // generate artifacts for server, client or both?
-            c_targetEngine = cmdLineArgs.getOptionBykey("s");
-            if (c_targetEngine == null)
-                c_targetEngine = "server";
-            
-            // Wrapped or unwrapped? The default will be wrapped. 
-            String wsdlWrapStyle = cmdLineArgs.getOptionBykey("w");
-            if (wsdlWrapStyle == null)
-                c_wsdlWrappingStyle = true;
-            else if (wsdlWrapStyle.equalsIgnoreCase("wrapped"))
-            {
-                c_wsdlWrappingStyle = true;
-                c_userRequestedWSDLWrappingStyle = true;
-            }
-            else
-                c_wsdlWrappingStyle = false;            
+            CUtils.setLanguage(c_cmdLineArgs.getTargetLanguage());
             
             // ==================================================
             // Parse the WSDL file
             // ==================================================
             
-            c_wsdlInfo = new WSDLInfo(cmdLineArgs.getArgument(0));
+            c_wsdlInfo = new WSDLInfo(c_cmdLineArgs.getURIToWSDL());
             c_wsdlInfo.setVerbose(c_verbose);
-            c_wsdlInfo.setTimeout(cmdLineArgs.getOptionBykey("t")); 
-            c_wsdlInfo.setNoWrapperStyle(c_wsdlWrappingStyle == false);
+            c_wsdlInfo.setTimeout(c_cmdLineArgs.getTimeout()); 
+            c_wsdlInfo.setNoWrapperStyle(c_cmdLineArgs.isWrapperStyle() == false);
 
             c_symbolTable = c_wsdlInfo.parse();
             
@@ -245,12 +212,17 @@ public class WSDL2Ws
         // Wrapper info
         WrapperInfo wrapperInfo = 
             new WrapperInfo(bindingEntry.getBindingStyle().getName(), 
-                            c_language, c_targetoutputLocation, c_targetEngine,
+                            CUtils.getLanguage(), 
+                            c_cmdLineArgs.getOutputDirectory(), 
+                            c_cmdLineArgs.getTargetEngine(),
                             c_wsdlInfo.getTargetNameSpaceOfWSDL());
         
         // Service info
+        boolean userRequestedWSDLWrappingStyle = c_cmdLineArgs.isSet("w") && c_cmdLineArgs.isWrapperStyle();
         String serviceName       = WSDLInfo.getServiceName(bindingEntry);
-        ArrayList serviceMethods = c_wsdlInfo.processServiceMethods(bindingEntry, c_wsdlWrappingStyle, c_userRequestedWSDLWrappingStyle);
+        ArrayList serviceMethods = c_wsdlInfo.processServiceMethods(bindingEntry, 
+                                                                    c_cmdLineArgs.isWrapperStyle(), 
+                                                                    userRequestedWSDLWrappingStyle);
         ServiceInfo serviceInfo  = new ServiceInfo(serviceName, serviceMethods, WSDLInfo.getTargetEndPointURI(port));
         
         // Context
@@ -277,18 +249,12 @@ public class WSDL2Ws
         // Generate the artifacts
         // ================================================== 
         
+        // Generate code
         wsg.generate();
+        
+        // Indicate code generation complete and show where stored.
+        System.out.println("\nCode generation completed. Generated files in directory '" + c_cmdLineArgs.getOutputDirectory() + "'.");
     }    
-    
-    /**
-     * Returns absolute path to where the generated code will be located. 
-     * 
-     * @return the absolute path to the target location
-     */
-    public String getTargetOutputLocation()
-    {
-        return c_targetoutputLocation;
-    }
     
     // The following 3 exposeXXX methods attempts to expose anonymous types so that 
     // the types are externalized to the user.  

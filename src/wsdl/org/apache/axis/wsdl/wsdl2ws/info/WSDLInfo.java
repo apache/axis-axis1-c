@@ -210,12 +210,9 @@ public class WSDLInfo
      * 
      * @param t  timeout value in seconds. Null implies 0 timeout (no timeout).
      */
-    public void setTimeout(String t)
+    public void setTimeout(long t)
     {
-        if (t == null)
-            t = "0"; 
-        
-        c_timeout = Long.parseLong(t);
+        c_timeout = t;
     }
     
     /**

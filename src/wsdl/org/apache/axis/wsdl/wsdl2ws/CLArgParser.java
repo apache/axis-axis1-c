@@ -22,14 +22,21 @@
 
 package org.apache.axis.wsdl.wsdl2ws;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+/**
+ * Parsers user-specified options on the command.
+ * 
+ */
 public class CLArgParser 
 {
     private boolean optionsAreValid = true;
-    public Hashtable bag;
-    public ArrayList args;
+    
+    public Hashtable bag  = new Hashtable();
+    public ArrayList args = new ArrayList();
 
     /**
      * Not very good argument parser, could be improved.  For example, there can be no spaces between
@@ -37,10 +44,7 @@ public class CLArgParser
      * In addition, only single character options are allowed.
      */
     public CLArgParser(String[] args) 
-    {
-        this.bag = new Hashtable();
-        this.args = new ArrayList();
-        
+    {        
         for (int i = 0; i < args.length; i++) 
         {
             if (!args[i].startsWith("-"))
@@ -79,28 +83,116 @@ public class CLArgParser
             }
         }
     }
+    
+    /**
+     * Return output directory.
+     * 
+     * @return
+     * @throws IOException
+     */
+    public String getOutputDirectory() throws IOException
+    {
+        String targetoutputLocation = getOptionBykey("o");
+        if (targetoutputLocation == null)
+            targetoutputLocation = "." + File.separator;
+        return (new File(targetoutputLocation)).getCanonicalPath();
+    }
+    
+    /**
+     * Return whether to generate wrapper-style
+     * 
+     * @return
+     */
+    public boolean isWrapperStyle()
+    {
+        String wsdlWrapStyle = getOptionBykey("w");
+        if (wsdlWrapStyle == null || wsdlWrapStyle.equalsIgnoreCase("wrapped"))
+            return true;
+        
+        return false;
+    }
+    
+    /**
+     * Return binding name.
+     * 
+     * @return
+     */
+    public String getBinding()
+    {
+        return getOptionBykey("b");
+    }
+    
+    /**
+     * Return target language.
+     * @return
+     */
+    public String getTargetLanguage()
+    {
+        String language = getOptionBykey("l");
+        if (language == null)
+            language = "c++";
+        return language;
+    }
 
     /**
+     * Return verbose information
+     * 
+     * @return
+     */
+    public boolean beVerbose()
+    {
+        return isSet("v");
+    }
+    
+    /**
+     * Return timeout value
+     * 
+     * @return
+     */
+    public long getTimeout()
+    {
+        String t = getOptionBykey("t");
+        if (t == null)
+            t = "0";
+        return Long.parseLong(t);
+    }
+    
+    /**
+     * Return target engine.
+     * 
+     * @return
+     */
+    public String getTargetEngine()
+    {
+        String targetEngine = getOptionBykey("s");
+        if (targetEngine == null)
+            targetEngine = "server";
+        
+        return targetEngine;
+    }
+    
+    /**
+     * Return URI to WSDL
+     * 
+     * @return
+     */
+    public String getURIToWSDL()
+    {
+        if (args.size() > 0)
+            return (String)args.get(0);
+        
+        return null;
+    }
+    
+    /**
      * This method checks that we do not have extraneous inputs to the tool that we do not support
+     * 
      * @return true if the args are all supported false otherwise.
      */
     public boolean areOptionsValid()
     {
         return optionsAreValid;
     }    
-    
-    /**
-     * These are direct arguments not - type options
-     * @param i
-     */
-    public String getArgument(int i) 
-    {
-        Object obj = args.get(i);
-        if(obj == null) 
-            return null;
-        else 
-            return (String)obj;
-    }
 
     /**
      * These are direct arguments not - type options
@@ -110,11 +202,23 @@ public class CLArgParser
         return this.args.size();
     }
 
+    /**
+     * Return the value specified for an option.
+     * 
+     * @param key
+     * @return
+     */
     public String getOptionBykey(String key) 
     {
         return (String) bag.get(key);
     }
 
+    /**
+     * Determines whether an option is set.
+     * 
+     * @param key
+     * @return
+     */
     public boolean isSet(String key) 
     {
         return bag.containsKey(key);
