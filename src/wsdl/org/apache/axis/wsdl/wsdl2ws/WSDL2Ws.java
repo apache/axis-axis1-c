@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.wsdl.Binding;
 import javax.wsdl.Port;
 import javax.wsdl.Service;
 import javax.xml.namespace.QName;
@@ -61,6 +60,7 @@ import org.apache.axis.wsdl.wsdl2ws.info.WrapperInfo;
  */
 public class WSDL2Ws
 {
+    public static boolean c_veryVerbose = false;
     public static boolean c_verbose = false;
 
     // Command line arguments
@@ -83,8 +83,10 @@ public class WSDL2Ws
                 + "-o<folder>             target output folder - default is current folder.\n"
                 + "-l<c++|c>              target language (c++|c) - default is c++.\n"
                 + "-s<server|client>      target side (server|client) - default is server.\n"
-                + "-v, -verbose           be verbose.\n"
+                + "-v,                    be verbose - will show exception stack trace when exceptions occur.\n"
+                + "-vv,                   be very verbose - debug information will be shown.\n"
                 + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout).\n"
+                + "-b<binding-name>       binding name that will be used to generate stub.\n"
                 + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped.\n"
                 );
     }
@@ -105,7 +107,11 @@ public class WSDL2Ws
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            if (c_verbose)
+                e.printStackTrace();
+            else
+                System.out.println("\nERROR: " + e.getMessage());
+            
             System.out.println("\nCode generation failed. Please see errors above.\n");
         }
     }    
@@ -134,6 +140,7 @@ public class WSDL2Ws
             }
             
             // Verbose mode?
+            c_veryVerbose = c_cmdLineArgs.beVeryVerbose();
             c_verbose = c_cmdLineArgs.beVerbose();
             
             // language c or c++ - CUtils.setLanguage MUST be invoked at the very beginning!
@@ -144,7 +151,7 @@ public class WSDL2Ws
             // ==================================================
             
             c_wsdlInfo = new WSDLInfo(c_cmdLineArgs.getURIToWSDL());
-            c_wsdlInfo.setVerbose(c_verbose);
+            c_wsdlInfo.setVerbose(c_veryVerbose);
             c_wsdlInfo.setTimeout(c_cmdLineArgs.getTimeout()); 
             c_wsdlInfo.setNoWrapperStyle(c_cmdLineArgs.isWrapperStyle() == false);
 
@@ -158,13 +165,16 @@ public class WSDL2Ws
             if (c_wsdlInfo.getServices().size() > 1)
                 throw new WrapperFault("Multiple service definitions not supported.");
             
-            // TODO
-            // At this time we require a service definition to be defined, but in 
-            // future if not found that caller needs to specify a binding to use in 
-            // order for us to generate the stubs.  Not having service definition will
+            // If a service definition is not defined then caller needs to specify a 
+            // binding to use in order for us to generate the stubs.  Not having service definition will
             // only result in not knowing the Web service end point, so it is really not necessary.
-            if (c_wsdlInfo.getServices().size() == 0)
-                throw new WrapperFault("Service definition not found. A service definition must be specified.");
+            if (c_wsdlInfo.getServices().size() == 0 && !c_cmdLineArgs.isSet("b"))
+            {
+                throw new WrapperFault(
+                          "Service definition not found in WSDL document. " 
+                        + "A service definition must be specified in the WSDL document or " 
+                        + "a binding needs to be specified using the -b option.");
+            }
         }
         catch (WrapperFault e)
         {
@@ -185,25 +195,46 @@ public class WSDL2Ws
     {        
         // ==================================================
         // Get service, ports, binding, and port type
-        // ==================================================           
+        // ==================================================   
+        
+        Port port                 = null;
+        BindingEntry bindingEntry = null;
    
         //TODO  resolve this
         //  this code will generate one stub corresponding to a port.  Other ports
         //  are ignored. Should really generate one service stub per port.
-
-        // Get service definition, binding entry, port type.  We first ask for SOAP 1.1 ports
-        // that have a binding style of document....if there is none, then we ask for 
-        // SOAP 1.1 ports that have a binding style of rpc.
-        Service service = (Service)c_wsdlInfo.getServices().get(0);
-        ArrayList servicePorts = c_wsdlInfo.getPortsSOAP11Document(service);
-        if (servicePorts.isEmpty())
-            servicePorts = c_wsdlInfo.getPortsSOAP11RPC(service);
-        if (servicePorts.isEmpty())
-            throw new WrapperFault("A port with a supported binding was not found.");
-
-        Port port                 = (Port)servicePorts.get(0);
-        Binding binding           = port.getBinding();
-        BindingEntry bindingEntry = c_symbolTable.getBindingEntry(binding.getQName());
+        
+        // If binding is specified, ensure binding is supported and see if there is a port that uses 
+        // it in order to get end point. If not specified, then use the service definition to 
+        // obtain the information we need.
+        if (c_cmdLineArgs.isSet("b"))
+        {
+            // Validate binding
+            bindingEntry = c_wsdlInfo.getBindEntry(c_cmdLineArgs.getBinding());
+            if (bindingEntry == null)
+                throw new WrapperFault("Specified binding '" + c_cmdLineArgs.getBinding() + "' not found.");
+            
+            if (!WSDLInfo.isSOAP11Binding(bindingEntry))
+                throw new WrapperFault("Specified binding '" + c_cmdLineArgs.getBinding() + "' is not supported.");
+            
+            // Get port in order to obtain end point. Not having a port is OK.
+            if (c_wsdlInfo.getServices().size() != 0)
+                port = WSDLInfo.getPort((Service)c_wsdlInfo.getServices().get(0), bindingEntry);
+        }
+        else
+        {
+            // We first ask for SOAP 1.1 ports that have a binding style of document....if 
+            // there is none, then we ask for SOAP 1.1 ports that have a binding style of rpc.
+            Service service = (Service)c_wsdlInfo.getServices().get(0);
+            ArrayList servicePorts = c_wsdlInfo.getPortsSOAP11Document(service);
+            if (servicePorts.isEmpty())
+                servicePorts = c_wsdlInfo.getPortsSOAP11RPC(service);
+            if (servicePorts.isEmpty())
+                throw new WrapperFault("A port with a supported binding was not found.");
+    
+            port            = (Port)servicePorts.get(0);
+            bindingEntry    = c_symbolTable.getBindingEntry(port.getBinding().getQName());
+        }
         
         // ==================================================
         // Build the context that is needed by the code generators.
@@ -242,7 +273,7 @@ public class WSDL2Ws
         exposeNestedTypesThatAreAnonymousTypes(wsContext);
         
         // Dump the map if requested.
-        if (c_verbose)
+        if (c_veryVerbose)
             c_wsdlInfo.getTypeMap().dump();
         
         // ==================================================
@@ -297,7 +328,7 @@ public class WSDL2Ws
                             if (referencedType==null)
                                 continue;
                             
-                            if(c_verbose)
+                            if(c_veryVerbose)
                                 System.out.println( "EXPOSE1: Checking whether to expose ref-types for "+defType.getQName().getLocalPart());
 
                             // If ref type is anonymous and thus currently not exposed because 
@@ -306,7 +337,7 @@ public class WSDL2Ws
                             if(referencedType.getQName().getLocalPart().startsWith(">") 
                                     && referencedType.getQName().getLocalPart().lastIndexOf(">") == 0)
                             {
-                                if(c_verbose)
+                                if(c_veryVerbose)
                                     System.out.println( "EXPOSE1: Exposing ref-type "+referencedType.getQName());
 
                                 Type innerClassType = wsContext.getTypemap().getType(referencedType.getQName());
@@ -340,7 +371,7 @@ public class WSDL2Ws
                 DefinedType type = (DefinedType)highLevelType;
                 if(type.getQName().getLocalPart().toString().startsWith(">"))
                 {
-                    if(c_verbose)
+                    if(c_veryVerbose)
                         System.out.println( "EXPOSE2: Checking whether to expose anon type "+type.getQName().getLocalPart());
                     
                     // this is an "inner" type that will not be exposed
@@ -364,7 +395,7 @@ public class WSDL2Ws
                                   ParameterInfo parameterInfo =(ParameterInfo)paramIterator.next();
                                   Type parameterType = parameterInfo.getType();
 
-                                  if(c_verbose)
+                                  if(c_veryVerbose)
                                       System.out.println( "EXPOSE2: Exposing fault type "+parameterType.getName());
                                   externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
                               }                              
@@ -379,7 +410,7 @@ public class WSDL2Ws
                               Type parameterType = parameterInfo.getType();
                               if(parameterType.getName().equals(type.getQName()))
                               {
-                                  if(c_verbose)
+                                  if(c_veryVerbose)
                                       System.out.println( "EXPOSE2: Matches input parm, exposing anon type "+parameterType.getName());
                                   externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
                               }
@@ -394,7 +425,7 @@ public class WSDL2Ws
                               Type parameterType = parameterInfo.getType();
                               if(parameterType.getName().equals(type.getQName()))
                               {
-                                  if(c_verbose)
+                                  if(c_veryVerbose)
                                       System.out.println( "EXPOSE2: Matches output parm, exposing anon type "+parameterType.getName());                             
                                   externalizeTypeAndUpdateTypeMap(wsContext, parameterType);
                               }
@@ -417,7 +448,7 @@ public class WSDL2Ws
         Type classType =  theOrigMap.getType(oldName);
         if (classType != null && !classType.isExternalized())
         {
-            if(c_verbose)
+            if(c_veryVerbose)
                 System.out.println("\nEXPOSE4: Externalizing type " + oldName);
             
             // Externalize the type - if anonymous we have to change to name
@@ -467,7 +498,7 @@ public class WSDL2Ws
             type = (Type) typesIt.next();
             if (type.isExternalized())
             {
-                if(c_verbose)
+                if(c_veryVerbose)
                     System.out.println("\nEXPOSE3: Checking related types for type " + type.getName());
                 
                 Iterator relatedTypesIt = type.getRelatedTypes();

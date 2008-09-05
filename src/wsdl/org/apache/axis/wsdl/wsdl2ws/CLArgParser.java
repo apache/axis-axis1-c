@@ -55,7 +55,12 @@ public class CLArgParser
                 String option       = args[i].substring(1, 2);
                 String optionValue  = args[i].substring(2);
                 
-                if (option.equals("l")) 
+                if (option.equals("b"))
+                {
+                    if (optionValue.length() == 0)
+                        optionsAreValid = false;
+                }
+                else if (option.equals("l")) 
                 {
                     if (!optionValue.equals("c++") && !optionValue.equals("c"))
                         optionsAreValid = false;
@@ -142,6 +147,20 @@ public class CLArgParser
     public boolean beVerbose()
     {
         return isSet("v");
+    }
+    
+    /**
+     * Return verbose information
+     * 
+     * @return
+     */
+    public boolean beVeryVerbose()
+    {
+        String v = getOptionBykey("v");
+        if (v != null && v.equals("v"))
+            return true;
+        
+        return false;
     }
     
     /**

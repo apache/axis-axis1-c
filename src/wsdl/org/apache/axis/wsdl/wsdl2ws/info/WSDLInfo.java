@@ -291,6 +291,66 @@ public class WSDLInfo
     {
         return c_typeMap;
     }
+    
+    /**
+     * Return the binding entry matching the local name.
+     * 
+     * @param name
+     * @return
+     */
+    public BindingEntry getBindEntry(String name)
+    {
+        Iterator it = c_bindings.iterator();
+        while (it.hasNext())
+        {
+            BindingEntry be = (BindingEntry)it.next();
+            if (be.getBinding().getQName().getLocalPart().equals(name))
+                return be;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Returns the Port that references the specified binding entry from a service definition.
+     * 
+     * @param s
+     * @param be
+     * @return
+     */
+    public static Port getPort(Service s, BindingEntry be)
+    {
+        Iterator ports = s.getPorts().values().iterator();
+        while (ports.hasNext())
+        {
+            Port p = (Port) ports.next();
+            Binding b = p.getBinding();
+            if (be.getBinding().getQName().equals(b.getQName()))
+                return p;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Checks if binding entry is SOAP 1.1 binding.
+     * @param be
+     * @return
+     */
+    public static boolean isSOAP11Binding(BindingEntry be)
+    {
+        return isSOAPBinding(be, Constants.URI_WSDL11_SOAP);
+    }
+    
+    /**
+     * Checks if SOAP 1.2 binding.
+     * @param be
+     * @return
+     */
+    public static boolean isSOAP12Binding(BindingEntry be)
+    {
+        return isSOAPBinding(be, Constants.URI_WSDL12_SOAP);
+    }
 
     /**
      * Updates MethodInfo with information from the binding operation element.
@@ -1520,5 +1580,26 @@ public class WSDLInfo
             return newName;
 
         return newName + "_t";
+    }
+    
+    /**
+     * Checks if binding entry is SOAP and specified version.
+     * @param be
+     * @return
+     */
+    private static boolean isSOAPBinding(BindingEntry be, String soapNamespace)
+    {
+        Binding b = be.getBinding();        
+        if ((be.getBindingType() == BindingEntry.TYPE_SOAP))
+        {            
+            String ns = soapNamespace;
+            SOAPBinding soapbinding = (SOAPBinding)getExtensibilityElement(b, INSTANCEOF_SOAPBINDING);
+            if (soapbinding != null && null != soapbinding.getElementType().getNamespaceURI())
+                ns = soapbinding.getElementType().getNamespaceURI();
+                
+            return ns.equals(soapNamespace);
+        }
+        
+        return false;
     }
 }
