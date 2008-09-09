@@ -787,7 +787,7 @@ public class WSDLInfo
                             
                             if (elem.getAnyElement())
                             {
-                                newSecondaryType =  new Type(CUtils.anyTypeQname, CUtils.anyTypeQname.getLocalPart());
+                                newSecondaryType =  new Type();
                             }
                             else
                             {
@@ -1274,8 +1274,7 @@ public class WSDLInfo
                     pinfo.setType(type);
                     pinfo.setParamName(elementName, c_typeMap);
                     pinfo.setElementName(element.getQName());
-                    if (type.getName().equals(CUtils.anyTypeQname))
-                        pinfo.setAnyType(true);
+                    pinfo.setAnyType(type.isAnyType());
                     minfo.addOutputParameter(pinfo);                    
                     minfo.setConsumeBodyOnMessageValidation(false);
                 }
@@ -1291,21 +1290,11 @@ public class WSDLInfo
                     ParameterInfo pinfo = new ParameterInfo();
                     pinfo.setType(innerType);
                     pinfo.setParamName(elementname, c_typeMap);
-                    
-                    if (eleinfo.getMaxOccurs() > 1)
-                        pinfo.setArray(true);
-                    
+                    pinfo.setArray(eleinfo.getMaxOccurs() > 1);
                     pinfo.setNillable(eleinfo.isNillable());
-                    
-                    if (eleinfo.getMinOccurs() == 0)
-                        pinfo.setOptional(true);
-                    else
-                        pinfo.setOptional(false);
-    
+                    pinfo.setOptional(eleinfo.getMinOccurs() == 0);
                     pinfo.setElementName(type.getElementForElementName(elementname).getName());
-                    
-                    if (innerType.getName().equals(CUtils.anyTypeQname))
-                        pinfo.setAnyType(true);
+                    pinfo.setAnyType(innerType.isAnyType());
     
                     minfo.addOutputParameter(pinfo);
                 }
@@ -1314,6 +1303,7 @@ public class WSDLInfo
         else
         { 
             String elementName = (String) element.getQName().getLocalPart();
+            
             ParameterInfo pinfo = new ParameterInfo();
             pinfo.setType(type);
             type.setIsUnwrappedOutputType(true);
@@ -1324,8 +1314,7 @@ public class WSDLInfo
             else
                 pinfo.setElementName(type.getName());
             
-            if (type.getName().equals(CUtils.anyTypeQname))
-                pinfo.setAnyType(true);
+            pinfo.setAnyType(type.isAnyType());
             
             // Let us be nice and uppercase the first character in type name, 
             // in addition to resolving method name/type conflicts.
@@ -1433,22 +1422,12 @@ public class WSDLInfo
                 
                 ParameterInfo pinfo = new ParameterInfo();
                 pinfo.setType(innerType);
-                pinfo.setParamName(elementname, c_typeMap);            
-                
-                if (eleinfo.getMaxOccurs() > 1)
-                    pinfo.setArray(true);
-
+                pinfo.setParamName(elementname, c_typeMap);     
+                pinfo.setArray(eleinfo.getMaxOccurs() > 1);
                 pinfo.setElementName(type.getElementForElementName(elementname).getName());
-                
-                if (innerType.getName().equals(CUtils.anyTypeQname))
-                    pinfo.setAnyType(true);
-                
+                pinfo.setAnyType(innerType.isAnyType());
                 pinfo.setNillable(eleinfo.isNillable());
-                
-                if (eleinfo.getMinOccurs() == 0)
-                    pinfo.setOptional(true);
-                else
-                    pinfo.setOptional(false);
+                pinfo.setOptional(eleinfo.getMinOccurs() == 0);
 
                 minfo.addInputParameter(pinfo);
             }
@@ -1490,8 +1469,7 @@ public class WSDLInfo
                 type.setIsUnwrappedInputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
                 pinfo.setElementName(type.getName());
-                if (type.getName().equals(CUtils.anyTypeQname))
-                    pinfo.setAnyType(true);
+                pinfo.setAnyType(type.isAnyType());
     
                 // Let us be nice and uppercase the first character in type name, 
                 // in addition to resolving method name/type conflicts.

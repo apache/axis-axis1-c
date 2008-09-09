@@ -259,11 +259,6 @@ public class ParameterInfo
     {
         return methodName;
     }
-
-    public void setMethodName(String methodName)
-    {
-        this.methodName = methodName;
-    }
     
     /**
      * @return String

@@ -50,7 +50,8 @@ public class CUtils
 {
     public static final String WRAPPER_NAME_APPENDER = "Wrapper";
     public static final String CLASS_LOADER_APPENDER = "Service";
-    public static final QName anyTypeQname = new QName("http://ws.apache.org/axisc/types","AnyType");
+    public static final QName xsdAnyElementQName = new QName("http://ws.apache.org/axisc/types","AnyType");
+    public static final QName xsdAnyTypeQName = new QName(WrapperConstants.SCHEMA_NAMESPACE,"anyType");
 
     // File suffix for C++ Class files
     private static final String CPP_CLASS_SUFFIX = ".cpp";
@@ -117,7 +118,9 @@ public class CUtils
     
     static{    
         String[] primitiveTypes = {
+            // ====================
             // C++ primitive types
+            // ====================
             "xsd__duration",        "xsd__dateTime",            "xsd__time",                    
             "xsd__date",            "xsd__gYearMonth",          "xsd__gYear",                    
             "xsd__gMonthDay",       "xsd__gDay",                "xsd__gMonth",                
@@ -133,7 +136,10 @@ public class CUtils
             "xsd__unsignedInt",     "xsd__unsignedShort",       "xsd__unsignedByte",            
             "xsd__positiveInteger", "xsd__double",              "xsd__anyURI",    
             "xsd__QName",           "xsd__NOTATION",            
+            
+            // ====================
             // C primitive types
+            // ====================
             "xsdc__duration",       "xsdc__dateTime",           "xsdc__time",               
             "xsdc__date",           "xsdc__gYearMonth",         "xsdc__gYear",                  
             "xsdc__gMonthDay",      "xsdc__gDay",               "xsdc__gMonth",                 
@@ -795,14 +801,25 @@ public class CUtils
     }
   
     /**
-     * Method to determine if QName represents an AnyType.
+     * Method to determine if QName represents an xsd:any element.
+     * 
+     * @param name
+     * @return
+     */
+    public static boolean isAnyElement(QName name)
+    {
+            return name.equals(xsdAnyElementQName);
+    }
+  
+    /**
+     * Method to determine if QName represents an xsd:anyType.
      * 
      * @param name
      * @return
      */
     public static boolean isAnyType(QName name)
     {
-            return name.equals(anyTypeQname);
+            return name.equals(xsdAnyTypeQName);
     }
     
     /**
@@ -1190,7 +1207,7 @@ public class CUtils
         WebServiceContext wscontext)
         throws WrapperFault
     {
-        if (param.getType().getName().equals(CUtils.anyTypeQname))
+        if (CUtils.isAnyElement(param.getType().getName()))
             return "AnyType*";
         
         Type type = wscontext.getTypemap().getType(param.getSchemaName());

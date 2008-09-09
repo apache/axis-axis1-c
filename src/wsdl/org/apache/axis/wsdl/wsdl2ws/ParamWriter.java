@@ -151,8 +151,7 @@ public abstract class ParamWriter extends BasicFileWriter
             this.attribs[i].setParamName((String) elementfields.get(i - attributeParamCount), wscontext.getTypemap());
             CElementDecl elem = type.getElementForElementName(this.attribs[i].getParamName());
             Type elementType = elem.getType();
-            if (CUtils.isAnyType(elementType.getName()))
-                this.attribs[i].setAnyType(true);
+            this.attribs[i].setAnyType(elementType.isAnyType());
 
             if (CUtils.isSimpleType(elementType.getName()))
                 this.attribs[i].setTypeName(CUtils.getSimpleType(elementType.getName()));

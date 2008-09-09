@@ -111,6 +111,25 @@ public class Type
     // is type the input type for unwrapped doc/lit operation?
     private boolean isUnwrappedInputType  = false;
     
+    // is any type?
+    private boolean c_isAnyType = false;
+
+
+    /**
+     * Constructor.
+     * This is solely for the creating of types associated with xsd:any elements!
+     */
+    public Type()
+    {
+        this(CUtils.xsdAnyElementQName, CUtils.xsdAnyElementQName.getLocalPart());
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param name
+     * @param languageSpecificName
+     */
     public Type(QName name, String languageSpecificName)
     {
         this.languageSpecificName = languageSpecificName;
@@ -136,6 +155,9 @@ public class Type
             isAnonymous = true;
             externalize = false;
         }
+        
+        // See if this type represents an xsd:any element or an xsd:anyType type.
+        c_isAnyType = CUtils.isAnyType(name) || CUtils.isAnyElement(name);
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
             (name.getLocalPart().equals("DataHandler") ||
@@ -513,5 +535,13 @@ public class Type
     public boolean isUnwrappedInputType()
     {
         return isUnwrappedInputType;
+    }
+
+    /**
+     * @return the c_isAnyType
+     */
+    public boolean isAnyType()
+    {
+        return c_isAnyType;
     }
 }

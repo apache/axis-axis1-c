@@ -473,7 +473,7 @@ public class ParmHeaderFileWriter extends ParamWriter
     {
         try
         {
-            if (type.isSimpleType() || type.isArray() || type.getName().equals(CUtils.anyTypeQname)
+            if (type.isSimpleType() || type.isArray() || type.isAnyType()
                     || (type.isAnonymous() && !type.isExternalized()))
                 return;
             
