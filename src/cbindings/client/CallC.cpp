@@ -3443,7 +3443,13 @@ int axiscCallAddAnyObject(AXISCHANDLE call,
             objAnyType._array = pAnyObject->_array;
         }
         
-        return c->addAnyObject(&objAnyType);
+        int returnCode = c->addAnyObject(&objAnyType);
+        
+        // Reset object so it will not free memory.
+        objAnyType._size  = 0;
+        objAnyType._array = NULL;
+
+        return returnCode;
     }
     catch ( AxisException& e  )
     {

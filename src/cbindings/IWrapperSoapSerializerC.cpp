@@ -533,7 +533,13 @@ int axiscSoapSerializerAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer,
             objAnyType._array = pAnyObject->_array;
         }
         
-        return sz->addOutputAnyObject(&objAnyType);
+        int returnCode = sz->addOutputAnyObject(&objAnyType);
+        
+        // Need to reset object so destructors do not free memory.
+        objAnyType._size  = 0;
+        objAnyType._array = NULL;
+        
+        return returnCode;
     }
     catch ( AxisException& e  )
     {
@@ -562,8 +568,14 @@ int axiscSoapSerializerSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer,
             objAnyType._size  = pAnyObject->_size;
             objAnyType._array = pAnyObject->_array;
         }
+        
+        int returnCode = sz->serializeAnyObject(&objAnyType);
+        
+        // Need to reset object so destructors do not free memory.
+        objAnyType._size  = 0;
+        objAnyType._array = NULL;
                 
-        return sz->serializeAnyObject(&objAnyType);
+        return returnCode;
     }
     catch ( AxisException& e  )
     {
