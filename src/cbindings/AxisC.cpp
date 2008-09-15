@@ -185,11 +185,12 @@ int axiscAxisDelete(void * pValue,
 				if (anytype->_size > 0 && anytype->_array) 
 				{
 					for (int i=0; i<anytype->_size; i++)
-						if (anytype->_array[i]) delete [] anytype->_array[i];
+						if (anytype->_array[i]) 
+							delete [] anytype->_array[i];
                     
                     delete [] anytype->_array;
-					delete anytype;
 				}
+				delete anytype;
                 break;
             }
             
