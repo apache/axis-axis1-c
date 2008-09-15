@@ -156,6 +156,7 @@ AnyType::AnyType()
 
 AnyType::~AnyType() 
 { 
+	// TODO add code to free storage!
 }
 
 Axis_Array::Axis_Array()
