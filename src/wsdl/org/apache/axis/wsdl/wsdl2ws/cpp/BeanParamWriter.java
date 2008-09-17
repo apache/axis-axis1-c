@@ -113,7 +113,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     if (!properParamType.endsWith("*"))
                         asterisk += "* ";
                 }
-                else if (attribs[i].isAnyType())
+                else if (attribs[i].getType().isAnyElement())
                 {
                     // We use a counter appended to parameter name.
                     anyCounter += 1;
@@ -466,14 +466,20 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     c_writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
                 }
              
-            if (attribs[i].isAnyType())
+            if (attribs[i].isAnyTypeOrAnyElement())
             {
-                anyCounter += 1;
+                String fieldName = attribs[i].getParamNameAsMember();
                 
-                if (attribs[i].isOptional())
-                    c_writer.write("\tif (param->any" + Integer.toString(anyCounter) + " != NULL)\n");
+                if (attribs[i].getType().isAnyElement())
+                {
+                    anyCounter += 1;
+                    fieldName  = "any" + Integer.toString(anyCounter);
+                }
+                
+                if (!ifCheckPrinted && attribs[i].isOptional())
+                    c_writer.write("\tif (param->" + fieldName + " != NULL)\n");
                                 
-                c_writer.write("\t\tpSZ->serializeAnyObject(param->any" + Integer.toString(anyCounter) +");\n");
+                c_writer.write("\t\tpSZ->serializeAnyObject(param->" + fieldName +");\n");
             }
             else if (attribs[i].isArray())
             {
@@ -819,10 +825,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
             if (handleAll || handleChoice)
                 tab2 += "\t";
             
-            if (attribs[i].isAnyType())
+            if (attribs[i].isAnyTypeOrAnyElement())
             {
-                anyCounter +=1;
-                c_writer.write(tab2 + "param->any" + Integer.toString(anyCounter)+ " = pIWSDZ->getAnyObject();\n");
+                String fieldName = attribs[i].getParamNameAsMember();
+                
+                if (attribs[i].getType().isAnyElement())
+                {
+                    anyCounter += 1;
+                    fieldName  = "any" + Integer.toString(anyCounter);
+                }
+                
+                c_writer.write(tab2 + "param->" + fieldName + " = pIWSDZ->getAnyObject();\n");
             }
             else if (attribs[i].isArray())
             {
@@ -1142,18 +1155,25 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (i != 0)
                     c_writer.write("\n");
 
-                if (attribs[i].isArray())
+                if (attribs[i].isAnyTypeOrAnyElement())
+                {
+                    String fieldName = attribs[i].getParamNameAsMember();
+                    
+                    if (attribs[i].getType().isAnyElement())
+                    {
+                        anyCounter += 1;
+                        fieldName  = "any" + Integer.toString(anyCounter);
+                    }
+                    
+                    c_writer.write("\tif (original." + fieldName + " != NULL)\n");
+                    c_writer.write("\t\t" + fieldName + " = new " + attribs[i].getTypeName() + "(*(original." + fieldName + "));\n");
+                }
+                else if (attribs[i].isArray())
                 {    
                     c_writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     c_writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
                             + attribs[i].getTypeName() + "_Array(*original." 
                             + attribs[i].getParamNameAsMember() + ");\n");
-                }
-                else if (attribs[i].isAnyType())
-                {
-                    anyCounter++;
-                    c_writer.write("\tif (original." + attribs[i].getParamNameAsMember() + anyCounter + " != NULL)\n");
-                    c_writer.write("\t\t" + attribs[i].getParamNameAsMember() + anyCounter + " = new " + attribs[i].getTypeName() + "(*(original." + attribs[i].getParamNameAsMember() + anyCounter + "));\n");
                 }
                 else
                 {
@@ -1218,17 +1238,15 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     isPointerType = CUtils.isPointerType(typename);
                 
-                if(attribs[i].isArray())
-                {
-                    if (!forConstructor)
-                        c_writer.write("\tdelete " + name + ";\n");
-                    c_writer.write("\t"+ name + " = NULL;\n\n");
-                }
-                else if (attribs[i].isAnyType())
-                {
-                    anyCounter += 1;
-                    name = name + Integer.toString(anyCounter);
+                if (attribs[i].isAnyTypeOrAnyElement())
+                {                    
+                    if (attribs[i].getType().isAnyElement())
+                    {
+                        anyCounter += 1;
+                        name  = "any" + Integer.toString(anyCounter);
+                    }
                     
+                    // TODO remove and replace with simple delete!
                     if (!forConstructor)
                     {
                         c_writer.write("\tif ("+name+") \n\t{\n");
@@ -1238,6 +1256,12 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         c_writer.write("\t}\n");
                     }
                     c_writer.write("\t" + name + "= NULL;\n\n");
+                }
+                else if(attribs[i].isArray())
+                {
+                    if (!forConstructor)
+                        c_writer.write("\tdelete " + name + ";\n");
+                    c_writer.write("\t"+ name + " = NULL;\n\n");
                 }
                 else if (!(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType()))
                 {

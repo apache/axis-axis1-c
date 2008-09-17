@@ -276,7 +276,7 @@ public class ClientStubWriter
         {
             c_writer.write("\t");
             
-            if (returntypeisarray)
+            if (returntypeisarray && !returntype.isAnyTypeOrAnyElement())
             {   
                 QName qname = null;
                 if (CUtils.getArrayType (retType) != null)
@@ -430,7 +430,7 @@ public class ClientStubWriter
                 typeisarray = false;
             }
  
-            if (param.isAnyType ())
+            if (param.isAnyTypeOrAnyElement ())
                 c_writer.write("\taxiscCallAddAnyObject(call, Value" + i);
             else
             {
@@ -549,7 +549,7 @@ public class ClientStubWriter
             }
 
             c_writer.write (");\n");
-            if (!param.isAnyType ())
+            if (!param.isAnyTypeOrAnyElement ())
                 c_writer.write("\t}\n");            
           } // end for-loop
 
@@ -637,7 +637,14 @@ public class ClientStubWriter
                 currentParamName = "*OutValue" + i;
                 
                 // Some code need to be merged as we have some duplicated in coding here.
-                if (typeisarray)
+                if (currentType.isAnyTypeOrAnyElement ())
+                {
+                    // TODO work needs to be done to clean up storage!
+                    c_writer.write ("\t\t\t"
+                          + currentParamName + " = *(" + currentParaType 
+                          + "*)axiscCallGetAnyObject(call);\n");
+                }
+                else if (typeisarray)
                 {
                     QName qname = null;
                     if (CUtils.getArrayType (type) != null)
@@ -770,12 +777,6 @@ public class ClientStubWriter
                     }
                     c_writer.write("\t\t\t}\n"); // end scope
                 }
-                else if (currentType.isAnyType ())
-                {
-                    c_writer.write ("\t\t\t"
-                          + currentParamName + " = *(" + currentParaType 
-                          + "*)axiscCallGetAnyObject(call);\n");
-                }
                 else
                 {
                     int lastIndexOfStar = currentParaType.lastIndexOf("*");
@@ -797,6 +798,13 @@ public class ClientStubWriter
         {
             if (minfo.getOutputMessage () != null)
                 c_writer.write ("\t\t\t// no output?\n\t\t}\n");
+        }
+        else if (returntype.isAnyTypeOrAnyElement ())
+        {
+            // TODO need to handle arrays
+            c_writer.write ("\t\t\tpReturn = (" + outparamType + ")axiscCallGetAnyObject(call);\n\t\t}\n");
+
+            returnStatement = "\treturn pReturn;\n";
         }
         else if (returntypeisarray)
         {
@@ -865,12 +873,6 @@ public class ClientStubWriter
             }
 
             returnStatement = "\treturn Ret;\n";
-        }
-        else if (returntype.isAnyType ())
-        {
-            c_writer.write ("\t\t\tpReturn = (" + outparamType + "*)axiscCallGetAnyObject(call);\n\t\t}\n");
-
-            returnStatement = "\treturn pReturn;\n";
         }
         else
         {

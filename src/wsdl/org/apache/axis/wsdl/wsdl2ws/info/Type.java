@@ -111,8 +111,11 @@ public class Type
     // is type the input type for unwrapped doc/lit operation?
     private boolean isUnwrappedInputType  = false;
     
-    // is any type?
+    // is any type? This is true for xsd:anyType
     private boolean c_isAnyType = false;
+    
+    // is any element?  This is true for xsd:any.
+    private boolean c_isAnyElement = false;
 
 
     /**
@@ -157,7 +160,8 @@ public class Type
         }
         
         // See if this type represents an xsd:any element or an xsd:anyType type.
-        c_isAnyType = CUtils.isAnyType(name) || CUtils.isAnyElement(name);
+        c_isAnyType    = CUtils.isAnyType(name);
+        c_isAnyElement = CUtils.isAnyElement(name);
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
             (name.getLocalPart().equals("DataHandler") ||
@@ -543,5 +547,13 @@ public class Type
     public boolean isAnyType()
     {
         return c_isAnyType;
+    }
+    
+    /**
+     * @return the c_isAnyType
+     */
+    public boolean isAnyElement()
+    {
+        return c_isAnyElement;
     }
 }

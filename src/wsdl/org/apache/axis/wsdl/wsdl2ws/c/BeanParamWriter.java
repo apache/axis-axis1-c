@@ -249,14 +249,20 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
                 }
              
-            if (attribs[i].isAnyType())
+            if (attribs[i].isAnyTypeOrAnyElement())
             {
-                anyCounter += 1;
-                
-                if (attribs[i].isOptional())
-                    c_writer.write("\tif (param->any" + Integer.toString(anyCounter) + " != NULL)\n");
+                String fieldName = attribs[i].getParamNameAsMember();
+            
+                if (attribs[i].getType().isAnyElement())
+                {
+                    anyCounter += 1;
+                    fieldName  = "any" + Integer.toString(anyCounter);
+                }
+                    
+                if (!ifCheckPrinted && attribs[i].isOptional())
+                    c_writer.write("\tif (param->" + fieldName + " != NULL)\n");
                                           
-                c_writer.write("\t\taxiscSoapSerializerSerializeAnyObject(pSZ, param->any" + Integer.toString(anyCounter) +");\n");
+                c_writer.write("\t\taxiscSoapSerializerSerializeAnyObject(pSZ, param->" + fieldName +");\n");
             } 
             else if (attribs[i].isArray())
             {
@@ -593,10 +599,17 @@ public class BeanParamWriter extends ParamCFileWriter
             if (handleAll || handleChoice)
                 tab2 += "\t";
             
-            if (attribs[i].isAnyType())
+            if (attribs[i].isAnyTypeOrAnyElement())
             {
-                anyCounter +=1;
-                c_writer.write(tab2 + "param->any" + anyCounter + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
+                String fieldName = attribs[i].getParamNameAsMember();
+                
+                if (attribs[i].getType().isAnyElement())
+                {
+                    anyCounter += 1;
+                    fieldName  = "any" + Integer.toString(anyCounter);
+                }
+                
+                c_writer.write(tab2 + "param->" + fieldName + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
             }
             else if (attribs[i].isArray())
             {
@@ -832,7 +845,7 @@ public class BeanParamWriter extends ParamCFileWriter
         // the container structure for arrays are created by the corresponding deserializer.
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isArray())
+            if (attribs[i].isArray() && !attribs[i].isAnyTypeOrAnyElement())
             {
                 writeNewline = true;
                 
@@ -942,13 +955,18 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\n");
                 }
             }
-            else if (attribs[i].isAnyType())
+            else if (attribs[i].isAnyTypeOrAnyElement())
             {
-                anyCounter += 1;
-                String name = attribs[i].getParamNameAsMember() + anyCounter;
+                String fieldName = attribs[i].getParamNameAsMember();
                 
-                c_writer.write("\t\tif (param->" + name + " != NULL)\n");
-                c_writer.write("\t\t\taxiscAxisDelete(param->" + name + ", XSDC_ANY);\n");               
+                if (attribs[i].getType().isAnyElement())
+                {
+                    anyCounter += 1;
+                    fieldName  = "any" + Integer.toString(anyCounter);
+                }
+                
+                c_writer.write("\t\tif (param->" + fieldName + " != NULL)\n");
+                c_writer.write("\t\t\taxiscAxisDelete(param->" + fieldName + ", XSDC_ANY);\n");               
             }            
             else
             {

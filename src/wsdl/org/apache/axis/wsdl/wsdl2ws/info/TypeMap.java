@@ -58,8 +58,10 @@ public class TypeMap
      */
     public Type getType(QName name)
     {
-        if (CUtils.isPrimitiveType(name))
+        if (CUtils.isPrimitiveType(name)) 
             return new Type(name, null);
+        else if (CUtils.isAnyType(name))
+            return new Type(name, "AnyType");
 
         return (Type) this.typeInfo.get(name);
     }

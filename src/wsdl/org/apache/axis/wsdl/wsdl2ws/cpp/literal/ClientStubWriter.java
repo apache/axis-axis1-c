@@ -432,7 +432,7 @@ public class ClientStubWriter
                 typeisarray = false;
             }
     
-            if (param.isAnyType ())
+            if (param.isAnyTypeOrAnyElement ())
                 c_writer.write ("\t\tm_pCall->addAnyObject(Value" + i);
             else
             {
@@ -638,7 +638,14 @@ public class ClientStubWriter
                 currentParamName = "*OutValue" + i;
                 
                 // Some code need to be merged as we have some duplicated in coding here.
-                if (typeisarray)
+                if (currentType.isAnyTypeOrAnyElement ())
+                {
+                    // TODO Handle arrays
+                    c_writer.write ("\t\t\t\t"
+                          + currentParamName + " = *(" + currentParaType 
+                          + "*)m_pCall->getAnyObject();\n");
+                }
+                else if (typeisarray)
                 {
                     QName qname = null;
                     if (CUtils.getArrayType (type) != null)
@@ -762,12 +769,6 @@ public class ClientStubWriter
                         c_writer.write( "\t\t\t\tAxis::AxisDelete( (void *) pReturn" + i + ", " + CUtils.getXSDEnumeratorForType( baseTypeName) + ");\n");
                     }
                 }
-                else if (currentType.isAnyType ())
-                {
-                    c_writer.write ("\t\t\t\t"
-                          + currentParamName + " = *(" + currentParaType 
-                          + "*)m_pCall->getAnyObject();\n");
-                }
                 else
                 {
                     int lastIndexOfStar = currentParaType.lastIndexOf("*");
@@ -789,6 +790,13 @@ public class ClientStubWriter
         {
             if (minfo.getOutputMessage () != null)
                 c_writer.write ("\t\t\t\t// no output?\n\t\t\t}\n");
+        }
+        else if (returntype.isAnyTypeOrAnyElement ())
+        {
+            // TODO handle arrays
+            c_writer.write ("\t\t\t\tpReturn = (" + outparamType + ")m_pCall->getAnyObject();\n\t\t\t}\n");
+
+            returnStatement =  "\t\treturn pReturn;\n";
         }
         else if (returntypeisarray)
         {
@@ -848,12 +856,6 @@ public class ClientStubWriter
             c_writer.write ("\t\t\t}\n");
 
             returnStatement = "\t\treturn Ret;\n";
-        }
-        else if (returntype.isAnyType ())
-        {
-            c_writer.write ("\t\t\t\tpReturn = (" + outparamType + "*)m_pCall->getAnyObject();\n\t\t}\n");
-
-            returnStatement =  "\t\treturn pReturn;\n";
         }
         else
         {

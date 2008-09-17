@@ -36,7 +36,7 @@ public class ParameterInfo
     private String attribNameAsSOAPString = null;
     private String attribNameAsMember = null;
     private String methodName=null;
-    private boolean isAnyType = false;
+    private boolean isAnyTypeOrAnyElement = false;
     private boolean isArray = false;
     private boolean isAttribute = false;
     private boolean isNillable = false;
@@ -72,7 +72,7 @@ public class ParameterInfo
         str = str + "attribNameAsSOAPString ="  + attribNameAsSOAPString + "\n";
         str = str + "elementName ="             + elementName + "\n";
         str = str + "elementNameAsSOAPString =" + elementNameAsSOAPString + "\n";
-        str = str + "isAnyType ="               + isAnyType + "\n";
+        str = str + "isAnyTypeOrAnyElement ="   + isAnyTypeOrAnyElement + "\n";
         str = str + "isArray ="                 + isArray + "\n";
         str = str + "isAttribute ="             + isAttribute + "\n";
         str = str + "isNillable = "             + isNillable + "\n";
@@ -229,17 +229,17 @@ public class ParameterInfo
     /**
      * @return
      */
-    public boolean isAnyType()
+    public boolean isAnyTypeOrAnyElement()
     {
-        return isAnyType;
+        return isAnyTypeOrAnyElement;
     }
 
     /**
      * @param b
      */
-    public void setAnyType(boolean b)
+    public void setAnyTypeOrAnyElement(boolean b)
     {
-        isAnyType = b;
+        isAnyTypeOrAnyElement = b;
     }
 
     /**

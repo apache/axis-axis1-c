@@ -946,6 +946,9 @@ public class CUtils
      */
     public static String getArrayNameForComplexType(QName qname)
     {
+        if (isAnyType(qname) || isAnyElement(qname))
+            return "AnyType";
+        
         String arrayName = null;
         if (!c_qnameToPrimitiveTypeMapper.containsKey(qname) 
                 && !c_schemaDefinedQNameToSimpleTypeMapper.containsKey(qname))
@@ -1207,7 +1210,8 @@ public class CUtils
         WebServiceContext wscontext)
         throws WrapperFault
     {
-        if (CUtils.isAnyElement(param.getType().getName()))
+        if (CUtils.isAnyElement(param.getType().getName()) 
+                || CUtils.isAnyType(param.getType().getName()))
             return "AnyType*";
         
         Type type = wscontext.getTypemap().getType(param.getSchemaName());
