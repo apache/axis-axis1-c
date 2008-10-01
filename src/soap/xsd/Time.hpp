@@ -49,6 +49,11 @@ public:
     Time(const xsd__time* value);
 
     /**
+     * Destructor
+     */
+    virtual ~Time() { }
+
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

@@ -44,6 +44,11 @@ public:
     NormalizedString(const xsd__normalizedString value);
 
     /**
+     * Destructor
+     */
+    virtual ~NormalizedString() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

@@ -47,6 +47,11 @@ public:
      * @param value The value to be serialized
      */
     Duration(const xsd__duration* value);
+    
+    /**
+     * Destructor
+     */
+    virtual ~Duration() { }
 
     /**
      * Get the xsd type of this simple type.

@@ -44,6 +44,11 @@ public:
     PositiveInteger(const xsd__positiveInteger* value) throw (AxisSoapException);
 
     /**
+     * Destructor
+     */
+    virtual ~PositiveInteger() { }  
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

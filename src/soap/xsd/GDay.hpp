@@ -49,6 +49,11 @@ public:
     GDay(const xsd__gDay* value);
 
     /**
+     * Destructor
+     */
+    virtual ~GDay() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

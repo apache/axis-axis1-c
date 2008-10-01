@@ -44,6 +44,11 @@ public:
     Name(const xsd__Name value);
 
     /**
+     * Destructor
+     */
+    virtual ~Name() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

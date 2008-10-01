@@ -47,6 +47,11 @@ public:
     String(const xsd__string value);
 
     /**
+     * Destructor
+     */
+    virtual ~String() { }
+
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

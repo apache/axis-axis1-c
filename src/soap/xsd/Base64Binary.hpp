@@ -44,7 +44,7 @@ public:
     /**
      * Destructor
      */    
-    ~Base64Binary();
+    virtual ~Base64Binary();
 
     /**
      * Constructor providing a value for later serialization

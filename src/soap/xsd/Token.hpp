@@ -44,6 +44,11 @@ public:
     Token(const xsd__token value);
 
     /**
+     * Destructor
+     */
+    virtual ~Token() { }
+
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

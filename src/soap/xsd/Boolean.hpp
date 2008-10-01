@@ -46,7 +46,7 @@ public:
     /**
      * Destructor
      */
-    ~Boolean();
+    virtual ~Boolean();
 
     /**
      * Get the xsd type of this simple type.

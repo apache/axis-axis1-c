@@ -47,6 +47,11 @@ public:
     NOTATION(const xsd__NOTATION value);
 
     /**
+     * Destructor
+     */
+    virtual ~NOTATION() { }  
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

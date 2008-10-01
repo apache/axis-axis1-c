@@ -46,7 +46,7 @@ public:
     /**
      * Destructor
      */
-    ~Decimal();
+    virtual ~Decimal();
 
     /**
      * Constructor providing a value for later serialization

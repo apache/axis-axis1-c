@@ -51,7 +51,7 @@ public:
     /**
      * Destructor
      */
-    ~Float();
+    virtual ~Float();
 
     /**
      * Get the xsd type of this simple type.

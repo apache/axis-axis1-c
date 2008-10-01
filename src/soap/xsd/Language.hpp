@@ -44,6 +44,11 @@ public:
     Language(const xsd__language value);
 
     /**
+     * Destructor
+     */
+    virtual ~Language() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

@@ -39,7 +39,7 @@ public:
     /**
      * Destructor
      */
-    ~Long();
+    virtual ~Long();
 
     /**
      * Constructor providing a value for later serialization

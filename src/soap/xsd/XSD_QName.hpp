@@ -47,6 +47,11 @@ public:
     XSD_QName(const xsd__QName value);
 
     /**
+     * Destructor
+     */
+    virtual ~XSD_QName() { }
+
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

@@ -44,6 +44,11 @@ public:
     IDREF(const xsd__IDREF value);
 
     /**
+     * Destructor
+     */
+    virtual ~IDREF() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

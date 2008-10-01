@@ -51,7 +51,7 @@ public:
     /**
      * Destructor
      */
-    ~DateTime();
+    virtual ~DateTime();
 
     /**
      * Get the xsd type of this simple type.

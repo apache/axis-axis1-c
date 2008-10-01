@@ -44,6 +44,11 @@ public:
     NMTOKEN(const xsd__NMTOKEN value);
 
     /**
+     * Destructor
+     */
+    virtual ~NMTOKEN() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

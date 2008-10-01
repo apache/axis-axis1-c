@@ -47,6 +47,11 @@ public:
      * @param value The value to be serialized
      */
     Date(const xsd__date* value);
+    
+    /**
+     * Destructor
+     */
+    virtual ~Date() { }
 
     /**
      * Get the xsd type of this simple type.

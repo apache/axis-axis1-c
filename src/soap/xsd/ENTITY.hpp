@@ -44,6 +44,11 @@ public:
     ENTITY(const xsd__ENTITY value);
 
     /**
+     * Destructor
+     */
+    virtual ~ENTITY() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

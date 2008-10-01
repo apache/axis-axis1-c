@@ -41,7 +41,7 @@ public:
     /**
      * Destructor
      */
-    ~Integer();
+    virtual ~Integer();
 
     /**
      * Constructor providing a value for later serialization

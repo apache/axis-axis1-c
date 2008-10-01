@@ -45,7 +45,7 @@ public:
    /**
     * Destructor.
     */
-    ~HexBinary();
+    virtual ~HexBinary();
 
         /**
      * Constructor providing a value for later serialization

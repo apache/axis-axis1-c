@@ -46,6 +46,11 @@ public:
      * @param value The value to be serialized
      */
     Double(const xsd__double* value);
+    
+    /**
+     * Destructor
+     */
+    virtual ~Double() { }
  
      /**
      * Get the xsd type of this simple type.

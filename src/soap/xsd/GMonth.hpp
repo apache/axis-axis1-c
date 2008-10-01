@@ -49,6 +49,11 @@ public:
     GMonth(const xsd__gMonth* value);
 
     /**
+     * Destructor
+     */
+    virtual ~GMonth() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

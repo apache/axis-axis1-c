@@ -40,7 +40,7 @@ public:
     /**
      * Destructor
      */
-    ~Byte();
+    virtual ~Byte();
 
     /**
      * Constructor providing a value for later serialization

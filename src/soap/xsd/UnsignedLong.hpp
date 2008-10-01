@@ -46,7 +46,7 @@ public:
     /**
      * Destructor
      */
-    ~UnsignedLong();
+    virtual ~UnsignedLong();
 
     /**
      * Get the xsd type of this simple type.

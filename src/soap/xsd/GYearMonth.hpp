@@ -49,6 +49,11 @@ public:
     GYearMonth(const xsd__gYearMonth* value);
 
     /**
+     * Destructor
+     */
+    virtual ~GYearMonth() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

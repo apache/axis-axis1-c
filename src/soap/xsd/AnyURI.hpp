@@ -45,6 +45,11 @@ public:
      * @param value The value to be serialized
      */
     AnyURI(const xsd__anyURI value);
+    
+    /**
+     * Destructor
+     */
+    virtual ~AnyURI() {};
 
     /**
      * Get the xsd type of this simple type.

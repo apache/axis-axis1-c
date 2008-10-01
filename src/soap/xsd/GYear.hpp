@@ -49,6 +49,11 @@ public:
     GYear(const xsd__gYear* value);
     
     /**
+     * Destructor
+     */
+    virtual ~GYear() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */

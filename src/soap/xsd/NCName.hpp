@@ -44,6 +44,11 @@ public:
     NCName(const xsd__NCName value);
 
     /**
+     * Destructor
+     */
+    virtual ~NCName() { }   
+    
+    /**
      * Get the xsd type of this simple type.
      * @return the xsd type of this simple type
      */
