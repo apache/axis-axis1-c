@@ -1107,6 +1107,8 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 
     *this << pStr;
 
+    delete pSimpleType;
+    
     return AXIS_SUCCESS;  
 }
 
