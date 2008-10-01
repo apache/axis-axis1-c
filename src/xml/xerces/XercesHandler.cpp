@@ -50,6 +50,8 @@ XercesHandler::
 {
     delete m_pNextElement;
     delete m_pPrefixMappingElement;
+    m_NsStack.clear();
+    m_CurrPrefixMappings.clear();
 }
 
 void XercesHandler::
