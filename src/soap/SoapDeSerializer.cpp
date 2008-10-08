@@ -1686,11 +1686,12 @@ getFaultAsXMLString()
 
     xsd__string ret = new char[len];
     memset(ret,0,len);
-    for (i=0; i<any->_size; i++) if (any->_array[i]) 
-    {
-        strcat(ret,any->_array[i]);
-        delete [] any->_array[i];
-    }
+    for (i=0; i<any->_size; i++) 
+        if (any->_array[i]) 
+        {
+            strcat(ret,any->_array[i]);
+            delete [] any->_array[i];
+        }
     delete [] any->_array;
     delete any;
     return ret;
@@ -1897,6 +1898,9 @@ getAnyObject ()
 
     list < AxisString > lstXML;
 
+	AxisString inValue = "";
+	AxisString outValue = "";
+
     while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
     {
         // Continue if processing start prefix,
@@ -1911,7 +1915,7 @@ getAnyObject ()
             tagCount++;
         else if (END_ELEMENT == m_pNode->m_type)
             tagCount--;
-        
+                
         if (START_PREFIX == m_pNode->m_type)
         {
             nsDecls += " xmlns";
@@ -1930,7 +1934,11 @@ getAnyObject ()
             nsDecls = "";
         }
         else
-            xmlStr += m_pNode->m_pchNameOrValue;
+        {
+        	inValue = m_pNode->m_pchNameOrValue;
+        	IAnySimpleType::replaceReservedCharacters(inValue, outValue);
+            xmlStr += outValue;
+        }
     
         if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))    /* copying the First level element into the list */
         {

@@ -17,31 +17,37 @@
 
 AXIS_CPP_NAMESPACE_START
 
-IAnySimpleType::IAnySimpleType():m_Buf(NULL), m_isNil(true)
+IAnySimpleType::
+IAnySimpleType():m_Buf(NULL), m_isNil(true)
 {
 }
 
-IAnySimpleType::~IAnySimpleType()
+IAnySimpleType::
+~IAnySimpleType()
 {
     delete [] m_Buf;
 }
 
-bool IAnySimpleType::isNil()
+bool IAnySimpleType::
+isNil()
 {
     return m_isNil;
 }
 
-void IAnySimpleType::setNil(bool nil)
+void IAnySimpleType::
+setNil(bool nil)
 {
     m_isNil = nil;
 }
 
-AxisChar* IAnySimpleType::serialize()
+AxisChar* IAnySimpleType::
+serialize()
 {
     return m_Buf;
 }
 
-void IAnySimpleType::deserialize(const AxisChar* value)
+void IAnySimpleType::
+deserialize(const AxisChar* value)
 {
     delete [] m_Buf;
     m_Buf = NULL;
@@ -53,28 +59,23 @@ void IAnySimpleType::deserialize(const AxisChar* value)
         strcpy (m_Buf, value);
     }
     else
-    {
         setNil(true);
-    }
 }
 
-AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapException)
+AxisChar* IAnySimpleType::
+serialize(const AxisChar* value) throw (AxisSoapException)
 {
     WhiteSpace* whiteSpace = getWhiteSpace();
     const AxisChar* serializedValue = whiteSpace->processWhiteSpace(value);
 
     Pattern* pattern = getPattern();
     if(pattern->isSet())
-    {
         pattern->validatePattern(serializedValue);
-    }
     delete pattern;
 
     Enumeration* enumeration = getEnumeration();
     if (enumeration->isSet())
-    {
         enumeration->validateEnumeration(serializedValue);
-    }
     delete enumeration;
 
     delete [] m_Buf;
@@ -86,80 +87,96 @@ AxisChar* IAnySimpleType::serialize(const AxisChar* value) throw (AxisSoapExcept
     return m_Buf;
 }
 
-const AxisString& IAnySimpleType::replaceReservedCharacters(AxisString &value)
+const AxisString& IAnySimpleType::
+replaceReservedCharacters(AxisString &value)
 {
-    m_strReturnVal = "";
+	// If empty string or no entity references just return string.
     if (value.empty ())
-    {
         return value;
-    }
 
-    /* Find entity reference characters and returns the first any of chars find
-     * position
-     */ 
     unsigned long nPos = value.find_first_of (XML_ENTITY_REFERENCE_CHARS);
-
-    /* Check for position validity */
     if (AxisString::npos == nPos)
-    {
         return value;
-    }
-
-    unsigned long nOldIdx = 0;            // Counter value
-    while (AxisString::npos != nPos)
-    {                         // Get pointered character
-        switch (value.at (nPos))
-        {
-            case LESSER_THAN_CHAR:     // Process < character
-                m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_LESSER_STR);
-                break;
-            case GREATER_THAN_CHAR:    // Process > character
-                m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_GREATER_STR);
-                break;
-            case AMPERSAND_CHAR:       // Process & character
-                m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_AMPERSAND_STR);
-                break;
-            case DOUBLE_QUOTE_CHAR:    // Process " character
-                m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_DBL_QUOTE_STR);
-                break;
-            case SINGLE_QUOTE_CHAR:    // Process ' character
-                m_strReturnVal.append (value.substr (nOldIdx, nPos - nOldIdx));
-                m_strReturnVal.append (ENCODED_SGL_QUOTE_STR);
-                break;
-        }
-        nOldIdx = ++nPos;     // Get old position
-    /* Find the next entity reference characters from previous found 
-	 * position,
-	 */ 
-        nPos = value.find_first_of (XML_ENTITY_REFERENCE_CHARS, nPos);
-    }
-
-    unsigned long nDataLen = value.length ();    // Get the length of the field value
-    unsigned long nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
-    if (nLen > 0)
-    {
-        m_strReturnVal += value.substr (nOldIdx, nLen); /* Apend the remaining
-							  * data
-							  */ 
-    }
-    return m_strReturnVal;
+	
+	replaceReservedCharacters(value, m_strReturnVal);
+	return m_strReturnVal;
 }
 
-WhiteSpace* IAnySimpleType::getWhiteSpace()
+
+void IAnySimpleType::
+replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
+{
+	outValue = "";
+	
+	// If empty string or no entity references just return string.
+    if (inValue.empty ())
+        return;
+
+    unsigned long nPos = inValue.find_first_of (XML_ENTITY_REFERENCE_CHARS);
+    if (AxisString::npos == nPos)
+    {
+    	outValue = inValue;
+        return;
+    }
+
+    // Loop through character string, replacing any entity characters    
+    unsigned long nOldIdx = 0;            
+    while (AxisString::npos != nPos)
+    {                         
+        switch (inValue.at (nPos))
+        {
+            case LESSER_THAN_CHAR:     // Process < character
+                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+                outValue.append (ENCODED_LESSER_STR);
+                break;
+            case GREATER_THAN_CHAR:    // Process > character
+                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+                outValue.append (ENCODED_GREATER_STR);
+                break;
+            case AMPERSAND_CHAR:       // Process & character
+                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+                outValue.append (ENCODED_AMPERSAND_STR);
+                break;
+            case DOUBLE_QUOTE_CHAR:    // Process " character
+                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+                outValue.append (ENCODED_DBL_QUOTE_STR);
+                break;
+            case SINGLE_QUOTE_CHAR:    // Process ' character
+                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+                outValue.append (ENCODED_SGL_QUOTE_STR);
+                break;
+        }
+        
+        // Get old position
+        nOldIdx = ++nPos;
+    
+        // Find the next entity reference characters from previous found position
+        nPos = inValue.find_first_of (XML_ENTITY_REFERENCE_CHARS, nPos);
+    }
+
+    // Apend the remaining data  
+    unsigned long nDataLen = inValue.length ();    // Get the length of the field value
+    unsigned long nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
+    if (nLen > 0)
+        outValue += inValue.substr (nOldIdx, nLen); 
+    
+    return;
+}
+
+WhiteSpace* IAnySimpleType::
+getWhiteSpace()
 {
     return new WhiteSpace(PRESERVE);
 }
 
-Pattern* IAnySimpleType::getPattern()
+Pattern* IAnySimpleType::
+getPattern()
 {
     return new Pattern();
 }
 
-Enumeration* IAnySimpleType::getEnumeration()
+Enumeration* IAnySimpleType::
+getEnumeration()
 {
     return new Enumeration();
 }

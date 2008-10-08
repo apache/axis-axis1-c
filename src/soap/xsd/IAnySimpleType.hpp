@@ -102,6 +102,15 @@ public:
      * @param Serialized form of value
      */
     void deserialize(const AxisChar* value);
+    
+    /**
+     * Utility function to replace reserved characters in XML with corresponding
+     * entities. 
+     * 
+     * @param inValue - source string
+     * @param outValue - source string with reserved characters converted.
+     */
+    static void replaceReservedCharacters(AxisString& inValue, AxisString& outValue);
 
 protected:
 
