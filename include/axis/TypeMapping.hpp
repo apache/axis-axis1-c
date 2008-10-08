@@ -292,7 +292,12 @@ typedef enum XSDTYPETag
     /**
      * Attachment
      */
-    ATTACHMENT
+    ATTACHMENT,
+    
+    /**
+     * xsd:anyType
+     */
+    XSD_ANYTYPE
 } XSDTYPE;
 
 /**

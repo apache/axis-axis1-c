@@ -531,7 +531,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 
                 if (theType.isRestriction() && !CUtils.isPrimitiveType(basicType))
                     typeSet.add(basicType);
-                else if (!attribs[i].isSimpleType() && !attribs[i].isAnyTypeOrAnyElement())
+                else if (!attribs[i].isSimpleType() && !attribs[i].isAnyElement())
                 {
                     if ((attribs[i].isArray()) && !theType.isSimpleType())
                         typeSet.add(basicType + "_Array");
@@ -581,7 +581,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             {
                 if (!attribs[i].isArray() && 
                         !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
-                        && !attribs[i].isAnyTypeOrAnyElement())
+                        && !attribs[i].isAnyElement())
 				{
                     typeSet.add(attribs[i].getTypeName());
                 } 

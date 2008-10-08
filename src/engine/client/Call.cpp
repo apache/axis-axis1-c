@@ -731,6 +731,12 @@ xsd__NOTATION Call::getElementAsNOTATION (const AxisChar* pName,
     return m_pIWSDZ->getElementAsNOTATION (pName, pNamespace);
 }
 
+xsd__anyType Call::getElementAsAnyType (const AxisChar* pName, 
+                                        const AxisChar* pNamespace)
+{
+    return m_pIWSDZ->getElementAsAnyType (pName, pNamespace);
+}
+
 xsd__int * Call::getAttributeAsInt (const AxisChar* pName, const AxisChar* pNamespace)
 {
     return m_pIWSDZ->getAttributeAsInt (pName, pNamespace);

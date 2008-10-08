@@ -110,6 +110,11 @@ typedef AxisChar * xsd__NMTOKEN;
  */
 typedef AxisChar * xsd__NMTOKENS;
 /**
+ * @typedef xsd__anyType
+ * Axis C++ defined type for xml anyType
+ */
+typedef AxisChar * xsd__anyType;
+/**
  * @typedef xsd__integer
  * Axis C++ defined type for xml basic type integer
  */

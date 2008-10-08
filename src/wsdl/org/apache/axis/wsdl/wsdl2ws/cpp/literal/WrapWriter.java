@@ -286,7 +286,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                         + ",\n\t\t \"" + elementName + "\", Axis_URI_" + containedType + ");\n");
                 }
             }
-            else if (param.isAnyTypeOrAnyElement())
+            else if (param.isAnyElement())
             {
                 c_writer.write("\t" + paraTypeName + " *v" + i + " = (" + paraTypeName
                         + "*)pIWSDZ->getAnyObject();\n");
@@ -413,7 +413,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                     c_writer.write("\t\treturn nStatus;\n");
                 }
             }
-            else if (returntype.isAnyTypeOrAnyElement())
+            else if (returntype.isAnyElement())
                 c_writer.write( "\t\treturn pIWSSZ->addOutputAnyObject(ret);\n");
             else
             {
@@ -531,7 +531,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                 + ", \"" + returnParamName + "\", Axis_URI_" + containedType + ");\n");
                     }
                 }
-                else if (param.isAnyTypeOrAnyElement())
+                else if (param.isAnyElement())
                     c_writer.write("\tpIWSSZ->addOutputAnyObject(out" + i + ");\n");
                 else
                 {

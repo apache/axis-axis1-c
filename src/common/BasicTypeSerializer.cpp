@@ -203,6 +203,8 @@ const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
             return "QName";
         case XSD_NOTATION:
             return "NOTATION";
+        case XSD_ANYTYPE:
+            return "anyType";            
         default:
             return " ";
     }

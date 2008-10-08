@@ -135,7 +135,9 @@ public class CUtils
             "xsd__byte",            "xsd__nonNegativeInteger",  "xsd__unsignedLong",            
             "xsd__unsignedInt",     "xsd__unsignedShort",       "xsd__unsignedByte",            
             "xsd__positiveInteger", "xsd__double",              "xsd__anyURI",    
-            "xsd__QName",           "xsd__NOTATION",            
+            "xsd__QName",           "xsd__NOTATION",
+            
+            "xsd__anyType", 
             
             // ====================
             // C primitive types
@@ -154,7 +156,9 @@ public class CUtils
             "xsdc__byte",           "xsdc__nonNegativeInteger", "xsdc__unsignedLong",           
             "xsdc__unsignedInt",    "xsdc__unsignedShort",      "xsdc__unsignedByte",           
             "xsdc__positiveInteger","xsdc__double",             "xsdc__anyURI",                  
-            "xsdc__QName",          "xsdc__NOTATION"
+            "xsdc__QName",          "xsdc__NOTATION",
+            
+            "xsdc__anyType" 
         };
         
         c_primitiveTypes = new HashSet(Arrays.asList(primitiveTypes));
@@ -204,6 +208,7 @@ public class CUtils
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsd__QName");
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsd__anyURI");
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),                "xsd__NOTATION");
+        c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyType"),                "xsd__anyType");
         
         // TODO revisit attachment support.
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),       "ISoapAttachment");
@@ -259,7 +264,8 @@ public class CUtils
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "QName"),                "xsdc__QName");
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsdc__anyURI");
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),            "xsdc__NOTATION");
-        
+        c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyType"),                "xsdc__anyType");
+
         /* TODO:
          *   Should be removed when the following issue will be fixed :
          *     -> http://marc.theaimsgroup.com/?t=107907748000002&r=1&w=2 
@@ -374,6 +380,8 @@ public class CUtils
         c_simpleTypeToMethodSuffixMapper.put("xsd__anyURI",                "AnyURI");
         c_simpleTypeToMethodSuffixMapper.put("xsd__QName",                "QName");
         c_simpleTypeToMethodSuffixMapper.put("xsd__NOTATION",                "NOTATION");
+        c_simpleTypeToMethodSuffixMapper.put("xsd__anyType",                "AnyType");
+
         
         c_simpleTypeToMethodSuffixMapper.put("xsdc__duration",                "Duration");
         c_simpleTypeToMethodSuffixMapper.put("xsdc__dateTime",                "DateTime");
@@ -419,6 +427,8 @@ public class CUtils
         c_simpleTypeToMethodSuffixMapper.put("xsdc__anyURI",                "AnyURI");
         c_simpleTypeToMethodSuffixMapper.put("xsdc__QName",                    "QName");
         c_simpleTypeToMethodSuffixMapper.put("xsdc__NOTATION",                "NOTATION");
+        c_simpleTypeToMethodSuffixMapper.put("xsdc__anyType",                "AnyType");
+
         
         c_simpleTypeToEnumMapper.put("xsd__duration",            "XSD_DURATION");
         c_simpleTypeToEnumMapper.put("xsd__dateTime",            "XSD_DATETIME");
@@ -464,6 +474,8 @@ public class CUtils
         c_simpleTypeToEnumMapper.put("xsd__anyURI",                "XSD_ANYURI");
         c_simpleTypeToEnumMapper.put("xsd__QName",                "XSD_QNAME");
         c_simpleTypeToEnumMapper.put("xsd__NOTATION",            "XSD_NOTATION");
+        c_simpleTypeToEnumMapper.put("xsd__anyType",             "XSD_ANYTYPE");
+
 
         c_simpleTypeToEnumMapper.put("xsdc__duration",            "XSDC_DURATION");
         c_simpleTypeToEnumMapper.put("xsdc__dateTime",            "XSDC_DATETIME");
@@ -509,6 +521,8 @@ public class CUtils
         c_simpleTypeToEnumMapper.put("xsdc__anyURI",                "XSDC_ANYURI");
         c_simpleTypeToEnumMapper.put("xsdc__QName",                "XSDC_QNAME");
         c_simpleTypeToEnumMapper.put("xsdc__NOTATION",            "XSDC_NOTATION");
+        c_simpleTypeToEnumMapper.put("xsdc__anyType",             "XSDC_ANYTYPE");
+
 
 
         c_initValueForSimpleType.put("xsd__duration",                "0");
@@ -555,7 +569,8 @@ public class CUtils
         c_initValueForSimpleType.put("xsd__anyURI",                "NULL");
         c_initValueForSimpleType.put("xsd__QName",                    "NULL");
         c_initValueForSimpleType.put("xsd__NOTATION",                "NULL");
- 
+        c_initValueForSimpleType.put("xsd__anyType",                "NULL");
+
         
         c_initValueForSimpleType.put("xsdc__duration",                "0");
         c_initValueForSimpleType.put("xsdc__dateTime",                "{0, 0, 0, 0, 0, 0, 0, 0, 0}");
@@ -601,6 +616,8 @@ public class CUtils
         c_initValueForSimpleType.put("xsdc__anyURI",                    "NULL");
         c_initValueForSimpleType.put("xsdc__QName",                    "NULL");
         c_initValueForSimpleType.put("xsdc__NOTATION",                "NULL");
+        c_initValueForSimpleType.put("xsdc__anyType",                "NULL");
+
         
         String[] pointerTypes = {
         // C++ types
@@ -609,14 +626,14 @@ public class CUtils
         "xsd__ID",             "xsd__IDREF",                        "xsd__IDREFS",
         "xsd__ENTITY",         "xsd__ENTITIES",                     "xsd__NMTOKEN",
         "xsd__NMTOKENS",       "xsd__anyURI",                       "xsd__QName",
-        "xsd__NOTATION",    
+        "xsd__NOTATION",       "xsd__anyType",   
         // C types
         "xsdc__string",        "xsdc__normalizedString",            "xsdc__token",
         "xsdc__language",      "xsdc__Name",                        "xsdc__NCName",
         "xsdc__ID",            "xsdc__IDREF",                       "xsdc__IDREFS",
         "xsdc__ENTITY",        "xsdc__ENTITIES",                    "xsdc__NMTOKEN",       
         "xsdc__NMTOKENS",      "xsdc__anyURI",                      "xsdc__QName",         
-        "xsdc__NOTATION"
+        "xsdc__NOTATION",      "xsdc__anyType"
         };
         c_pointerBasedTypes = new HashSet(Arrays.asList(pointerTypes));
     
@@ -810,7 +827,7 @@ public class CUtils
     {
             return name.equals(xsdAnyElementQName);
     }
-  
+    
     /**
      * Method to determine if QName represents an xsd:anyType.
      * 
@@ -946,7 +963,7 @@ public class CUtils
      */
     public static String getArrayNameForComplexType(QName qname)
     {
-        if (isAnyType(qname) || isAnyElement(qname))
+        if (isAnyElement(qname))
             return "AnyType";
         
         String arrayName = null;
@@ -1210,8 +1227,7 @@ public class CUtils
         WebServiceContext wscontext)
         throws WrapperFault
     {
-        if (CUtils.isAnyElement(param.getType().getName()) 
-                || CUtils.isAnyType(param.getType().getName()))
+        if (CUtils.isAnyElement(param.getType().getName()))
             return "AnyType*";
         
         Type type = wscontext.getTypemap().getType(param.getSchemaName());

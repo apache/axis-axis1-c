@@ -391,6 +391,12 @@ AxisObjectConverter::cppArrayToC(Axis_Array *objArray,
                     cArray->m_Array[count] = m_Array[count];
                     break;
                 }
+                case XSD_ANYTYPE:
+                {
+                    ((xsd__anyType*) cArray->m_Array)[count] = new char[strlen(((xsd__anyType*) m_Array)[count])+1];
+                    strcpy(((xsd__anyType*) cArray->m_Array)[count], ((xsd__anyType*) m_Array)[count]);
+                    break;
+                }
                 case XSD_UNKNOWN:
                 case XSD_ANY:
                 case ATTACHMENT:

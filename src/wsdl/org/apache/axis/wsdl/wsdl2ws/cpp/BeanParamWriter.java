@@ -466,15 +466,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     c_writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
                 }
              
-            if (attribs[i].isAnyTypeOrAnyElement())
+            if (attribs[i].isAnyElement())
             {
-                String fieldName = attribs[i].getParamNameAsMember();
-                
-                if (attribs[i].getType().isAnyElement())
-                {
-                    anyCounter += 1;
-                    fieldName  = "any" + Integer.toString(anyCounter);
-                }
+                anyCounter += 1;
+                String fieldName  = "any" + Integer.toString(anyCounter);
                 
                 if (!ifCheckPrinted && attribs[i].isOptional())
                     c_writer.write("\tif (param->" + fieldName + " != NULL)\n");
@@ -825,15 +820,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
             if (handleAll || handleChoice)
                 tab2 += "\t";
             
-            if (attribs[i].isAnyTypeOrAnyElement())
+            if (attribs[i].isAnyElement())
             {
-                String fieldName = attribs[i].getParamNameAsMember();
-                
-                if (attribs[i].getType().isAnyElement())
-                {
-                    anyCounter += 1;
-                    fieldName  = "any" + Integer.toString(anyCounter);
-                }
+                anyCounter += 1;
+                String fieldName  = "any" + Integer.toString(anyCounter);
                 
                 c_writer.write(tab2 + "param->" + fieldName + " = pIWSDZ->getAnyObject();\n");
             }
@@ -1155,15 +1145,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 if (i != 0)
                     c_writer.write("\n");
 
-                if (attribs[i].isAnyTypeOrAnyElement())
+                if (attribs[i].isAnyElement())
                 {
-                    String fieldName = attribs[i].getParamNameAsMember();
-                    
-                    if (attribs[i].getType().isAnyElement())
-                    {
-                        anyCounter += 1;
-                        fieldName  = "any" + Integer.toString(anyCounter);
-                    }
+                    anyCounter += 1;
+                    String fieldName  = "any" + Integer.toString(anyCounter);
                     
                     c_writer.write("\tif (original." + fieldName + " != NULL)\n");
                     c_writer.write("\t\t" + fieldName + " = new " + attribs[i].getTypeName() + "(*(original." + fieldName + "));\n");
@@ -1238,13 +1223,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                     isPointerType = CUtils.isPointerType(typename);
                 
-                if (attribs[i].isAnyTypeOrAnyElement())
+                if (attribs[i].isAnyElement())
                 {                    
-                    if (attribs[i].getType().isAnyElement())
-                    {
-                        anyCounter += 1;
-                        name  = "any" + Integer.toString(anyCounter);
-                    }
+                    anyCounter += 1;
+                    name  = "any" + Integer.toString(anyCounter);
                     
                     // TODO remove and replace with simple delete!
                     if (!forConstructor)

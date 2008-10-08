@@ -608,6 +608,17 @@ xsdc__NOTATION axiscSoapDeSerializerGetElementAsNOTATION(AXISCHANDLE wrapperSoap
 	const AxiscChar * pNamespace);
 
 /**
+ * Method used by wrapper to deserialize an xsd:anyType element
+ *
+ * @param pName SOAP element name
+ * @param pNamespace SOAP namespace
+ * @return deserialized xsd:anyType value
+ */
+AXISC_STORAGE_CLASS_INFO
+xsdc__anyType axiscSoapDeSerializerGetElementAsAnyType(AXISCHANDLE wrapperSoapDeSerializer, const AxiscChar * pName, 
+	const AxiscChar * pNamespace);
+
+/**
  * Method used by wrapper to deserialize an xsd:int attribute
  *
  * @param pName SOAP attribute name

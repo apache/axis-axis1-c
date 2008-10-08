@@ -432,7 +432,7 @@ public class ClientStubWriter
                 typeisarray = false;
             }
     
-            if (param.isAnyTypeOrAnyElement ())
+            if (param.isAnyElement ())
                 c_writer.write ("\t\tm_pCall->addAnyObject(Value" + i);
             else
             {
@@ -638,7 +638,7 @@ public class ClientStubWriter
                 currentParamName = "*OutValue" + i;
                 
                 // Some code need to be merged as we have some duplicated in coding here.
-                if (currentType.isAnyTypeOrAnyElement ())
+                if (currentType.isAnyElement ())
                 {
                     // TODO Handle arrays
                     c_writer.write ("\t\t\t\t"
@@ -791,7 +791,7 @@ public class ClientStubWriter
             if (minfo.getOutputMessage () != null)
                 c_writer.write ("\t\t\t\t// no output?\n\t\t\t}\n");
         }
-        else if (returntype.isAnyTypeOrAnyElement ())
+        else if (returntype.isAnyElement ())
         {
             // TODO handle arrays
             c_writer.write ("\t\t\t\tpReturn = (" + outparamType + ")m_pCall->getAnyObject();\n\t\t\t}\n");

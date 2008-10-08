@@ -307,6 +307,9 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
         case XSD_NMTOKENS:
             xsdValue = new NMTOKENS((xsd__NMTOKENS) pValue);
             break;
+        case XSD_ANYTYPE:
+            xsdValue = new AnyType2((xsd__anyType) pValue);
+            break;
         default:
             break;
     }

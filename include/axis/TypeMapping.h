@@ -288,7 +288,12 @@ typedef enum XSDCTYPETag
     /**
      * Attachment
      */
-    C_ATTACHMENT
+    C_ATTACHMENT,
+    
+    /**
+     * xsd:anyType
+     */
+    XSDC_ANYTYPE    
 } AXISC_XSDTYPE;
 
 /**

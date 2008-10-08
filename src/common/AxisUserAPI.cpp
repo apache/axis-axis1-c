@@ -483,6 +483,12 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
                 m_Array[count] = array[count];
                 break;
             }
+            case XSD_ANYTYPE:
+            {
+                ((xsd__anyType*) m_Array)[count] = new char[strlen(((xsd__anyType*) array)[count])+1];
+                strcpy(((xsd__anyType*) m_Array)[count], ((xsd__anyType*) array)[count]);
+                break;
+            }
             case XSD_UNKNOWN:
             case XSD_ANY:
             case ATTACHMENT:
@@ -792,6 +798,12 @@ void Axis_Array::addElement(void* element)
                 m_Array[m_Size] = element;
                 break;
             }
+            case XSD_ANYTYPE:
+            {
+                ((xsd__anyType*) m_Array)[m_Size] = new char[strlen((xsd__anyType) element)+1];
+                strcpy(((xsd__anyType*) m_Array)[m_Size], (xsd__anyType) element);
+                break;
+            }
             case XSD_UNKNOWN:
             case XSD_ANY:
             case ATTACHMENT:
@@ -1043,6 +1055,11 @@ void Axis_Array::clear()
                     case XSD_ARRAY:
                     {
                         delete ((Axis_Array**) m_Array)[count];
+                        break;
+                    }
+                    case XSD_ANYTYPE:
+                    {
+                        delete []((xsd__anyType*) m_Array)[count];
                         break;
                     }
                     case USER_TYPE:
@@ -2253,6 +2270,34 @@ const xsd__NOTATION* xsd__NOTATION_Array::get(int& size) const
 {
     XSDTYPE type;
     return (const xsd__NOTATION*) Axis_Array::get(size, type);
+}
+
+
+xsd__anyType_Array::xsd__anyType_Array()
+{
+    m_Type = XSD_ANYTYPE;
+}
+
+xsd__anyType_Array::xsd__anyType_Array(const xsd__anyType_Array & original)
+{
+    if (original.m_Type == XSD_ANYTYPE)
+        clone(original);
+}
+
+xsd__anyType_Array::~xsd__anyType_Array()
+{
+    // Parent Axis_Array will carry out full clear up
+}
+
+void xsd__anyType_Array::set(xsd__anyType* array, int size)
+{
+    Axis_Array::set((void**)array, size, XSD_ANYTYPE);
+}
+
+const xsd__anyType* xsd__anyType_Array::get(int& size) const
+{
+    XSDTYPE type;
+    return (const xsd__anyType*) Axis_Array::get(size, type);
 }
 
 AXIS_CPP_NAMESPACE_END

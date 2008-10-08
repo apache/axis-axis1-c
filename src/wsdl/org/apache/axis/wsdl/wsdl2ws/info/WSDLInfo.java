@@ -615,7 +615,7 @@ public class WSDLInfo
             if (null == qn)
                 throw new WrapperFault("Array type found without a Ref type");
             
-            if (CUtils.isPrimitiveType(qn) || CUtils.isAnyType(qn))
+            if (CUtils.isPrimitiveType(qn))
                 return null;
             
             QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
@@ -799,7 +799,7 @@ public class WSDLInfo
                                     
                                     typeName = new QName(typeName.getNamespaceURI(), localpart);
                                     
-                                    if (CUtils.isPrimitiveType(typeName) || CUtils.isAnyType(typeName))
+                                    if (CUtils.isPrimitiveType(typeName))
                                         newSecondaryType = createTypeInfo(typeName);
                                     else
                                         newSecondaryType = createTypeInfo(elem.getTypeEntry());
@@ -1274,7 +1274,7 @@ public class WSDLInfo
                     pinfo.setType(type);
                     pinfo.setParamName(elementName, c_typeMap);
                     pinfo.setElementName(element.getQName());
-                    pinfo.setAnyTypeOrAnyElement(type.isAnyType() || type.isAnyElement());
+                    pinfo.setAnyElement(type.isAnyElement());
                     minfo.addOutputParameter(pinfo);                    
                     minfo.setConsumeBodyOnMessageValidation(false);
                 }
@@ -1294,7 +1294,7 @@ public class WSDLInfo
                     pinfo.setNillable(eleinfo.isNillable());
                     pinfo.setOptional(eleinfo.getMinOccurs() == 0);
                     pinfo.setElementName(type.getElementForElementName(elementname).getName());
-                    pinfo.setAnyTypeOrAnyElement(innerType.isAnyType() || innerType.isAnyElement());
+                    pinfo.setAnyElement(innerType.isAnyElement());
     
                     minfo.addOutputParameter(pinfo);
                 }
@@ -1314,7 +1314,7 @@ public class WSDLInfo
             else
                 pinfo.setElementName(type.getName());
             
-            pinfo.setAnyTypeOrAnyElement(type.isAnyType() || type.isAnyElement());
+            pinfo.setAnyElement(type.isAnyElement());
             
             // Let us be nice and uppercase the first character in type name, 
             // in addition to resolving method name/type conflicts.
@@ -1425,7 +1425,7 @@ public class WSDLInfo
                 pinfo.setParamName(elementname, c_typeMap);     
                 pinfo.setArray(eleinfo.getMaxOccurs() > 1);
                 pinfo.setElementName(type.getElementForElementName(elementname).getName());
-                pinfo.setAnyTypeOrAnyElement(innerType.isAnyType() || innerType.isAnyElement());
+                pinfo.setAnyElement(innerType.isAnyElement());
                 pinfo.setNillable(eleinfo.isNillable());
                 pinfo.setOptional(eleinfo.getMinOccurs() == 0);
 
@@ -1469,7 +1469,7 @@ public class WSDLInfo
                 type.setIsUnwrappedInputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
                 pinfo.setElementName(type.getName());
-                pinfo.setAnyTypeOrAnyElement(type.isAnyType() || type.isAnyElement());
+                pinfo.setAnyElement(type.isAnyElement());
     
                 // Let us be nice and uppercase the first character in type name, 
                 // in addition to resolving method name/type conflicts.

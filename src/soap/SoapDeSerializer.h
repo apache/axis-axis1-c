@@ -207,6 +207,8 @@ public:
         const AxisChar* pNamespace);
     xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
         const AxisChar* pNamespace);
+    xsd__anyType AXISCALL getElementAsAnyType(const AxisChar* pName,
+        const AxisChar* pNamespace);
 
 	void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
         IAnySimpleType* pSimpleType);

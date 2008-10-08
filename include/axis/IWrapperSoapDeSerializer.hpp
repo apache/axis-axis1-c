@@ -538,6 +538,16 @@ public:
                                                         const AxisChar* pNamespace)=0;
 
     /**
+     * Method used by wrapper to deserialize an xsd:anyType element
+     * 
+     * @param pName SOAP element name
+     * @param pNamespace SOAP namespace
+     * @return deserialized xsd:anyType value
+     */
+    virtual xsd__anyType AXISCALL getElementAsAnyType(const AxisChar* pName,
+                                                      const AxisChar* pNamespace)=0;
+    
+    /**
      * Method used by wrapper to deserialize an xsd:int attribute
      * 
      * @param pName SOAP attribute name

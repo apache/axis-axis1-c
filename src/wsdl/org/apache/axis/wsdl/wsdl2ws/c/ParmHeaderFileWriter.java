@@ -266,13 +266,10 @@ public class ParmHeaderFileWriter extends ParamWriter
                 
                 // Following will set param name - if xsd:any, we index param name
                 String paramName = attribs[i].getParamNameAsMember();
-                if(attribs[i].isAnyTypeOrAnyElement())
+                if(attribs[i].isAnyElement())
                 {
-                    if (attribs[i].getType().isAnyElement())
-                    {
-                        anyCounter += 1;
-                        paramName  += Integer.toString(anyCounter);
-                    }
+                    anyCounter += 1;
+                    paramName  += Integer.toString(anyCounter);
                     
                     paramType = "Axisc" + paramType;
                 }
@@ -404,7 +401,7 @@ public class ParmHeaderFileWriter extends ParamWriter
 
                 if (theType.isRestriction() && !CUtils.isPrimitiveType(basicType))
                     typeSet.add(basicType);
-                else if (!attribs[i].isSimpleType() && !attribs[i].isAnyTypeOrAnyElement())
+                else if (!attribs[i].isSimpleType() && !attribs[i].isAnyElement())
                 {
                     if ((attribs[i].isArray()) && !theType.isSimpleType())
                         typeSet.add(basicType + "_Array");

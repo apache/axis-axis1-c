@@ -126,6 +126,12 @@ typedef AxiscChar * xsdc__NMTOKEN;
 typedef AxiscChar * xsdc__NMTOKENS;
 
 /**
+ * @typedef xsdc__NMTOKENS
+ * Axis C++ defined type for xml basic type NMTOKENS
+ */
+typedef AxiscChar * xsdc__anyType;
+
+/**
  * @typedef xsdc__integer
  * Axis C++ defined type for xml basic type integer
  */
@@ -504,6 +510,7 @@ AXISC_DEFINED_ARRAY(xsdc__double)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__anyURI)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__QName)
 AXISC_DEFINED_POINTER_ARRAY(xsdc__NOTATION)
+AXISC_DEFINED_POINTER_ARRAY(xsdc__anyType)
 
 
 #ifdef __cplusplus

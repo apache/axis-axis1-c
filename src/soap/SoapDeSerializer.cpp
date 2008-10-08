@@ -731,12 +731,23 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
             elementName = m_pParser->peek();
             if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
             {
-                if (0 == count)
-                    pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-                getElement(pName, pNamespace, pSimpleType, (bool)(RPC_ENCODED == m_nStyle));
-                pValue = pSimpleType->getValue();
-                Array->addElement(pValue);
-                Axis::AxisDelete(pValue, pSimpleType->getType());
+            	// TODO instead of deleting the pointer use it by by-passing addElement().
+            	if (XSD_ANYTYPE != nType)
+            	{
+	                if (0 == count)
+	                    pSimpleType = AxisUtils::createSimpleTypeObject(nType);
+	                getElement(pName, pNamespace, pSimpleType, (bool)(RPC_ENCODED == m_nStyle));
+	                pValue = pSimpleType->getValue();
+	                Array->addElement(pValue);
+	                Axis::AxisDelete(pValue, pSimpleType->getType());
+            	}
+            	else
+            	{
+            		pValue = getElementAsAnyType(pName, pNamespace);
+            		Array->addElement(pValue);
+            		Axis::AxisDelete(pValue, XSD_ANYTYPE);
+            	}
+            	
                 pValue = NULL;
             }
             else
@@ -1287,7 +1298,7 @@ getElement (const AxisChar * pName, const AxisChar * pNamespace,
     
     if (AXIS_FAIL == m_nStatus)
         return;
-        
+    
     // get next element, character mode 
     if (AXIS_FAIL == getNextNode(false, true))
        return;
@@ -1672,6 +1683,35 @@ getElementAsNOTATION (const AxisChar * pName, const AxisChar * pNamespace)
     return simpleType.getNOTATION();
 }
 
+xsd__anyType SoapDeSerializer::
+getElementAsAnyType(const AxisChar* pName, const AxisChar* pNamespace)
+{
+    xsd__anyType ret = NULL;
+    
+    if (AXIS_SUCCESS != m_nStatus)
+        return ret;
+        
+    if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
+        return ret;
+
+    if (RPC_ENCODED != m_nStyle && (0 != strcmp (pName, m_pNode->m_pchNameOrValue)))
+       return ret;
+    
+    AnyType *any = getAnyObject();
+    if (NULL != any)
+    {
+	    if (any->_size != 0)
+	    {
+	    	ret = any->_array[0];
+	    	any->_array[0] = NULL;
+	        delete [] any->_array;
+	    }
+	    delete any;
+    }
+    
+    return ret;
+}
+
 xsd__string SoapDeSerializer::
 getFaultAsXMLString()
 {
@@ -1687,11 +1727,11 @@ getFaultAsXMLString()
     xsd__string ret = new char[len];
     memset(ret,0,len);
     for (i=0; i<any->_size; i++) 
-        if (any->_array[i]) 
-        {
-            strcat(ret,any->_array[i]);
-            delete [] any->_array[i];
-        }
+    	if (any->_array[i]) 
+	    {
+	        strcat(ret,any->_array[i]);
+	        delete [] any->_array[i];
+	    }
     delete [] any->_array;
     delete any;
     return ret;
@@ -1915,7 +1955,7 @@ getAnyObject ()
             tagCount++;
         else if (END_ELEMENT == m_pNode->m_type)
             tagCount--;
-                
+
         if (START_PREFIX == m_pNode->m_type)
         {
             nsDecls += " xmlns";

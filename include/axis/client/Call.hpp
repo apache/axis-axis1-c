@@ -989,6 +989,18 @@ public:
                                                  const AxisChar * pNamespace);
 
     /**
+     * Method used by stubs to get a deserialized value of XML element as any type.
+     *
+     * @param pName null terminated character string that contains the name of
+     * the tag containing the element.
+     * @param pNamespace null terminated character string that contains the
+     * namespace of the tag containing the element.
+     * @return pointer to xsd__anyType type containing the contents of the element.
+     */
+    xsd__anyType AXISCALL getElementAsAnyType( const AxisChar * pName,
+                                               const AxisChar * pNamespace);
+    
+    /**
      * Method used by stubs to get a deserialized value of a XML attribute as basic type.
      *
      * @param pName null terminated character string that contains the name of

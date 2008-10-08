@@ -22,6 +22,7 @@
 #include <axis/GDefine.hpp>
 #include <string>
 
+#include "../soap/xsd/AnyType2.hpp"
 #include "../soap/xsd/Boolean.hpp"
 #include "../soap/xsd/AnyURI.hpp"
 #include "../soap/xsd/String.hpp"

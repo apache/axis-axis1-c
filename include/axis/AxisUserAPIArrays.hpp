@@ -952,6 +952,47 @@ class STORAGE_CLASS_INFO xsd__NMTOKENS_Array : public Axis_Array {
 };
 
 /**
+ * @class xsd__string_Array
+ * 
+ * The storage class for arrays of xsd__string
+ * 
+ */
+class STORAGE_CLASS_INFO xsd__anyType_Array : public Axis_Array {
+  public:
+    /**
+     * Constructor
+     */
+    xsd__anyType_Array();
+
+    /**
+     * Copy constructor
+     * @param original xsd__anyType_Array to copy.
+     */
+    xsd__anyType_Array(const xsd__anyType_Array & original);
+        
+    /**
+     * Destructor
+     */
+    virtual ~xsd__anyType_Array();
+    
+    /**
+     * Populate the array from a c-style array
+     * 
+     * @param array is a c-style array of pointers to the xsd__anyType data.
+     * @param size of the array, including NULL entries.
+     */
+     void set(xsd__anyType* array, int size);
+
+    /**
+     * Return a c-style array.
+     * 
+     * @param size will be updated with the size of the array returned.
+     * @return c-style array of pointers to the xsd__anyType data.
+     */
+    const xsd__anyType* get(int& size) const;
+};
+
+/**
  * @class xsd__boolean_Array
  * 
  * The storage class for arrays of xsd__boolean

@@ -142,6 +142,7 @@ int axiscAxisDelete(void * pValue,
             case C_USER_TYPE:
             case C_ATTACHMENT:
             case XSDC_UNKNOWN:
+            case XSDC_ANYTYPE:
             {
                 Axis::AxisDelete(pValue, (XSDTYPE) type);
                 break;
@@ -283,6 +284,7 @@ void *axiscAxisNew(AXISC_XSDTYPE type, int size)
             case XSDC_ANYURI:
             case XSDC_QNAME:
             case XSDC_NOTATION:
+            case XSDC_ANYTYPE:
             {
                 retVal = new char[size+1];
                 break;

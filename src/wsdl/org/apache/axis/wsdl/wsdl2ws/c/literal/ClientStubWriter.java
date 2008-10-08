@@ -276,7 +276,7 @@ public class ClientStubWriter
         {
             c_writer.write("\t");
             
-            if (returntypeisarray && !returntype.isAnyTypeOrAnyElement())
+            if (returntypeisarray && !returntype.isAnyElement())
             {   
                 QName qname = null;
                 if (CUtils.getArrayType (retType) != null)
@@ -430,7 +430,7 @@ public class ClientStubWriter
                 typeisarray = false;
             }
  
-            if (param.isAnyTypeOrAnyElement ())
+            if (param.isAnyElement ())
                 c_writer.write("\taxiscCallAddAnyObject(call, Value" + i);
             else
             {
@@ -549,7 +549,7 @@ public class ClientStubWriter
             }
 
             c_writer.write (");\n");
-            if (!param.isAnyTypeOrAnyElement ())
+            if (!param.isAnyElement ())
                 c_writer.write("\t}\n");            
           } // end for-loop
 
@@ -637,7 +637,7 @@ public class ClientStubWriter
                 currentParamName = "*OutValue" + i;
                 
                 // Some code need to be merged as we have some duplicated in coding here.
-                if (currentType.isAnyTypeOrAnyElement ())
+                if (currentType.isAnyElement ())
                 {
                     // TODO work needs to be done to clean up storage!
                     c_writer.write ("\t\t\t"
@@ -799,9 +799,9 @@ public class ClientStubWriter
             if (minfo.getOutputMessage () != null)
                 c_writer.write ("\t\t\t// no output?\n\t\t}\n");
         }
-        else if (returntype.isAnyTypeOrAnyElement ())
+        else if (returntype.isAnyElement ())
         {
-            // TODO need to handle arrays
+            // TODO need to handle arrays?
             c_writer.write ("\t\t\tpReturn = (" + outparamType + ")axiscCallGetAnyObject(call);\n\t\t}\n");
 
             returnStatement = "\treturn pReturn;\n";

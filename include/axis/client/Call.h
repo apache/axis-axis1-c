@@ -1008,6 +1008,19 @@ xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar *
 	const AxiscChar * pNamespace);
 
 /**
+ * Method used by stubs to get a deserialized value of XML element as any type.
+ *
+ * @param pName null terminated character string that contains the name of
+ * the tag containing the element.
+ * @param pNamespace null terminated character string that contains the
+ * namespace of the tag containing the element.
+ * @return pointer to xsd__anyType type containing the contents of the element.
+ */
+AXISC_STORAGE_CLASS_INFO
+xsdc__anyType axiscCallGetElementAsAnyType(AXISCHANDLE call, const AxiscChar * pName, 
+	const AxiscChar * pNamespace);
+
+/**
  * Method used by stubs to get a deserialized value of a XML attribute as basic type.
  *
  * @param pName null terminated character string that contains the name of

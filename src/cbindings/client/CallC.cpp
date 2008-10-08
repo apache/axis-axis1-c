@@ -1909,15 +1909,32 @@ xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar *
 }
 
 
+AXISC_STORAGE_CLASS_INFO
+xsdc__anyType axiscCallGetElementAsAnyType(AXISCHANDLE call, const AxiscChar * pName, 
+	const AxiscChar * pNamespace)
+{
+    
+    
+    Call *c = (Call*)call;
+    
+    try
+    {
+        return c->getElementAsAnyType(pName,pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+          
+          
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
 
-
-
-
-
-
-
-
-
+    return (xsdc__anyType)NULL;
+}
 
 
 AXISC_STORAGE_CLASS_INFO 

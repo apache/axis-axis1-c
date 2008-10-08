@@ -249,15 +249,10 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\tif(param->" + attribs[i].getParamNameAsMember() + ")\n\t{\n\t");
                 }
              
-            if (attribs[i].isAnyTypeOrAnyElement())
+            if (attribs[i].isAnyElement())
             {
-                String fieldName = attribs[i].getParamNameAsMember();
-            
-                if (attribs[i].getType().isAnyElement())
-                {
-                    anyCounter += 1;
-                    fieldName  = "any" + Integer.toString(anyCounter);
-                }
+                anyCounter += 1;
+                String fieldName  = "any" + Integer.toString(anyCounter);
                     
                 if (!ifCheckPrinted && attribs[i].isOptional())
                     c_writer.write("\tif (param->" + fieldName + " != NULL)\n");
@@ -599,15 +594,10 @@ public class BeanParamWriter extends ParamCFileWriter
             if (handleAll || handleChoice)
                 tab2 += "\t";
             
-            if (attribs[i].isAnyTypeOrAnyElement())
+            if (attribs[i].isAnyElement())
             {
-                String fieldName = attribs[i].getParamNameAsMember();
-                
-                if (attribs[i].getType().isAnyElement())
-                {
-                    anyCounter += 1;
-                    fieldName  = "any" + Integer.toString(anyCounter);
-                }
+                anyCounter += 1;
+                String fieldName  = "any" + Integer.toString(anyCounter);
                 
                 c_writer.write(tab2 + "param->" + fieldName + " = axiscSoapDeSerializerGetAnyObject(pDZ);\n");
             }
@@ -845,7 +835,7 @@ public class BeanParamWriter extends ParamCFileWriter
         // the container structure for arrays are created by the corresponding deserializer.
         for (int i = 0; i < attribs.length; i++)
         {
-            if (attribs[i].isArray() && !attribs[i].isAnyTypeOrAnyElement())
+            if (attribs[i].isArray() && !attribs[i].isAnyElement())
             {
                 writeNewline = true;
                 
@@ -955,19 +945,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\n");
                 }
             }
-            else if (attribs[i].isAnyTypeOrAnyElement())
+            else if (attribs[i].isAnyElement())
             {
-                String fieldName = attribs[i].getParamNameAsMember();
-                
-                if (attribs[i].getType().isAnyElement())
-                {
-                    anyCounter += 1;
-                    fieldName  = "any" + Integer.toString(anyCounter);
-                }
+                anyCounter += 1;
+                String fieldName  = "any" + Integer.toString(anyCounter);
                 
                 c_writer.write("\t\tif (param->" + fieldName + " != NULL)\n");
                 c_writer.write("\t\t\taxiscAxisDelete(param->" + fieldName + ", XSDC_ANY);\n");               
-            }            
+            }
             else
             {
                 String deleteFunctionSuffix = "";

@@ -1201,7 +1201,28 @@ xsdc__NOTATION axiscSoapDeSerializerGetElementAsNOTATION(AXISCHANDLE wrapperSoap
 }
 
 
+AXISC_STORAGE_CLASS_INFO
+xsdc__anyType axiscSoapDeSerializerGetElementAsAnyType(AXISCHANDLE wrapperSoapDeSerializer, 
+                                                       const AxiscChar * pName, 
+                                                       const AxiscChar * pNamespace)
+{
+    IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
 
+    try
+    {
+        return dz->getElementAsAnyType(pName, pNamespace);
+    }
+    catch ( AxisException& e  )
+    {
+        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
+
+    return (xsdc__anyType)NULL;      
+}
 
 
 
