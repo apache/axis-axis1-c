@@ -21,6 +21,8 @@
  *
  */
 
+#include "axis/Axis.hpp"
+
 #include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
@@ -55,253 +57,18 @@ ArrayBean::~ArrayBean()
                 m_value.cta->pObject = NULL;
             }
             delete m_value.cta;
-			m_value.cta = NULL;
         }
     }
     else if (AxisEngine::m_bServer && m_value.sta)
     {
+    	// TODO - Why do we only do this for server? I think we need to do for client also.
         if (m_nSize > 0)
         {
             for (int count = 0 ; count < m_nSize ; count++)
-            {
-                if ( ((void **) m_value.sta)[count] != NULL)
-                {
-                    switch (m_type)
-                    {
-                        case XSD_DURATION:
-                        {
-                            delete ((xsd__duration**) m_value.sta)[count];
-                          break;
-                        }
-                        case XSD_DATETIME:
-                        {
-                            delete ((xsd__dateTime**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_TIME:
-                        {
-                            delete ((xsd__time**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_DATE:
-                        {
-                            delete ((xsd__date**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_GYEARMONTH:
-                        {
-                            delete ((xsd__gYearMonth**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_GYEAR:
-                        {
-                            delete ((xsd__gYear**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_GMONTHDAY:
-                        {
-                            delete ((xsd__gMonthDay**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_GDAY:
-                        {
-                            delete ((xsd__gDay**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_GMONTH:
-                        {
-                            delete ((xsd__gMonth**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_STRING:
-                        {
-                            delete []((xsd__string*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NORMALIZEDSTRING:
-                        {
-                            delete []((xsd__normalizedString*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_TOKEN:
-                        {
-                            delete []((xsd__token*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_LANGUAGE:
-                        {
-                            delete []((xsd__language*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NAME:
-                        {
-                            delete []((xsd__Name*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NCNAME:
-                        {
-                            delete []((xsd__NCName*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_ID:
-                        {
-                            delete []((xsd__ID*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_IDREF:
-                        {
-                            delete []((xsd__IDREF*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_IDREFS:
-                        {
-                            delete []((xsd__IDREFS*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_ENTITY:
-                        {
-                            delete []((xsd__ENTITY*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_ENTITIES:
-                        {
-                            delete []((xsd__ENTITIES*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NMTOKEN:
-                        {
-                            delete []((xsd__NMTOKEN*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NMTOKENS:
-                        {
-                            delete []((xsd__NMTOKENS*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_BOOLEAN:
-                        {
-                            delete ((xsd__boolean**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_BASE64BINARY:
-                        {
-                            delete ((xsd__base64Binary**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_HEXBINARY:
-                        {
-                            delete ((xsd__hexBinary**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_FLOAT:
-                        {
-                            delete ((xsd__float**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_DECIMAL:
-                        {
-                            delete ((xsd__decimal**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_INTEGER:
-                        {
-                            delete ((xsd__integer**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NONPOSITIVEINTEGER:
-                        {
-                            delete ((xsd__nonPositiveInteger**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NEGATIVEINTEGER:
-                        {
-                            delete ((xsd__negativeInteger**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_LONG:
-                        {
-                            delete ((xsd__long**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_INT:
-                        {
-                            delete ((xsd__int**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_SHORT:
-                        {
-                            delete ((xsd__short**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_BYTE:
-                        {
-                            delete ((xsd__byte**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NONNEGATIVEINTEGER:
-                        {
-                            delete ((xsd__nonNegativeInteger**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_UNSIGNEDLONG:
-                        {
-                            delete ((xsd__unsignedLong**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_UNSIGNEDINT:
-                        {
-                            delete ((xsd__unsignedInt**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_UNSIGNEDSHORT:
-                        {
-                            delete ((xsd__unsignedShort**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_UNSIGNEDBYTE:
-                        {
-                            delete ((xsd__unsignedByte**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_POSITIVEINTEGER:
-                        {
-                            delete ((xsd__positiveInteger**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_DOUBLE:
-                        {
-                            delete ((xsd__double**) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_ANYURI:
-                        {
-                            delete []((xsd__anyURI*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_QNAME:
-                        {
-                            delete []((xsd__QName*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_NOTATION:
-                        {
-                            delete []((xsd__NOTATION*) m_value.sta)[count];
-                            break;
-                        }
-                        case XSD_ARRAY:
-                        {
-                            delete ((Axis_Array**) m_value.sta)[count];
-                            break;
-                        }
-                        default:
-                            break;
-                    }
-                }
-            }
-            m_nSize = 0;
+            	if (((void **) m_value.sta)[count] != NULL)
+            		Axis:AxisDelete(((void **) m_value.sta)[count], m_type);
         }
         delete [] m_value.sta;
-        m_value.sta = NULL;
     }
 }
 

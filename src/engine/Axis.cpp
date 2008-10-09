@@ -522,131 +522,16 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         
     switch (type)
     {
-        case XSD_DURATION:
-        {
-            delete (xsd__duration*) pValue;
-            break;
-        }
-        case XSD_DATETIME:
-        {
-            delete (xsd__dateTime*) pValue;
-            break;
-        }
-        case XSD_TIME:
-        {
-            delete (xsd__time*) pValue;
-            break;
-        }
-        case XSD_DATE:
-        {
-            delete (xsd__date*) pValue;
-            break;
-        }
-        case XSD_GYEARMONTH:
-        {
-            delete (xsd__gYearMonth*) pValue;
-            break;
-        }
-        case XSD_GYEAR:
-        {
-            delete (xsd__gYear*) pValue;
-            break;
-        }
-        case XSD_GMONTHDAY:
-        {
-            delete (xsd__gMonthDay*) pValue;
-            break;
-        }
-        case XSD_GDAY:
-        {
-            delete (xsd__gDay*) pValue;
-            break;
-        }
-        case XSD_GMONTH:
-        {
-            delete (xsd__gMonth*) pValue;
-            break;
-        }
-        case XSD_STRING:
-        {
-            delete [] (xsd__string) pValue;
-            break;
-        }
-        case XSD_NORMALIZEDSTRING:
-        {
-            delete [] (xsd__normalizedString) pValue;
-            break;
-        }
-        case XSD_TOKEN:
-        {
-            delete [] (xsd__token) pValue;
-            break;
-        }
-        case XSD_LANGUAGE:
-        {
-            delete [] (xsd__language) pValue;
-            break;
-        }
-        case XSD_NAME:
-        {
-            delete [] (xsd__Name) pValue;
-            break;
-        }
-        case XSD_NCNAME:
-        {
-            delete [] (xsd__NCName) pValue;
-            break;
-        }
-        case XSD_ID:
-        {
-            delete [] (xsd__ID) pValue;
-            break;
-        }
-        case XSD_IDREF:
-        {
-            delete [] (xsd__IDREF) pValue;
-            break;
-        }
-        case XSD_IDREFS:
-        {
-            delete [] (xsd__IDREFS) pValue;
-            break;
-        }
-        case XSD_ENTITY:
-        {
-            delete [] (xsd__ENTITY) pValue;
-            break;
-        }
-        case XSD_ENTITIES:
-        {
-            delete [] (xsd__ENTITIES) pValue;
-            break;
-        }
-        case XSD_NMTOKEN:
-        {
-            delete [] (xsd__NMTOKEN) pValue;
-            break;
-        }
-        case XSD_NMTOKENS:
-        {
-            delete [] (xsd__NMTOKENS) pValue;
-            break;
-        }
-        case XSD_BOOLEAN:
-        {
-            delete (xsd__boolean*) pValue;
-            break;
-        }
-        case XSD_BASE64BINARY:
-        {
-            delete (xsd__base64Binary*) pValue;
-            break;
-        }
-        case XSD_HEXBINARY:
-        {
-            delete (xsd__hexBinary*) pValue;
-            break;
-        }
+	    case XSD_STRING:
+	    {
+	        delete [] (xsd__string) pValue;
+	        break;
+	    }
+	    case XSD_NORMALIZEDSTRING:
+	    {
+	        delete [] (xsd__normalizedString) pValue;
+	        break;
+	    }
         case XSD_FLOAT:
         {
             delete (xsd__float*) pValue;
@@ -726,6 +611,121 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         {
             delete (xsd__double*) pValue;
             break;
+        }	    
+        case XSD_DURATION:
+        {
+            delete (xsd__duration*) pValue;
+            break;
+        }
+        case XSD_DATETIME:
+        {
+            delete (xsd__dateTime*) pValue;
+            break;
+        }
+        case XSD_TIME:
+        {
+            delete (xsd__time*) pValue;
+            break;
+        }
+        case XSD_DATE:
+        {
+            delete (xsd__date*) pValue;
+            break;
+        }
+        case XSD_GYEARMONTH:
+        {
+            delete (xsd__gYearMonth*) pValue;
+            break;
+        }
+        case XSD_GYEAR:
+        {
+            delete (xsd__gYear*) pValue;
+            break;
+        }
+        case XSD_GMONTHDAY:
+        {
+            delete (xsd__gMonthDay*) pValue;
+            break;
+        }
+        case XSD_GDAY:
+        {
+            delete (xsd__gDay*) pValue;
+            break;
+        }
+        case XSD_GMONTH:
+        {
+            delete (xsd__gMonth*) pValue;
+            break;
+        }
+        case XSD_TOKEN:
+        {
+            delete [] (xsd__token) pValue;
+            break;
+        }
+        case XSD_LANGUAGE:
+        {
+            delete [] (xsd__language) pValue;
+            break;
+        }
+        case XSD_NAME:
+        {
+            delete [] (xsd__Name) pValue;
+            break;
+        }
+        case XSD_NCNAME:
+        {
+            delete [] (xsd__NCName) pValue;
+            break;
+        }
+        case XSD_ID:
+        {
+            delete [] (xsd__ID) pValue;
+            break;
+        }
+        case XSD_IDREF:
+        {
+            delete [] (xsd__IDREF) pValue;
+            break;
+        }
+        case XSD_IDREFS:
+        {
+            delete [] (xsd__IDREFS) pValue;
+            break;
+        }
+        case XSD_ENTITY:
+        {
+            delete [] (xsd__ENTITY) pValue;
+            break;
+        }
+        case XSD_ENTITIES:
+        {
+            delete [] (xsd__ENTITIES) pValue;
+            break;
+        }
+        case XSD_NMTOKEN:
+        {
+            delete [] (xsd__NMTOKEN) pValue;
+            break;
+        }
+        case XSD_NMTOKENS:
+        {
+            delete [] (xsd__NMTOKENS) pValue;
+            break;
+        }
+        case XSD_BOOLEAN:
+        {
+            delete (xsd__boolean*) pValue;
+            break;
+        }
+        case XSD_BASE64BINARY:
+        {
+            delete (xsd__base64Binary*) pValue;
+            break;
+        }
+        case XSD_HEXBINARY:
+        {
+            delete (xsd__hexBinary*) pValue;
+            break;
         }
         case XSD_ANYURI:
         {
@@ -750,6 +750,11 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
             delete (Axis_Array*) pValue;
             break;
         }
+        case XSD_ANYTYPE:
+        {
+            delete [] (xsd__anyType) pValue;
+            break;
+        }        	
         case XSD_ANY:
         case ATTACHMENT:
         case XSD_UNKNOWN:

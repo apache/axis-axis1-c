@@ -94,6 +94,8 @@ void TypeMapping::initialize ()
         m_sTypeMap[std::string ("anyURI")] = XSD_ANYURI;
         m_sTypeMap[std::string ("QName")] = XSD_QNAME;
         m_sTypeMap[std::string ("NOTATION")] = XSD_NOTATION;
+        m_sTypeMap[std::string ("anyType")] = XSD_ANYTYPE;
+
 
         m_bInit = true;
     }

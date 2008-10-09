@@ -17,6 +17,7 @@
  * @author Mark Whitlock
  */
 
+#include <axis/Axis.hpp>
 #include <axis/AxisUserAPI.hpp>
 #include <axis/AxisUserAPIArrays.hpp>
 
@@ -209,6 +210,12 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
 
         switch (m_Type)
         {
+	        case XSD_STRING:
+	        {
+	            ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1];
+	            strcpy(((xsd__string*) m_Array)[count], ((xsd__string*) array)[count]);
+	            break;
+	        }
             case XSD_DURATION:
             {
                 ((xsd__duration**) m_Array)[count] = new xsd__duration();
@@ -263,12 +270,7 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
                 *((xsd__gMonth**)m_Array)[count] = *((xsd__gMonth**) array)[count];
                 break;
             }
-            case XSD_STRING:
-            {
-                ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1];
-                strcpy(((xsd__string*) m_Array)[count], ((xsd__string*) array)[count]);
-                break;
-            }
+
             case XSD_NORMALIZEDSTRING:
             {
                 ((xsd__normalizedString*) m_Array)[count] = new char[strlen(((xsd__normalizedString*) array)[count])+1];
@@ -524,6 +526,12 @@ void Axis_Array::addElement(void* element)
     {
         switch (m_Type)
         {
+	        case XSD_STRING:
+	        {
+	            ((xsd__string*) m_Array)[m_Size] = new char[strlen((xsd__string) element)+1];
+	            strcpy(((xsd__string*) m_Array)[m_Size], (xsd__string) element);
+	            break;
+	        }
             case XSD_DURATION:
             {
                 ((xsd__duration**) m_Array)[m_Size] = new xsd__duration();
@@ -578,12 +586,7 @@ void Axis_Array::addElement(void* element)
                 *((xsd__gMonth**)m_Array)[m_Size] = *(xsd__gMonth*) element;
                 break;
             }
-            case XSD_STRING:
-            {
-                ((xsd__string*) m_Array)[m_Size] = new char[strlen((xsd__string) element)+1];
-                strcpy(((xsd__string*) m_Array)[m_Size], (xsd__string) element);
-                break;
-            }
+
             case XSD_NORMALIZEDSTRING:
             {
                 ((xsd__normalizedString*) m_Array)[m_Size] = new char[strlen((xsd__normalizedString) element)+1];
@@ -827,250 +830,9 @@ void Axis_Array::clear()
     if (m_Size > 0)
     {
         for (int count = 0 ; count < m_Size ; count++)
-        {
             if (m_Array[count] != NULL)
-            {
-                switch (m_Type)
-                {
-                    case XSD_DURATION:
-                    {
-                        delete ((xsd__duration**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_DATETIME:
-                    {
-                        delete ((xsd__dateTime**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_TIME:
-                    {
-                        delete ((xsd__time**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_DATE:
-                    {
-                        delete ((xsd__date**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_GYEARMONTH:
-                    {
-                        delete ((xsd__gYearMonth**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_GYEAR:
-                    {
-                        delete ((xsd__gYear**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_GMONTHDAY:
-                    {
-                        delete ((xsd__gMonthDay**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_GDAY:
-                    {
-                        delete ((xsd__gDay**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_GMONTH:
-                    {
-                        delete ((xsd__gMonth**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_STRING:
-                    {
-                        delete []((xsd__string*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NORMALIZEDSTRING:
-                    {
-                        delete []((xsd__normalizedString*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_TOKEN:
-                    {
-                        delete []((xsd__token*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_LANGUAGE:
-                    {
-                        delete []((xsd__language*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NAME:
-                    {
-                        delete []((xsd__Name*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NCNAME:
-                    {
-                        delete []((xsd__NCName*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ID:
-                    {
-                        delete []((xsd__ID*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_IDREF:
-                    {
-                        delete []((xsd__IDREF*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_IDREFS:
-                    {
-                        delete []((xsd__IDREFS*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ENTITY:
-                    {
-                        delete []((xsd__ENTITY*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ENTITIES:
-                    {
-                        delete []((xsd__ENTITIES*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NMTOKEN:
-                    {
-                        delete []((xsd__NMTOKEN*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NMTOKENS:
-                    {
-                        delete []((xsd__NMTOKENS*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_BOOLEAN:
-                    {
-                        delete ((xsd__boolean**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_BASE64BINARY:
-                    {
-                        delete ((xsd__base64Binary**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_HEXBINARY:
-                    {
-                        delete ((xsd__hexBinary**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_FLOAT:
-                    {
-                        delete ((xsd__float**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_DECIMAL:
-                    {
-                        delete ((xsd__decimal**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_INTEGER:
-                    {
-                        delete ((xsd__integer**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NONPOSITIVEINTEGER:
-                    {
-                        delete ((xsd__nonPositiveInteger**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NEGATIVEINTEGER:
-                    {
-                        delete ((xsd__negativeInteger**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_LONG:
-                    {
-                        delete ((xsd__long**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_INT:
-                    {
-                        delete ((xsd__int**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_SHORT:
-                    {
-                        delete ((xsd__short**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_BYTE:
-                    {
-                        delete ((xsd__byte**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NONNEGATIVEINTEGER:
-                    {
-                        delete ((xsd__nonNegativeInteger**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_UNSIGNEDLONG:
-                    {
-                        delete ((xsd__unsignedLong**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_UNSIGNEDINT:
-                    {
-                        delete ((xsd__unsignedInt**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_UNSIGNEDSHORT:
-                    {
-                        delete ((xsd__unsignedShort**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_UNSIGNEDBYTE:
-                    {
-                        delete ((xsd__unsignedByte**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_POSITIVEINTEGER:
-                    {
-                        delete ((xsd__positiveInteger**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_DOUBLE:
-                    {
-                        delete ((xsd__double**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ANYURI:
-                    {
-                        delete []((xsd__anyURI*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_QNAME:
-                    {
-                        delete []((xsd__QName*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_NOTATION:
-                    {
-                        delete []((xsd__NOTATION*) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ARRAY:
-                    {
-                        delete ((Axis_Array**) m_Array)[count];
-                        break;
-                    }
-                    case XSD_ANYTYPE:
-                    {
-                        delete []((xsd__anyType*) m_Array)[count];
-                        break;
-                    }
-                    case USER_TYPE:
-                    case XSD_ANY:
-                    case ATTACHMENT:
-                    case XSD_UNKNOWN:
-                    default:
-                        break;
-                }
-            }
-        }
+            	Axis:AxisDelete(m_Array[count], m_Type);
+
         m_Size = 0;
     }
     
