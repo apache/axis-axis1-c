@@ -66,7 +66,7 @@ ArrayBean::~ArrayBean()
         {
             for (int count = 0 ; count < m_nSize ; count++)
             	if (((void **) m_value.sta)[count] != NULL)
-            		Axis:AxisDelete(((void **) m_value.sta)[count], m_type);
+            		Axis::AxisDelete(((void **) m_value.sta)[count], m_type);
         }
         delete [] m_value.sta;
     }

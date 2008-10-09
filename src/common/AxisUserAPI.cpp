@@ -831,7 +831,7 @@ void Axis_Array::clear()
     {
         for (int count = 0 ; count < m_Size ; count++)
             if (m_Array[count] != NULL)
-            	Axis:AxisDelete(m_Array[count], m_Type);
+            	Axis::AxisDelete(m_Array[count], m_Type);
 
         m_Size = 0;
     }
