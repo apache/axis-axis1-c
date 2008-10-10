@@ -284,7 +284,7 @@ public class WSDL2Ws
         wsg.generate();
         
         // Indicate code generation complete and show where stored.
-        System.out.println("\nCode generation completed. Generated files in directory '" + c_cmdLineArgs.getOutputDirectory() + "'.");
+        System.out.println("\nCode generation completed. Generated files in directory\n'" + c_cmdLineArgs.getOutputDirectory() + "'.");
     }    
     
     // The following 3 exposeXXX methods attempts to expose anonymous types so that 
