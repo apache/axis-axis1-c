@@ -56,7 +56,8 @@ openFile ()
     return initialise(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH), STATE_ON);
 }
 
-int AxisTrace::openFileByClient ()
+int AxisTrace::
+openFileByClient ()
 {
     return initialise(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH), STATE_ON);
 }
@@ -243,13 +244,10 @@ traceHeader(enum AxisTraceState newState)
 
         const char *value = g_pConfig->getAxisConfProperty((g_axconfig)j);
         if (NULL==value)
-        {
             confLine += "NULL";
-        }
         else 
-        {
             confLine += value;
-        }
+
         traceLine(confLine.c_str());
     }
 
@@ -293,33 +291,43 @@ traceLineInternal(const char *type, const char *classname,
     else text += classname;
     text += " ";
     text += type;
-    if (NULL!=methodname) {
+    if (NULL!=methodname) 
+    {
         text += " ";
         text += methodname;
     }
     text += " ";
-    if (NULL != that) {
+    if (NULL != that) 
+    {
         char prim[32];
         sprintf(prim,"@%p",that);
         text += prim;
-        if (NULL!=parms) text += ",";
+        if (NULL!=parms) 
+        	text += ",";
     }
 
-    if (NULL != parms) {
-        if (NULL==strchr(parms,'\n')) {
+    if (NULL != parms) 
+    {
+        if (NULL==strchr(parms,'\n')) 
+        {
             text += parms;
             traceLine2(text.c_str());
-        } else {
+        } 
+        else 
+        {
             // Multi-line output
             text += "------------>";
             traceLine2(text.c_str());
             const char *tok = strtok(const_cast<char*>(parms),"\n");
-            while (NULL != tok) {
+            while (NULL != tok) 
+            {
                 traceLineInternal(tok);
                 tok = strtok(NULL,"\n");
             }
         }
-    } else {
+    } 
+    else 
+    {
         traceLine2(text.c_str());
     }
 }
@@ -345,11 +353,14 @@ traceEntryInternal(const char *className, const char *methodName,
 {
     if (!isTraceOn()) return;
 
-    try {
+    try 
+    {
         string line;
         const char *parms = NULL;
-        if (0<nParms) {
-            for (int i=0; i<nParms; i++) {
+        if (0<nParms) 
+        {
+            for (int i=0; i<nParms; i++) 
+            {
                 int type = va_arg(args, int);
                 unsigned len = va_arg(args, unsigned);
                 void *value = va_arg(args, void*);
@@ -360,7 +371,9 @@ traceEntryInternal(const char *className, const char *methodName,
         }
 
         traceLineInternal(TRACE_ENTRY,className,methodName,that,parms);
-    } catch (...) {
+    } 
+    catch (...) 
+    {
         traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace entry");
     }
 }
@@ -371,10 +384,13 @@ traceExitInternal(const char *className, const char *methodName, const void* tha
 {
     if (!isTraceOn()) return;
 
-    try {
+    try 
+    {
         string line;
         bool added = false;
-        if (0!=returnIndex) { // Zero means only one return
+        if (0!=returnIndex) 
+        { 
+        	// Zero means only one return
                line = "@";
                char prim[32];
                sprintf(prim,"%d",returnIndex);
@@ -382,14 +398,17 @@ traceExitInternal(const char *className, const char *methodName, const void* tha
                added = true;
         }
 
-        if (TRACETYPE_UNKNOWN != type) {
+        if (TRACETYPE_UNKNOWN != type) 
+        {
             if (added) line += " ";
             addParameter(line,type,len,value);
             added = true;
         }
 
         traceLineInternal(TRACE_EXIT,className,methodName,that,added?line.c_str():NULL);
-    } catch (...) {
+    } 
+    catch (...) 
+    {
         traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace exit");
     }
 }
@@ -400,9 +419,12 @@ traceCatchInternal(const char *className, const char *methodName, const void* th
 {
     if (!isTraceOn()) return;
 
-    try {
+    try 
+    {
         string line;
-        if (0!=catchIndex) { // Zero means only one catch
+        if (0!=catchIndex) 
+        { 
+        	// Zero means only one catch
               line = "@";
               char prim[32];
               sprintf(prim,"%d",catchIndex);
@@ -415,7 +437,9 @@ traceCatchInternal(const char *className, const char *methodName, const void* th
             addParameter(line,type,len,value);
         else line += "\"...\"";
         traceLineInternal(TRACE_EXCEPT,className,methodName,that,line.c_str());
-    } catch (...) {
+    } 
+    catch (...) 
+    {
         traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace catch");
     }
 }
@@ -424,101 +448,120 @@ void AxisTrace::
 addParameter(string& line, int type, unsigned len, void *value)
 {
     char prim[32]; // Plenty big enough to hold a primitive
-      char *pcValue = (char*)value;
+    char *pcValue = (char*)value;
+    
     switch (type) 
     {
-    case TRACETYPE_CHAR:    sprintf(prim,"%c" ,*((char  *)value));    line += prim;    break;
-    case TRACETYPE_USHORT:    sprintf(prim,"%hu",*((short *)value));    line += prim;    break;
-    case TRACETYPE_SHORT:    sprintf(prim,"%hd",*((short *)value));    line += prim;    break;
-    case TRACETYPE_UINT:    sprintf(prim,"%u" ,*((int   *)value));    line += prim;    break;
-    case TRACETYPE_INT:        sprintf(prim,"%d" ,*((int   *)value));    line += prim;    break;
-    case TRACETYPE_ULONG:    sprintf(prim,"%lu",*((long  *)value));    line += prim;    break;
-    case TRACETYPE_LONG:    sprintf(prim,"%ld",*((long  *)value));    line += prim;    break;
-    case TRACETYPE_DOUBLE:    sprintf(prim,"%f" ,*((double*)value));    line += prim;    break;
-    case TRACETYPE_FLOAT:    sprintf(prim,"%f" ,*((float *)value));    line += prim;    break;
-
-    case TRACETYPE_BOOL:
-        line += *((bool*)value)?"true":"false";
-        break;
-
-    case TRACETYPE_POINTER:    
-            pcValue = *((char**)pcValue);
-        sprintf(prim,"%p ",pcValue);    
-        line += prim;    
-            if (NULL!=pcValue) 
-            addDataParameter(line,len,value);
-        break;
-    
-    case TRACETYPE_DATA:    
-        addDataParameter(line,len,value);
-        break;
-
-    case TRACETYPE_STRING:    
-        try {
-                  pcValue = *((char**)pcValue);
-                  if (NULL==pcValue) line += "<null>";
-                  else {
-                line += "\"";    
-                line += pcValue;    
-                line += "\"";
-                  }    
-        } catch (...) {
-            line += "<BADPOINTER>";
-        }
-        break;
-
-    case TRACETYPE_STLSTRING:
-        try {
-            string *str = static_cast<string*>(value);
-            if (str) {
-                line += "\"";    
-                     line += str->c_str();
-                line += "\"";    
-            } else line += "<BADPOINTER>";
-        } catch (...) {
-            line += "<BADPOINTER>";
-        }
-        break;
-
-    case TRACETYPE_EXCEPTION:
-        try {
-            exception *ex = static_cast<exception*>(value);
-                 const char *msg = ex->what();
-            if (NULL==msg) msg = "\?\?\?\?";
-            line += "exception(\"";
-                 line += msg;
-            line += "\")";    
-        } catch (...) {
-            line += "<BADPOINTER>";
-        }
-        break;
-
-    case TRACETYPE_AXISEXCEPTION:
-        try {
-            AxisException *ex = static_cast<AxisException*>(value);
-              const int code = ex->getExceptionCode();
-                 const char *msg = ex->what();
-            if (NULL==msg) msg = "\?\?\?\?";
-            line += "AxisException(";    
-                 line += code;
-                    line += ", \"";
-                 line += msg;
-            line += "\")";    
-        } catch (...) {
-            line += "<BADPOINTER>";
-        }
-        break;
-
-    case TRACETYPE_ANONYMOUS:
-        line += "<ANONYMOUS>";                
-        break;
-
-    default:
-        sprintf(prim,"%d",type);
-        line += "<UNKNOWNTYPE";                
-        line += prim;
-        line += ">";
-        break;
+	    case TRACETYPE_CHAR:    sprintf(prim,"%c" ,*((char  *)value));    line += prim;    break;
+	    case TRACETYPE_USHORT:  sprintf(prim,"%hu",*((short *)value));    line += prim;    break;
+	    case TRACETYPE_SHORT:   sprintf(prim,"%hd",*((short *)value));    line += prim;    break;
+	    case TRACETYPE_UINT:    sprintf(prim,"%u" ,*((int   *)value));    line += prim;    break;
+	    case TRACETYPE_INT:     sprintf(prim,"%d" ,*((int   *)value));    line += prim;    break;
+	    case TRACETYPE_ULONG:   sprintf(prim,"%lu",*((long  *)value));    line += prim;    break;
+	    case TRACETYPE_LONG:    sprintf(prim,"%ld",*((long  *)value));    line += prim;    break;
+	    case TRACETYPE_DOUBLE:  sprintf(prim,"%f" ,*((double*)value));    line += prim;    break;
+	    case TRACETYPE_FLOAT:   sprintf(prim,"%f" ,*((float *)value));    line += prim;    break;
+	
+	    case TRACETYPE_BOOL:
+	        line += *((bool*)value)?"true":"false";
+	        break;
+	
+	    case TRACETYPE_POINTER:    
+	        pcValue = *((char**)pcValue);
+	        sprintf(prim,"%p ",pcValue);    
+	        line += prim;    
+	        if (NULL!=pcValue) 
+	            addDataParameter(line,len,value);
+	        break;
+	    
+	    case TRACETYPE_DATA:    
+	        addDataParameter(line,len,value);
+	        break;
+	
+	    case TRACETYPE_STRING:    
+	        try 
+	        {
+                pcValue = *((char**)pcValue);
+                if (NULL==pcValue) 
+                	line += "<null>";
+                else 
+                {
+                	line += "\"";    
+                	line += pcValue;    
+                	line += "\"";
+                }    
+	        } 
+	        catch (...) 
+	        {
+	            line += "<BADPOINTER>";
+	        }
+	        break;
+	
+	    case TRACETYPE_STLSTRING:
+	        try {
+	            string *str = static_cast<string*>(value);
+	            if (str) 
+	            {
+	                line += "\"";    
+	                line += str->c_str();
+	                line += "\"";    
+	            } 
+	            else 
+	            	line += "<BADPOINTER>";
+	        } 
+	        catch (...) 
+	        {
+	            line += "<BADPOINTER>";
+	        }
+	        break;
+	
+	    case TRACETYPE_EXCEPTION:
+	        try 
+	        {
+	            exception *ex = static_cast<exception*>(value);
+	            const char *msg = ex->what();
+	            if (NULL==msg) 
+	            	msg = "\?\?\?\?";
+	            line += "exception(\"";
+	            line += msg;
+	            line += "\")";    
+	        } 
+	        catch (...) 
+	        {
+	            line += "<BADPOINTER>";
+	        }
+	        break;
+	
+	    case TRACETYPE_AXISEXCEPTION:
+	        try 
+	        {
+	            AxisException *ex = static_cast<AxisException*>(value);
+	            const int code = ex->getExceptionCode();
+	            const char *msg = ex->what();
+	            if (NULL==msg) 
+	            	msg = "\?\?\?\?";
+	            line += "AxisException(";    
+	            line += code;
+	            line += ", \"";
+	            line += msg;
+	            line += "\")";    
+	        } 
+	        catch (...) 
+	        {
+	            line += "<BADPOINTER>";
+	        }
+	        break;
+	
+	    case TRACETYPE_ANONYMOUS:
+	        line += "<ANONYMOUS>";                
+	        break;
+	
+	    default:
+	        sprintf(prim,"%d",type);
+	        line += "<UNKNOWNTYPE";                
+	        line += prim;
+	        line += ">";
+	        break;
     }
 }
 
@@ -530,25 +573,31 @@ addParameter(string& line, int type, unsigned len, void *value)
  * in a more human-friendly format.
  */
 void AxisTrace::
-addDataParameter(string& line, unsigned len, void *value) {
+addDataParameter(string& line, unsigned len, void *value) 
+{
     char prim[32]; // Plenty big enough to hold a primitive
-      char *pcValue = (char*)value;
-    try {
+    char *pcValue = (char*)value;
+    try 
+    {
         line += "[";
-        for (unsigned i=0; i<len && i<32; i++) {
+        for (unsigned i=0; i<len && i<32; i++) 
+        {
             int x = (int)(pcValue[i]);
             sprintf(prim,"%2.2X",x);
             line += prim;
         }
         line += "] <";
-        for (unsigned j=0; j<len && j<32; j++) {
+        for (unsigned j=0; j<len && j<32; j++) 
+        {
             char c = pcValue[j];
             if (!isprint(c)) c='.';
             sprintf(prim,"%c",c);
             line += prim;
         }
         line += ">";
-    } catch (...) {
+    } 
+    catch (...) 
+    {
         line += "<BADPOINTER>";
     }
 }
