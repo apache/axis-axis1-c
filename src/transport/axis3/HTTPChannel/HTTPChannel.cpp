@@ -17,6 +17,7 @@
 #include "../../../platforms/PlatformAutoSense.hpp"
 
 #include "HTTPChannel.hpp"
+
 #include "../../../common/AxisTrace.h"
 
 /**

@@ -20,16 +20,14 @@
  *
  */
 
+// !!! Must be first thing in file !!!
+#include "../../../platforms/PlatformAutoSense.hpp"
+
 #ifndef AXISTRACE_LIBRARY_MAINENTRYPOINT
 #define AXISTRACE_LIBRARY_MAINENTRYPOINT
 #endif
 
 #include "../../../common/AxisTrace.h"
-
-#ifdef WIN32
-#pragma warning( disable : 4786)
-#pragma warning( disable : 4101)
-#endif
 
 #include "HTTPSSLChannel.hpp"
 

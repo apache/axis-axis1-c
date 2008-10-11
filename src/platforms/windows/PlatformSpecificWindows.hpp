@@ -19,8 +19,35 @@
 #if !defined( _PLATFORM_SPECIFIC_WINDOWS_HPP )
 #define _PLATFORM_SPECIFIC_WINDOWS_HPP
 
-// Disable: C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#define _CRT_SECURE_NO_WARNINGS
+
+#define _SCL_SECURE_NO_WARNINGS
+
+#define _USE_32BIT_TIME_T
+
+// C4101: 'identifier' : unreferenced local variable (revisit this)
+#pragma warning (disable : 4101)
+
+// C4251: class xx needs to have dll-interface to be used by clients of class bb
+#pragma warning (disable : 4251)
+
+// C4275: non dll-interface class used as base for dll-interface class
+#pragma warning (disable : 4275)
+
+// C4290: C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
 #pragma warning (disable : 4290)
+
+// C4297: function assumed not to throw an exception but does
+#pragma warning (disable : 4297)
+
+// C4503: decorated name length exceeded, name was truncated
+#pragma warning (disable : 4503)
+
+// C4786: identifier was truncated to '255' characters in the debug information
+#pragma warning (disable : 4786)
+
+// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN  
 
 //#define _WIN32_WINNT 0x0400
 #define _WINSOCKAPI_ /* Prevent inclusion of winsock.h in windows.h */

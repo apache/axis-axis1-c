@@ -29,23 +29,16 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added copy constructure and clone for copy constructing derived classes
- */
-
-/*
- * Revision 1.2  2004/07/01 roshan
- * Added code to addChild(BasicNode *pBasicNode) method to deal with NULL
- *  values.
- */
-
-/* ComplexElement.cpp: implementation of the ComplexElement class. */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include <axis/GDefine.hpp>
+
 #include "Attribute.h"
 #include "ComplexElement.h"
 #include "SoapSerializer.h"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

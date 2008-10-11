@@ -14,6 +14,10 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/BasicNode.hpp>
 #include <axis/AxisException.hpp>
 
@@ -21,6 +25,8 @@
 #include <axis/GDefine.h>
 #include <axis/AxisUserAPI.h>
 #include <axis/BasicNode.h>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_USE
 

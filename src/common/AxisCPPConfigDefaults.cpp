@@ -20,14 +20,19 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
-#include "axis/AxisCPPConfigDefaults.hpp"
-#include "AxisCPPConfigDefaultsImpl.hpp"
-#include "AxisUtils.h"
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+
+#include "axis/AxisCPPConfigDefaults.hpp"
+
+#include "AxisCPPConfigDefaultsImpl.hpp"
+#include "AxisUtils.h"
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START 
 

@@ -17,9 +17,14 @@
  * @author Mark Whitlock
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/Axis.hpp>
 #include <axis/AxisUserAPI.hpp>
 #include <axis/AxisUserAPIArrays.hpp>
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START 
 

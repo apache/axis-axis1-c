@@ -20,11 +20,6 @@
  *
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#pragma warning (disable : 4101)
-#endif
-
 // !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
@@ -34,6 +29,9 @@
 #include "../../soap/apr_base64.h"
 
 #include <stdio.h>
+
+
+#include "../../common/AxisTrace.h"
 
 static int axtoi( char *pcHexString);
 
@@ -702,7 +700,7 @@ getBytes_MessageIsChunked(char * pcBuffer, int * piSize)
     // OK, now we need to determine how much of the chunk will be left 
     // over depending on the buffer length that is passed in.
     int iDataToCpyLen;
-    if (*piSize >= m_iChunkedDataLeftToConsume)
+    if (*((unsigned int *)piSize) >= m_iChunkedDataLeftToConsume)
     {
         iDataToCpyLen = m_iChunkedDataLeftToConsume;
         m_iChunkedDataLeftToConsume = 0;

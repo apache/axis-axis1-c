@@ -19,13 +19,17 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "WSDDDeployment.h"
 #include "WSDDDocument.h"
 
 #include <axis/GDefine.hpp>
 #include "../common/AxisConfig.h"
-#include "../common/AxisTrace.h"
 #include "AxisWsddException.h"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

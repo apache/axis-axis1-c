@@ -19,15 +19,18 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <axis/AxisException.hpp>
 
 #include "HandlerPool.h"
 #include "AppScopeHandlerPool.h"
 #include "RequestScopeHandlerPool.h"
 #include "SessionScopeHandlerPool.h"
 #include "../wsdd/WSDDDeployment.h"
-#include <axis/AxisException.hpp>
+
 #include "../common/AxisTrace.h"
-#include "../platforms/PlatformAutoSense.hpp"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AppScopeHandlerPool* g_pAppScopeHandlerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX RequestScopeHandlerPool* g_pRequestScopeHandlerPool;

@@ -14,9 +14,12 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "SimpleAttribute.h"
 
+#include "../common/AxisTrace.h"
 
 SimpleAttribute::SimpleAttribute()
 {

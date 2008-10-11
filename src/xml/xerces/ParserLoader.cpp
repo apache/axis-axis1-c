@@ -20,6 +20,9 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #define AXISTRACE_LIBRARY_MAINENTRYPOINT
 #include "../../common/AxisTrace.h"
 

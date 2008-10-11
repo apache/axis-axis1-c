@@ -19,9 +19,12 @@
  */
 
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "QName.h"
 
+#include "../common/AxisTrace.h"
 
 QName::QName()
 {

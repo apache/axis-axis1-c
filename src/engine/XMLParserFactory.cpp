@@ -15,20 +15,16 @@
  *   limitations under the License.
  */
 
-/**
- * This class 
- *
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- *
- */
-
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
+
+#include <stdio.h>
 
 #include "XMLParserFactory.h"
 #include "../xml/XMLParser.h"
-#include <stdio.h>
 #include "../common/AxisConfig.h"
 #include "AxisEngineException.h"
+
 #include "../common/AxisTrace.h"
                                                                                                                              
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;

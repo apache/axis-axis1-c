@@ -14,12 +14,7 @@
  *   limitations under the License.
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#pragma warning (disable : 4101)
-#endif
-
-// !!! Must be first thing in file !!!
+// !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
 #include <string>
@@ -28,6 +23,8 @@
 #include "../../transport/axis3/HTTPTransportException.hpp"
 
 #include <xercesc/sax2/XMLReaderFactory.hpp>
+
+#include "../../common/AxisTrace.h"
 
 XERCES_CPP_NAMESPACE_USE
 using namespace std;

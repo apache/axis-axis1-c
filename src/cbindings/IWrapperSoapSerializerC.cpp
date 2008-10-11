@@ -15,6 +15,9 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/IWrapperSoapSerializer.hpp>
 #include <axis/AxisException.hpp>
 
@@ -28,6 +31,8 @@
 #include <axis/TypeMapping.h>
 #include <axis/WSDDDefines.h>
 #include <axis/IWrapperSoapSerializer.h>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_USE
 

@@ -20,11 +20,16 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include <stdio.h>
+
 #include "BasicTypeSerializer.h"
 #include "../soap/apr_base64.h"
 #include "../soap/HexCoder.h"
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

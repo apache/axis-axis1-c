@@ -18,6 +18,7 @@
 
 #include "HTTPSSLChannel.hpp"
 
+#include "../../../common/AxisTrace.h"
 /**
  * cert_verify_callback( int ok, X509_STORE_CTX * ctx)
  *

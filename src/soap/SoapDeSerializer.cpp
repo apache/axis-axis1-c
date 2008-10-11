@@ -24,11 +24,14 @@
  *
  */
 
-/* SoapDeSerializer.cpp: implementation of the SoapDeSerializer class. */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#ifdef WIN32
-#pragma warning (disable : 4101)
-#endif
+#include <list>
+#include <iostream>
+
+#include <axis/Axis.hpp>
+#include <axis/GDefine.hpp>
 
 #include "SoapDeSerializer.h"
 #include "SoapEnvelope.h"
@@ -40,7 +43,6 @@
 #include "SoapFault.h"
 #include "ComplexElement.h"
 #include "CharacterElement.h"
-#include <axis/GDefine.hpp>
 #include "apr_base64.h"
 #include "HexCoder.h"
 #include "../engine/XMLParserFactory.h"
@@ -49,11 +51,11 @@
 #include "../xml/AxisParseException.h"
 #include "AxisSoapException.h"
 #include "../common/AxisGenException.h"
-#include "../common/AxisTrace.h"
-#include <axis/Axis.hpp>
 
-#include <list>
-#include <iostream>
+#include "../common/AxisTrace.h"
+
+
+
 AxisChar * pBodyContent;
 
 AXIS_CPP_NAMESPACE_START

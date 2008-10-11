@@ -20,10 +20,14 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#include "../common/MessageData.h"
+#include "MessageData.h"
 #include "IDeployerUtils.h"
 #include "../wsdd/WSDDDeployment.h"
+
+#include "AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 

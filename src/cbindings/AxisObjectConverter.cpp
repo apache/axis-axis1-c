@@ -17,11 +17,13 @@
  *
  */
 
-// Must be included as first thing in file - DO NOT REMOVE
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
 #include <axis/Axis.h>
 #include "AxisObjectConverter.hpp"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

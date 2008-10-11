@@ -14,9 +14,12 @@
  *   limitations under the License.
  */
 
-/* SoapInputSource.cpp: implementation of the SoapInputSource class. */
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #include "SoapInputSource.h"
+
+#include "../../common/AxisTrace.h"
 
 SoapInputSource::SoapInputSource(AxisIOStream* pInputStream)
 {

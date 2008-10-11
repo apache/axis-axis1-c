@@ -20,13 +20,18 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <axis/SoapEnvVersions.hpp>
+#include <axis/GDefine.hpp>
+
 #include "SoapFault.h"
 #include "SoapSerializer.h"
 #include "SoapDeSerializer.h"
-#include <axis/SoapEnvVersions.hpp>
-#include <axis/GDefine.hpp>
-#include "../common/AxisTrace.h"
 #include "../common/AxisConfig.h"
+
+#include "../common/AxisTrace.h"
 
 
 // This array of structure is used to store all the soap faults

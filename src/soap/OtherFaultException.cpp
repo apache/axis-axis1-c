@@ -14,8 +14,13 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
+
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/OtherFaultException.hpp>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

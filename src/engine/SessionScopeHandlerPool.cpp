@@ -19,13 +19,13 @@
  *
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4503)
-#endif
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "SessionScopeHandlerPool.h"
 #include "HandlerLoader.h"
 
+#include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
 

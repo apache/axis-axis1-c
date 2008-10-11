@@ -22,29 +22,26 @@
  *
  */
 
-/*
- * Revision 1.1  2005/01/09 Roshan
- * Added cleanup of SoapAttachments to the Destructor.
- */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
-#include <axis/GDefine.hpp>
-#include "SoapEnvelope.h"
-#include "SoapSerializer.h"
-#include "HeaderBlock.h"
-#include "../common/ArrayBean.h"
-#include "../common/BasicTypeSerializer.h"
-#include "SoapKeywordMapping.h"
-#include "SoapAttachmentReference.hpp"
-#include "AxisSoapException.h"
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "../common/AxisTrace.h"
+#include <axis/GDefine.hpp>
+
+#include "SoapEnvelope.h"
+#include "SoapSerializer.h"
+#include "HeaderBlock.h"
+#include "SoapKeywordMapping.h"
+#include "SoapAttachmentReference.hpp"
+#include "AxisSoapException.h"
+#include "../common/ArrayBean.h"
+#include "../common/BasicTypeSerializer.h"
 #include "../common/AxisConfig.h"
+
+#include "../common/AxisTrace.h"
+
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 #define MIMEBOUNDARY    "------=MIME_BOUNDARY"

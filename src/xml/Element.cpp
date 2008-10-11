@@ -14,11 +14,12 @@
  *   limitations under the License.
  */
 
-
-
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "Element.h"
 
+#include "../common/AxisTrace.h"
 
 Element::Element()
 {

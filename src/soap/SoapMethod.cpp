@@ -19,10 +19,15 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <axis/GDefine.hpp>
 
 #include "SoapMethod.h"
 #include "Attribute.h"
-#include <axis/GDefine.hpp>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

@@ -102,6 +102,10 @@ SOURCE=..\src\soap\xsd\AnyURI.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\soap\xsd\AnyType2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\engine\AppScopeHandlerPool.cpp
 # End Source File
 # Begin Source File

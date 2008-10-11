@@ -19,16 +19,19 @@
  * @author Samisa Abeysinghe (samisa.abeysinghe@gmail.com)
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <stdio.h>
+
+#include <axis/GDefine.hpp>
 
 #include "SoapEnvelope.h"
-#include <axis/GDefine.hpp>
 #include "SoapSerializer.h"
-#include <stdio.h>
-#include "../common/AxisTrace.h"
 #include "Attribute.h"
+
+#include "../common/AxisTrace.h"
+
 
 AXIS_CPP_NAMESPACE_START
 

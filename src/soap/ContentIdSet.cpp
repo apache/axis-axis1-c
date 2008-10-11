@@ -16,9 +16,15 @@
  * @author Mark Whitlock
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <list>
+
 #include "ContentIdSet.hpp"
 #include "AxisSoapException.h"
-#include <list>
+
+#include "../common/AxisTrace.h"
 
 using namespace std;
 AXIS_CPP_NAMESPACE_START

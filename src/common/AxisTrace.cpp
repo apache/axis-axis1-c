@@ -20,20 +20,28 @@
  *
  */
 
-#include "AxisTrace.h"
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "AxisUtils.h"
-#include <axis/AxisException.hpp>
-#include "AxisConfig.h"
 #include <string>
+
 // cctype is needed to make isprint compile on linux
 #include <cctype>
 #include <exception>
 #include <ctime>
 #include <cstring>
+
+#include <axis/AxisException.hpp>
+
+#include "AxisUtils.h"
+#include "AxisConfig.h"
+
+#include "AxisTrace.h"
+
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START

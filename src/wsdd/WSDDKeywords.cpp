@@ -14,8 +14,13 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "WSDDKeywords.h"
 #include "../common/AxisUtils.h"
+
+#include "../common/AxisTrace.h"
 
 #define __TRC(X) AxisUtils::ToAxisXMLCh(X)
 

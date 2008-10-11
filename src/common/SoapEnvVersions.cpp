@@ -19,6 +19,9 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/SoapEnvVersions.hpp>
 
 AXIS_CPP_NAMESPACE_START

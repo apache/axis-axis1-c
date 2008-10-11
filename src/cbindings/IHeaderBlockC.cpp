@@ -15,6 +15,9 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/IHeaderBlock.hpp>
 #include <axis/AxisException.hpp>
 
@@ -24,6 +27,8 @@
 #include <axis/BasicNode.h>
 #include <axis/SoapEnvVersions.h>
 #include <axis/IHeaderBlock.h>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_USE
 

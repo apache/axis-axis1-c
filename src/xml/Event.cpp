@@ -14,9 +14,12 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "Event.h"
 
+#include "../common/AxisTrace.h"
 
 Event::Event()
 {

@@ -19,10 +19,14 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include <axis/TypeMapping.hpp>
+
 #include "AxisUtils.h"
-#define __TRC(X) AxisUtils::Convert(X)
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 using namespace std;

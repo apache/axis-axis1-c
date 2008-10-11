@@ -18,18 +18,21 @@
  *
  */
 
-#include "AxisEngine.h"
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <stdio.h>
 
+#include "AxisEngine.h"
 #include "HandlerPool.h"
 #include "DeserializerPool.h"
 #include "SerializerPool.h"
+
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX DeserializerPool* g_pDeserializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX SerializerPool* g_pSerializerPool;
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;
-// extern WSDDDeployment* g_pWSDDDeployment;
 
 AXIS_CPP_NAMESPACE_START
 

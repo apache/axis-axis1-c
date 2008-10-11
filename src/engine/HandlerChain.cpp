@@ -19,8 +19,11 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "HandlerChain.h"
+
 #include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START

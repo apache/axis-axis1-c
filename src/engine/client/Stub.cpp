@@ -18,15 +18,22 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
+#include <stdio.h>
+
+#include <axis/AxisWrapperAPI.hpp>
 #include <axis/UnknownElementException.hpp>
 #include <axis/client/Stub.hpp>
-#include <stdio.h>
+
 #include "../../transport/SOAPTransport.h"
-#include <axis/AxisWrapperAPI.hpp>
 #include "../../soap/SoapSerializer.h"
 #include "../../common/AxisUtils.h"
 #include "../../common/AxisConfig.h"
 #include "../../common/AxisGenException.h"
+
+#include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 

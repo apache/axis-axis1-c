@@ -15,17 +15,15 @@
  *   limitations under the License.
  */
 
-/*
- *
- *
- * @author Lilantha Darshana (lilantha@virtusa.com)
- *
- */
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
 
-#include "Platform.hpp"
 #include "URL.hpp"
 #include <ctype.h>
 #include <iostream>
+
+
+#include "../../common/AxisTrace.h"
 
 using namespace std;
 

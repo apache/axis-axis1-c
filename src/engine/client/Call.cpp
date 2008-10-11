@@ -21,6 +21,9 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
 #include <axis/ISoapFault.hpp>
@@ -35,6 +38,8 @@
 #include "../../common/AxisGenException.h"
 #include "../../soap/Attribute.h"
 #include "../../soap/SoapMethod.h"
+
+#include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 

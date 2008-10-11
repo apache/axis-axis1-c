@@ -15,6 +15,9 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #include <axis/client/Call.hpp>
 #include <axis/AxisException.hpp>
 #include <axis/client/Stub.hpp>
@@ -22,6 +25,7 @@
 #include "../AxisObjectConverter.hpp"
 #include "StubC.h"
 
+#include "../../common/AxisTrace.h"
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>

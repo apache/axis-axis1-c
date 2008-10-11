@@ -14,22 +14,15 @@
  *   limitations under the License.
  */
 
-/*
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- *
- */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-/* SoapBody.cpp: implementation of the SoapBody class. */
+#include <axis/GDefine.hpp>
 
 #include "SoapBody.h"
 #include "SoapSerializer.h"
-#include <axis/GDefine.hpp>
 #include "Attribute.h"
+
 #include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START

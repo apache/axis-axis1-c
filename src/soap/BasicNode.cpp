@@ -29,13 +29,13 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added constructors, copy constructure and pure virtual clone for copy constructing derived classes
- */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 
 #include <axis/BasicNode.hpp>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

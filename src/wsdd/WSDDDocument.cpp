@@ -18,9 +18,13 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "WSDDDocument.h"
 #include "WSDDKeywords.h"
 #include "../engine/XMLParserFactory.h"
+
 #include "../common/AxisTrace.h"
 
 #define NAMESPACESEPARATOR 0x03    /* Heart */

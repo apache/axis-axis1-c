@@ -19,10 +19,14 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
+#include <axis/AxisException.hpp>
 
 #include "AppScopeHandlerPool.h"
 #include "HandlerLoader.h"
-#include <axis/AxisException.hpp>
+
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;

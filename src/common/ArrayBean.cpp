@@ -21,12 +21,16 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "axis/Axis.hpp"
 
 #include "Param.h"
 #include "ArrayBean.h"
 #include "BasicTypeSerializer.h"
 #include "../engine/AxisEngine.h"
+
 #include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START

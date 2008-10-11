@@ -14,7 +14,12 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "HexCoder.h"
+
+#include "../common/AxisTrace.h"
 
 const static char s_HexToNumTable[256]=
 {

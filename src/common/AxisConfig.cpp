@@ -22,15 +22,20 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
-#include "AxisConfig.h"
-#include <axis/GDefine.hpp>
-#include "../common/AxisFile.h"
-#include "AxisUtils.h"
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+
+#include <axis/GDefine.hpp>
+
+#include "AxisConfig.h"
+#include "AxisFile.h"
+#include "AxisUtils.h"
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START 
 

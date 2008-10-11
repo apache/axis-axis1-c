@@ -18,15 +18,15 @@
  * @author sanjaya singharage (sanjayas@opensource.lk)
  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
+
+// !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
 #include "XercesHandler.h"
 #include <xercesc/sax2/Attributes.hpp>
 #include <stdio.h>
 
+#include "../../common/AxisTrace.h"
 
 XercesHandler::
 XercesHandler()

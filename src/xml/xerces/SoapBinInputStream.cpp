@@ -14,10 +14,13 @@
  *   limitations under the License.
  */
 
-/* SoapBinInputStream.cpp: implementation of the SoapBinInputStream class. */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #include "SoapBinInputStream.h"
+
+#include "../../common/AxisTrace.h"
 
 SoapBinInputStream::SoapBinInputStream(AxisIOStream* pInputStream)
 {

@@ -28,19 +28,15 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added copy constructure and clone for copy constructing derived classes
- * Also changed the constructor to call the base class constructer, 
- * rahter than working on base class attribute from derived class
- */
- 
-/* CharacterElement.cpp: implementation of the CharacterElement class. */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
+#include <axis/GDefine.hpp>
 
 #include "CharacterElement.h"
 #include "SoapSerializer.h"
-#include <axis/GDefine.hpp>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

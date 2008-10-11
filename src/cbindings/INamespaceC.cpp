@@ -15,6 +15,9 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include <axis/GDefine.hpp>
 #include <axis/INamespace.hpp>
 #include <axis/AxisException.hpp>
@@ -22,6 +25,8 @@
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
 #include <axis/INamespace.h>
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_USE
 

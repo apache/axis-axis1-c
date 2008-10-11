@@ -21,15 +21,14 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4503)
-#endif
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#ifdef WIN32
-#include <Windows.h>            //for Sleep(0);
-#else
-#include <unistd.h>
-#endif
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <map>
+#include <iostream>
 
 #include <axis/Axis.hpp>
 
@@ -39,12 +38,6 @@
 #else
 #include "server/ServerAxisEngine.h"
 #endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <map>
-#include <iostream>
 
 #include <axis/AxisUserAPI.hpp>
 
@@ -62,9 +55,11 @@
 #include "../common/AxisUtils.h"
 #include "../common/AxisConfig.h"
 #include "../wsdd/WSDDKeywords.h"
-#include "../common/AxisTrace.h"
 #include "SOAPTransportFactory.h"
 #include "XMLParserFactory.h"
+
+#include "../common/AxisTrace.h"
+
 
 AXIS_CPP_NAMESPACE_USE
 
@@ -495,11 +490,7 @@ int uninitialize_module ()
 
 void Ax_Sleep (int nTime)
 {
-#ifdef WIN32
-    Sleep (0);
-#else
-    sleep (0);
-#endif
+	PLATFORM_SLEEP(0);
 }
 
 

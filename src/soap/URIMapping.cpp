@@ -14,13 +14,14 @@
  *   limitations under the License.
  */
 
-/*
- * @author Susantha Kumara (skumara@virtusa.com)
- *
- */
+
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "URIMapping.h"
 #include "../common/AxisUtils.h"
+
+#include "../common/AxisTrace.h"
 
 #define __TRC(X) AxisUtils::Convert(X)
 

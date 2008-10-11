@@ -19,14 +19,14 @@
  *
  */
 
-/*
- * Revision 1.1  2004/08/26 roshan
- * Added code to the putInstance method, so that it calls the "fini" method of
- *  a Handler when the handler is released
- */
+
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "RequestScopeHandlerPool.h"
 #include "HandlerLoader.h"
+
+#include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
 

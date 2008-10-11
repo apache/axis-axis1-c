@@ -29,17 +29,13 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added copy constructor
- */
-
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "Attribute.h"
 #include "SoapSerializer.h"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

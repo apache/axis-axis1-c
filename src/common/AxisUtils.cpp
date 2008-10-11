@@ -20,15 +20,15 @@
  *
  */
 
-/*
- * Revision 1.1  2005/01/19 roshan
- * Added decodeFromBase64Binary
- */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
+#include <axis/AxisUserAPI.hpp>
 
 #include "AxisUtils.h"
-#include <axis/AxisUserAPI.hpp>
 #include "../soap/apr_base64.h"
+
+#include "AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

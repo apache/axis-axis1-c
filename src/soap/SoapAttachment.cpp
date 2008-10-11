@@ -18,17 +18,16 @@
  * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcsworld.com)
  */
 
-// SoapAttachment.cpp: implementation of the SoapAttachment class.
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "SoapAttachment.hpp"
 #include "SoapSerializer.h"
 
+#include "../common/AxisTrace.h"
+
 AXIS_CPP_NAMESPACE_START
-//////////////////////////////////////////////////////////////////////
 
-// Construction/Destruction
-
-//////////////////////////////////////////////////////////////////////
 
 SoapAttachment::
 SoapAttachment(ContentIdSet *pContentIdSet)

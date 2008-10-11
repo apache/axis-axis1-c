@@ -14,15 +14,12 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
-/* base64 encoder/decoder. Originally part of main/util.c
- * but moved here so that support/ab and apr_sha1.c could
- * use it. This meant removing the apr_palloc()s and adding
- * ugly 'len' functions, which is quite a nasty cost.
- */
-
 #include "apr_base64.h"
+
+#include "../common/AxisTrace.h"
 
 /* aaaack but it's fast and const should make it shared text page. */
 static const unsigned char pr2six[256] =

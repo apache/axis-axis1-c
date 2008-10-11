@@ -20,8 +20,13 @@
  *
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
+
 #include "SoapKeywordMapping.h"
 #include "../common/AxisUtils.h"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

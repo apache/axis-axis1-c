@@ -22,13 +22,18 @@
  *  Handlers once they are used.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
+#include <axis/AxisException.hpp>
 
 #include "ClientAxisEngine.h"
 #include "../../wsdd/WSDDDeployment.h"
 #include "../HandlerPool.h"
-#include <axis/AxisException.hpp>
 #include "../../common/AxisTrace.h"
 #include "../../common/AxisGenException.h"
+
+#include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 extern AXIS_CPP_NAMESPACE_PREFIX HandlerPool* g_pHandlerPool;

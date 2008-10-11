@@ -19,23 +19,17 @@
  * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
  */
 
-/*
- * Revision 1.1 2004/07/01 roshan
- * Added code to the following methods to deal with NULL values.
- *  addNamespaceDecl(Attribute *pAttribute)
- *  addAttribute(Attribute *pAttribute)
- *  addHeaderBlock(HeaderBlock* pHeaderBlock)
- */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
+#include <axis/GDefine.hpp>
 
 #include "SoapHeader.h"
 #include "SoapSerializer.h"
-#include <axis/GDefine.hpp>
 #include "Attribute.h"
 #include "HeaderBlock.h"
+
+#include "../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_START
 

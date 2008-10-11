@@ -28,20 +28,22 @@
  *
  */
 
-/* HeaderBlock.cpp: implementation of the HeaderBlock class. */
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
+#include <iostream>
+
+#include <axis/GDefine.hpp>
+#include <axis/BasicNode.hpp>
 
 #include "HeaderBlock.h"
 #include "SoapSerializer.h"
-#include <axis/GDefine.hpp>
-#include <axis/BasicNode.hpp>
 #include "ComplexElement.h"
 #include "CharacterElement.h"
 #include "Namespace.h"
-#include <iostream>
+
+#include "../common/AxisTrace.h"
+
 AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];

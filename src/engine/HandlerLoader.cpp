@@ -20,18 +20,16 @@
  * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
  *
  */
-#ifdef WIN32
-#pragma warning (disable : 4390)        // empty controlled statement found;
-#pragma warning (disable : 4786)
-#endif
 
-// !!! Must be first thing in file !!!
+// !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
-#include "HandlerLoader.h"
 #include <stdio.h>
+
+#include "HandlerLoader.h"
 #include "../common/AxisUtils.h"
 #include "../wsdd/WSDDDeployment.h"
+
 #include "../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
@@ -52,33 +50,24 @@ HandlerLoader::~HandlerLoader ()
          m_HandlerInfoList.begin (); it != m_HandlerInfoList.end (); it++)
     {
         pHandlerInfo = (*it).second;
-        if (pHandlerInfo->m_nObjCount != 0);  /* It seems that some objects
-                                               * created have not been deleted
-					                           * - unexpected
-					                           */
-            unloadLib (pHandlerInfo);
+        unloadLib (pHandlerInfo);
         delete pHandlerInfo;
     }
-    //unlock ();
 	l.unlock ();
     PLATFORM_LOADLIBEXIT()
 }
 
 int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
 {
-    //lock ();
 	Lock l(this);
     if (m_HandlerInfoList.find (nLibId) != m_HandlerInfoList.end ())
     {
         HandlerInformation* pHandlerInfo = m_HandlerInfoList[nLibId];
         pHandlerInfo->m_nObjCount--;
         pHandlerInfo->m_Delete (pHandler);
-        //if (pHandlerInfo->m_nObjCount == 0);  //time to unload the DLL
-          //  unlock ();
     }
     else
     {
-        //unlock ();
         throw AxisEngineException(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
     return AXIS_SUCCESS;
@@ -120,7 +109,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         if (pHandlerInfo->m_sLib.empty ())
         {
             delete pHandlerInfo;
-            //unlock ();
             AXISTRACE1("SERVER_CONFIG_LIBRARY_PATH_EMPTY", CRITICAL);
             throw AxisConfigException(SERVER_CONFIG_LIBRARY_PATH_EMPTY);
         }
@@ -144,7 +132,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 unloadLib (pHandlerInfo);
                 
                 delete pHandlerInfo;
-                //unlock ();
                 throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
             }
             else // success
@@ -198,7 +185,6 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
-                //unlock ();
                 AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             }
@@ -206,12 +192,10 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
     }
     else
     {
-        //unlock ();
         AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
         throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
     }
 
-    //unlock ();
     return AXIS_SUCCESS;
 }
 

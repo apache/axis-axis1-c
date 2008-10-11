@@ -15,9 +15,12 @@
  */
 
 
+// !!! This include file must be first thing in file !!!
+#include "../platforms/PlatformAutoSense.hpp"
 
 #include "StartElement.h"
 
+#include "../common/AxisTrace.h"
 
 StartElement::StartElement()
 {
