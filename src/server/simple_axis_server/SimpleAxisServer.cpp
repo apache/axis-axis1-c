@@ -21,6 +21,8 @@
 *
 */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #ifdef WIN32
 #include <winsock2.h>      // for socket(),... 

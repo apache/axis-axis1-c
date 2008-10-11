@@ -17,6 +17,8 @@
  * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
  *
  */
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
 
 #include "SimpleAxisTransport.h"
 

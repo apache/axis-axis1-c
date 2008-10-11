@@ -19,11 +19,17 @@
 #if !defined( _PLATFORM_SPECIFIC_WINDOWS_HPP )
 #define _PLATFORM_SPECIFIC_WINDOWS_HPP
 
-#define _CRT_SECURE_NO_WARNINGS
+#ifndef _CRT_SECURE_NO_WARNINGS
+  #define _CRT_SECURE_NO_WARNINGS
+#endif
 
-#define _SCL_SECURE_NO_WARNINGS
+#ifndef _SCL_SECURE_NO_WARNINGS
+  #define _SCL_SECURE_NO_WARNINGS
+#endif
 
-#define _USE_32BIT_TIME_T
+#ifndef _USE_32BIT_TIME_T
+  #define _USE_32BIT_TIME_T
+#endif
 
 // C4101: 'identifier' : unreferenced local variable (revisit this)
 #pragma warning (disable : 4101)

@@ -15,6 +15,9 @@
  *   limitations under the License.
  */
 
+// !!! This include file must be first thing in file !!!
+#include "../../platforms/PlatformAutoSense.hpp"
+
 #include "../../soap/SoapBody.h"
 #include "../../soap/SoapMethod.h"
 #include "ServerAxisEngine.h"
