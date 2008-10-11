@@ -121,10 +121,6 @@ public:
     AxisTraceEntrypoints *g_traceEntrypoints = NULL;
 #endif
 
-#ifdef WIN32
-#pragma warning (disable : 4251)
-#endif
-
 class STORAGE_CLASS_INFO AxisTrace
 {
 public:

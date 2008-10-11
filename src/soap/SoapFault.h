@@ -15,10 +15,6 @@
  *   limitations under the License.
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
 #if !defined(_SOAPFAULT_H____OF_AXIS_INCLUDED_)
 #define _SOAPFAULT_H____OF_AXIS_INCLUDED_
 

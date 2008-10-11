@@ -18,11 +18,6 @@
  *    @author sanjaya singharage (sanjayas@opensource.lk)
  */
 
-
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
 #if !defined(__XMLPARSERXERCES_H_OF_AXIS_INCLUDED__)
 #define __XMLPARSERXERCES_H_OF_AXIS_INCLUDED__
 

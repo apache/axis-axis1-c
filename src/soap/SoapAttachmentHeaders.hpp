@@ -21,12 +21,6 @@
  *
  */
 
-// SoapAttachmentHeaders.h: interface for the SoapAttachmentHeaders class.
-
-//
-
-//////////////////////////////////////////////////////////////////////
-
 
 #if !defined(AFX_SOAPATTACHMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_)
 #define AFX_SOAPATTACHMENTHEADERS_H__88A54506_DC18_41D4_B484_AB877ADC42D4__INCLUDED_
@@ -34,10 +28,6 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
-#ifdef WIN32
-#pragma warning( disable : 4786 )
-#endif
 
 #include <vector>
 #include <string>

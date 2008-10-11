@@ -21,12 +21,6 @@
  *
  */
 
-// SoapAttachment.h: interface for the SoapAttachment class.
-
-//
-
-//////////////////////////////////////////////////////////////////////
-
 
 
 #if !defined(AFX_SOAPATTACHMENT_H__7E7B50DC_21AF_4C6E_83E0_F77985A38E43__INCLUDED_)
@@ -47,10 +41,6 @@
 using namespace std;
 
 AXIS_CPP_NAMESPACE_START
-
-#ifdef WIN32
-#pragma warning (disable : 4251)
-#endif
 
 class SoapSerializer;
 

@@ -14,10 +14,6 @@
  *   limitations under the License.
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
 #if !defined(_WSDDHANDLER_H__NCLUDED_)
 #define _WSDDHANDLER_H__NCLUDED_
 

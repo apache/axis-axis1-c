@@ -16,10 +16,6 @@
  *   limitations under the License.
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
-
 #if !defined(AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_)
 #define AXIS_SHAREDOBJECT_H__OF_AXIS_INCLUDED_
 

@@ -16,10 +16,6 @@
  *
  */
 
-#ifdef WIN32
-#pragma warning (disable : 4503)
-#endif
-
 #if !defined(AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_)
 #define AXIS_HANDLERPOOL_H__OF_AXIS_INCLUDED_
 

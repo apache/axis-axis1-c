@@ -14,10 +14,6 @@
  *   limitations under the License.
  */
 
-#ifdef WIN32
-#pragma warning(disable : 4786)
-#endif
-
 #if !defined(__WSDDDOCUMENT_H_OF_AXIS_INCLUDED__)
 #define __WSDDDOCUMENT_H_OF_AXIS_INCLUDED__
 

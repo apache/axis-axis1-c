@@ -15,27 +15,8 @@
  *
  */
 
-/*
- * Revision 1.1  2004/05/25 samisa
- * Added copy constructure and clone for copy constructing derived classes
- */
-
-/*
- * Revision 1.2  2004/06/13 roshan
- * Added doxygen comments to help autobuild API docs
- */
-
-/*
- * Revision 1.3  2004/07/28 roshan
- * Added the method getLocalName().
- */
-
 #if !defined(_CHARACTERELEMENT_H____OF_AXIS_INCLUDED_)
 #define _CHARACTERELEMENT_H____OF_AXIS_INCLUDED_
-
-#ifdef WIN32
-#pragma warning (disable : 4786)
-#endif
 
 #include <axis/BasicNode.hpp>
 #include "SoapSerializer.h"
