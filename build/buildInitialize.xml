@@ -1,30 +1,30 @@
 <project name="Initialize Apache Axis C Build" default="initialize" basedir="..">
-	<!--
-	  Load definition of C/C++ Tasks and Types
-	  To allow the compilation and linking of C/C++ code
-	  -->
-	<taskdef resource="cpptasks.tasks"/>
-	<typedef resource="cpptasks.types"/>
+    <!--
+      Load definition of C/C++ Tasks and Types
+      To allow the compilation and linking of C/C++ code
+      -->
+    <taskdef resource="cpptasks.tasks"/>
+    <typedef resource="cpptasks.types"/>
 
-	<!--
-	  Load definition of Additional Tasks and Types
-	  -->
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+    <!--
+      Load definition of Additional Tasks and Types
+      -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
-	<!--
-	  These properties will be the same for all environments, so have not been
-	  included within the property files
-	  -->
-	<property name="dir.src" value="${basedir}/src"/>
-	<property name="dir.include" value="${basedir}/include"/>
-	<property name="dir.tools" value="${basedir}/tools"/>
+    <!--
+      These properties will be the same for all environments, so have not been
+      included within the property files
+      -->
+    <property name="dir.src" value="${basedir}/src"/>
+    <property name="dir.include" value="${basedir}/include"/>
+    <property name="dir.tools" value="${basedir}/tools"/>
 
- 	<property name="dir.properties" value="${basedir}/build"/>
+     <property name="dir.properties" value="${basedir}/build"/>
 
-	<!-- platform specific stuff separated -->
-	<import file="${basedir}/build/Initialize.xml"/>
+    <!-- platform specific stuff separated -->
+    <import file="${basedir}/build/Initialize.xml"/>
 
-	<property environment="env"/>
+    <property environment="env"/>
 
     <condition property="msvc7">
         <and>
@@ -35,260 +35,230 @@
         </and>
     </condition>
 
-	<!--
-	  Compiler Definitions
-	  -->
-		<!-- Definition of cc compile for Solaris -->
-		<compiler id="SolarisCC" name="CC" if="solaris">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-KPIC"/>
-			<compilerarg value="-xildoff"/>
-			<compilerarg value="-pta"/>
-			<compilerarg value="-instances=global"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="PIC"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
+    <!-- ######################################################## -->
+    <!-- Compiler Definitions                                     -->
+    <!-- ######################################################## -->
+	
+        <!-- cc compile for Solaris -->
+        <compiler id="SolarisCC" name="CC" if="solaris">
+            <compilerarg value="-g" if="debug"/>
+            <compilerarg value="-KPIC"/>
+            <compilerarg value="-xildoff"/>
+            <compilerarg value="-pta"/>
+            <compilerarg value="-instances=global"/>
+            <defineset>
+                <define name="HAVE_CONFIG_H"/>
+                <define name="PIC"/>
+            </defineset>
+            <includepath path="${dir.include}"/>
+        </compiler>
 
-		<!--
-		  Definition of Visual C++ compiler
-		  -->
-		<compiler id="VisualC++" name="msvc" if="windows">
-			<compilerarg value="/nologo"/>
-			<compilerarg value="/MD"/>
-			<!-- Display all warnings -->
-			<compilerarg value="/W3"/>
-			<compilerarg value="/GX"/>
-        <compilerarg value="/w44290" if="msvc7" />
-			<compilerarg value="/Gm" if="debug"/>
-        <compilerarg value="/Zi" if="debug"/>
-			<compilerarg value="/Od"/>
-			<includepath path="${dir.include}"/>
-			<defineset>
-				<define name="WIN32"/>
-				<define name="_DEBUG" if="debug"/>
-				<define name="NDEBUG" unless="debug"/>
-				<define name="_MBCS"/>
-				<define name="_USRDLL"/>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-			</defineset>
-			<compilerarg value="/FD"/>
-			<compilerarg value="/c"/>
-			<compilerarg value="/Zc:wchar_t"/>
-			<compilerarg value="/Zc:forScope"/>
-			<compilerarg value="/GR"/>
-		</compiler>
+        <!-- Visual C++ compiler -->
+        <compiler id="VisualC++" name="msvc" if="windows">
+            <compilerarg value="/nologo"/>
+            <compilerarg value="/MD"/>
+            <!-- Display all warnings -->
+            <compilerarg value="/W3"/>
+            <compilerarg value="/GX"/>
+            <compilerarg value="/w44290" if="msvc7" />
+            <compilerarg value="/Gm" if="debug"/>
+            <compilerarg value="/Zi" if="debug"/>
+            <compilerarg value="/Od"/>
+            <includepath path="${dir.include}"/>
+            <defineset>
+                <define name="WIN32"/>
+                <define name="_DEBUG" if="debug"/>
+                <define name="NDEBUG" unless="debug"/>
+                <define name="_MBCS"/>
+                <define name="_USRDLL"/>
+            </defineset>
+            <compilerarg value="/FD"/>
+            <compilerarg value="/c"/>
+            <compilerarg value="/Zc:wchar_t"/>
+            <compilerarg value="/Zc:forScope"/>
+            <compilerarg value="/GR"/>
+        </compiler>
 
-		<!--
-		  Definition of gcc compile for Linux
-	      -->
-		<compiler id="Linuxgcc" name="g++" if="linux">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-Wall"/>
-			<compilerarg value="-Wshadow"/>
-			<compilerarg value="-O2"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="PIC"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
+        <!-- gcc compile for Linux -->
+        <compiler id="Linuxgcc" name="g++" if="linux">
+            <compilerarg value="-g" if="debug"/>
+            <compilerarg value="-Wall"/>
+            <compilerarg value="-Wshadow"/>
+            <compilerarg value="-O2"/>
+            <defineset>
+                <define name="HAVE_CONFIG_H"/>
+                <define name="PIC"/>
+            </defineset>
+            <includepath path="${dir.include}"/>
+        </compiler>
 
-		<!--
-		  Definition of xlc compile for AIX
-	      -->
-		<compiler id="AIXxlc" name="xlC" if="aix">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-V"/>
+        <!-- xlc compile for AIX -->
+        <compiler id="AIXxlc" name="xlC" if="aix">
+            <compilerarg value="-g" if="debug"/>
+            <compilerarg value="-V"/>
             <compilerarg value="-q32" unless="64bit"/>
             <compilerarg value="-q64" if="64bit"/>      
-			<compilerarg value="-qthreaded"/>
-			<compilerarg value="-qstaticinline"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="AIX"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
+            <compilerarg value="-qthreaded"/>
+            <compilerarg value="-qstaticinline"/>
+            <defineset>
+                <define name="HAVE_CONFIG_H"/>
+                <define name="AIX"/>
+            </defineset>
+            <includepath path="${dir.include}"/>
+        </compiler>
 
-		<!--
-		  Definition of icc compile for OS400
-	      -->
-		<compiler id="OS400icc" name="icc" if="os400">
-			<compilerarg value="-g" if="debug"/>
-			<compilerarg value="-O" unless="debug"/>
-			<compilerarg value="-qLOCALETYPE=*LOCALEUCS2"/>
-			<compilerarg value="-qENUM=*INT"/>
-			<compilerarg value="-qTGTRLS=V5R1M0"/>
-			<compilerarg value="-qRTTICAST"/>
-			<compilerarg value="-qTEMPLATE=*TEMPINC"/>
-			<compilerarg value="-qTERASPACE=*YES *TSIFC"/>
-			<compilerarg value="-qSTGMDL=*INHERIT"/>
-			<defineset>
-				<define name="ENABLE_AXIS_EXCEPTION"/>
-				<define name="HAVE_CONFIG_H"/>
-				<define name="OS400"/>
-				<define name="AS400"/>
-				<define name="_XOPEN_SOURCE" value="510"/>
-				<define name="_MULTI_THREADED"/>
-			</defineset>
-			<includepath path="${dir.include}"/>
-		</compiler>
+        <!-- icc compile for OS400 -->
+        <compiler id="OS400icc" name="icc" if="os400">
+            <compilerarg value="-g" if="debug"/>
+            <compilerarg value="-O" unless="debug"/>
+            <compilerarg value="-qLOCALETYPE=*LOCALEUCS2"/>
+            <compilerarg value="-qENUM=*INT"/>
+            <compilerarg value="-qTGTRLS=V5R1M0"/>
+            <compilerarg value="-qRTTICAST"/>
+            <compilerarg value="-qTEMPLATE=*TEMPINC"/>
+            <compilerarg value="-qTERASPACE=*YES *TSIFC"/>
+            <compilerarg value="-qSTGMDL=*INHERIT"/>
+            <defineset>
+                <define name="HAVE_CONFIG_H"/>
+                <define name="OS400"/>
+                <define name="AS400"/>
+                <define name="_XOPEN_SOURCE" value="510"/>
+                <define name="_MULTI_THREADED"/>
+            </defineset>
+            <includepath path="${dir.include}"/>
+        </compiler>
 
-	    <!--
-	      Definition of aC++ compile for HP-UX
-	      -->
-	    <compiler id="HP-UXaC++" name="aCC" if="hp-ux">
-	        <compilerarg value="-g" if="debug"/>
+        <!-- aC++ compile for HP-UX -->
+        <compiler id="HP-UXaC++" name="aCC" if="hp-ux">
+            <compilerarg value="-g" if="debug"/>
             <compilerarg value="-AA"/>
             <compilerarg value="+Z" location="mid"/>  
             <compilerarg value="+W829"/>
-	    <compilerarg value="-DAportable"/> 
-	        <defineset>
-	            <define name="ENABLE_AXIS_EXCEPTION"/>
-	            <define name="HAVE_CONFIG_H"/>
-	            <define name="HPUX"/>
-	        </defineset>
-	        <includepath path="${dir.include}"/>
-	    </compiler>
+            <compilerarg value="-DAportable"/> 
+            <defineset>
+                <define name="HAVE_CONFIG_H"/>
+                <define name="HPUX"/>
+            </defineset>
+            <includepath path="${dir.include}"/>
+        </compiler>
     
-	<!--
-	  Linker Definitions
-	  -->
-		<!-- Definition of Solaris linker -->
-		<linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
-			<linkerarg value="-g" if="debug"/>
-			<linkerarg value="-Qoption"/>
-			<linkerarg value="ld"/>
-			<linkerarg value="-zmuldefs"/>
-			<syslibset libs="Cstd"/>
-			<syslibset libs="socket"/>
-			<syslibset libs="nsl"/>
-		</linker>
+    <!-- ######################################################## -->
+    <!-- Linker Definitions                                       -->
+    <!-- ######################################################## -->
 
-		<!--
-		  Definition of Visual C++ linker
-		  -->
-		<linker id="VisualC++Linker" name="msvc" if="windows">
+        <!-- Solaris linker -->
+        <linker id="SolarisLinker" name="CC" libtool="true" if="solaris">
+            <linkerarg value="-g" if="debug"/>
+            <linkerarg value="-Qoption"/>
+            <linkerarg value="ld"/>
+            <linkerarg value="-zmuldefs"/>
+            <syslibset libs="Cstd"/>
+            <syslibset libs="socket"/>
+            <syslibset libs="nsl"/>
+        </linker>
+
+        <!-- Visual C++ linker -->
+        <linker id="VisualC++Linker" name="msvc" if="windows">
             <linkerarg value="${basedir}/build/version.res"/>
-			<linkerarg value="/debug" if="debug"/>
-			<linkerarg value="/machine:I386"/>
-			<linkerarg value="/nologo"/>
+            <linkerarg value="/debug" if="debug"/>
+            <linkerarg value="/machine:I386"/>
+            <linkerarg value="/nologo"/>
         <linkerarg value="/pdb:none" unless="msvc7" />
-		</linker>
-	
-		<!--
-	      Definition of Linux linker
-	      -->
-		<linker id="LinuxLinker" name="g++" libtool="true" if="linux">
-			<linkerarg value="-g" if="debug"/>
-			<libset libs="dl"/>
-			<syslibset libs="pthread"/>
-		</linker>
-		
-		<!--
-	      Definition of AIX linker
-	      -->
-		<linker id="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
-			<linkerarg value="-g" if="debug"/>
+        </linker>
+    
+        <!-- Linux linker -->
+        <linker id="LinuxLinker" name="g++" libtool="true" if="linux">
+            <linkerarg value="-g" if="debug"/>
+            <libset libs="dl"/>
+            <syslibset libs="pthread"/>
+        </linker>
+        
+        <!-- AIX linker -->
+        <linker id="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
+            <linkerarg value="-g" if="debug"/>
             <linkerarg value="-q64" if="64bit"/>
             <linkerarg value="-q32" unless="64bit"/>      
             <syslibset libs="pthread"/>
-		</linker>
+        </linker>
 
-		<linker id="AIXLinker" extends="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
-			<linkerarg value="-qmkshrobj"/>
-			<linkerarg value="-q64" if="64bit"/>
+        <linker id="AIXLinker" extends="AIXExecutableLinker" name="xlC" libtool="false" if="aix">
+            <linkerarg value="-qmkshrobj"/>
+            <linkerarg value="-q64" if="64bit"/>
             <linkerarg value="-q32" unless="64bit"/>
-			<linkerarg value="-L/usr/lib/threads"/>
-			<linkerarg value="-lpthreads"/>
-			<linkerarg value="-lm"/>
-			<linkerarg value="-lc_r"/>
-			<linkerarg value="-lc"/>
-		</linker>
+            <linkerarg value="-L/usr/lib/threads"/>
+            <linkerarg value="-lpthreads"/>
+            <linkerarg value="-lm"/>
+            <linkerarg value="-lc_r"/>
+            <linkerarg value="-lc"/>
+        </linker>
 
-		<!-- Definition of OS/400 linker -->
-		<linker id="OS400ExecutableLinker" name="icc" libtool="false" if="os400">
-		    <linkerarg value="-qTGTRLS=V5R1M0"/>
-		    <linkerarg value="-qDUPPROC"/>
-		</linker>
-		
-		<linker id="OS400Linker" name="ld" libtool="false" if="os400">
-		    <linkerarg value="-qTGTRLS=V5R1M0"/>
-			<linkerarg value="-qSTGMDL=*INHERIT"/>
-		</linker>
+        <!-- OS/400 linker -->
+        <linker id="OS400ExecutableLinker" name="icc" libtool="false" if="os400">
+            <linkerarg value="-qTGTRLS=V5R1M0"/>
+            <linkerarg value="-qDUPPROC"/>
+        </linker>
+        
+        <linker id="OS400Linker" name="ld" libtool="false" if="os400">
+            <linkerarg value="-qTGTRLS=V5R1M0"/>
+            <linkerarg value="-qSTGMDL=*INHERIT"/>
+        </linker>
 
-	    <!--
-	      Definition of HP-UX linker
-	      -->
-	    <linker id="HP-UXLinker" name="aCC" libtool="true" if="hp-ux">
-	        <linkerarg value="-g" if="debug"/>
-	        <syslibset libs="pthread, std_v2, Csup_v2"/>
-	    </linker>
+        <!-- HP-UX linker -->
+        <linker id="HP-UXLinker" name="aCC" libtool="true" if="hp-ux">
+            <linkerarg value="-g" if="debug"/>
+            <syslibset libs="pthread, std_v2, Csup_v2"/>
+        </linker>
     
-	<!--
-	  pre-init target is now in Initialize.xml
-	  -->
-	
-	<!--
-	  Initialize properties
-      -->
+    <!-- ######################################################## -->
+    <!-- Initialize properties                                    -->
+    <!-- ######################################################## -->
 
-	<target name="initialize" depends="set-platform-specifics, checkIfDebug" />
+    <target name="initialize" depends="set-platform-specifics, checkIfDebug" />
 
-	<target name="set-platform-specifics" depends="pre-init">
-  		
-  		<!-- Load properties from file -->
- 		<property file="${dir.properties}/build.${platform}.properties"/>
+    <target name="set-platform-specifics" depends="pre-init">
+        <!-- Load properties from file -->
+        <property file="${dir.properties}/build.${platform}.properties"/>
         <property file="${dir.properties}/build.common.properties"/>   
-		<!-- there is a problem on windows where the dir.release is not set before the dir.libraries/dir.lib therefore dir.libraries/dir.lib gets incorrectly
-		set to ${dir.release}/bin & ${dir.release}/lib. to fix this I'll have to hack it in here. -->
-		<!-- Before we can do this we have to make all backslashes in dir.release into forward slashes -->
-		<propertyregex property="dir.release" input="${dir.release}" regexp="\\" replace="/" defaultValue="${dir.release}" override="true"/>
-		<propertyregex property="dir.libraries" input="${dir.libraries}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.libraries}" override="true"/>
-		<propertyregex property="dir.lib" input="${dir.lib}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.lib}" override="true"/>
-	</target>
+    	
+        <!-- Make all backslashes in dir.release into forward slashes -->
+        <propertyregex property="dir.release" input="${dir.release}" regexp="\\" replace="/" defaultValue="${dir.release}" override="true"/>
+        <propertyregex property="dir.libraries" input="${dir.libraries}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.libraries}" override="true"/>
+        <propertyregex property="dir.lib" input="${dir.lib}" regexp="\$\{dir.release\}" replace="${dir.release}" defaultValue="${dir.lib}" override="true"/>
+    </target>
 
-	<!--
-	  Change the name of the DLL files if compiling with debug on windows
-	  -->
-	<target name="checkIfDebug" if="debug">
-		<if>
-			<and>
-				<isset property="windows"/>
-				<equals arg1="${debug}" arg2="true" casesensitive="false"/>
-			</and>
-			<then>
-				<property name="clientLibraryName_D" value="${clientLibraryName}_D"/>
-				<property name="cClientLibraryName_D" value="${cClientLibraryName}_D"/>
-				<property name="transportLibraryName_D" value="${transportLibraryName}_D"/>
-				<property name="xmlParserLibraryName_D" value="${xmlParserLibraryName}_D"/>
-				<property name="xml4c.xmlParserLibraryName_D" value="${xml4c.xmlParserLibraryName}_D"/>
-				<property name="xerces.xmlParserLibraryName_D" value="${xerces.xmlParserLibraryName}_D"/>
-				<property name="axis2.transportLibraryName_D" value="${axis2.transportLibraryName}_D"/>
-				<property name="axis2.ipv6.transportLibraryName_D" value="${axis2.ipv6.transportLibraryName}_D"/>
-				<property name="HTTP.SecureChannelLibraryName_D" value="${HTTP.SecureChannelLibraryName}_D"/>
-				<property name="HTTP.transportLibraryName_D" value="${HTTP.transportLibraryName}_D"/>
-				<property name="HTTP.ChannelLibraryName_D" value="${HTTP.ChannelLibraryName}_D"/>
+    <target name="checkIfDebug" if="debug">
+        <!-- Change the name of the DLL files if compiling with debug on windows -->
+        <if>
+            <and>
+                <isset property="windows"/>
+                <equals arg1="${debug}" arg2="true" casesensitive="false"/>
+            </and>
+            <then>
+                <property name="clientLibraryName_D" value="${clientLibraryName}_D"/>
+                <property name="cClientLibraryName_D" value="${cClientLibraryName}_D"/>
+                <property name="transportLibraryName_D" value="${transportLibraryName}_D"/>
+                <property name="xmlParserLibraryName_D" value="${xmlParserLibraryName}_D"/>
+                <property name="xml4c.xmlParserLibraryName_D" value="${xml4c.xmlParserLibraryName}_D"/>
+                <property name="xerces.xmlParserLibraryName_D" value="${xerces.xmlParserLibraryName}_D"/>
+                <property name="axis2.transportLibraryName_D" value="${axis2.transportLibraryName}_D"/>
+                <property name="axis2.ipv6.transportLibraryName_D" value="${axis2.ipv6.transportLibraryName}_D"/>
+                <property name="HTTP.SecureChannelLibraryName_D" value="${HTTP.SecureChannelLibraryName}_D"/>
+                <property name="HTTP.transportLibraryName_D" value="${HTTP.transportLibraryName}_D"/>
+                <property name="HTTP.ChannelLibraryName_D" value="${HTTP.ChannelLibraryName}_D"/>
 
-				<propertycopy property="clientLibraryName" from="clientLibraryName_D" override="true"/>
-				<propertycopy property="cClientLibraryName" from="cClientLibraryName_D" override="true"/>
-				<propertycopy property="transportLibraryName" from="transportLibraryName_D" override="true"/>
-				<propertycopy property="xmlParserLibraryName" from="xmlParserLibraryName_D" override="true"/>
-				<propertycopy property="xml4c.xmlParserLibraryName" from="xml4c.xmlParserLibraryName_D" override="true"/>
-				<propertycopy property="xerces.xmlParserLibraryName" from="xerces.xmlParserLibraryName_D" override="true"/>
-				<propertycopy property="axis2.transportLibraryName" from="axis2.transportLibraryName_D" override="true"/>
-				<propertycopy property="axis2.ipv6.transportLibraryName" from="axis2.ipv6.transportLibraryName_D" override="true"/>
-				<propertycopy property="HTTP.SecureChannelLibraryName" from="HTTP.SecureChannelLibraryName_D" override="true"/>
-				<propertycopy property="HTTP.transportLibraryName" from="HTTP.transportLibraryName_D" override="true"/>
-				<propertycopy property="HTTP.ChannelLibraryName" from="HTTP.ChannelLibraryName_D" override="true"/>
-			</then>
-		</if>
-	</target>
-		
+                <propertycopy property="clientLibraryName" from="clientLibraryName_D" override="true"/>
+                <propertycopy property="cClientLibraryName" from="cClientLibraryName_D" override="true"/>
+                <propertycopy property="transportLibraryName" from="transportLibraryName_D" override="true"/>
+                <propertycopy property="xmlParserLibraryName" from="xmlParserLibraryName_D" override="true"/>
+                <propertycopy property="xml4c.xmlParserLibraryName" from="xml4c.xmlParserLibraryName_D" override="true"/>
+                <propertycopy property="xerces.xmlParserLibraryName" from="xerces.xmlParserLibraryName_D" override="true"/>
+                <propertycopy property="axis2.transportLibraryName" from="axis2.transportLibraryName_D" override="true"/>
+                <propertycopy property="axis2.ipv6.transportLibraryName" from="axis2.ipv6.transportLibraryName_D" override="true"/>
+                <propertycopy property="HTTP.SecureChannelLibraryName" from="HTTP.SecureChannelLibraryName_D" override="true"/>
+                <propertycopy property="HTTP.transportLibraryName" from="HTTP.transportLibraryName_D" override="true"/>
+                <propertycopy property="HTTP.ChannelLibraryName" from="HTTP.ChannelLibraryName_D" override="true"/>
+            </then>
+        </if>
+    </target>
+        
 </project>
