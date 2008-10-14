@@ -88,6 +88,12 @@ public class WSDL2Ws
                 + "-t<timeout>            uri resolution timeout in seconds - default is 0 (no timeout).\n"
                 + "-b<binding-name>       binding name that will be used to generate stub.\n"
                 + "-w<wrapped|unwrapped>  generate wrapper style or not - default is wrapped.\n"
+                + "                       In order for an operation to be eligible for wrapper-style,\n"
+                + "                       the following criteria must be met:\n"
+                + "                           -- There is at most one single part in input and output messages\n"
+                + "                           -- Each part definition must reference an element\n"
+                + "                           -- The input element must have the same name as the operation\n"
+                + "                           -- The input and output elements have no attributes\n"
                 );
     }
     
