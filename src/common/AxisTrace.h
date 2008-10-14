@@ -129,51 +129,46 @@ public:
 
     /**
      * This is called in writing to the log file whose path is specified in 
-     * $AXISCPP_DEPLOY/axiscpp.conf file.
-     * This method is used when the caller has two string messages 
-     * as arguments. One may be his      *own message.
+     * $AXISCPP_DEPLOY/axiscpp.conf file. This method is used when the caller 
+     * has two string messages as arguments. One may be his own message.
      * The other may be to print a trace value. User can also specify the 
-     * severity of the messag     *e by
-     * assigning level argument to one of CRITICAL, WARN, INFO or TRIVIAL.
+     * severity of the message by assigning level argument to one of CRITICAL, 
+     * WARN, INFO or TRIVIAL.
+     * 
      * @param sLog1 string message one
      * @param sLog2 string message two  
      * @param level severity level
      * @param arg3 file name
      * @param arg4 line number
-     * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not     * (AXIS_FAIL).
+     * 
+     * @return Operation status: AXIS_SUCCESS or AXIS_FAIL.
      */
     static int logaxis(const char* sLog1, const char* sLog2, const char *type, const char* file, int line);
 
     /**
      * Writes the given string to the standard console. 
-     * This method is useful when using the standalone server.
-     * @param pchLog The given string which will be printed to the 
-     * standard console.
-     * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not (AXIS_FAIL).
+     * 
+     * @param pchLog The given string which will be printed to the  standard console.
+     * 
+     * @return Operation status: AXIS_SUCCESS or AXIS_FAIL.
      */
     static int trace(const char* pchLog);
 
     /**
-     * Log file is opened for logging server side log messages
-     *
+     * Log file is opened for logging server side log messages.
      * The file is created( if one is already not there) with the name and 
      * path specified in AXISCPP_DEPLOY/axiscpp.conf file when web server loads.
      *
-     * @return The status which indicates whether the operation is successful
-     * (AXIS_SUCCESS) or not (AXIS_FAIL).
+     * @return Operation status: AXIS_SUCCESS or AXIS_FAIL.
      */
     static int openFile();
 
     /**
      * Log file is opened for logging client side log messages
-     *
      * The file is created with the name ClientAxisLog if one is not 
      * already in the current path.
      * 
-     * @return The status which indicates whether the operation is success 
-     * (AXIS_SUCCESS) or not (AXIS_FAIL).
+     * @return Operation status: AXIS_SUCCESS or AXIS_FAIL.
      */
     static int openFileByClient();
 
