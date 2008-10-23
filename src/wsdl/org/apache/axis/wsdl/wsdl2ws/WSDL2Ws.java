@@ -115,10 +115,11 @@ public class WSDL2Ws
         {
             if (c_verbose)
                 e.printStackTrace();
-            else
+            else if (e.getMessage() != null)
                 System.out.println("\nERROR: " + e.getMessage());
             
-            System.out.println("\nCode generation failed. Please see errors above.\n");
+            if (e.getMessage() != null)
+                System.out.println("\nCode generation failed. Please see errors above.\n");
         }
     }    
     
