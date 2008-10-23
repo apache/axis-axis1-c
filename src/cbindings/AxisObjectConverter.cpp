@@ -115,158 +115,12 @@ AxisObjectConverter::cppArrayToC(Axis_Array *objArray,
     
             switch (m_Type)
             {
-                case XSD_DURATION:
-                {
-                    ((xsd__duration**) cArray->m_Array)[count] = new xsd__duration();
-                    *((xsd__duration**)cArray->m_Array)[count] = *((xsd__duration**) m_Array)[count];
-                    break;
-                }
-                case XSD_DATETIME:
-                {
-                    ((xsd__dateTime**) cArray->m_Array)[count] = new xsd__dateTime();
-                    *((xsd__dateTime**)cArray->m_Array)[count] = *((xsd__dateTime**) m_Array)[count];
-                    break;
-                }
-                case XSD_TIME:
-                {
-                    ((xsd__time**) cArray->m_Array)[count] = new xsd__time();
-                    *((xsd__time**)cArray->m_Array)[count] = *((xsd__time**) m_Array)[count];
-                    break;
-                }
-                case XSD_DATE:
-                {
-                    ((xsd__date**) cArray->m_Array)[count] = new xsd__date();
-                    *((xsd__date**)cArray->m_Array)[count] = *((xsd__date**) m_Array)[count];
-                    break;
-                }
-                case XSD_GYEARMONTH:
-                {
-                    ((xsd__gYearMonth**) cArray->m_Array)[count] = new xsd__gYearMonth();
-                    *((xsd__gYearMonth**)cArray->m_Array)[count] = *((xsd__gYearMonth**) m_Array)[count];
-                    break;
-                }           
-                case XSD_GYEAR:
-                {
-                    ((xsd__gYear**) cArray->m_Array)[count] = new xsd__gYear();
-                    *((xsd__gYear**)cArray->m_Array)[count] = *((xsd__gYear**) m_Array)[count];
-                    break;
-                }
-                case XSD_GMONTHDAY:
-                {
-                    ((xsd__gMonthDay**) cArray->m_Array)[count] = new xsd__gMonthDay();
-                    *((xsd__gMonthDay**)cArray->m_Array)[count] = *((xsd__gMonthDay**) m_Array)[count];
-                    break;
-                }
-                case XSD_GDAY:
-                {
-                    ((xsd__gDay**) cArray->m_Array)[count] = new xsd__gDay();
-                    *((xsd__gDay**)cArray->m_Array)[count] = *((xsd__gDay**) m_Array)[count];
-                    break;
-                }
-                case XSD_GMONTH:
-                {
-                    ((xsd__gMonth**) cArray->m_Array)[count] = new xsd__gMonth();
-                    *((xsd__gMonth**)cArray->m_Array)[count] = *((xsd__gMonth**) m_Array)[count];
-                    break;
-                }
-                case XSD_STRING:
-                {
-                    ((xsd__string*) cArray->m_Array)[count] = new char[strlen(((xsd__string*) m_Array)[count])+1];
-                    strcpy(((xsd__string*) cArray->m_Array)[count], ((xsd__string*) m_Array)[count]);
-                    break;
-                }
-                case XSD_NORMALIZEDSTRING:
-                {
-                    ((xsd__normalizedString*) cArray->m_Array)[count] = new char[strlen(((xsd__normalizedString*) m_Array)[count])+1];
-                    strcpy(((xsd__normalizedString*) cArray->m_Array)[count], ((xsd__normalizedString*) m_Array)[count]);
-                    break;
-                }
-                case XSD_TOKEN:
-                {
-                    ((xsd__token*) cArray->m_Array)[count] = new char[strlen(((xsd__token*) m_Array)[count])+1];
-                    strcpy(((xsd__token*) cArray->m_Array)[count], ((xsd__token*) m_Array)[count]);
-                    break;
-                }
-                case XSD_LANGUAGE:
-                {
-                    ((xsd__language*) cArray->m_Array)[count] = new char[strlen(((xsd__language*) m_Array)[count])+1];
-                    strcpy(((xsd__language*) cArray->m_Array)[count], ((xsd__language*) m_Array)[count]);
-                    break;
-                }
-                case XSD_NAME:
-                {
-                    ((xsd__Name*) cArray->m_Array)[count] = new char[strlen(((xsd__Name*) m_Array)[count])+1];
-                    strcpy(((xsd__Name*) cArray->m_Array)[count], ((xsd__Name*) m_Array)[count]);
-                    break;
-                }
-                case XSD_NCNAME:
-                {
-                    ((xsd__NCName*) cArray->m_Array)[count] = new char[strlen(((xsd__NCName*) m_Array)[count])+1];
-                    strcpy(((xsd__NCName*) cArray->m_Array)[count], ((xsd__NCName*) m_Array)[count]);
-                    break;
-                }
-                case XSD_ID:
-                {
-                    ((xsd__ID*) cArray->m_Array)[count] = new char[strlen(((xsd__ID*) m_Array)[count])+1];
-                    strcpy(((xsd__ID*) cArray->m_Array)[count], ((xsd__ID*) m_Array)[count]);
-                    break;
-                }
-                case XSD_IDREF:
-                {
-                    ((xsd__IDREF*) cArray->m_Array)[count] = new char[strlen(((xsd__IDREF*) m_Array)[count])+1];
-                    strcpy(((xsd__IDREF*) cArray->m_Array)[count], ((xsd__IDREF*) m_Array)[count]);
-                    break;
-                }
-                case XSD_IDREFS:
-                {
-                    ((xsd__IDREFS*) cArray->m_Array)[count] = new char[strlen(((xsd__IDREFS*) m_Array)[count])+1];
-                    strcpy(((xsd__IDREFS*) cArray->m_Array)[count], ((xsd__IDREFS*) m_Array)[count]);
-                    break;
-                }
-                case XSD_ENTITY:
-                {
-                    ((xsd__ENTITY*) cArray->m_Array)[count] = new char[strlen(((xsd__ENTITY*) m_Array)[count])+1];
-                    strcpy(((xsd__ENTITY*) cArray->m_Array)[count], ((xsd__ENTITY*) m_Array)[count]);
-                    break;
-                }
-                case XSD_ENTITIES:
-                {
-                    ((xsd__ENTITIES*) cArray->m_Array)[count] = new char[strlen(((xsd__ENTITIES*) m_Array)[count])+1];
-                    strcpy(((xsd__ENTITIES*) cArray->m_Array)[count], ((xsd__ENTITIES*) m_Array)[count]);
-                    break;
-                }
-                case XSD_NMTOKEN:
-                {
-                    ((xsd__NMTOKEN*) cArray->m_Array)[count] = new char[strlen(((xsd__NMTOKEN*) m_Array)[count])+1];
-                    strcpy(((xsd__NMTOKEN*) cArray->m_Array)[count], ((xsd__NMTOKEN*) m_Array)[count]);
-                    break;
-                }
-                case XSD_NMTOKENS:
-                {
-                    ((xsd__NMTOKENS*) cArray->m_Array)[count] = new char[strlen(((xsd__NMTOKENS*) m_Array)[count])+1];
-                    strcpy(((xsd__NMTOKENS*) cArray->m_Array)[count], ((xsd__NMTOKENS*) m_Array)[count]);
-                    break;
-                }
-                case XSD_BOOLEAN:
-                {
-                    ((xsd__boolean**) cArray->m_Array)[count] = new xsd__boolean();
-                    *((xsd__boolean**)cArray->m_Array)[count] = *((xsd__boolean**) m_Array)[count];
-                    break;
-                }
-                case XSD_BASE64BINARY:
-                {
-                    // TODO
-                    ((xsdc__base64Binary**) cArray->m_Array)[count] = new xsdc__base64Binary();
-                    *((xsdc__base64Binary**)cArray->m_Array)[count] = *((xsdc__base64Binary**) m_Array)[count];
-                    break;
-                }
-                case XSD_HEXBINARY:
-                {
-                    // TODO
-                    ((xsdc__hexBinary**) cArray->m_Array)[count] = new xsdc__hexBinary();
-                    *((xsdc__hexBinary**)cArray->m_Array)[count] = *((xsdc__hexBinary**) m_Array)[count];
-                    break;
-                }
+	            case XSD_STRING:
+	            {
+	                ((xsd__string*) cArray->m_Array)[count] = new char[strlen(((xsd__string*) m_Array)[count])+1];
+	                strcpy(((xsd__string*) cArray->m_Array)[count], ((xsd__string*) m_Array)[count]);
+	                break;
+	            }
                 case XSD_FLOAT:
                 {
                     ((xsd__float**) cArray->m_Array)[count] = new xsd__float();
@@ -361,6 +215,148 @@ AxisObjectConverter::cppArrayToC(Axis_Array *objArray,
                 {
                     ((xsd__double**) cArray->m_Array)[count] = new xsd__double();
                     *((xsd__double**)cArray->m_Array)[count] = *((xsd__double**) m_Array)[count];
+                    break;
+                }	            
+                case XSD_DURATION:
+                {
+                    ((xsd__duration**) cArray->m_Array)[count] = new xsd__duration();
+                    *((xsd__duration**)cArray->m_Array)[count] = *((xsd__duration**) m_Array)[count];
+                    break;
+                }
+                case XSD_DATETIME:
+                {
+                    ((xsd__dateTime**) cArray->m_Array)[count] = new xsd__dateTime();
+                    *((xsd__dateTime**)cArray->m_Array)[count] = *((xsd__dateTime**) m_Array)[count];
+                    break;
+                }
+                case XSD_TIME:
+                {
+                    ((xsd__time**) cArray->m_Array)[count] = new xsd__time();
+                    *((xsd__time**)cArray->m_Array)[count] = *((xsd__time**) m_Array)[count];
+                    break;
+                }
+                case XSD_DATE:
+                {
+                    ((xsd__date**) cArray->m_Array)[count] = new xsd__date();
+                    *((xsd__date**)cArray->m_Array)[count] = *((xsd__date**) m_Array)[count];
+                    break;
+                }
+                case XSD_GYEARMONTH:
+                {
+                    ((xsd__gYearMonth**) cArray->m_Array)[count] = new xsd__gYearMonth();
+                    *((xsd__gYearMonth**)cArray->m_Array)[count] = *((xsd__gYearMonth**) m_Array)[count];
+                    break;
+                }           
+                case XSD_GYEAR:
+                {
+                    ((xsd__gYear**) cArray->m_Array)[count] = new xsd__gYear();
+                    *((xsd__gYear**)cArray->m_Array)[count] = *((xsd__gYear**) m_Array)[count];
+                    break;
+                }
+                case XSD_GMONTHDAY:
+                {
+                    ((xsd__gMonthDay**) cArray->m_Array)[count] = new xsd__gMonthDay();
+                    *((xsd__gMonthDay**)cArray->m_Array)[count] = *((xsd__gMonthDay**) m_Array)[count];
+                    break;
+                }
+                case XSD_GDAY:
+                {
+                    ((xsd__gDay**) cArray->m_Array)[count] = new xsd__gDay();
+                    *((xsd__gDay**)cArray->m_Array)[count] = *((xsd__gDay**) m_Array)[count];
+                    break;
+                }
+                case XSD_GMONTH:
+                {
+                    ((xsd__gMonth**) cArray->m_Array)[count] = new xsd__gMonth();
+                    *((xsd__gMonth**)cArray->m_Array)[count] = *((xsd__gMonth**) m_Array)[count];
+                    break;
+                }
+                case XSD_NORMALIZEDSTRING:
+                {
+                    ((xsd__normalizedString*) cArray->m_Array)[count] = new char[strlen(((xsd__normalizedString*) m_Array)[count])+1];
+                    strcpy(((xsd__normalizedString*) cArray->m_Array)[count], ((xsd__normalizedString*) m_Array)[count]);
+                    break;
+                }
+                case XSD_TOKEN:
+                {
+                    ((xsd__token*) cArray->m_Array)[count] = new char[strlen(((xsd__token*) m_Array)[count])+1];
+                    strcpy(((xsd__token*) cArray->m_Array)[count], ((xsd__token*) m_Array)[count]);
+                    break;
+                }
+                case XSD_LANGUAGE:
+                {
+                    ((xsd__language*) cArray->m_Array)[count] = new char[strlen(((xsd__language*) m_Array)[count])+1];
+                    strcpy(((xsd__language*) cArray->m_Array)[count], ((xsd__language*) m_Array)[count]);
+                    break;
+                }
+                case XSD_NAME:
+                {
+                    ((xsd__Name*) cArray->m_Array)[count] = new char[strlen(((xsd__Name*) m_Array)[count])+1];
+                    strcpy(((xsd__Name*) cArray->m_Array)[count], ((xsd__Name*) m_Array)[count]);
+                    break;
+                }
+                case XSD_NCNAME:
+                {
+                    ((xsd__NCName*) cArray->m_Array)[count] = new char[strlen(((xsd__NCName*) m_Array)[count])+1];
+                    strcpy(((xsd__NCName*) cArray->m_Array)[count], ((xsd__NCName*) m_Array)[count]);
+                    break;
+                }
+                case XSD_ID:
+                {
+                    ((xsd__ID*) cArray->m_Array)[count] = new char[strlen(((xsd__ID*) m_Array)[count])+1];
+                    strcpy(((xsd__ID*) cArray->m_Array)[count], ((xsd__ID*) m_Array)[count]);
+                    break;
+                }
+                case XSD_IDREF:
+                {
+                    ((xsd__IDREF*) cArray->m_Array)[count] = new char[strlen(((xsd__IDREF*) m_Array)[count])+1];
+                    strcpy(((xsd__IDREF*) cArray->m_Array)[count], ((xsd__IDREF*) m_Array)[count]);
+                    break;
+                }
+                case XSD_IDREFS:
+                {
+                    ((xsd__IDREFS*) cArray->m_Array)[count] = new char[strlen(((xsd__IDREFS*) m_Array)[count])+1];
+                    strcpy(((xsd__IDREFS*) cArray->m_Array)[count], ((xsd__IDREFS*) m_Array)[count]);
+                    break;
+                }
+                case XSD_ENTITY:
+                {
+                    ((xsd__ENTITY*) cArray->m_Array)[count] = new char[strlen(((xsd__ENTITY*) m_Array)[count])+1];
+                    strcpy(((xsd__ENTITY*) cArray->m_Array)[count], ((xsd__ENTITY*) m_Array)[count]);
+                    break;
+                }
+                case XSD_ENTITIES:
+                {
+                    ((xsd__ENTITIES*) cArray->m_Array)[count] = new char[strlen(((xsd__ENTITIES*) m_Array)[count])+1];
+                    strcpy(((xsd__ENTITIES*) cArray->m_Array)[count], ((xsd__ENTITIES*) m_Array)[count]);
+                    break;
+                }
+                case XSD_NMTOKEN:
+                {
+                    ((xsd__NMTOKEN*) cArray->m_Array)[count] = new char[strlen(((xsd__NMTOKEN*) m_Array)[count])+1];
+                    strcpy(((xsd__NMTOKEN*) cArray->m_Array)[count], ((xsd__NMTOKEN*) m_Array)[count]);
+                    break;
+                }
+                case XSD_NMTOKENS:
+                {
+                    ((xsd__NMTOKENS*) cArray->m_Array)[count] = new char[strlen(((xsd__NMTOKENS*) m_Array)[count])+1];
+                    strcpy(((xsd__NMTOKENS*) cArray->m_Array)[count], ((xsd__NMTOKENS*) m_Array)[count]);
+                    break;
+                }
+                case XSD_BOOLEAN:
+                {
+                    ((xsd__boolean**) cArray->m_Array)[count] = new xsd__boolean();
+                    *((xsd__boolean**)cArray->m_Array)[count] = *((xsd__boolean**) m_Array)[count];
+                    break;
+                }
+                case XSD_BASE64BINARY:
+                {
+                    cArray->m_Array[count] = cppBase64BinaryToC((xsd__base64Binary *)m_Array[count], NULL, false); 
+                    break;
+                }
+                case XSD_HEXBINARY:
+                {
+                    cArray->m_Array[count] = cppHexBinaryToC((xsd__hexBinary *)m_Array[count], NULL, false);
                     break;
                 }
                 case XSD_ANYURI:
