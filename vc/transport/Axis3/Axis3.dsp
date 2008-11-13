@@ -108,6 +108,10 @@ SOURCE=..\..\..\src\transport\axis3\HTTPTransportInstantiator.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\src\common\AxisTrace.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\src\platforms\windows\PlatformSpecificWindows.cpp
 # End Source File
 # Begin Source File
