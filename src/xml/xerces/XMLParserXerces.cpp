@@ -32,27 +32,37 @@ using namespace std;
 XMLParserXerces::
 XMLParserXerces() : XMLParser()
 {
+	logEntryParser("XMLParserXerces::XMLParserXerces")
+
     m_pInputSource = NULL;
     m_bFirstParsed = false;
     m_bPeeked = false;
     m_bStartEndElement = false;
     m_pParser = XMLReaderFactory::createXMLReader();
     m_pParser->setErrorHandler(&m_Xhandler);
+    
+    logExit()
 }
 
 XMLParserXerces::
 ~XMLParserXerces()
 {
+	logEntryParser("XMLParserXerces::~XMLParserXerces")
+
     // Parser has memory allocated with the last AnyElement parsed; clean that
     m_Xhandler.freeElement();
 
     delete m_pInputSource;
     delete m_pParser;
+    
+    logExit()
 }
 
 int XMLParserXerces::
 setInputStream(AxisIOStream* pInputStream)
 {
+	logEntryParser("XMLParserXerces::setInputStream")
+
     m_pInputStream = pInputStream;
     
     delete m_pInputSource;
@@ -68,6 +78,8 @@ setInputStream(AxisIOStream* pInputStream)
     m_iStatus = AXIS_SUCCESS;
     m_sErrorString = "";
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
@@ -80,6 +92,8 @@ getNS4Prefix(const XML_Ch* prefix)
 const AnyElement* XMLParserXerces::
 parse(bool ignoreWhitespace, bool peekIt)
 {
+	logEntryParser("XMLParserXerces::parse")
+
     try 
     {
         // Need to do a parseFirst() to kick off parsing
@@ -92,7 +106,11 @@ parse(bool ignoreWhitespace, bool peekIt)
             
             m_bFirstParsed = true;
             if (!m_bCanParseMore)
+            {
+                logExitWithPointer(NULL)
+
                 return (const AnyElement*)NULL;
+            }
         }
 
         // release any element that has been consumed
@@ -156,6 +174,8 @@ parse(bool ignoreWhitespace, bool peekIt)
         }
         
         // Return element
+        logExitWithPointer(elem)
+
         return (const AnyElement*)elem;
     } 
     catch( const SAXParseException& e) 
@@ -165,6 +185,8 @@ parse(bool ignoreWhitespace, bool peekIt)
         m_iErrorCode = SERVER_PARSE_PARSER_FAILED;
         m_iStatus = AXIS_FAIL;
         XMLString::release( &message);
+        
+        logThrowExceptionWithData("AxisParseException", m_sErrorString.c_str())
         
         throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());
     } 
@@ -176,6 +198,8 @@ parse(bool ignoreWhitespace, bool peekIt)
         m_iStatus = AXIS_FAIL;
         XMLString::release( &message);
         
+        logThrowExceptionWithData("AxisParseException", m_sErrorString.c_str())
+
         throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());        
     }    
     catch( HTTPTransportException & e)
@@ -184,6 +208,8 @@ parse(bool ignoreWhitespace, bool peekIt)
         m_iErrorCode = SERVER_PARSE_TRANSPORT_FAILED;
         m_iStatus = AXIS_FAIL;
         
+        logThrowExceptionWithData("AxisParseException", m_sErrorString.c_str())
+
         throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());        
     }    
     catch(...) 
@@ -192,16 +218,26 @@ parse(bool ignoreWhitespace, bool peekIt)
         m_iErrorCode = SERVER_PARSE_PARSER_FAILED;
         m_iStatus = AXIS_FAIL;
         
+        logThrowExceptionWithData("AxisParseException", m_sErrorString.c_str())
+
         throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());         
     }
     
+    logExitWithPointer(NULL)
+
     return (const AnyElement*)NULL;
 }
 
 const AnyElement* XMLParserXerces::
 next(bool isCharData)
 {    
-    return parse(isCharData ? false : true);
+	logEntryParser("XMLParserXerces::next")
+
+    const AnyElement* returnValue = parse(isCharData ? false : true);
+	
+    logExitWithPointer(returnValue)
+
+	return returnValue;
 }
 
 // New method which peek a head next element 
@@ -209,31 +245,36 @@ next(bool isCharData)
 const char* XMLParserXerces::
 peek()
 {   
+	logEntryParser("XMLParserXerces::peek")
+
+    const char* returnValue = "";
+
     // peek() is used to determine optional elements or elements 
     // that are not in order (e.g. xsd:all support) - return a null string if 
     // the last node processed was a start/end element
-    if (m_bStartEndElement)
-        return "";
-    
-    // get element, ignoring whitespace and indicating this is a peek operation   
-    const AnyElement* elem = parse(true, true);
-    if (!elem)
-        return "";
-    
-    // We return null string if end-element or unknown type is encountered
-    const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
-    if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
+    if (!m_bStartEndElement)
     {
-        const char* name = m_Xhandler.peekNextElementName();
-        return name;
+	    // get element, ignoring whitespace and indicating this is a peek operation   
+	    const AnyElement* elem = parse(true, true);
+	    if (elem)
+	    {
+		    // We return null string if end-element or unknown type is encountered
+		    const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
+		    if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
+		    	returnValue = m_Xhandler.peekNextElementName();
+	    }
     }
-    else
-        return "";
+    
+    logExitWithString(returnValue)
+
+    return returnValue;
 }
 
 const AnyElement* XMLParserXerces::
 anyNext()
 {
+	logEntryParser("XMLParserXerces::anyNext")
+
     // Say the SAX event handler to record prefix mappings too 
     // By default the event handler do not record them.
     m_Xhandler.setGetPrefixMappings(true);
@@ -244,6 +285,8 @@ anyNext()
     // Reset prefix mapping
     m_Xhandler.setGetPrefixMappings(false);
     
+    logExitWithPointer(elem)
+
     return elem;
 }
 
@@ -251,4 +294,11 @@ const XML_Ch* XMLParserXerces::
 getPrefix4NS(const XML_Ch* pcNS)
 {
     return m_Xhandler.prefix4NS(pcNS);
+}
+
+void XMLParserXerces::
+enableTrace(const char* logFilePath, const char *filters)
+{
+	AxisTrace::setLogFilter(filters);
+	AxisTrace::startTrace(logFilePath, false);
 }

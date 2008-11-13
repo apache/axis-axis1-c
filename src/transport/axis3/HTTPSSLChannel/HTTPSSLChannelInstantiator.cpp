@@ -23,10 +23,6 @@
 // !!! Must be first thing in file !!!
 #include "../../../platforms/PlatformAutoSense.hpp"
 
-#ifndef AXISTRACE_LIBRARY_MAINENTRYPOINT
-#define AXISTRACE_LIBRARY_MAINENTRYPOINT
-#endif
-
 #include "../../../common/AxisTrace.h"
 
 #include "HTTPSSLChannel.hpp"
@@ -67,12 +63,9 @@ extern "C"
 
     /*  initializeLibrary() Is a C interface.
      */
-    STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints* ep)
+    STORAGE_CLASS_INFO void initializeLibrary (void)
     {
         // Do init actions
-#ifdef ENABLE_AXISTRACE
-        AxisTrace::setTraceEntrypoints(ep);
-#endif
     }
 
     /*  uninitializeLibrary() Is a C interface.

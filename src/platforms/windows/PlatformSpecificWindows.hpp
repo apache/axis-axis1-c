@@ -61,6 +61,9 @@
 #include <string>
 #include <sys/timeb.h>
 
+#define DIR_SEPARATOR   '\\'
+#define DIR_SEPARATOR_S "\\"
+
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
@@ -140,6 +143,7 @@
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "I64d"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%I64u"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "I64u"
+#define PRINTF_LONGLONG_LOG_FORMAT_SPECIFIER "%.8I64u"
 
 /**
  * Platform specific method to obtain current thread ID
@@ -155,6 +159,12 @@
 std::string getPlatformErrorMessage(long errorNumber);
 
 HMODULE callLoadLib(LPCTSTR lib);
+
+/**
+ * File modes
+ */
+#define TRACE_FILE_MODE1   "a"
+#define TRACE_FILE_MODE2   "a"
 
 #endif
 

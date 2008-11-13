@@ -36,17 +36,24 @@ AXIS_CPP_NAMESPACE_START
 const AxisChar* MessageData::m_pachBlankPropertyValue = "";
 AdminUtils MessageData::m_AdminUtil;
 
-MessageData::MessageData ()
+MessageData::
+MessageData ()
 {
+	logEntryEngine("MessageData::MessageData")
+
     m_pSZ = NULL;
     m_pDZ = NULL;
     m_bPastPivotState = false;
+    
+    logExit()
 }
 
-MessageData::~MessageData ()
+MessageData::
+~MessageData ()
 {
-    map < const AxisChar*, const AxisChar*, ltstr >::const_iterator itCurrentItem =
-        m_Properties.begin ();
+	logEntryEngine("MessageData::~MessageData")
+
+    map < const AxisChar*, const AxisChar*, ltstr >::const_iterator itCurrentItem = m_Properties.begin ();
 
     while (itCurrentItem != m_Properties.end ())
     {
@@ -57,92 +64,94 @@ MessageData::~MessageData ()
     }
 
     m_Properties.clear ();
+    
+    logExit()
 }
 
-void MessageData::setSerializer (IWrapperSoapSerializer* pSZ)
+void MessageData::
+setSerializer (IWrapperSoapSerializer* pSZ)
 {
     m_pSZ = pSZ;
 }
 
-void MessageData::setDeSerializer (IWrapperSoapDeSerializer* pDZ)
+void MessageData::
+setDeSerializer (IWrapperSoapDeSerializer* pDZ)
 {
     m_pDZ = pDZ;
 }
 
-void MessageData::setOperationName(const AxisChar* pchOperation)
+void MessageData::
+setOperationName(const AxisChar* pchOperation)
 {
 	m_sOperationName = pchOperation;
 }
-const AxisChar* MessageData::getOperationName()
+const AxisChar* MessageData::
+getOperationName()
 {
 	return m_sOperationName.c_str();
 }
 
-void MessageData::setUserName (string &sUserName)
+void MessageData::
+setUserName (string &sUserName)
 {
     m_sUserName = sUserName;
 }
 
-string &MessageData::getUserName ()
+string &MessageData::
+getUserName ()
 {
     return m_sUserName;
-    // return "damitha kumarage"; 
 }
 
-/*
- *    comm on 25Jul2003 at 10.00am
- *    ISoapSerializer* MessageData::getSoapSerializer()
- *    {
- *        return m_pSZ;
- *    }
- */
-
-IWrapperSoapDeSerializer* MessageData::getSoapDeserializer ()
+IWrapperSoapDeSerializer* MessageData::
+getSoapDeserializer ()
 {
     return m_pDZ;
 }
 
-bool MessageData::isPastPivot ()
+bool MessageData::
+isPastPivot ()
 {
     return m_bPastPivotState;
 }
 
-int MessageData::setPastPivotState (bool bState)
+int MessageData::
+setPastPivotState (bool bState)
 {
     m_bPastPivotState = bState;
 
     return AXIS_SUCCESS;
 }
 
-void MessageData::getSoapSerializer 
-    (IHandlerSoapSerializer** pIHandlerSoapSerializer)
+void MessageData::
+getSoapSerializer (IHandlerSoapSerializer** pIHandlerSoapSerializer)
 {
     *pIHandlerSoapSerializer = static_cast < IHandlerSoapSerializer* >(m_pSZ);
 }
 
-void MessageData::getSoapSerializer (IWrapperSoapSerializer**
-    pIWrapperSoapSerializer)
+void MessageData::
+getSoapSerializer (IWrapperSoapSerializer** pIWrapperSoapSerializer)
 {
     *pIWrapperSoapSerializer = static_cast < IWrapperSoapSerializer* >(m_pSZ);
 }
 
-void MessageData::getSoapDeSerializer (IWrapperSoapDeSerializer**
-    pIWrapperSoapDeSerializer)
+void MessageData::
+getSoapDeSerializer (IWrapperSoapDeSerializer** pIWrapperSoapDeSerializer)
 {
-    *pIWrapperSoapDeSerializer = 
-        static_cast < IWrapperSoapDeSerializer* >(m_pDZ);
+    *pIWrapperSoapDeSerializer = static_cast < IWrapperSoapDeSerializer* >(m_pDZ);
 }
 
-void MessageData::getSoapDeSerializer (IHandlerSoapDeSerializer**
-    pIHandlerSoapDeSerializer)
+void MessageData::
+getSoapDeSerializer (IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)
 {
-    *pIHandlerSoapDeSerializer = 
-        static_cast < IHandlerSoapDeSerializer * >(m_pDZ);
+    *pIHandlerSoapDeSerializer = static_cast < IHandlerSoapDeSerializer * >(m_pDZ);
 }
 
 
 
-int MessageData::setProperty (const AxisChar* pachName, const AxisChar* pachValue)
+int MessageData::
+setProperty (const AxisChar* pachName, 
+		     const AxisChar* pachValue)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -154,7 +163,10 @@ int MessageData::setProperty (const AxisChar* pachName, const AxisChar* pachValu
     return AXIS_SUCCESS;
 }
 
-int MessageData::setProperty (const AxisChar* pachName, const void* pachValue, int len)
+int MessageData::
+setProperty (const AxisChar* pachName, 
+		     const void* pachValue, 
+		     int len)
 {
      AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
      strcpy (pachTmpName, pachName);
@@ -166,7 +178,10 @@ int MessageData::setProperty (const AxisChar* pachName, const void* pachValue, i
      return AXIS_SUCCESS;
 }
 
-void MessageData::setComplexProperty(const AxisChar* pachName, void* pValue, int iObjectSize)
+void MessageData::
+setComplexProperty(const AxisChar* pachName, 
+		           void* pValue, 
+		           int iObjectSize)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -181,7 +196,8 @@ void MessageData::setComplexProperty(const AxisChar* pachName, void* pValue, int
  *    not. If it is empty then the idea is that the property is not 
  *    available.
  */
-const void* MessageData::getProperty (const AxisChar* pachName)
+const void* MessageData::
+getProperty (const AxisChar* pachName)
 {
     if (m_Properties.find (pachName) != m_Properties.end ())
     {
@@ -191,7 +207,8 @@ const void* MessageData::getProperty (const AxisChar* pachName)
     return m_pachBlankPropertyValue;
 }
 
-void* MessageData::getComplexProperty(const AxisChar* pachName)
+void* MessageData::
+getComplexProperty(const AxisChar* pachName)
 {
     if (m_ComplexProperties.find (pachName) != m_ComplexProperties.end ())
     {
@@ -201,7 +218,8 @@ void* MessageData::getComplexProperty(const AxisChar* pachName)
     return NULL;	
 }
 
-void MessageData::getAdminUtils (IAdminUtils** pIAdminUtils)
+void MessageData::
+getAdminUtils (IAdminUtils** pIAdminUtils)
 {
     *pIAdminUtils = &m_AdminUtil;
 }

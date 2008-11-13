@@ -50,7 +50,7 @@ class HTTPTransport:public SOAPTransport
 {
   public:
     HTTPTransport ();
-    virtual ~ HTTPTransport ();
+    virtual ~HTTPTransport ();
 
   /**
     * Sets the endpoint URI. 
@@ -107,6 +107,8 @@ class HTTPTransport:public SOAPTransport
     ISoapAttachment**       getAllAttachments(int *pAttchArraySize) { return NULL;}; 
     char *					getIncomingSOAPMimeHeaders() {return NULL;}
 	const char *			getLastChannelError();
+	
+    void enableTrace(const char* logFilePath, const char *filters);
 
   protected:
     void					processRootMimeBody();

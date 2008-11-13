@@ -37,6 +37,8 @@ AXIS_CPP_NAMESPACE_START
 WSDDDeployment::
 WSDDDeployment()
 {
+	logEntryEngine("WSDDDeployment::WSDDDeployment")
+
     m_DeployedServices = NULL;
     m_sAux = "";
     m_pTransportHandlers = NULL;
@@ -44,11 +46,15 @@ WSDDDeployment()
     m_GlobalRequestHandlers = NULL;
     m_DeplType = DT_DEPLOYMENT;
     m_pLibNameIdMap = new map<AxisString, int>;
+    
+	logExit()
 }
 
 WSDDDeployment::
 ~WSDDDeployment()
 {
+	logEntryEngine("WSDDDeployment::~WSDDDeployment")
+
     WSDDHandlerList::iterator iter;
     delete m_pTransportHandlers;
 
@@ -67,6 +73,8 @@ WSDDDeployment::
 
     delete m_DeployedServices;
     delete m_pLibNameIdMap;
+    
+	logExit()
 }
 
 const WSDDHandlerList* WSDDDeployment::
@@ -97,6 +105,8 @@ updateWSDD(const AxisChar* sWSDD)
 int WSDDDeployment::
 loadWSDD( const AxisChar * sWSDD)
 {
+	logEntryEngine("WSDDDeployment::loadWSDD")
+
     m_sWSDDPath = std::string( sWSDD);
 
     WSDDDocument *doc = new WSDDDocument( m_pLibNameIdMap);
@@ -106,8 +116,14 @@ loadWSDD( const AxisChar * sWSDD)
     delete doc;
     
     if (AXIS_FAIL == rc)
+    {
+    	 logThrowException("AxisWsddException - SERVER_WSDD_FILE_NOT_FOUND")
+
          throw AxisWsddException(SERVER_WSDD_FILE_NOT_FOUND);
-         
+    }
+        
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
@@ -190,6 +206,8 @@ saveWSDD()
 const WSDDService* WSDDDeployment::
 getService(const AxisChar* sServiceName)
 {
+	logSetFunctionNameEngine("WSDDDeployment::getService")
+	
     WSDDServiceMap::iterator iter;
     if (!m_DeployedServices) 
         return NULL;
@@ -205,6 +223,8 @@ getService(const AxisChar* sServiceName)
     catch(exception& e)
     {
         e = e;
+
+   	    logThrowExceptionWithData("AxisWsddException - SERVER_WSDD_EXCEPTION", e.what())
 
         throw AxisWsddException(SERVER_WSDD_EXCEPTION);
     }
@@ -232,15 +252,19 @@ getLibName(int nLibId)
 int WSDDDeployment::
 addService(WSDDService* pService)
 {
+	logEntryEngine("WSDDDeployment::addService")
+
     if (!m_DeployedServices) 
         m_DeployedServices = new WSDDServiceMap;
     
     if (m_DeployedServices->find(pService->getServiceName()) != m_DeployedServices->end())
     {
-        AXISTRACE1("The service already exists and the attempt to re-deploy is ignored", WARN);
+    	logWarning("The service already exists and the attempt to re-deploy is ignored.")
     }
     else
         (*m_DeployedServices)[pService->getServiceName()] = pService;
+
+	logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }        
@@ -248,6 +272,17 @@ addService(WSDDService* pService)
 int WSDDDeployment::
 addHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL_TYPE protocol)
 {
+	logEntryEngine("WSDDDeployment::addHandler")
+	
+	if (pHandler)
+	{
+		logDebugArg4("Adding handler %s, global=%s, request=%s, response=%s", 
+				     pHandler->getLibName(), 
+				     bGlobal ? "yes" : "no",
+				     bRequestFlow ? "yes" : "no", 
+				     bRequestFlow ? "no"  : "yes")
+	}
+
     if (bGlobal)
     {
         if (bRequestFlow)
@@ -269,6 +304,9 @@ addHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTOCOL
             m_pTransportHandlers = new WSDDTransport();
         m_pTransportHandlers->addHandler(bRequestFlow, protocol, pHandler);
     }
+	
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
@@ -327,6 +365,7 @@ removeHandler(bool bGlobal, bool bRequestFlow, WSDDHandler* pHandler, AXIS_PROTO
             return AXIS_NO_SUCH_HANDLER;
         return m_pTransportHandlers->removeHandler(bRequestFlow, protocol, pHandler);
     }
+    
     return AXIS_NO_SUCH_HANDLER;    
 }
 

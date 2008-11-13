@@ -29,25 +29,37 @@
 AXIS_CPP_NAMESPACE_START
 
 
-SerializerPool::SerializerPool ()
+SerializerPool::
+SerializerPool ()
 {
+	logEntryEngine("SerializerPool::SerializerPool")
 
+    logExit()
 }
 
-SerializerPool::~SerializerPool ()
+SerializerPool::
+~SerializerPool ()
 {
+	logEntryEngine("SerializerPool::~SerializerPool")
+
     for (list <IWrapperSoapSerializer*>::iterator it = m_SZList.begin ();
          it != m_SZList.end (); it++)
     {
         delete (*it);
     }
+	
+    logExit()
 }
 
 // Pooling should be implemented
-int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
+int SerializerPool::
+getInstance (IWrapperSoapSerializer** ppSZ)
 {
-    //lock ();
+	logEntryEngine("SerializerPool::getInstance")
+
 	Lock l(this);
+	
+	int Status = AXIS_SUCCESS;
 
     if (!m_SZList.empty ())
     {
@@ -63,25 +75,30 @@ int SerializerPool::getInstance (IWrapperSoapSerializer** ppSZ)
 #endif
         
     }
+	
     if (AXIS_SUCCESS != ((SoapSerializer*)(*ppSZ))->init ())
     {
         delete *ppSZ;
         *ppSZ = NULL;
-        //unlock ();
-        AXISTRACE1 ("Serializer pool could not be initialized", CRITICAL);
-        return AXIS_FAIL;
+        Status = AXIS_FAIL;
     }
-    //unlock ();
-    return AXIS_SUCCESS;
+    
+	logExitWithReturnCode(Status)
+	
+    return Status;
 }
 
-int SerializerPool::putInstance (IWrapperSoapSerializer* pSZ)
+int SerializerPool::
+putInstance (IWrapperSoapSerializer* pSZ)
 {
-    //lock ();
+	logEntryEngine("SerializerPool::putInstance")
+
 	Lock l(this);
 
     m_SZList.push_back (pSZ);
-    //unlock ();
+    
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 

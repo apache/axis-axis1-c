@@ -36,13 +36,17 @@ extern AXIS_CPP_NAMESPACE_PREFIX WSDDDeployment* g_pWSDDDeployment;
 
 AXIS_CPP_NAMESPACE_START
 
-HandlerLoader::HandlerLoader ()
+HandlerLoader::
+HandlerLoader ()
 {
     PLATFORM_LOADLIBINIT();
 }
 
-HandlerLoader::~HandlerLoader ()
+HandlerLoader::
+~HandlerLoader ()
 {
+	logEntryEngine("HandlerLoader::~HandlerLoader")
+
     //lock ();
 	Lock l(this);
     HandlerInformation* pHandlerInfo = NULL;
@@ -55,10 +59,15 @@ HandlerLoader::~HandlerLoader ()
     }
 	l.unlock ();
     PLATFORM_LOADLIBEXIT()
+    
+    logExit()
 }
 
-int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
+int HandlerLoader::
+deleteHandler (BasicHandler* pHandler, int nLibId)
 {
+	logEntryEngine("HandlerLoader::deleteHandler")
+
 	Lock l(this);
     if (m_HandlerInfoList.find (nLibId) != m_HandlerInfoList.end ())
     {
@@ -68,13 +77,23 @@ int HandlerLoader::deleteHandler (BasicHandler* pHandler, int nLibId)
     }
     else
     {
+    	logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_NOT_LOADED")
+
         throw AxisEngineException(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
+    
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
+int HandlerLoader::
+loadLib (HandlerInformation* pHandlerInfo)
 {
+	logEntryEngine("HandlerLoader::loadLib")
+
+    logDebugArg1("Loading handler %s", pHandlerInfo->m_sLib.c_str())
+    
     pHandlerInfo->m_Handler = PLATFORM_LOADLIB(pHandlerInfo->m_sLib.c_str());
 
     if (!pHandlerInfo->m_Handler)
@@ -83,21 +102,35 @@ int HandlerLoader::loadLib (HandlerInformation* pHandlerInfo)
         string sFullMessage = "Failed to load handler library " +  
                               pHandlerInfo->m_sLib + ". " + PLATFORM_LOADLIB_ERROR;
 
+        logThrowExceptionWithData("AxisEngineException - SERVER_ENGINE_HANDLER_NOT_LOADED", sFullMessage.c_str())
+        
         throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, sFullMessage.c_str());
     }
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
-int HandlerLoader::unloadLib (HandlerInformation* pHandlerInfo)
+int HandlerLoader::
+unloadLib (HandlerInformation* pHandlerInfo)
 {
+	logEntryEngine("HandlerLoader::unloadLib")
+
+    logDebugArg1("Unloading handler %s", pHandlerInfo->m_sLib.c_str())
+
     PLATFORM_UNLOADLIB(pHandlerInfo->m_Handler);
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
-int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
+int HandlerLoader::
+createHandler (BasicHandler** pHandler, int nLibId)
 {
+	logEntryEngine("HandlerLoader::createHandler")
+
     //lock ();
 	Lock l(this);
     *pHandler = NULL;
@@ -109,7 +142,9 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         if (pHandlerInfo->m_sLib.empty ())
         {
             delete pHandlerInfo;
-            AXISTRACE1("SERVER_CONFIG_LIBRARY_PATH_EMPTY", CRITICAL);
+            
+            logThrowException("AxisEngineException - SERVER_CONFIG_LIBRARY_PATH_EMPTY")
+
             throw AxisConfigException(SERVER_CONFIG_LIBRARY_PATH_EMPTY);
         }
 
@@ -130,9 +165,11 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
                 
                 // Unload library - this must be done after obtaining error info above            
                 unloadLib (pHandlerInfo);
-                
                 delete pHandlerInfo;
-                throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
+                
+                logThrowExceptionWithData("AxisEngineException - SERVER_ENGINE_LIBRARY_LOADING_FAILED", sFullMessage.c_str())
+
+                throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED, sFullMessage.c_str());
             }
             else // success
             {
@@ -142,6 +179,8 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
         else
         {
             // dead code - will never be reached, need to remove.
+            logThrowException("AxisEngineException - SERVER_ENGINE_LIBRARY_LOADING_FAILED")
+
             throw AxisEngineException(SERVER_ENGINE_LIBRARY_LOADING_FAILED);
         }
     }
@@ -163,14 +202,16 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 pBH->_functions->fini (pBH->_object);
                 pHandlerInfo->m_Delete (pBH);
-                //unlock ();
-                AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
+
+                logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_INIT_FAILED")
+
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             }
         }
         else if (0 == pBH->_object)
         {
-            AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
+            logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_CREATION_FAILED")
+
             throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
         }
         else
@@ -185,17 +226,22 @@ int HandlerLoader::createHandler (BasicHandler** pHandler, int nLibId)
             {
                 ((HandlerBase*) pBH->_object)->fini ();
                 pHandlerInfo->m_Delete (pBH);
-                AXISTRACE1("SERVER_ENGINE_HANDLER_INIT_FAILED", CRITICAL);
+                
+                logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_INIT_FAILED")
+
                 throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
             }
         }
     }
     else
     {
-        AXISTRACE1("SERVER_ENGINE_HANDLER_CREATION_FAILED", CRITICAL);
+        logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_CREATION_FAILED")
+
         throw AxisEngineException(SERVER_ENGINE_HANDLER_CREATION_FAILED);
     }
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 

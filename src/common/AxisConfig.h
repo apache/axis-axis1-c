@@ -39,6 +39,8 @@
 #define AXCONF_NODENAME_TAGNAME				"NodeName"
 #define AXCONF_LISTENPORT_TAGNAME			"ListenPort"
 #define AXCONF_SECUREINFO_TAGNAME			"SecureInfo"
+#define AXCONF_LOGFILTER_TAGNAME            "LogFilter"
+
 
 #include <axis/GDefine.hpp>
 #include <string>
@@ -71,6 +73,7 @@ enum g_axconfig
 	AXCONF_SSLCHANNEL_HTTP,
 	AXCONF_CHANNEL_HTTP,
 	AXCONF_SECUREINFO,
+	AXCONF_LOGFILTER,
 	AXCONF_LAST
 };
 
@@ -80,7 +83,6 @@ class AxisConfig
 {
     public:
     AxisConfig();
-//    AxisConfig( bool bDefaultsOnly);
     AxisConfig( AxisConfig * pOrgAxisConfig);
 
     /**
@@ -101,6 +103,11 @@ class AxisConfig
 
 	char* getAxisConfProperty(g_axconfig property);
     void setValue(int valuelength, g_axconfig valueindex, char* value);
+    
+    /** 
+     * Return values in properties file as a string.
+     */
+    std::string toString();
         
     private:
 		std::string m_pcKeyArray [AXCONF_LAST];

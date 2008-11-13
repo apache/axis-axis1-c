@@ -29,6 +29,9 @@
 #include <unistd.h>     // access()
 #include <string>      
 
+#define DIR_SEPARATOR   '/'
+#define DIR_SEPARATOR_S "/"
+
 // =============================================================
 // Default paths to shared library/DLLs and files
 // =============================================================
@@ -40,8 +43,8 @@
 #define PLATFORM_CHANNEL_PATH        PLATFORM_DEFAULT_DEPLOY_PATH "libhttp_channel.so"
 #define PLATFORM_SSLCHANNEL_PATH     PLATFORM_DEFAULT_DEPLOY_PATH "Unknown"
 
-#define PLATFORM_LOG_PATH            "/usr/local/axiscpp_deploy/log/AxisLog"
-#define PLATFORM_CLIENTLOG_PATH      "/usr/local/axiscpp_deploy/log/AxisClientLog"
+#define PLATFORM_LOG_PATH            ""
+#define PLATFORM_CLIENTLOG_PATH      ""
 #define PLATFORM_CONFIG_PATH         "/etc/axiscpp.conf"
 
 #define PLATFORM_SECUREINFO			 ""
@@ -112,7 +115,13 @@ extern char *toUTF8(char *b, int len);
 /**
  * Platform specific method to obtain current thread ID
  */
-#define PLATFORM_GET_THREAD_ID pthread_self()
+#define PLATFORM_GET_THREAD_ID os400_getThreadID()
+
+inline long long os400_getThreadID()
+{
+	pthread_id_np_t tid = pthread_getthreadid_np();
+	return *((long long *)&tid);
+}
 
 /**
  * Platform specific method to obtain current time in milli seconds
@@ -150,23 +159,12 @@ static int os400_ftime(struct os400_timeb * tp)
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "lld"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%llu"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "llu"
+#define PRINTF_LONGLONG_LOG_FORMAT_SPECIFIER "%.8llu"
 
 /**
- * For debugging
+ * File modes
  */
-static void traceData(void *d, int length)
-{
-    char logFile[1024];
-    sprintf(logFile, "/tmp/axis.log");
-    FILE *fh = fopen(logFile, "ab, codepage=819");
-    setvbuf(fh, NULL, _IOFBF, (size_t)(4*1024));
-    fwrite(d, 1, length, fh);
-    fwrite("\x0d\x0a\x2b\x2b\x2b\x2b\x2b\x2b\x0d\x0a", 1, 10, fh);
-    fflush(fh);
-    fclose(fh);
-}
-
+#define TRACE_FILE_MODE1   "a, o_ccsid=1208, crln=N"
+#define TRACE_FILE_MODE2   "a, o_ccsid=0, crln=N"
 
 #endif
-
-

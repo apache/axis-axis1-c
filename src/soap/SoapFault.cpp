@@ -67,6 +67,8 @@ SoapFault::
 int SoapFault::
 serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
+	logEntryEngine("SoapFault::serialize")
+
     // written according to SOAP Version 1.1
     int iStatus= AXIS_SUCCESS;
     pSZ.setStyle(DOC_LITERAL);
@@ -88,6 +90,8 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix, ":",
         gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_FAULT], ">\n", NULL);
+
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -193,6 +197,8 @@ initialize()
 SoapFault* SoapFault::
 getSoapFault(int iFaultCode)
 {   
+	logEntryEngine("SoapFault::getSoapFault")
+
     SoapFault* pSoapFault= NULL;
 
     // fill the soap fault object 
@@ -218,36 +224,53 @@ getSoapFault(int iFaultCode)
     pSoapFault->setFaultactor(strUrl.c_str());             
     pSoapFault->setFaultDetail(s_parrSoapFaultStruct[iFaultCode].pcFaultDetail);
     
+    logExitWithPointer(pSoapFault)
+    
     return pSoapFault;
 }
 
 SoapFault::
 SoapFault(string sFaultcode, string sFaultstring, string sFaultactor, string sDetail) 
 {
+	logEntryEngine("SoapFault::SoapFault")
+
     m_sFaultcode= sFaultcode;
     m_sFaultstring= sFaultstring;
     m_sFaultactor= sFaultactor;
     m_sFaultDetail= sDetail;    
+    
+    logExit()
 }
 
 int SoapFault::
 setParam(Param* pParam, const AxisChar* pchName, const void* pValue, XSDTYPE type)
 {
-    if (!pParam) 
-        return AXIS_FAIL;
-        
-    pParam->m_sName = pchName;
-    pParam->setValue( type , (IAnySimpleType*) pValue);
+	logEntryEngine("SoapFault::setParam")
+
+	int Status = AXIS_FAIL;
+	
+    if (pParam) 
+    {        
+    	pParam->m_sName = pchName;
+    	pParam->setValue( type , (IAnySimpleType*) pValue);
+    	Status = AXIS_SUCCESS;
+    }
     
-    return AXIS_SUCCESS;
+    logExitWithReturnCode(Status)
+    
+    return Status;
 }
 
 int SoapFault::
 setFaultcode(const AxisChar* sFaultcode)
 {
+	logEntryEngine("SoapFault::setFaultcode")
+
     m_pFaultcodeParam = new Param();
     setParam(m_pFaultcodeParam, "faultcode", new String((xsd__string)sFaultcode), XSD_STRING); 
     m_sFaultcode= sFaultcode;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -255,29 +278,41 @@ setFaultcode(const AxisChar* sFaultcode)
 int SoapFault::
 setFaultstring(const AxisChar* sFaultstring)
 {
+	logEntryEngine("SoapFault::setFaultstring")
+
     m_pFaultstringParam = new Param();
     setParam(m_pFaultstringParam, "faultstring", new String((xsd__string)sFaultstring), XSD_STRING); 
     m_sFaultstring= sFaultstring;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
 int SoapFault::
 setFaultactor(const AxisChar* sFaultactor)
 {
+	logEntryEngine("SoapFault::setFaultactor")
+
     m_pFaultactorParam = new Param();
     setParam(m_pFaultactorParam, "faultactor", new String((xsd__string)sFaultactor), XSD_STRING); 
     m_sFaultactor = sFaultactor;
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
 int SoapFault::
 setFaultDetail(const AxisChar* sFaultDetail)
 {
+	logEntryEngine("SoapFault::setFaultDetail")
+
     m_pFaultDetail = new Param();
     setParam(m_pFaultDetail, "appSpecific", new String((xsd__string)sFaultDetail), XSD_STRING);
     m_sFaultDetail = sFaultDetail;
     m_bIsSimpleDetail = true;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -285,7 +320,11 @@ setFaultDetail(const AxisChar* sFaultDetail)
 int SoapFault::
 setFaultDetail(const Param* pFaultDetail)
 {
+	logEntryEngine("SoapFault::setFaultDetail")
+
     m_pFaultDetail = (Param*) pFaultDetail;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -293,14 +332,23 @@ setFaultDetail(const Param* pFaultDetail)
 int SoapFault::
 setCmplxFaultObjectName(const string& sCmplxFaultObjectName)
 {
+	logEntryEngine("SoapFault::setCmplxFaultObjectName")
+
     m_sCmplxFaultObjectName = sCmplxFaultObjectName;
+	
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
 int SoapFault::
 setCmplxFaultObject(const void* pCmplxFaultObject)
 {
+	logEntryEngine("SoapFault::setCmplxFaultObject")
+
     m_pCmplxFaultObject = pCmplxFaultObject;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

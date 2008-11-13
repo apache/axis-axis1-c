@@ -39,7 +39,7 @@
 
 typedef int (* CREATE_OBJECT2) (XMLParser** inst);
 typedef int (* DELETE_OBJECT2) (XMLParser* inst);
-typedef void (* INIT_OBJECT2) (AxisTraceEntrypoints* ep);
+typedef void (* INIT_OBJECT2) ();
 typedef void (* UNINIT_OBJECT2) ();
 
 AXIS_CPP_NAMESPACE_START

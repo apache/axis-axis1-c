@@ -64,7 +64,6 @@ getDeployment(const AxisChar* pcWSDDFileName, WSDDDeployment* pDeployment)
     /* this enables the access to Deployment object while parsing */
     if (AXIS_SUCCESS != parseDocument(pcWSDDFileName))
     {
-        AXISTRACE1("Deployment descripter loading failed", CRITICAL);
         return AXIS_FAIL;
     }
     return AXIS_SUCCESS;
@@ -145,7 +144,6 @@ parseDocument(const AxisChar* pcWSDDFileName)
     XMLParser* pParser = XMLParserFactory::getParserObject();
     if (!pParser)
     {
-        AxisTrace::trace("Failed to getXMLParser to load WSDDDocument with");
         return AXIS_FAIL;
     }
     

@@ -170,6 +170,8 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(XSDTYPE type)
 
 IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
 {
+	logEntryEngine("AxisUtils::createSimpleTypeObject")
+
     IAnySimpleType* xsdValue = NULL;
     
     // Put commonly used type at top of switch statement!
@@ -313,6 +315,8 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
         default:
             break;
     }
+    
+    logExitWithPointer(xsdValue)
     
     return xsdValue;
 }

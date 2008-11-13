@@ -19,6 +19,8 @@
 #if !defined(_PLATFORM_SPECIFIC_AIX_HPP)
 #define _PLATFORM_SPECIFIC_AIX_HPP
 
+#define DIR_SEPARATOR   '/'
+#define DIR_SEPARATOR_S "/"
 
 // =============================================================
 // Default paths to shared library/DLLs and files
@@ -124,6 +126,13 @@
 #define PRINTF_LONGLONG_FORMAT_SPECIFIER_CHARS "lld"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER "%llu"
 #define PRINTF_UNSIGNED_LONGLONG_FORMAT_SPECIFIER_CHARS "llu"
+#define PRINTF_LONGLONG_LOG_FORMAT_SPECIFIER "%.8llu"
+
+/**
+ * File modes
+ */
+#define TRACE_FILE_MODE1   "a"
+#define TRACE_FILE_MODE2   "a"
 
 #endif
 

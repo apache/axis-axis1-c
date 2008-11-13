@@ -26,6 +26,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
+
 #include <string>
 #include <map>
 #include <iostream>
@@ -67,27 +69,22 @@ AXIS_CPP_NAMESPACE_USE
 // The relative location of the wsdl files hardcoded
 #define WSDLDIRECTORY "/wsdls/"
 
-// Define all global variables of the axisengine
-#ifdef ENABLE_AXISTRACE
-unsigned char chEBuf[1024];
-#endif
-
 // Synchronized global variables.
-HandlerLoader* g_pHandlerLoader;
-AppScopeHandlerPool* g_pAppScopeHandlerPool;
+HandlerLoader*           g_pHandlerLoader;
+AppScopeHandlerPool*     g_pAppScopeHandlerPool;
 RequestScopeHandlerPool* g_pRequestScopeHandlerPool;
 SessionScopeHandlerPool* g_pSessionScopeHandlerPool;
-DeserializerPool* g_pDeserializerPool;
-SerializerPool* g_pSerializerPool;
-HandlerPool* g_pHandlerPool;
-bool g_isRunning;
+DeserializerPool*        g_pDeserializerPool;
+SerializerPool*          g_pSerializerPool;
+HandlerPool*             g_pHandlerPool;
+bool                     g_isRunning;
 
 // Unsynchronized read-only global variables.
-WSDDDeployment* g_pWSDDDeployment;
-AxisConfig* g_pConfig;
+WSDDDeployment*          g_pWSDDDeployment;
+AxisConfig*              g_pConfig;
 
 //Keeps track of how many times initialize_module/uninitialize_module was called
-static volatile long g_uModuleInitialize = 0;
+static volatile long     g_uModuleInitialize = 0;
 
 
 void ModuleInitialize ()
@@ -126,8 +123,6 @@ void ModuleUnInitialize ()
 
     g_pConfig = NULL;
     g_pWSDDDeployment = NULL;
-
-    AxisTrace::terminate();
 }
 
 #ifndef AXIS_CLIENT_LIB
@@ -358,31 +353,46 @@ int initialize_module (int bServer)
             SoapFault::initialize ();
             ModuleInitialize ();
 
+            // Read from the configuration file
+            status = g_pConfig->readConfFile (); 
+            if (status == AXIS_SUCCESS)
+            {
+            	// One can also start trace via Axis::startTrace().  If that has been done, 
+            	// ignore the config file. 
+            	if (!AxisTrace::isLoggingEnabled())
+            	{
+	            	AxisTrace::setLogFilter(g_pConfig->getAxisConfProperty(AXCONF_LOGFILTER));
+	            	
+	            	if (bServer)
+	            		AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH));
+	            	else
+	            		AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH));
+            	}
+            	
+            	string configProperties = g_pConfig->toString();
+            	AxisTrace::writeTrace(configProperties.c_str(), configProperties.length());
+            }
+            
+            // The entry log must start here - may revisit so as to start earlier. 
+        	logEntryEngine("initialize_module")
+            
             if (bServer) // no client side wsdd processing at the moment
             {
-                // Read from the configuration file
-                status = g_pConfig->readConfFile (); 
-
                 if (status == AXIS_SUCCESS)
-                {                    
+                {             	
                     try
                     {            
                         XMLParserFactory::initialize();
                     }
                     catch (AxisException& e)
                     {
+                    	logRethrowException()
+                    	
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
 
                     char *pWsddPath = g_pConfig->getAxisConfProperty(AXCONF_WSDDFILEPATH);
-#if defined(ENABLE_AXISTRACE)
-                    status = AxisTrace::openFile ();
-                    if (status == AXIS_FAIL)
-                    {
-                        // Samisa - make sure that we start service, even if we cannot open log file
-                        // Hence do not return from here, may be we can log an error here
-                    }
-#endif
+
                     try
                     {            
                         if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pWsddPath))
@@ -390,6 +400,8 @@ int initialize_module (int bServer)
                     }
                     catch (AxisException& e)
                     {
+                    	logRethrowException()
+                    	
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
                 }
@@ -398,13 +410,8 @@ int initialize_module (int bServer)
            }
            else if (bServer == 0)      // client side module initialization
            {
-                status = g_pConfig->readConfFile (); //Read from the configuration file 
-
                 if (status == AXIS_SUCCESS)
-                {
-#if defined(ENABLE_AXISTRACE)
-                    status = AxisTrace::openFileByClient ();
-#endif
+                {                	
                    XMLParserFactory::initialize();
                    SOAPTransportFactory::initialize();
 
@@ -415,16 +422,6 @@ int initialize_module (int bServer)
                        if (AXIS_SUCCESS != g_pWSDDDeployment->loadWSDD (pClientWsddPath))
                            status = AXIS_FAIL;
                 }
-                else
-                {
-                    AXISTRACE3( "Reading from the configuration file failed. \
-                                Check for error in the configuration file.\n\
-                                Handlers and logging are not working");
-                    /* TODO:Improve the AxisTrace so that it will log these kind of 
-                     * messages into a log file according to the critical level 
-                     * specified.
-                     */
-                }
            }
            else
            {
@@ -432,15 +429,17 @@ int initialize_module (int bServer)
                status = AXIS_SUCCESS;
            }
            g_isRunning = true;
+           
+       	   logExitWithReturnCode(status)
        }
        else if (AxisEngine::m_bServer != bServer)
-       {
+       {    	   
            throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
        }
     }
     catch (...)
     {
-        done_initializing();
+        done_initializing();        
         throw;
     }
 
@@ -456,6 +455,8 @@ extern "C" {
 STORAGE_CLASS_INFO
 int uninitialize_module ()
 {
+	logEntryEngine("uninitialize_module")
+
     start_initializing();
 
     try
@@ -467,7 +468,7 @@ int uninitialize_module ()
 				g_isRunning = false;
                 TypeMapping::uninitialize();
                 URIMapping::uninitialize();
-                if (!AxisEngine::m_bServer) // we have to deal with transport factory only if it is the client
+                if (!AxisEngine::m_bServer) 
                     SOAPTransportFactory::uninitialize();
                 ModuleUnInitialize();
                 SoapKeywordMapping::uninitialize();
@@ -478,10 +479,15 @@ int uninitialize_module ()
     catch (...)
     {
         done_initializing();
+        
+        logRethrowException()
+        
         throw;
     }
 
     done_initializing();
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -498,16 +504,26 @@ void Ax_Sleep (int nTime)
 
 void Axis::initialize(bool bIsServer)
 {
+	logEntryEngine("Axis::initialize")
+
     initialize_module(bIsServer);
+	
+    logExit()
 }
 
 void Axis::terminate()
 {
+	logEntryEngine("Axis::terminate")
+
     uninitialize_module();
+	
+    logExit()
 }
 
 void Axis::AxisDelete(void *pValue, XSDTYPE type)
 {
+	logEntryEngine("Axis::AxisDelete")
+
     if (pValue == NULL)
         return;
         
@@ -752,6 +768,8 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         default:
             ;
     }
+    
+    logExit()
 }
 
 bool Axis::isRunning()
@@ -761,7 +779,48 @@ bool Axis::isRunning()
 
 void Axis::stopAxis()
 {
+	logEntryEngine("Axis::stopAxis")
+
     start_initializing();
     g_isRunning = false;
     done_initializing();
+    
+    logExit()
+}
+
+int Axis::
+startTrace(const char* logFilePath, const char *logFilter)
+{
+	AxisTrace::setLogFilter(logFilter);
+	return AxisTrace::startTrace(logFilePath);
+}
+
+void Axis::
+stopTrace()
+{
+	AxisTrace::stopTrace();
+}
+
+void Axis::
+writeTrace(const char* functionName, const char * fmt, ...)
+{
+	// If logging is not enabled, just return.
+	if (!AxisTrace::isLoggingEnabled() || !AxisTrace::isStubLoggingEnabled())
+		return;
+	
+    // Construct final formatter
+    string myfmt;
+    string blank = " ";
+    if (NULL == fmt)
+        fmt = "";
+    myfmt += TRACE_COMPONENT_STUB + blank;
+    myfmt += TRACE_TYPE_DEBUG + blank;
+    myfmt += functionName;
+    myfmt += "(): ";
+    myfmt += fmt;
+        
+    va_list vargs;
+    va_start(vargs,fmt);
+    AxisTrace::writeTrace(myfmt.c_str(), vargs);        
+    va_end(vargs);
 }

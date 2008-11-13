@@ -29,89 +29,104 @@
 AXIS_CPP_NAMESPACE_START
 
 
-HandlerChain::HandlerChain ()
+HandlerChain::
+HandlerChain ()
 {
 }
 
-HandlerChain::~HandlerChain ()
+HandlerChain::
+~HandlerChain ()
 {
     /* Nothing to do because the list keeps only pointers to objects that 
      * belongs to the Handler pool;
      */
 }
 
-int HandlerChain::invoke (void* pMsg)
+int HandlerChain::
+invoke (void* pMsg)
 {
+	logEntryEngine("HandlerChain::invoke")
+
+    int Status=AXIS_SUCCESS;
+
     m_itCurrHandler = m_HandlerList.begin ();
     while (m_itCurrHandler != m_HandlerList.end ())
     {
         BasicHandler* pHandler = (*m_itCurrHandler).m_pHandler;
-        /*
-         * if (AXIS_SUCCESS == pHandler->_functions->Invoke(pHandler->_object, 
-	 *     pMsg))
-         * {            
-         *     m_itCurrHandler++;
-         * }
-         * else
-         * {
-         *     AXISTRACE1("Handler invoke not successful", WARN);            
-         *     OnFault(pMsg);
-         *     return AXIS_FAIL;
-         * }
-         */
-        
-	//----------change by roshan on 12Feb2004-------------
+
         if (0 != pHandler->_functions)
         {
                 /* This is a C Handler */
         }
         else if (0 != pHandler->_object)
         {
-            if (AXIS_SUCCESS ==
-                ((Handler *) (pHandler->_object))->invoke (pMsg))
-            {
+            logDebugArg1("Calling invoke() method for handler %p", pHandler->_object)
+
+        	Status = ((Handler *) (pHandler->_object))->invoke (pMsg);
+            
+            logDebugArg2("Returned from invoke() method for handler %p with status=%d", pHandler->_object, Status)
+
+            if (AXIS_SUCCESS == Status)
                 m_itCurrHandler++;
-            }
             else
             {
-                AXISTRACE1 ("Handler invoke not successful", WARN);
                 onFault (pMsg);
-                return AXIS_FAIL;
+                break;
             }
         }
     }
 
-    return AXIS_SUCCESS;
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
-void HandlerChain::onFault (void* pMsg)
+void HandlerChain::
+onFault (void* pMsg)
 {
+	logEntryEngine("HandlerChain::onFault")
+
     while (m_itCurrHandler != m_HandlerList.begin ())
     {
         BasicHandler* pHandler = (*m_itCurrHandler).m_pHandler;
+        
+        logDebugArg1("Calling onFault() method for handler %p", pHandler->_object)
+
         pHandler->_functions->onFault (pHandler->_object, pMsg);
+        
+        logDebugArg1("Returned from onFault() method for handler %p", pHandler->_object)
+
         m_itCurrHandler--;
     }
+	
+	logExit()
 }
 
-int HandlerChain::addHandler (BasicHandler* pHandler, int nScope, int nLibId)
+int HandlerChain::
+addHandler (BasicHandler* pHandler, int nScope, int nLibId)
 {
+	logEntryEngine("HandlerChain::addHandler")
+
     ChainItem item;
     item.m_pHandler = pHandler;
     item.m_nScope = nScope;
     item.m_nLibId = nLibId;
     m_HandlerList.push_back (item);
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-int HandlerChain::init ()
+int HandlerChain::
+init ()
 {
     m_HandlerList.clear ();
     return AXIS_SUCCESS;
 }
 
-int HandlerChain::fini ()
+int HandlerChain::
+fini ()
 {
     m_HandlerList.clear ();
     return AXIS_SUCCESS;

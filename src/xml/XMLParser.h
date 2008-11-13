@@ -191,6 +191,13 @@ public:
      * @return true if more data to parse; false otherwise. 
      */
     virtual bool canParseMore() { return m_bCanParseMore; }
+    
+    /**
+      * Enable trace.
+      *  @param logFilePath  path to log file. 
+      *  @param filters      log filters.  See common/AxisTrace.h.
+      */
+      virtual void enableTrace(const char* logFilePath, const char *filters) { }
 
 protected:
     AxisIOStream* m_pInputStream;

@@ -532,6 +532,13 @@ public:
     */
     virtual bool isThereResponseData() {return false;}
    
+    /**
+      * Enable trace.
+      *  @param logFilePath  path to log file. 
+      *  @param filters      log filters.  See common/AxisTrace.h.
+      */
+      virtual void enableTrace(const char* logFilePath, const char *filters) { }
+      
   /**
     * Sets the username to be used for basic authentication
     */

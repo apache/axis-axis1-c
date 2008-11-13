@@ -31,15 +31,20 @@ extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
 
 AXIS_CPP_NAMESPACE_START
 
-SessionScopeHandlerPool::SessionScopeHandlerPool ()
+SessionScopeHandlerPool::
+SessionScopeHandlerPool ()
 {
+	logEntryEngine("SessionScopeHandlerPool::SessionScopeHandlerPool")
 
+    logExit()
 }
 
-SessionScopeHandlerPool::~SessionScopeHandlerPool ()
+SessionScopeHandlerPool::
+~SessionScopeHandlerPool ()
 {
-    for (map <int, SessionHandlers*>::iterator it = m_Handlers.begin ();
-        it != m_Handlers.end (); it++)
+	logEntryEngine("SessionScopeHandlerPool::~SessionScopeHandlerPool")
+
+    for (map <int, SessionHandlers*>::iterator it = m_Handlers.begin (); it != m_Handlers.end (); it++)
     {
         SessionHandlers *pSH = (*it).second;
         for (SessionHandlers::iterator itr = pSH->begin ();
@@ -56,15 +61,20 @@ SessionScopeHandlerPool::~SessionScopeHandlerPool ()
         delete pSH;
     }
     m_Handlers.clear ();
+    
+    logExit()
 }
 
-int SessionScopeHandlerPool::getInstance (string &sSessionId,
-    BasicHandler** pHandler, int nLibId)
+int SessionScopeHandlerPool::
+getInstance (string &sSessionId, BasicHandler** pHandler, int nLibId)
 {
+	logEntryEngine("SessionScopeHandlerPool::getInstance")
+
     //lock ();
 	Lock l(this);
 
-    int Status;
+    int Status = AXIS_SUCCESS;
+    
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
         SessionHandlers *pSesHandlers = m_Handlers[nLibId];
@@ -76,44 +86,33 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
                 // check in the store for reuse
                 if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
                 {
-                    //unlock ();
 					l.unlock ();
-                    return g_pHandlerLoader->createHandler (pHandler, nLibId);
+					Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
                 }
                 else
                 {
                     *pHandler = (*pSesHandlers)[SESSIONLESSHANDLERS].front ();
                     (*pSesHandlers)[SESSIONLESSHANDLERS].pop_front ();
-                    //unlock ();
-                    return AXIS_SUCCESS;
                 }
             }
             else
             {
                 *pHandler = HandlerList.front ();
                 HandlerList.pop_front ();
-                //unlock ();
-                return AXIS_SUCCESS;
             }
-            //unlock ();
-			l.unlock ();
-            return g_pHandlerLoader->createHandler (pHandler, nLibId);
         }
         else // No handler list for this session id
         {
             // Check in the store for reuse
             if ((*pSesHandlers)[SESSIONLESSHANDLERS].empty ())
             {
-                //unlock ();
 				l.unlock ();
-                return g_pHandlerLoader->createHandler (pHandler, nLibId);
+				Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
             }
             else
             {
                 *pHandler = (*pSesHandlers)[SESSIONLESSHANDLERS].front ();
                 (*pSesHandlers)[SESSIONLESSHANDLERS].pop_front ();
-                //unlock ();
-                return AXIS_SUCCESS;
             }
         }
     }
@@ -122,28 +121,26 @@ int SessionScopeHandlerPool::getInstance (string &sSessionId,
         Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
         if (AXIS_SUCCESS == Status)
         {
-            /* This just creates the entry in m_Handlers so that next time we 
-             * know that the DLL is loaded
-             */ 
             SessionHandlers* pNewSH = new SessionHandlers;
             pNewSH->clear ();
             m_Handlers[nLibId] = pNewSH;
         }
-        //unlock ();
-        return Status;
     }
+    
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
-int SessionScopeHandlerPool::putInstance (string &sSessionId,
-    BasicHandler* pHandler, int nLibId)
+int SessionScopeHandlerPool::
+putInstance (string &sSessionId, BasicHandler* pHandler, int nLibId)
 {
-    //lock ();
+	logEntryEngine("SessionScopeHandlerPool::putInstance")
+
 	Lock l(this);
     SessionHandlers* pSesHandlers;
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
-    {
         pSesHandlers = m_Handlers[nLibId];
-    }
     else // This is unexpected situation. anyway do it
     {
         pSesHandlers = new SessionHandlers;
@@ -152,15 +149,22 @@ int SessionScopeHandlerPool::putInstance (string &sSessionId,
     }
     list <BasicHandler*>&HandlerList = ((*pSesHandlers)[sSessionId]);
     HandlerList.push_back (pHandler);
-    //unlock ();
+
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-void SessionScopeHandlerPool::endSession (string &sSessionId)
+void SessionScopeHandlerPool::
+endSession (string &sSessionId)
 {
+	logEntryEngine("SessionScopeHandlerPool::endSession")
+
     /* Traverse all the lists and remove corresponding handlers if any and put 
      * to SESSIONLESSHANDLERS        
      */
+	
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

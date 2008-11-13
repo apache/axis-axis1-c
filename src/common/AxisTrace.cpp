@@ -16,8 +16,6 @@
  *   limitations under the License.
  *
  *
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- *
  */
 
 // !!! This include file must be first thing in file !!!
@@ -31,583 +29,477 @@
 
 // cctype is needed to make isprint compile on linux
 #include <cctype>
-#include <exception>
 #include <ctime>
 #include <cstring>
 
-#include <axis/AxisException.hpp>
-
-#include "AxisUtils.h"
-#include "AxisConfig.h"
-
 #include "AxisTrace.h"
 
-
-extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 AXIS_CPP_NAMESPACE_START
 using namespace std;
 
-enum AxisTraceState AxisTrace::m_bLoggingOn = STATE_UNINITIALISED;
-AxisFile *AxisTrace::m_fileTrace = NULL;
+// Initialization of static trace variables.
+bool AxisTrace::m_logFileIsSet             = false;
 
-AxisTraceEntrypoints g_traceEntrypoints = {
-    AxisTrace::traceLineInternal,
-    AxisTrace::traceEntryInternal,
-    AxisTrace::traceExitInternal,
-    AxisTrace::traceCatchInternal,
-    AxisTrace::isTraceOn
-};
+bool AxisTrace::m_stubLogLevelEnabled      = true;
+bool AxisTrace::m_engineLogLevelEnabled    = true;
+bool AxisTrace::m_parserLogLevelEnabled    = true;
+bool AxisTrace::m_transportLogLevelEnabled = true;
+bool AxisTrace::m_noEntryExit              = false;
 
+bool AxisTrace::m_consoleMode = false;
+
+string AxisTrace::m_logFilePath = "";
+
+//******************************************************************************
+//
+// AxisTrace::startTrace() Implementation
+//
+//******************************************************************************
 int AxisTrace::
-openFile ()
+startTrace(const char* logFilePath, 
+		   bool dumpEnvironment)
 {
-    return initialise(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH), STATE_ON);
-}
-
-int AxisTrace::
-openFileByClient ()
-{
-    return initialise(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH), STATE_ON);
-}
-
-int AxisTrace::
-initialise(const char *filename, AxisTraceState newState) 
-{
-    AxisFile *newFile = NULL;
-    int result = AXIS_SUCCESS;
-    if (NULL != filename) 
-    {
-        newFile = new AxisFile();
-        if (NULL == newFile || 
-            AXIS_FAIL == newFile->fileOpen(filename, "a"))
-            result = AXIS_FAIL;
-    }
-
-    if (NULL != m_fileTrace) 
-    {
-        if (AXIS_FAIL == result) 
-        {
-            /*
-             * If we have failed to open the trace file specified in axiscpp.conf and the
-             * startup trace file is open then write a sensible error message out to the 
-             * startup trace file before we close it.
-             */
-            if (NULL == newFile)
-                traceLineInternal("Failed to open trace file in axiscpp.conf because of no storage");
-            else 
-            {
-                string text = "Failed to open trace file ";
-                text += filename;
-                text += " that was specified by ClientLogPath in axiscpp.conf";
-                traceLineInternal(text.c_str());
-            }
-        }
-        else 
-        {
-            traceLineInternal("Closing the startup trace file");
-        }
-        delete m_fileTrace;
-        m_fileTrace = NULL;
-    }
-    m_bLoggingOn = STATE_OFF;
-
-    if (NULL == filename || AXIS_FAIL == result)
-    {
-        if (NULL != newFile) delete newFile;
+    // If startTrace() already invoked, just return.
+    if (NULL == logFilePath || 0x00 == *logFilePath)
         return AXIS_FAIL;
-    }
 
-    m_fileTrace = newFile;
-    m_bLoggingOn = newState;
-    traceHeader(newState);
-    return AXIS_SUCCESS;
-}
-
-void AxisTrace::
-terminate() 
-{ 
-    m_bLoggingOn = STATE_STOPPED;
-    // Deleting m_fileTrace closes the trace file
-    if (NULL != m_fileTrace)
-        delete m_fileTrace; 
-    m_fileTrace = NULL; 
-}
-
-bool AxisTrace::
-isTraceOn()
-{ 
-    switch (m_bLoggingOn)
-    {
-    case STATE_OFF:
-    case STATE_STOPPED:
-        return false;
-
-    case STATE_ON:
-    case STATE_STARTUP:
-        return true;
+    m_logFileIsSet = true;
     
-    case STATE_UNINITIALISED:
-        return AXIS_SUCCESS==initialise(getenv("AXISCPP_STARTUP_TRACE"),STATE_STARTUP);
+    // Set log directory
+    m_logFilePath = logFilePath;
     
-    default:
-        return false;
-    }
-}
+    // We need to do open here in order to ensure file is created and tagged as ASCII. 
+    // This is to cater to EBCDIC-based systems such as IBM i operating system.  Should really 
+    // not matter for ASCII-based operating systems such as UNIX and windows.
+    FILE *logFile = fopen(m_logFilePath.c_str(), TRACE_FILE_MODE1);
+    if (logFile != NULL)
+        fclose(logFile);
 
-int AxisTrace::
-logaxis (const char* sLog1, const char* sLog2, const char *type,
-         const char* file, int line)
-{
-    if (isTraceOn()) return AXIS_FAIL;
-
-    string name = file;
-    name += "@";
-    name += line;
-
-    string text = sLog1;
-    text += ":";
-    if(0 != sLog2)
-        text += sLog2;
-
-    traceLineInternal(type,name.c_str(),NULL,NULL,text.c_str());
-    return AXIS_SUCCESS;
-}
-
-int AxisTrace::
-trace (const char *pchLog)
-{
-    if (pchLog != NULL) {
-        traceLine(pchLog);
-    }
-    return AXIS_SUCCESS;
-}
-
-void AxisTrace::
-traceHeader(enum AxisTraceState newState)
-{
-    traceLine2("************ Start Display Current Environment ************");
-    string text = "Axis C++ libraries built on ";
-    text += __DATE__;
-    text += " at ";
-    text += __TIME__;
-    traceLine2(text.c_str());
-
-    time_t ltime;
-    time (&ltime);
-    if (STATE_ON==newState)
-        text = "Runtime trace produced on ";
-    else
-        text = "Startup trace produced on ";
-    text += ctime (&ltime);
-    traceLine2(text.c_str());
-
-    char *envVars[]={"PATH","LIBPATH","LD_LIBRARY_PATH","SHLIB_PATH", 
-        "AXISCPP_DEPLOY","PWD","CLASSPATH","INCLUDE","LIB","NLSPATH","OS",
-        "COMPUTERNAME","USERNAME","HOSTNAME","LANG","LOGIN","LOGNAME",
-        "MACHTYPE","OSTYPE","UID","USER"};
-    for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
+    // Now dump out environment information
+    if (dumpEnvironment)
     {
-        text = envVars[i];
-        const char *value = getenv(envVars[i]);
-        if (NULL!=value)
+	    string text = "************ Start Display Current Environment ************\n";
+	    text += "Axis C++ libraries built on ";
+	    text += __DATE__;
+	    text += " at ";
+	    text += __TIME__;
+	    text += "\n";
+	    writeTrace(text);
+	
+	    char *envVars[]={"AXISCPP_DEPLOY", "PATH","LIBPATH","LD_LIBRARY_PATH","SHLIB_PATH", 
+	        "PWD","CLASSPATH","INCLUDE","LIB","NLSPATH","OS",
+	        "COMPUTERNAME","USERNAME","HOSTNAME","LANG","LOGIN","LOGNAME",
+	        "MACHTYPE","OSTYPE","UID","USER"};
+	    for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
+	    {
+	        text = envVars[i];
+	        const char *value = getenv(envVars[i]);
+	        if (NULL!=value)
+	        {
+	            text += "=";
+	            text += value;
+	            text += "\n";
+	            writeTrace(text);
+	        }
+	    }
+	    writeTrace("************* End Display Current Environment *************\n");   
+    }
+    
+    return AXIS_SUCCESS;
+}
+
+//******************************************************************************
+//
+// AxisTrace::stopTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+stopTrace()
+{
+	m_logFilePath  = "";
+	m_logFileIsSet = false;
+}
+
+//******************************************************************************
+//
+// AxisTrace::setLogFilter() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+setLogFilter(const char *filters)
+{
+	resetLogFilter();
+	
+    if (filters == NULL || *filters == 0x00)
+        return;
+    
+    string filters_s = filters;
+    
+    if (filters_s.find(TRACE_FILTER_NOENTRYEXIT) != string::npos)
+        m_noEntryExit      = true;
+    
+    if (filters_s.find(TRACE_FILTER_STUB) == string::npos)
+        m_stubLogLevelEnabled      = false;
+    
+    if (filters_s.find(TRACE_FILTER_ENGINE) == string::npos)
+        m_engineLogLevelEnabled    = false;
+    
+    if (filters_s.find(TRACE_FILTER_PARSER) == string::npos)
+        m_parserLogLevelEnabled    = false;
+    
+    if (filters_s.find(TRACE_FILTER_TRANSPORT) == string::npos)
+        m_transportLogLevelEnabled = false;
+}
+
+//******************************************************************************
+//
+// AxisTrace::getLogFilters() Implementation
+//
+//******************************************************************************
+string AxisTrace::
+getLogFilter()
+{
+	string filters   = "";
+	string delimiter = ";";
+	
+	if (m_noEntryExit)
+		filters += TRACE_FILTER_NOENTRYEXIT + delimiter;
+	
+	if (m_stubLogLevelEnabled)
+		filters += TRACE_FILTER_STUB + delimiter;
+	
+	if (m_engineLogLevelEnabled)
+		filters += TRACE_FILTER_ENGINE + delimiter;
+	
+	if (m_parserLogLevelEnabled)
+		filters += TRACE_FILTER_PARSER + delimiter;
+	
+	if (m_transportLogLevelEnabled)
+		filters += TRACE_FILTER_TRANSPORT + delimiter;
+	
+	return filters;
+}
+
+//******************************************************************************
+//
+// AxisTrace::resetLogFilters() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+resetLogFilter()
+{
+	m_stubLogLevelEnabled      = true;
+	m_engineLogLevelEnabled    = true;
+	m_parserLogLevelEnabled    = true;
+	m_transportLogLevelEnabled = true;
+	m_noEntryExit              = false;
+}
+
+//******************************************************************************
+//
+// AxisTrace::enableConsoleMode() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+enableConsoleMode()
+{
+    m_consoleMode = true;
+}
+
+//******************************************************************************
+//
+// AxisTrace::disableConsoleMode() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+disableConsoleMode()
+{
+    m_consoleMode = false;
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeEntry() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeEntry   (const char* component, 
+		      const char* functionName, 
+              const char * fmt, 
+              ...)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    // Filter out entry/exit? If so, simply return.
+    if (m_noEntryExit)
+        return;
+    
+    // Construct final formatter
+    char myfmt[1024];
+    if (NULL == fmt)
+        fmt = "";
+    sprintf(myfmt, "%s %s %s(): %s\n", component, TRACE_TYPE_ENTRY, functionName, fmt);
+    
+    va_list vargs;
+    va_start(vargs,fmt);
+    writeTrace(myfmt, vargs);        
+    va_end(vargs);
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeExit() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeExit   (const char* component,
+		     const char* functionName, 
+             const char * fmt, 
+             ...)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    // Filter out entry/exit? If so, simply return.
+    if (m_noEntryExit)
+        return;
+    
+    // Construct final formatter
+    char myfmt[1024];
+    if (NULL == fmt)
+        fmt = "";
+    sprintf(myfmt, "%s %s %s(): %s\n", component, TRACE_TYPE_EXIT, functionName, fmt);
+    
+    va_list vargs;
+    va_start(vargs,fmt);
+    writeTrace(myfmt, vargs);        
+    va_end(vargs);
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeTrace  (const char* component,
+		     const char* type,
+             const char* functionName, 
+             const char * fmt, 
+             ...)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    // Construct final formatter
+    char myfmt[1024];
+    if (NULL == fmt)
+        fmt = "";
+    sprintf(myfmt, "%s %s %s(): %s\n", component, type, functionName, fmt);
+    
+    va_list vargs;
+    va_start(vargs,fmt);
+    writeTrace(myfmt, vargs);        
+    va_end(vargs);
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeTrace   (const char* component,
+		      const char* type,
+              const char* functionName, 
+              int lineNumber, 
+              const char* fileName, 
+              const char * fmt, 
+              ...)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    // Construct final formatter
+    char myfmt[1024];
+    if (NULL == fmt)
+        fmt = "";
+    sprintf(myfmt, "%s %s %s(): Line=%d: File=%s:\n%s\n", component, type, functionName, lineNumber, fileName, fmt);
+    
+    va_list vargs;
+    va_start(vargs,fmt);
+    writeTrace(myfmt, vargs);        
+    va_end(vargs);
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeTrace(const char* component, 
+		   const char* type, 
+		   const char* functionName,
+           bool hexFormat, 
+           int dataLen, 
+           const char *data)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    int len = 0;
+    
+    if (NULL == data || dataLen==0)
+        return;
+    
+    // Construct final formatter - the confuscated nature of the code is due to 
+    // the support of EBCDIC based systems.
+    char myfmt[1024];
+    sprintf(myfmt, "%s %s %s(): \n", component, type, functionName);
+    string prefix;
+    generatePrefix(prefix, myfmt);
+    PLATFORM_STRTOASC(prefix.c_str());
+    
+    if (!m_logFilePath.empty())
+    {
+        FILE *logFile = fopen(m_logFilePath.c_str(), TRACE_FILE_MODE1);
+        if (logFile != NULL)
         {
-            text += "=";
-            text += value;
-            traceLine2(text.c_str());
+            fprintf(logFile, "%s%*s%s", prefix.c_str(), dataLen, data, "\x0a");
+            fflush(logFile);
+            fclose(logFile);
         }
     }
-    traceLine2("************* End Display Current Environment *************");
-
-    if (STATE_STARTUP==newState) return;
-
-    // Write out the config settings
-    traceLine("-------------- Config File settings START ----------------");
-    string confLine="";
-
-    const char *confProps[]={
-        "AXCONF_WSDDFILEPATH",        //1
-        "AXCONF_LOGPATH",            //2
-        "AXCONF_CLIENTLOGPATH",        //3
-        "AXCONF_CLIENTWSDDFILEPATH",    //4
-        "AXCONF_AXISHOME",        //5
-        "AXCONF_TRANSPORTHTTP",        //6
-        "AXCONF_TRANSPORTSMTP",        //7
-        "AXCONF_XMLPARSER",        //8
-        "AXCONF_NODENAME",        //9
-        "AXCONF_LISTENPORT",        //10
-        "AXCONF_SSLCHANNEL_HTTP",    //11
-        "AXCONF_CHANNEL_HTTP",        //12
-        "AXCONF_SECUREINFO"};        //13 Please use this number in the #if below
-
-// Check at build time whether the lists of properties are in sync
-#if AXCONF_LAST > 13
-#error "The list of configuration properties in AxisConfig.h and AxisTrace.cpp are different. Please keep them in sync."
-#endif
-
-    for (unsigned j=0; j<sizeof(confProps)/sizeof(char*); j++) 
-    {
-        confLine ="";
-        confLine += confProps[j];
-        confLine += " = ";
-
-        const char *value = g_pConfig->getAxisConfProperty((g_axconfig)j);
-        if (NULL==value)
-            confLine += "NULL";
-        else 
-            confLine += value;
-
-        traceLine(confLine.c_str());
-    }
-
     
-    traceLine("-------------- Config File settings END OF ----------------");
-
-
+    if (m_consoleMode)
+    {
+    	fprintf(stdout, myfmt, dataLen, data);
+        fflush(stdout);
+    }
 }
 
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
 void AxisTrace::
-traceLineInternal(const char *type, const char *classname, 
-                  const char *methodname, const void *that, 
-                  const char *parms) 
+writeTrace(const char* data, int dataLen, bool hexFormat)
 {
-    if (!isTraceOn()) return;
-
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    int len = 0;
     
+    if (NULL == data || dataLen==0)
+        return;
+    
+    if (!m_logFilePath.empty())
+    {
+        FILE *logFile = fopen(m_logFilePath.c_str(), TRACE_FILE_MODE2);
+        if (logFile != NULL)
+        {
+            len = fwrite(data, 1, dataLen, logFile);
+            fflush(logFile);
+            fclose(logFile);
+        }
+    }
+    
+    if (m_consoleMode)
+    {
+        len = fwrite(data, 1, dataLen, stdout);
+        fflush(stdout);
+    }
+}
 
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeTrace(string& s)
+{
+	// If logging is not enabled, just return
+	if (!isLoggingEnabled())
+		return;
+	
+    writeTrace(s.c_str(), s.length());
+}
+
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+writeTrace(const char* fmt,
+           va_list vargs)
+{
+    int len = 0;
+    string prefix;
+    generatePrefix(prefix, fmt);
+    
+    // Dump the data 
+    
+    if (!m_logFilePath.empty())
+    {
+        FILE *logFile = fopen(m_logFilePath.c_str(), TRACE_FILE_MODE2);
+        if (logFile != NULL)
+        {
+            len = vfprintf(logFile, prefix.c_str(), vargs);
+            fflush(logFile);
+            fclose(logFile);
+        }
+    }
+    
+    if (m_consoleMode)
+    {
+        len = vfprintf(stdout, prefix.c_str(), vargs);
+        fflush(stdout);
+    }
+}
+
+//******************************************************************************
+//
+// AxisTrace::generatePrefix() Implementation
+//
+//******************************************************************************
+void AxisTrace::
+generatePrefix(string &prefix, const char *fmt)
+{
+    if (NULL == fmt)
+        fmt = "";
+		
+    const int workBufLen=1024;
+    char workBuf[workBufLen];
+    memset(workBuf,0,workBufLen);
+    
+    // Generate trace timestamp.
     PLATFORM_TIMEB timeBuffer;
     PLATFORM_GET_TIME_IN_MILLIS( &timeBuffer );
     struct tm *tm = localtime(&timeBuffer.time);
-
-    const int timelen=256;
-    char strtime[timelen];
-    memset(strtime,0,timelen);
-    strftime(strtime,timelen,"[%d/%m/%Y %H:%M:%S:",tm);
-    string text = strtime;
+    strftime(workBuf,workBufLen,"[%d/%m/%Y %H:%M:%S:", tm);
+    prefix = workBuf;
+    sprintf(workBuf, "%03u] ", timeBuffer.millitm);
+    prefix += workBuf;
     
-    char millis[5];
-    sprintf(millis, "%03u", timeBuffer.millitm);
-    text += millis;
+    // Generate trace thread ID - on some system thread ID is long long (64 bits)!
+    LONGLONG tid = (LONGLONG)PLATFORM_GET_THREAD_ID;
+    sprintf(workBuf, PRINTF_LONGLONG_LOG_FORMAT_SPECIFIER, tid);
+    prefix += workBuf;
+    prefix += "  ";
     
-    strftime(strtime, timelen, " %Z]", tm);
-    text += strtime;
-
-    char threadID[20];
-    sprintf(threadID, " %lu ", PLATFORM_GET_THREAD_ID);
-    text += threadID;
-
-    if (NULL==classname) text += "-";
-    else text += classname;
-    text += " ";
-    text += type;
-    if (NULL!=methodname) 
-    {
-        text += " ";
-        text += methodname;
-    }
-    text += " ";
-    if (NULL != that) 
-    {
-        char prim[32];
-        sprintf(prim,"@%p",that);
-        text += prim;
-        if (NULL!=parms) 
-        	text += ",";
-    }
-
-    if (NULL != parms) 
-    {
-        if (NULL==strchr(parms,'\n')) 
-        {
-            text += parms;
-            traceLine2(text.c_str());
-        } 
-        else 
-        {
-            // Multi-line output
-            text += "------------>";
-            traceLine2(text.c_str());
-            const char *tok = strtok(const_cast<char*>(parms),"\n");
-            while (NULL != tok) 
-            {
-                traceLineInternal(tok);
-                tok = strtok(NULL,"\n");
-            }
-        }
-    } 
-    else 
-    {
-        traceLine2(text.c_str());
-    }
-}
-
-void AxisTrace::
-traceLineInternal(const char *data) 
-{
-    traceLineInternal(TRACE_INFO,NULL,NULL,NULL,data);
-}
-
-void AxisTrace::
-traceLine2(const char *data) 
-{
-    m_fileTrace->filePuts(data);
-    m_fileTrace->filePuts("\n");
-    m_fileTrace->fileFlush();
-    return;
-}
-
-void AxisTrace::
-traceEntryInternal(const char *className, const char *methodName, 
-    const void *that, int nParms, va_list args)
-{
-    if (!isTraceOn()) return;
-
-    try 
-    {
-        string line;
-        const char *parms = NULL;
-        if (0<nParms) 
-        {
-            for (int i=0; i<nParms; i++) 
-            {
-                int type = va_arg(args, int);
-                unsigned len = va_arg(args, unsigned);
-                void *value = va_arg(args, void*);
-                if (0!=i) line += ", ";
-                addParameter(line,type,len,value);
-            }
-            parms = line.c_str();
-        }
-
-        traceLineInternal(TRACE_ENTRY,className,methodName,that,parms);
-    } 
-    catch (...) 
-    {
-        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace entry");
-    }
-}
-
-void AxisTrace::
-traceExitInternal(const char *className, const char *methodName, const void* that, int returnIndex,
-                  int type, unsigned len, void *value)
-{
-    if (!isTraceOn()) return;
-
-    try 
-    {
-        string line;
-        bool added = false;
-        if (0!=returnIndex) 
-        { 
-        	// Zero means only one return
-               line = "@";
-               char prim[32];
-               sprintf(prim,"%d",returnIndex);
-               line += prim;
-               added = true;
-        }
-
-        if (TRACETYPE_UNKNOWN != type) 
-        {
-            if (added) line += " ";
-            addParameter(line,type,len,value);
-            added = true;
-        }
-
-        traceLineInternal(TRACE_EXIT,className,methodName,that,added?line.c_str():NULL);
-    } 
-    catch (...) 
-    {
-        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace exit");
-    }
-}
-
-void AxisTrace::
-traceCatchInternal(const char *className, const char *methodName, const void* that, int catchIndex,
-                   int type, unsigned len, void *value)
-{
-    if (!isTraceOn()) return;
-
-    try 
-    {
-        string line;
-        if (0!=catchIndex) 
-        { 
-        	// Zero means only one catch
-              line = "@";
-              char prim[32];
-              sprintf(prim,"%d",catchIndex);
-              line += prim;
-              line += " ";
-        }
-
-        line += "caught ";
-        if (TRACETYPE_UNKNOWN != type)
-            addParameter(line,type,len,value);
-        else line += "\"...\"";
-        traceLineInternal(TRACE_EXCEPT,className,methodName,that,line.c_str());
-    } 
-    catch (...) 
-    {
-        traceLineInternal(TRACE_EXCEPT,NULL,NULL,NULL,"Unknown exception caught during trace catch");
-    }
-}
-
-void AxisTrace::
-addParameter(string& line, int type, unsigned len, void *value)
-{
-    char prim[32]; // Plenty big enough to hold a primitive
-    char *pcValue = (char*)value;
-    
-    switch (type) 
-    {
-	    case TRACETYPE_CHAR:    sprintf(prim,"%c" ,*((char  *)value));    line += prim;    break;
-	    case TRACETYPE_USHORT:  sprintf(prim,"%hu",*((short *)value));    line += prim;    break;
-	    case TRACETYPE_SHORT:   sprintf(prim,"%hd",*((short *)value));    line += prim;    break;
-	    case TRACETYPE_UINT:    sprintf(prim,"%u" ,*((int   *)value));    line += prim;    break;
-	    case TRACETYPE_INT:     sprintf(prim,"%d" ,*((int   *)value));    line += prim;    break;
-	    case TRACETYPE_ULONG:   sprintf(prim,"%lu",*((long  *)value));    line += prim;    break;
-	    case TRACETYPE_LONG:    sprintf(prim,"%ld",*((long  *)value));    line += prim;    break;
-	    case TRACETYPE_DOUBLE:  sprintf(prim,"%f" ,*((double*)value));    line += prim;    break;
-	    case TRACETYPE_FLOAT:   sprintf(prim,"%f" ,*((float *)value));    line += prim;    break;
-	
-	    case TRACETYPE_BOOL:
-	        line += *((bool*)value)?"true":"false";
-	        break;
-	
-	    case TRACETYPE_POINTER:    
-	        pcValue = *((char**)pcValue);
-	        sprintf(prim,"%p ",pcValue);    
-	        line += prim;    
-	        if (NULL!=pcValue) 
-	            addDataParameter(line,len,value);
-	        break;
-	    
-	    case TRACETYPE_DATA:    
-	        addDataParameter(line,len,value);
-	        break;
-	
-	    case TRACETYPE_STRING:    
-	        try 
-	        {
-                pcValue = *((char**)pcValue);
-                if (NULL==pcValue) 
-                	line += "<null>";
-                else 
-                {
-                	line += "\"";    
-                	line += pcValue;    
-                	line += "\"";
-                }    
-	        } 
-	        catch (...) 
-	        {
-	            line += "<BADPOINTER>";
-	        }
-	        break;
-	
-	    case TRACETYPE_STLSTRING:
-	        try {
-	            string *str = static_cast<string*>(value);
-	            if (str) 
-	            {
-	                line += "\"";    
-	                line += str->c_str();
-	                line += "\"";    
-	            } 
-	            else 
-	            	line += "<BADPOINTER>";
-	        } 
-	        catch (...) 
-	        {
-	            line += "<BADPOINTER>";
-	        }
-	        break;
-	
-	    case TRACETYPE_EXCEPTION:
-	        try 
-	        {
-	            exception *ex = static_cast<exception*>(value);
-	            const char *msg = ex->what();
-	            if (NULL==msg) 
-	            	msg = "\?\?\?\?";
-	            line += "exception(\"";
-	            line += msg;
-	            line += "\")";    
-	        } 
-	        catch (...) 
-	        {
-	            line += "<BADPOINTER>";
-	        }
-	        break;
-	
-	    case TRACETYPE_AXISEXCEPTION:
-	        try 
-	        {
-	            AxisException *ex = static_cast<AxisException*>(value);
-	            const int code = ex->getExceptionCode();
-	            const char *msg = ex->what();
-	            if (NULL==msg) 
-	            	msg = "\?\?\?\?";
-	            line += "AxisException(";    
-	            line += code;
-	            line += ", \"";
-	            line += msg;
-	            line += "\")";    
-	        } 
-	        catch (...) 
-	        {
-	            line += "<BADPOINTER>";
-	        }
-	        break;
-	
-	    case TRACETYPE_ANONYMOUS:
-	        line += "<ANONYMOUS>";                
-	        break;
-	
-	    default:
-	        sprintf(prim,"%d",type);
-	        line += "<UNKNOWNTYPE";                
-	        line += prim;
-	        line += ">";
-	        break;
-    }
-}
-
-/**
- * This code only prints out the first 32 bytes of storage pointed at by a 
- * pointer. This is to prevent huge blocks of atorage repeatedly being output
- * to the trace file. 32 bytes seems quite a low limit. Maybe this limit 
- * could be increased in the future. Large blocks of storage could be output
- * in a more human-friendly format.
- */
-void AxisTrace::
-addDataParameter(string& line, unsigned len, void *value) 
-{
-    char prim[32]; // Plenty big enough to hold a primitive
-    char *pcValue = (char*)value;
-    try 
-    {
-        line += "[";
-        for (unsigned i=0; i<len && i<32; i++) 
-        {
-            int x = (int)(pcValue[i]);
-            sprintf(prim,"%2.2X",x);
-            line += prim;
-        }
-        line += "] <";
-        for (unsigned j=0; j<len && j<32; j++) 
-        {
-            char c = pcValue[j];
-            if (!isprint(c)) c='.';
-            sprintf(prim,"%c",c);
-            line += prim;
-        }
-        line += ">";
-    } 
-    catch (...) 
-    {
-        line += "<BADPOINTER>";
-    }
+    // Add the format passed-in.
+    prefix += fmt;
 }
 
 AXIS_CPP_NAMESPACE_END

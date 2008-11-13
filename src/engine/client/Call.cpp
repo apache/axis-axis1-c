@@ -48,15 +48,20 @@ extern "C" int uninitialize_module ();
 
 AXIS_CPP_NAMESPACE_USE
 
-Call::Call ()
+Call::
+Call ()
 :m_pcEndPointUri(NULL), m_strProxyHost(""), m_uiProxyPort(0), m_bUseProxy(false),
 m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
 {
+
     m_pAxisEngine = NULL;
     m_pIWSSZ = NULL;
     m_pIWSDZ = NULL;
     initialize_module (0);
     
+    // This needs to be here, after the initialize_module, otherwise, trace filter is not honored.
+	logEntryEngine("Call::Call")
+
     m_pTransport = NULL;
     m_nTransportType = APTHTTP1_1;
     
@@ -86,13 +91,21 @@ m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
     catch(...)
     {
         cleanup();
+   
+        logRethrowException()
+        
         throw;
     }
+    
+    logExit()
 }
 
-Call::~Call ()
+Call::
+~Call ()
 {
-    if (m_pAxisEngine)
+	logEntryEngine("Call::~Call")
+
+	if (m_pAxisEngine)
         m_pAxisEngine->unInitialize ();
     
     cleanup();
@@ -110,9 +123,12 @@ Call::~Call ()
     
     // Following is for C-binding support.
     resetSoapFaultList();
+    
+    logExit()
 }
 
-void Call::cleanup()
+void Call::
+cleanup()
 {
     delete m_pContentIdSet;
     m_pContentIdSet = NULL;
@@ -128,15 +144,17 @@ void Call::cleanup()
     m_pcEndPointUri = NULL;
 }
 
-int Call::setEndpointURI( const char * pchEndpointURI)
+int Call::
+setEndpointURI( const char * pchEndpointURI)
 {
     m_pTransport->setEndpointUri( pchEndpointURI);
 
     return AXIS_SUCCESS;
 }
 
-void Call::setOperation (const char* pchOperation, 
-                         const char* pchNamespace)
+void Call::
+setOperation (const char* pchOperation, 
+              const char* pchNamespace)
 {
     setOperation(pchOperation, pchNamespace, true);
 }
@@ -145,11 +163,15 @@ void Call::setOperation (const char* pchOperation,
                          const char* pchNamespace,
                          bool bIsWrapperStyle)
 {
+	logEntryEngine("Call::setOperation")
+
     m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
     m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
     
     SoapMethod* sm = getSOAPSerializer()->getSOAPMethod();
     sm->setWrapperStyle(bIsWrapperStyle); 
+    
+    logExit()
 }
 
 void Call::addParameter( void * pValue, 
@@ -193,14 +215,22 @@ void Call::addCmplxParameter( void *            pObject,
 
 int Call::sendAndReceive()
 {
+	logEntryEngine("Call::sendAndReceive")
+
     m_nStatus = m_pAxisEngine->process( m_pTransport, false);
+
+    logExitWithReturnCode(m_nStatus)
 
     return m_nStatus;
 }
 
 int Call::send()
 {
+	logEntryEngine("Call::send")
+
     m_nStatus = m_pAxisEngine->process( m_pTransport, true);
+
+    logExitWithReturnCode(m_nStatus)
 
     return m_nStatus;
 }
@@ -218,6 +248,8 @@ public:
 
 int Call::initialize( PROVIDERTYPE nStyle)
 {
+	logEntryEngine("Call::initialize")
+
     m_bCallInitialized = true;
 
     // Initialize re-usable objects of this instance (objects may have been 
@@ -297,29 +329,44 @@ int Call::initialize( PROVIDERTYPE nStyle)
                 }
 
                 m_attachments.clear();
+                
+                logExitWithReturnCode(AXIS_SUCCESS)
+
                 return AXIS_SUCCESS;
             }
         }
 
         m_nStatus = AXIS_FAIL;
+        
+        logExitWithReturnCode(AXIS_FAIL)
+
         return AXIS_FAIL;
     }
-
     catch( AxisException& e)
     {
         e = e;
         m_nStatus = AXIS_FAIL;
+        
+        logRethrowException()
+
         throw;
     }
     catch( ...)
     {
-        m_nStatus = AXIS_FAIL;        
+        m_nStatus = AXIS_FAIL;   
+        
+        logRethrowException()
+
         throw;
     }
+    
+    logExit()
 }
 
 int Call::unInitialize()
 {
+	logEntryEngine("Call::unInitialize")
+
     m_bCallInitialized = false;
 
     if( m_pAxisEngine)
@@ -359,6 +406,9 @@ int Call::unInitialize()
     }
 
     closeConnection(false);
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
@@ -393,6 +443,8 @@ AXIS_PROTOCOL_TYPE Call::getProtocol ()
 
 int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
+	logEntryEngine("Call::setTransportProperty")
+
     int    iSuccess = AXIS_SUCCESS;
 
     // if SOAPAction is being set add extra "" to value
@@ -409,6 +461,8 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
         else
         {
             // need to throw some sort of exception relating to memory allocation failure?
+            logExitWithReturnCode(AXIS_FAIL)
+
             return  AXIS_FAIL;
         }
     }
@@ -416,7 +470,13 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
         iSuccess = m_pTransport->setTransportProperty( type, value);
 
     if( iSuccess < 0)
+    {
+    	logThrowExceptionWithData("AxisGenException", m_pTransport->getLastChannelError())
+
         throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
+    }
+
+    logExitWithReturnCode(iSuccess)
 
     return iSuccess;
 }
@@ -1175,6 +1235,8 @@ void Call::addSoapFaultToList(const char *faultName,
 void Call::processSoapFault(AxisException *e, 
                             void *exceptionHandlerFp)
 {
+	logEntryEngine("Call::processSoapFault")
+
     AXIS_EXCEPTION_HANDLER_FUNCT excFp = (AXIS_EXCEPTION_HANDLER_FUNCT)exceptionHandlerFp;
     ISoapFault* pSoapFault             = NULL;
     
@@ -1238,6 +1300,8 @@ void Call::processSoapFault(AxisException *e,
     }
     else
         excFp(e->getExceptionCode(), e->what(), NULL, NULL);
+    
+    logExit()
 }
 
 void Call::resetSoapFaultList()

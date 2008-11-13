@@ -60,6 +60,8 @@ ChannelFactory::
 IChannel * ChannelFactory::
 LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 {
+	logEntryEngine("ChannelFactory::LoadChannelLibrary")
+
     DLHandler    sLibHandler;
     IChannel *    pChannel = NULL;
     int            iLibCount = (int) eChannelType;
@@ -68,6 +70,8 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
     if( m_pLibName[iLibCount] == NULL ||
         strcmp( pcLibraryName, m_pLibName[iLibCount]) != 0)
     {
+        logDebugArg1("Loading transport %s", pcLibraryName)
+
         sLibHandler = PLATFORM_LOADLIB( pcLibraryName);
 
         if( !sLibHandler)
@@ -75,6 +79,8 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
             // get load lib error information
             string sFullMessage = "Failed to load transport channel library " +  
                                   string(pcLibraryName) + ". " + PLATFORM_LOADLIB_ERROR;
+
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_CHANNEL_FAILED", sFullMessage.c_str())
 
             throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
         }
@@ -98,24 +104,17 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 
                 if( eChannelType == UnsecureChannel)
                 {
+                    logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_CHANNEL_FAILED", sFullMessage.c_str())
+
                     throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
                 }
                 else
                 {
+                    logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED", sFullMessage.c_str())
+
                     throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, sFullMessage.c_str());
                 }
             }
-
-#ifdef ENABLE_AXISTRACE
-// Load function to do lib level inits
-            void (*initializeLibrary) (AxisTraceEntrypoints*);
-            initializeLibrary = (void (*)(AxisTraceEntrypoints*))PLATFORM_GETPROCADDR(sLibHandler, "initializeLibrary");
-
-            if( initializeLibrary)
-            {
-                (*initializeLibrary) (AxisTrace::getTraceEntrypoints());
-            }
-#endif
 
             // Additional code added to that when the user wants to load a different
             // library from that which is already loaded, it will now allow the change.
@@ -132,18 +131,25 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
             {
                 sCreate( &pChannel);
                 m_pChannel[iLibCount] = pChannel;
+                
+                if (AxisTrace::isTransportLoggingEnabled())
+                	pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
             }
         }
     }
     else
         pChannel = m_pChannel[iLibCount];
 
+    logExitWithPointer(pChannel)
+    
     return pChannel;
 }
 
 bool ChannelFactory::
 UnLoadChannelLibrary( g_ChannelType eChannelType)
 {
+	logEntryEngine("ChannelFactory::UnLoadChannelLibrary")
+
     bool    bSuccess = false;
     int        iLibIndex = (int) eChannelType;
 
@@ -182,6 +188,8 @@ UnLoadChannelLibrary( g_ChannelType eChannelType)
         bSuccess = true;
     }
 
+    logExitWithBoolean(bSuccess)
+    
     return bSuccess;
 }
 
@@ -195,6 +203,8 @@ preloadChannels(char *unsecChannel, char *secChannel)
 void ChannelFactory::
 preloadChannel(g_ChannelType type, const char *pcLibraryName)
 {
+	logEntryEngine("ChannelFactory::preloadChannel")
+
     int iLibCount = (int)type;
     ChannelLibrary *pCh = new ChannelLibrary();
 
@@ -206,6 +216,8 @@ preloadChannel(g_ChannelType type, const char *pcLibraryName)
                               string(pcLibraryName) + ". " + PLATFORM_LOADLIB_ERROR;
         
         delete pCh;
+
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_CHANNEL_FAILED", sFullMessage.c_str())
 
         throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
     }
@@ -227,42 +239,49 @@ preloadChannel(g_ChannelType type, const char *pcLibraryName)
 
         if( type == UnsecureChannel)
         {
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_CHANNEL_FAILED", sFullMessage.c_str())
+
             throw HTTPTransportException( SERVER_TRANSPORT_LOADING_CHANNEL_FAILED, sFullMessage.c_str());
         }
         else
         {
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED", sFullMessage.c_str())
+
             throw HTTPTransportException( SERVER_TRANSPORT_LOADING_SSLCHANNEL_FAILED, sFullMessage.c_str());
         }
     }
 
-#ifdef ENABLE_AXISTRACE
-    // Load function to do lib level inits
-    void (*initializeLibrary) (AxisTraceEntrypoints*);
-    initializeLibrary = (void (*)(AxisTraceEntrypoints*))PLATFORM_GETPROCADDR(pCh->m_Library, "initializeLibrary");
-    if( initializeLibrary)
-    {
-        (*initializeLibrary) (AxisTrace::getTraceEntrypoints());
-    }
-#endif
     m_ChannelLibrary[iLibCount] = pCh;
+    
+    logExit()
 }
 
 IChannel *ChannelFactory::
 createChannel(g_ChannelType type) 
 {
+	logEntryEngine("ChannelFactory::createChannel")
+
     int iLibCount = (int)type;
     IChannel *pChannel = NULL;
     if (m_ChannelLibrary[iLibCount])
     {
         m_ChannelLibrary[iLibCount]->m_Create(&pChannel);
         m_pChannel[iLibCount] = pChannel;
+        
+        if (AxisTrace::isTransportLoggingEnabled())
+        	pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
     }
+    
+    logExitWithPointer(pChannel)
+
     return pChannel;
 }
 
 void ChannelFactory::
 unloadChannels()
 {
+	logEntryEngine("ChannelFactory::unloadChannels")
+
     for (int i=0; i<(int)MaxChannelCount; i++) 
     {
         if (m_ChannelLibrary[i])
@@ -272,6 +291,8 @@ unloadChannels()
             m_ChannelLibrary[i] = NULL;
         }
     }
+	
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

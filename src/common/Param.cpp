@@ -42,8 +42,11 @@ AXIS_CPP_NAMESPACE_START
 int AxisEngine::m_bServer;
 
 
-Param::~Param ()
+Param::
+~Param ()
 {
+	logEntryEngine("Param::~Param")
+
     if (m_AnySimpleType)
     {
         delete m_AnySimpleType;
@@ -65,11 +68,16 @@ Param::~Param ()
             break;
         default:;
     }
+    
+    logExit()
 }
 
 
-int Param::serialize (SoapSerializer &pSZ)
+int Param::
+serialize (SoapSerializer &pSZ)
 {
+	logEntryEngine("Param::serialize")
+
     AxisString ATprefix;
     switch (m_Type)
     {
@@ -80,7 +88,11 @@ int Param::serialize (SoapSerializer &pSZ)
              * enc:arrayType="abc:phoneNumberType[2]" >";
              */
             if (!m_Value.pArray)
+            {
+                logExitWithReturnCode(AXIS_FAIL)
+                
                 return AXIS_FAIL;
+            }
                 
             if (RPC_ENCODED == pSZ.getStyle ())
             {
@@ -165,10 +177,11 @@ int Param::serialize (SoapSerializer &pSZ)
         case USER_TYPE:
             if (RPC_ENCODED == pSZ.getStyle ())
             {
-                TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
-                int stat = AXIS_FAIL;
-                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-                TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
+                logDebugArg2("Calling serializer function %p for complex object %p", m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject)
+
+                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+                
+                logDebugArg2("Returned from serializer function %p, status=%d", m_Value.pCplxObj->pSZFunct, stat)
             }
             else
             {
@@ -179,10 +192,11 @@ int Param::serialize (SoapSerializer &pSZ)
             	if (!m_sName.empty())
                     pSZ.serialize ("<", m_sName.c_str (), NULL); 
 
-                TRACE_SERIALIZE_FUNCT_ENTRY(m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject, &pSZ, false);
-                int stat = AXIS_FAIL;
-                stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
-                TRACE_SERIALIZE_FUNCT_EXIT(m_Value.pCplxObj->pSZFunct, stat);
+                logDebugArg2("Calling serializer function %p for complex object %p", m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject)
+
+                int stat = m_Value.pCplxObj->pSZFunct (m_Value.pCplxObj->pObject, &pSZ, false);
+
+                logDebugArg2("Returned from serializer function %p, status=%d", m_Value.pCplxObj->pSZFunct, stat)
 
                 if (!m_sName.empty())
                     pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
@@ -199,14 +213,21 @@ int Param::serialize (SoapSerializer &pSZ)
             break;
     }
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-void Param::setValue(XSDTYPE nType, 
-                     IAnySimpleType* value)
+void Param::
+setValue(XSDTYPE nType, 
+         IAnySimpleType* value)
 {
+	logEntryEngine("Param::setValue")
+
     m_Type = nType;
     m_AnySimpleType = value;
+    
+    logExit()
 }
 
 void Param::setPrefix (const AxisChar* prefix)
@@ -219,10 +240,13 @@ void Param::setURI (const AxisChar* uri)
     m_strUri = uri;
 }
 
-int Param::setUserType (void* pObject, 
-                        AXIS_DESERIALIZE_FUNCT pDZFunct,
-                        AXIS_OBJECT_DELETE_FUNCT pDelFunct)
+int Param::
+setUserType (void* pObject, 
+             AXIS_DESERIALIZE_FUNCT pDZFunct,
+             AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
+	logEntryEngine("Param::setUserType")
+
     if (m_Type != USER_TYPE)
         return AXIS_FAIL;
         
@@ -231,51 +255,64 @@ int Param::setUserType (void* pObject,
     m_Value.pCplxObj->pDZFunct = pDZFunct;
     m_Value.pCplxObj->pDelFunct = pDelFunct;
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-int Param::setArrayElements (void* pElements)
+int Param::
+setArrayElements (void* pElements)
 {
-    if (m_Type != XSD_ARRAY)
-        return AXIS_FAIL;
-        
-    if (m_Value.pArray)
-    {
-        if (m_Value.pArray->m_type != USER_TYPE)
-        {
-            m_Value.pArray->m_value.sta = pElements;
-            return AXIS_SUCCESS;
-        }
-        else // unexpected situation
-            return AXIS_FAIL;
+	logEntryEngine("Param::setArrayElements")
+	
+	int rc = AXIS_FAIL;
+
+    if (m_Type == XSD_ARRAY)
+    {   
+	    if (m_Value.pArray)
+	    {
+	        if (m_Value.pArray->m_type != USER_TYPE)
+	        {
+	            m_Value.pArray->m_value.sta = pElements;
+	            rc = AXIS_SUCCESS;
+	        }
+	    }
     }
     
-    return AXIS_FAIL;
+    logExitWithReturnCode(rc)
+
+    return rc;
 }
 
 // following function is called to set array of user types.
-int Param::setArrayElements (void* pObject, 
-                             AXIS_DESERIALIZE_FUNCT pDZFunct,
-                             AXIS_OBJECT_DELETE_FUNCT pDelFunct)
+int Param::
+setArrayElements (void* pObject, 
+                  AXIS_DESERIALIZE_FUNCT pDZFunct,
+                  AXIS_OBJECT_DELETE_FUNCT pDelFunct)
 {
-    if (m_Type != XSD_ARRAY)
-        return AXIS_FAIL;
-        
-    if (m_Value.pArray)
-    {
-        if (m_Value.pArray->m_type == USER_TYPE)
-        {
-            m_Value.pArray->m_value.cta = new ComplexObjectHandler;
-            m_Value.pArray->m_value.cta->pDZFunct = pDZFunct;
-            m_Value.pArray->m_value.cta->pDelFunct = pDelFunct;
-            m_Value.pArray->m_value.cta->pObject = pObject;
-            return AXIS_SUCCESS;
-        }
-        else                  //unexpected situation
-            return AXIS_FAIL;
+	logEntryEngine("Param::setArrayElements")
+    
+	int rc = AXIS_FAIL;
+
+    if (m_Type == XSD_ARRAY)
+    {  
+	    if (m_Value.pArray)
+	    {
+	        if (m_Value.pArray->m_type == USER_TYPE)
+	        {
+	            m_Value.pArray->m_value.cta = new ComplexObjectHandler;
+	            m_Value.pArray->m_value.cta->pDZFunct = pDZFunct;
+	            m_Value.pArray->m_value.cta->pDelFunct = pDelFunct;
+	            m_Value.pArray->m_value.cta->pObject = pObject;
+	
+	            rc = AXIS_SUCCESS;
+	        }
+	    }
     }
     
-    return AXIS_FAIL;
+    logExitWithReturnCode(rc)
+
+    return rc;
 }
 
 void Param::setName (const AxisChar* sName)
@@ -284,26 +321,39 @@ void Param::setName (const AxisChar* sName)
 }
 
 // ComplexObjectHandler functions
-ComplexObjectHandler::ComplexObjectHandler ()
+ComplexObjectHandler::
+ComplexObjectHandler ()
 {
+	logEntryEngine("ComplexObjectHandler::ComplexObjectHandler")
+
     init ();
+	
+    logExit()
 }
 
-ComplexObjectHandler::~ComplexObjectHandler ()
+ComplexObjectHandler::
+~ComplexObjectHandler ()
 {
+	logEntryEngine("ComplexObjectHandler::~ComplexObjectHandler")
+
     /* At client side we do not delete either output or return objects */
     if (AxisEngine::m_bServer)
     {
         if (pObject && pDelFunct)
         {
-            TRACE_OBJECT_DELETE_FUNCT_ENTRY(pDelFunct, pObject, 0);
+            logDebugArg2("Calling object delete function %p for object %p", pDelFunct, pObject)
+
             pDelFunct(pObject, 0);
-            TRACE_OBJECT_DELETE_FUNCT_EXIT(pDelFunct);
+            
+            logDebugArg1("Returned from object delete function %p", pDelFunct)
         }
     }
+	
+    logExit()
 }
 
-void ComplexObjectHandler::init ()
+void ComplexObjectHandler::
+init ()
 {
     pObject = NULL;
     pSZFunct = NULL;

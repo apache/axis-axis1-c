@@ -29,33 +29,53 @@ AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
-SoapBody::SoapBody()
+SoapBody::
+SoapBody()
 {
+	logEntryEngine("SoapBody::SoapBody")
+
     m_pSoapMethod= NULL;
     m_pSoapFault= NULL;
+    
+	logExit()
 }
 
-SoapBody::~SoapBody()
+SoapBody::
+~SoapBody()
 {
-    if(m_pSoapMethod)
-        delete m_pSoapMethod;
+	logEntryEngine("SoapBody::~SoapBody")
 
-    if(m_pSoapFault)
-        delete m_pSoapFault;
+    delete m_pSoapMethod;
+    delete m_pSoapFault;
+    
+	logExit()
 }
 
-void SoapBody::setSoapMethod(SoapMethod* ptrSoapMethod)
+void SoapBody::
+setSoapMethod(SoapMethod* ptrSoapMethod)
 {
+	logEntryEngine("SoapBody::setSoapMethod")
+
     m_pSoapMethod= ptrSoapMethod;
+	
+	logExit()
 }
 
-void SoapBody::setSoapFault(SoapFault *pSoapFault)
+void SoapBody::
+setSoapFault(SoapFault *pSoapFault)
 {
+	logEntryEngine("SoapBody::setSoapFault")
+
     m_pSoapFault= pSoapFault;
+	
+	logExit()
 }
 
-int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+int SoapBody::
+serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
+	logEntryEngine("SoapBody::serialize")
+
     int iStatus= AXIS_SUCCESS;
 
     do
@@ -101,30 +121,42 @@ int SoapBody::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],
             ">\n", NULL);
-    } while(0);
+    } 
+    while(0);
+
+	logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
 
-void SoapBody::addAttribute(Attribute *attr)
+void SoapBody::
+addAttribute(Attribute *attr)
 {
+	logEntryEngine("SoapBody::addAttribute")
+
     m_attributes.push_back(attr);
+	
+	logExit()
 }
 
-int SoapBody::serializeAttributes(SoapSerializer& pSZ)
+int SoapBody::
+serializeAttributes(SoapSerializer& pSZ)
 {
+	logEntryEngine("SoapBody::serializeAttributes")
+
     int iStatus= AXIS_SUCCESS;
 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
     {        
-
         iStatus= (*itCurrAttribute)->serialize(pSZ);
         if(iStatus==AXIS_FAIL)
             break;
         itCurrAttribute++;        
     }    
+
+	logExitWithReturnCode(iStatus)
 
     return iStatus;
 }

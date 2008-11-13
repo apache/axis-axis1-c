@@ -34,53 +34,79 @@ AXIS_CPP_NAMESPACE_START
 SoapMethod::
 SoapMethod()
 {
+	logEntryEngine("SoapMethod::SoapMethod")
+
 	reset();
+	
+	logExit()
 }
 
 SoapMethod::
 ~SoapMethod()
 {
+	logEntryEngine("SoapMethod::~SoapMethod")
+
     clearAttributes();
     clearOutParams();
+    
+	logExit()
 }
 
 void SoapMethod::
 setPrefix(const AxisChar* prefix)
 {
+	logEntryEngine("SoapMethod::setPrefix")
+
 	if (NULL == prefix)
 		m_strPrefix = "";
 	else
 		m_strPrefix = prefix;
+	
+	logExit()
 }
 
 void SoapMethod::
 setLocalName(const AxisChar* localname)
 {
+	logEntryEngine("SoapMethod::setLocalName")
+
 	if (NULL == localname)
 		m_strLocalname = "";
 	else
 		m_strLocalname = localname;
+	
+	logExit()
 }
 
 void SoapMethod::
 setURI(const AxisChar* uri)
 {
+	logEntryEngine("SoapMethod::setURI")
+
 	if (NULL == uri)
 		m_strUri = "";
 	else
 		m_strUri = uri;
+	
+	logExit()
 }
 
 void SoapMethod::
 addOutputParam(Param *param)
 {
+	logEntryEngine("SoapMethod::addOutputParam")
+
     if (param)
         m_OutputParams.push_back(param);
+	
+	logExit()
 }
 
 int SoapMethod::
 serialize(SoapSerializer& pSZ)
-{    
+{   
+	logEntryEngine("SoapMethod::serialize")
+
     int iStatus= AXIS_SUCCESS;
 
     do
@@ -135,19 +161,25 @@ serialize(SoapSerializer& pSZ)
     } 
     while(0);
             
+	logExitWithReturnCode(iStatus)
+
     return iStatus;
 }
 
 int SoapMethod::
 serializeOutputParam(SoapSerializer& pSZ)
-{    
-    int nStatus;
+{
+	logEntryEngine("SoapMethod::serializeOutputParam")
+
+    int nStatus = AXIS_SUCCESS;
     
     for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
         if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
-            return nStatus;
+            break;
 
-    return AXIS_SUCCESS;
+	logExitWithReturnCode(nStatus)
+
+    return nStatus;
 }
 
 const AxisChar* SoapMethod::
@@ -159,6 +191,8 @@ getMethodName()
 bool SoapMethod::
 isSerializable()
 {
+	logEntryEngine("SoapMethod::isSerializable")
+
     bool bStatus= true;    
 
     // checking whether namespace qualified, if not return AXIS_FAIL 
@@ -177,14 +211,20 @@ isSerializable()
     } 
     while(0);
 
+    logExitWithBoolean(bStatus)
+    
     return bStatus;
 }
 
 int SoapMethod::
 addAttribute(Attribute *pAttribute)
 {
+	logEntryEngine("SoapMethod::addAttribute")
+
 	if (pAttribute)
 		m_attributes.push_back(pAttribute);
+
+	logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -192,6 +232,8 @@ addAttribute(Attribute *pAttribute)
 int SoapMethod::
 serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
+	logEntryEngine("SoapMethod::serializeAttributes")
+
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
@@ -200,12 +242,16 @@ serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
         itCurrAttribute++;        
     }    
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;    
 }
 
 int SoapMethod::
 reset()
 {
+	logEntryEngine("SoapMethod::reset")
+
 	m_isWrapperStyle = true;
     m_strUri = "";
     m_strLocalname = "";
@@ -213,35 +259,45 @@ reset()
     m_OutputParams.clear();
     m_attributes.clear();
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
 void SoapMethod::
 clearOutParams()
 {
-    if ( m_OutputParams.empty() )
-        return;
-        
-    list<Param*>::iterator itParam;
+	logEntryEngine("SoapMethod::clearOutParams")
+
+    if ( !m_OutputParams.empty() )
+    {
+	    list<Param*>::iterator itParam;
+	    
+	    for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
+	        delete *itParam;
+	        
+	    m_OutputParams.clear();
+    }
     
-    for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
-        delete *itParam;
-        
-    m_OutputParams.clear();
+    logExit()
 }
 
 void SoapMethod::
 clearAttributes()
 {
-    if (m_attributes.empty())
-        return;
+	logEntryEngine("SoapMethod::clearAttributes")
+
+    if (!m_attributes.empty())
+    {
+	    list<Attribute*>::iterator it;
+	    
+	    for (it = m_attributes.begin(); it != m_attributes.end(); ++it)
+	        delete *it;
+	    
+	    m_attributes.clear();
+    }
     
-    list<Attribute*>::iterator it;
-    
-    for (it = m_attributes.begin(); it != m_attributes.end(); ++it)
-        delete *it;
-    
-    m_attributes.clear();
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

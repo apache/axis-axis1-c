@@ -43,6 +43,8 @@ AppScopeHandlerPool::AppScopeHandlerPool ()
 
 AppScopeHandlerPool::~AppScopeHandlerPool ()
 {
+	logEntryEngine("AppScopeHandlerPool::~AppScopeHandlerPool")
+
     for (map < int, list <BasicHandler*> >::iterator it =
         m_Handlers.begin (); it != m_Handlers.end (); it++)
     {
@@ -54,6 +56,8 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
         (*it).second.clear ();
     }
     m_Handlers.clear ();
+    
+    logExit() 
 }
 
 /* This method does not block the object. Instead expects that the calling 
@@ -62,9 +66,11 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
 
 int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
-    //lock ();
+	logEntryEngine("AppScopeHandlerPool::getInstance")
+	
 	Lock l(this);
-    int Status;
+    int Status = AXIS_SUCCESS;
+    
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
         if (m_Handlers[nLibId].empty ())
@@ -73,15 +79,14 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     * application scope object. So just return SERVER_ENGINE_HANDLERBEINGUSED
 	     */
         {
-            //unlock ();
-             throw AxisEngineException(SERVER_ENGINE_HANDLER_BEING_USED);
+        	logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_BEING_USED")
+        	
+            throw AxisEngineException(SERVER_ENGINE_HANDLER_BEING_USED);
         }
         else
         {
             *pHandler = m_Handlers[nLibId].front ();
             m_Handlers[nLibId].pop_front ();
-            //unlock ();
-            return AXIS_SUCCESS;
         }
     }
     else // Not even the handler DLL loaded
@@ -94,17 +99,22 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 	     */ 
             m_Handlers[nLibId].clear ();
         }
-        //unlock ();
-        return Status;
     }
+    
+	logExitWithReturnCode(Status)
+    
+    return Status;
 }
 
 int AppScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
-    //lock ();
+	logEntryEngine("AppScopeHandlerPool::putInstance")
+
 	Lock l(this);
     m_Handlers[nLibId].push_back (pHandler);
-    //unlock ();
+
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 

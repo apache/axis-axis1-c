@@ -35,15 +35,23 @@
 
 AXIS_CPP_NAMESPACE_START
 
-ArrayBean::ArrayBean()
+ArrayBean::
+ArrayBean()
 {
+	logEntryEngine("ArrayBean::ArrayBean")
+	
     m_type = XSD_UNKNOWN;
     m_ItemName = "";
     m_value.sta = NULL;
+    
+    logExit()
 }
 
-ArrayBean::~ArrayBean()
+ArrayBean::
+~ArrayBean()
 {
+	logEntryEngine("ArrayBean::~ArrayBean")
+
     if (USER_TYPE == m_type)
     {
         if (m_value.cta)
@@ -52,9 +60,11 @@ ArrayBean::~ArrayBean()
             {
                 if (AxisEngine::m_bServer)
                 {
-					TRACE_OBJECT_DELETE_FUNCT_ENTRY(m_value.cta->pDelFunct, m_value.cta->pObject,  m_nSize);
+                    logDebugArg2("Calling object delete function %p for object %p", m_value.cta->pDelFunct, m_value.cta->pObject)
+                    
                     m_value.cta->pDelFunct(m_value.cta->pObject, m_nSize);
-					TRACE_OBJECT_DELETE_FUNCT_EXIT(m_value.cta->pDelFunct);
+                    
+                    logDebugArg1("Returned from object delete function %p", m_value.cta->pDelFunct)
                 }
                 // make sure that the ComplexObjectHandler's destructor does 
                 // not try to delete the objects again 
@@ -74,15 +84,21 @@ ArrayBean::~ArrayBean()
         }
         delete [] m_value.sta;
     }
+	
+	logExit()
 }
 
-int ArrayBean::GetArraySize()
+int ArrayBean::
+GetArraySize()
 {	
     return m_nSize;
 }
 
-int ArrayBean::Serialize(SoapSerializer& pSZ)
+int ArrayBean::
+Serialize(SoapSerializer& pSZ)
 {	
+	logEntryEngine("ArrayBean::Serialize")
+
     if (USER_TYPE == m_type)
     {
         void* pItem;
@@ -121,10 +137,12 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
                 // note : ">" is not serialized to enable the type's serializer
                 // to add attributes 
 
-				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
+                logDebugArg2("Calling object serializer function %p for object %p", m_value.cta->pSZFunct, pItem)
+
                 int stat = AXIS_FAIL;
                 stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
-				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
+                
+                logDebugArg2("Returned from calling object serializer function %p, status %d", m_value.cta->pSZFunct, stat)
 
                 // no matter true or false is passed
             	if (pPrefix != NULL)
@@ -148,10 +166,12 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
             {
                 pItem = ptrval[x];
 
-				TRACE_SERIALIZE_FUNCT_ENTRY(m_value.cta->pSZFunct, pItem, &pSZ, true);
+                logDebugArg2("Calling object serializer function %p for object %p", m_value.cta->pSZFunct, pItem)
+
                 int stat = AXIS_FAIL;
-                stat = m_value.cta->pSZFunct(pItem, &pSZ, true); 
-				TRACE_SERIALIZE_FUNCT_EXIT(m_value.cta->pSZFunct, stat);
+                stat = m_value.cta->pSZFunct(pItem, &pSZ, true);
+                
+                logDebugArg2("Returned from calling object serializer function %p, status %d", m_value.cta->pSZFunct, stat)
             }
         }
     }
@@ -163,7 +183,8 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
  
 	   	const AxisChar* pNamespace = pSZ.getNamespace();
        	        
-       	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_LITERAL); 
+       	if (RPC_ENCODED == nStyle) 
+       		pSZ.setStyle(RPC_LITERAL); 
 
         void ** p = (void **) m_value.sta;
         for (int ix = 0 ; ix < m_nSize ; ix++ )
@@ -172,27 +193,35 @@ int ArrayBean::Serialize(SoapSerializer& pSZ)
         }
 
     	// restore Serializer's style after array serialization is finished
-    	if (RPC_ENCODED == nStyle) pSZ.setStyle(RPC_ENCODED);
+    	if (RPC_ENCODED == nStyle) 
+    		pSZ.setStyle(RPC_ENCODED);
     }
+	
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
-void ArrayBean::SetDimension(int nDim)
+void ArrayBean::
+SetDimension(int nDim)
 {
     m_nSize = nDim;
 }
 
-void ArrayBean::SetItemName(const AxisChar* sName)
+void ArrayBean::
+SetItemName(const AxisChar* sName)
 {
     m_ItemName = sName;
 }
 
-void ArrayBean::SetTypeName(const AxisChar* sName)
+void ArrayBean::
+SetTypeName(const AxisChar* sName)
 {
     m_TypeName = sName;
 }
 
-void ArrayBean::SetUri(const AxisChar* sURI)
+void ArrayBean::
+SetUri(const AxisChar* sURI)
 {
     if (sURI)
         m_URI = sURI;
@@ -203,19 +232,20 @@ void ArrayBean::SetUri(const AxisChar* sURI)
  * by the destructor.
  */
 
-void ArrayBean::RemoveArrayPointer()
+void ArrayBean::
+RemoveArrayPointer()
 {
+	logEntryEngine("ArrayBean::RemoveArrayPointer")
+
     if (USER_TYPE == m_type)
     {
         if (m_value.cta)
-        {
             m_value.cta->pObject = NULL;	
-        }
     }
     else
-    {
         m_value.sta = NULL;
-    }
+	
+	logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

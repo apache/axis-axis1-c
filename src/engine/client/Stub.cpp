@@ -44,6 +44,10 @@ m_proxyPassword (NULL),
 m_pExceptionHandler(NULL)
 {
     m_pCall = new Call ();
+    
+    // Weird, yes, but need to do here since tracing is not enabled until after instantiation of Call class.
+  	logEntryEngine("Stub::Stub")
+
     m_pCall->setProtocol (eProtocol);
     m_pTransport = m_pCall->getTransport ();
     m_pTransport->setEndpointUri( pcEndPointUri);
@@ -67,10 +71,14 @@ m_pExceptionHandler(NULL)
                 pszArgPtr++;
         }
     }
+    
+    logExit()
 }
 
 Stub::~Stub ()
 {
+  	logEntryEngine("Stub::~Stub")
+
     delete m_pCall;
     m_pCall = NULL;
 
@@ -80,24 +88,31 @@ Stub::~Stub ()
         delete m_vSOAPHeaderBlocks[j];
         m_vSOAPHeaderBlocks[j] = NULL;
     }
+    
+    logExit()
 }
 
 void
 Stub::setEndPoint (const char *pcEndPoint)
 {
+  	logEntryEngine("Stub::setEndPoint")
+
     if (m_pTransport)
         m_pTransport->setEndpointUri( pcEndPoint);
+  	
+    logExit()
 }
 
 void
 Stub::setTransportProperty (const char *pcKey, const char *pcValue)
 {
+  	logEntryEngine("Stub::setTransportProperty")
+
     if (m_pTransport)
     {
         if(!pcKey)
         {
             m_pTransport=NULL; //this should be set to null. otherwise the previous setting can be still there.
-            return;
         }
         else if (strcmp (pcKey, "SOAPAction") == 0)
         {
@@ -131,6 +146,8 @@ Stub::setTransportProperty (const char *pcKey, const char *pcValue)
         else
              m_pTransport->setTransportProperty (pcKey, pcValue);
     }
+  	
+    logExit()
 }
 
 const char *
@@ -192,7 +209,11 @@ Stub::deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
 void
 Stub::setHandlerProperty (AxisChar * name, void *value, int len)
 {
+  	logEntryEngine("Stub::setHandlerProperty")
+
     m_pCall->setHandlerProperty (name, value, len);
+  	
+    logExit()
 }
 
 IHeaderBlock *
@@ -251,16 +272,22 @@ Stub::getCurrentSOAPHeaderBlock ()
 void
 Stub::deleteCurrentSOAPHeaderBlock ()
 {
+  	logEntryEngine("Stub::deleteCurrentSOAPHeaderBlock")
+
     if (m_viCurrentSOAPHeaderBlock != m_vSOAPHeaderBlocks.end ())
     {
         delete (*m_viCurrentSOAPHeaderBlock);
         m_vSOAPHeaderBlocks.erase (m_viCurrentSOAPHeaderBlock);
     }
+  	
+    logExit()
 }
 
 void
 Stub::deleteSOAPHeaderBlock (IHeaderBlock * pHeaderBlock)
 {
+  	logEntryEngine("Stub::deleteSOAPHeaderBlock")
+
     vector < IHeaderBlock * >::iterator currentSOAPHeaderBlock =
     m_vSOAPHeaderBlocks.begin ();
     bool bDone = false;
@@ -274,11 +301,15 @@ Stub::deleteSOAPHeaderBlock (IHeaderBlock * pHeaderBlock)
         }
         currentSOAPHeaderBlock++;
     }
+  	
+    logExit()
 }
 
 void
 Stub::setSOAPHeaders ()
 {
+  	logEntryEngine("Stub::setSOAPHeaders")
+
     SoapSerializer *pSerializer = NULL;
     if (m_pCall)
         pSerializer = m_pCall->getSOAPSerializer ();
@@ -286,26 +317,40 @@ Stub::setSOAPHeaders ()
     if (pSerializer)
         for (unsigned int i = 0; i < m_vSOAPHeaderBlocks.size (); i++)
             pSerializer->addHeaderBlock (m_vSOAPHeaderBlocks[i]);
+  	
+    logExit()
 }
 
 void
 Stub::applyUserPreferences ()
 {
+  	logEntryEngine("Stub::applyUserPreferences")
+
     setSOAPHeaders ();
+  	
+    logExit()
 }
 
 void
 Stub::setProxy (const char *pcProxyHost, unsigned int uiProxyPort)
 {
+  	logEntryEngine("Stub::setProxy")
+
     if (m_pTransport)
         m_pTransport->setProxy (pcProxyHost, uiProxyPort);
+  	
+    logExit()
 }
 
 void
 Stub::setTransportTimeout (long lSeconds)
 {
+  	logEntryEngine("Stub::setTransportTimeout")
+
     if (m_pTransport)
         m_pTransport->setTimeout (lSeconds);
+  	
+    logExit()
 }
 
 int
@@ -372,20 +417,24 @@ Stub::setUsername (const char *pcUsername)
 void
 Stub::setProxyUsername (const char *pcProxyUsername)
 {
+  	logEntryEngine("Stub::setProxyUsername")
+
     if (m_proxyUsername)
     {
         delete[]m_proxyUsername;
         m_proxyUsername = NULL;
     }
 
-    if (!pcProxyUsername)
-        return;
-
-    m_proxyUsername = new char[strlen (pcProxyUsername) + 1];
-    strcpy (m_proxyUsername, pcProxyUsername);
-
-    if (m_proxyPassword)
-        setProxyAuthorizationHeader ();
+    if (pcProxyUsername)
+    {
+	    m_proxyUsername = new char[strlen (pcProxyUsername) + 1];
+	    strcpy (m_proxyUsername, pcProxyUsername);
+	
+	    if (m_proxyPassword)
+	        setProxyAuthorizationHeader ();
+    }
+    
+    logExit()
 }
 
 void
@@ -404,14 +453,14 @@ Stub::setProxyPassword (const char *pcProxyPassword)
         m_proxyPassword = NULL;
     }
 
-    if (!pcProxyPassword)
-        return;
-
-    m_proxyPassword = new char[strlen (pcProxyPassword) + 1];
-    strcpy (m_proxyPassword, pcProxyPassword);
-
-    if (m_proxyUsername)
-        setProxyAuthorizationHeader ();
+    if (pcProxyPassword)
+    {
+	    m_proxyPassword = new char[strlen (pcProxyPassword) + 1];
+	    strcpy (m_proxyPassword, pcProxyPassword);
+	
+	    if (m_proxyUsername)
+	        setProxyAuthorizationHeader ();
+    }
 }
 
 
@@ -432,6 +481,8 @@ Stub::getProxyPassword ()
 void 
 Stub::setProxyAuthorizationHeader ()
 {
+  	logEntryEngine("Stub::setProxyAuthorizationHeader")
+
     char* cpUsernamePassword = new char[strlen( m_proxyUsername) + strlen( m_proxyPassword ) + 2];
     strcpy( cpUsernamePassword, m_proxyUsername );
     strcat( cpUsernamePassword, ":" );
@@ -447,26 +498,38 @@ Stub::setProxyAuthorizationHeader ()
     this->setTransportProperty( "Proxy-Authorization", strValue.c_str());
     delete [] cpUsernamePassword;
     delete [] base64Value;
+  	
+    logExit()
 }
 
 ISoapAttachment* Stub::createSoapAttachment()
 {
+  	logEntryEngine("Stub::createSoapAttachment")
+
     return m_pCall->createSoapAttachment();
+  	
+    logExit()
 }
 
 /*Methods for supporting SecureChannel*/
 void Stub::SetSecure( char * pszArguments, ...)
 {
+  	logEntryEngine("Stub::SetSecure")
+
     va_list args;
     
     va_start( args, pszArguments);    
     SetSecure(pszArguments, args);
     va_end( args);
+  	
+    logExit()
 }
 
 /*Methods for supporting SecureChannel*/
 void Stub::SetSecure( char * pszArguments, va_list args)
 {
+  	logEntryEngine("Stub::SetSecure")
+
     int iArgIndex = 0;
     char * pszArg = pszArguments;
     
@@ -483,6 +546,8 @@ void Stub::SetSecure( char * pszArguments, va_list args)
         if( iArgIndex == 6)
             m_sArguments[iArgIndex] = "false";
     }
+  	
+    logExit()
 }
 
 void Stub::includeSecure()
@@ -493,11 +558,19 @@ void Stub::includeSecure()
 void 
 Stub::checkForExtraneousElements ()
 {	 
+  	logEntryEngine("Stub::checkForExtraneousElements")
+
 	IWrapperSoapDeSerializer *pDeSerializer = m_pCall->getSOAPDeSerializer();
-    if (!pDeSerializer)
-    	return;
-    	
-	const char *peekedElementName = pDeSerializer->peekNextElementName();
-	if (0x00 != *peekedElementName)
-		throw UnknownElementException(peekedElementName);
+    if (pDeSerializer)
+    {
+		const char *peekedElementName = pDeSerializer->peekNextElementName();
+		if (0x00 != *peekedElementName)
+		{
+	    	logThrowExceptionWithData("UnknownElementException", peekedElementName)
+
+			throw UnknownElementException(peekedElementName);
+		}
+    }
+    
+    logExit()
 }

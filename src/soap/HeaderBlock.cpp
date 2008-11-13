@@ -48,24 +48,49 @@ AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
-HeaderBlock::HeaderBlock()
+HeaderBlock::
+HeaderBlock()
 {
+	logEntryEngine("HeaderBlock::HeaderBlock")
+
     iNoOFChildren = 0;
 	m_sPrefix = "";
+	
+	logExit()
 }
 
-HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri)
+HeaderBlock::
+HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri)
 {
+	logEntryEngine("HeaderBlock::HeaderBlock")
+
     iNoOFChildren = 0;
     m_localname = pachLocalName;
     m_uri = pachUri;
     m_sPrefix = "";
+
+	logExit()
 }
 
-HeaderBlock::HeaderBlock(const HeaderBlock& rCopy):
+HeaderBlock::
+HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix)
+{
+	logEntryEngine("HeaderBlock::HeaderBlock")
+
+	iNoOFChildren = 0;
+    m_localname = pachLocalName;
+    m_uri = pachUri;
+    m_sPrefix = pachPrefix;
+
+	logExit()
+}
+
+HeaderBlock::
+HeaderBlock(const HeaderBlock& rCopy):
 IHeaderBlock(rCopy), iNoOFChildren(rCopy.iNoOFChildren), m_localname(rCopy.m_localname),
 m_sPrefix(rCopy.m_sPrefix), m_uri(rCopy.m_uri)  
 {
+	logEntryEngine("HeaderBlock::HeaderBlock")
 
     list<BasicNode*>::const_iterator itCurrChild= rCopy.m_children.begin();
     while(itCurrChild != rCopy.m_children.end())
@@ -90,15 +115,20 @@ m_sPrefix(rCopy.m_sPrefix), m_uri(rCopy.m_uri)
         itCurrNamespace++;        
     }
 	*/
+	logExit()
 }
 
-IHeaderBlock* HeaderBlock::clone()
+IHeaderBlock* HeaderBlock::
+clone()
 {
     return new HeaderBlock(*this);
 }
 
-HeaderBlock::~HeaderBlock()
+HeaderBlock::
+~HeaderBlock()
 {
+	logEntryEngine("HeaderBlock::~HeaderBlock")
+
     // Clear the Attributes
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
     while(itCurrAttribute != m_attributes.end())
@@ -125,72 +155,86 @@ HeaderBlock::~HeaderBlock()
         itCurrChild++;        
     }
     m_children.clear();
+    
+	logExit()
 }
 
-int HeaderBlock::setLocalName(const AxisChar* localname)
+int HeaderBlock::
+setLocalName(const AxisChar* localname)
 {
-	if(localname==NULL)
+	logEntryEngine("HeaderBlock::setLocalName")
+
+	int Status = AXIS_FAIL;
+	
+	if(localname)
 	{
-		return AXIS_FAIL;
+	    m_localname=localname;
+	    Status = AXIS_SUCCESS;
 	}
-    m_localname=localname;
-    return AXIS_SUCCESS;
+	
+	logExitWithReturnCode(Status)
+	
+    return Status;
 }
 
-const AxisChar * HeaderBlock::getLocalName()
+const AxisChar * HeaderBlock::
+getLocalName()
 {
     return m_localname.c_str();
 }
-/*
- *  Commented by Susantha - 21/06/2004
- * The prefix should be decided by the Serializer at runtime
- *
- * Uncommented by Mark Whitlock - 24/8/04 after discussion 
- * on the mailing list agreed to add back in this method.
- * Jira issue AXISCPP-135
- */
-int HeaderBlock::setPrefix(const AxisChar* prefix)
+
+int HeaderBlock::
+setPrefix(const AxisChar* prefix)
 {
+	logEntryEngine("HeaderBlock::setPrefix")
+
 	if(prefix)
-	{
 	    m_sPrefix= prefix;
-	}
 	else
-	{
 		m_sPrefix="";
-	}
+
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-int HeaderBlock::setURI(const AxisChar* uri)
+int HeaderBlock::
+setURI(const AxisChar* uri)
 {
+	logEntryEngine("HeaderBlock::setURI")
+
 	if(uri)
-	{
 	    m_uri= uri;
-	}
 	else
-	{
 		m_uri="";
-	}
+	
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-int HeaderBlock::addAttribute(Attribute* pAttr)
+int HeaderBlock::
+addAttribute(Attribute* pAttr)
 {
+	logEntryEngine("HeaderBlock::addAttribute")
+
+	int Status = AXIS_FAIL;
     if (pAttr)
     {
         m_attributes.push_back(pAttr);
-        return AXIS_SUCCESS;
+        Status = AXIS_SUCCESS;
     }
-    else
-    {
-    	return AXIS_FAIL;
-    }
+
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
-int HeaderBlock::serialize(SoapSerializer& pSZ)
+int HeaderBlock::
+serialize(SoapSerializer& pSZ)
 {
-	
+	logEntryEngine("HeaderBlock::serialize")
+
     /*
      *In the code we don't look whether the m_sPrefix is available or
      *    not. Instead directly insert it. The reason is that the SOAP
@@ -205,25 +249,18 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 
     do
     {
-        /*
-         * TO DO: ReWrite the following logic to deal with name spaces
-         */
-
+        // TO DO: ReWrite the following logic to deal with name spaces
         pSZ.serialize("<", NULL);
 
         if(m_sPrefix.length() == 0)
         {
-            m_sPrefix = pSZ.getNamespacePrefix(m_uri.c_str(),
-                blnIsNewNamespace);
+            m_sPrefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
             if (blnIsNewNamespace)
-            {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
-            }
-        } else {
-			/* The use has specified his/her own prefix. Therefore this is 
-			taken as a new namespace and will be declared as a namespace 
-			declaration.
-			*/
+        } 
+        else 
+        {
+			//  new namespace and will be declared as a namespace declaration.
 			blnIsNewNamespace = true;
 			/* Adding to the Serializers namespace list b'cas the child 
 			elements of this HeaderBlock might use this namespace, so that they
@@ -239,52 +276,48 @@ int HeaderBlock::serialize(SoapSerializer& pSZ)
 
         pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(), NULL);
 		
-		if (blnIsNewNamespace) {
+		if (blnIsNewNamespace) 
 			pSZ.serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
-		}
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
 
         iStatus= serializeNamespaceDecl(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
         
         pSZ.serialize(">", NULL);
 
         iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
 
-        pSZ.serialize("</", m_sPrefix.c_str(), ":", m_localname.c_str(), ">",
-            NULL);
+        pSZ.serialize("</", m_sPrefix.c_str(), ":", m_localname.c_str(), ">", NULL);
 
-        /*
-         * Removing the namespace list of this headerblock from the stack.
-         */
-        list<AxisChar*>::iterator itCurrentNamespace = 
-            lstTmpNameSpaceStack.begin();
+        // Removing the namespace list of this headerblock from the stack.
+        list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
         while (itCurrentNamespace != lstTmpNameSpaceStack.end())
         {
             pSZ.removeNamespacePrefix(*itCurrentNamespace);
             itCurrentNamespace++;
         }
             
-    } while(0);
+    } 
+    while(0);
+    
 	m_sPrefix = "";
+	
+	logExitWithReturnCode(iStatus)
+
     return iStatus;
 }
 
-int HeaderBlock::attrSerialize(SoapSerializer& pSZ,
-                               list<AxisChar*>& lstTmpNameSpaceStack)
+int HeaderBlock::
+attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
+	logEntryEngine("HeaderBlock::attrSerialize")
+
     int iStatus= AXIS_SUCCESS;
 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -317,126 +350,137 @@ int HeaderBlock::attrSerialize(SoapSerializer& pSZ,
         itCurrAttribute++;
     }
 
+	logExitWithReturnCode(iStatus)
+
     return iStatus;
 }
 
-bool HeaderBlock::isSerializable()
+bool HeaderBlock::
+isSerializable()
 {
+	logEntryEngine("HeaderBlock::isSerializable")
+
     bool bStatus= true;
 
     if(m_localname.length() == 0)
-    {
         bStatus= false;
-    }
     else
     {
         if(m_sPrefix.length() == 0)
         {
             if(m_uri.length() != 0)
-            {
                 bStatus= false;
-            }
         }
         else
         {
             if(m_uri.length() == 0)
-            {
                 bStatus= false;
-            }
         }
     }
+    
+    logExitWithBoolean(bStatus)
 
     return bStatus;
 }
 
-int HeaderBlock::addChild(BasicNode *pBasicNode)
+int HeaderBlock::
+addChild(BasicNode *pBasicNode)
 {
+	logEntryEngine("HeaderBlock::addChild")
+
+    int iStatus = AXIS_FAIL;
+
     if (pBasicNode)
     {
         m_children.push_back(pBasicNode);
         iNoOFChildren++;
 
-        return AXIS_SUCCESS;
+        iStatus = AXIS_SUCCESS;
     }
-    else
-    {
-        return AXIS_FAIL;
-    }
+
+	logExitWithReturnCode(iStatus)
+
+    return iStatus;
 }
 
-int HeaderBlock::serializeChildren(SoapSerializer& pSZ,
-                                   list<AxisChar *>& lstTmpNameSpaceStack)
+int HeaderBlock::
+serializeChildren(SoapSerializer& pSZ, list<AxisChar *>& lstTmpNameSpaceStack)
 {
+	logEntryEngine("HeaderBlock::serializeChildren")
+
     int iStatus = AXIS_SUCCESS;
 
-// SOAP serialiser does not have an == operator so can't check it
+	// SOAP serialiser does not have an == operator so can't check it
     list<BasicNode*>::iterator itCurrBasicNode = m_children.begin();
 
     while( itCurrBasicNode != m_children.end() && iStatus == AXIS_SUCCESS)
     {
         if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE)
         {
-// Processing for ELEMENT_NODE types
+        	// Processing for ELEMENT_NODE types
             iStatus = (*itCurrBasicNode)->serialize( pSZ, lstTmpNameSpaceStack);
         }
         else
         {
-// Processing for CHARACTER_NODE types
+        	// Processing for CHARACTER_NODE types
             iStatus = (*itCurrBasicNode)->serialize( pSZ);
         }
 
         itCurrBasicNode++;
     }
 
+	logExitWithReturnCode(iStatus)
+
     return iStatus;
 }
 
-INamespace* HeaderBlock::createNamespaceDecl( const AxisChar * pPrefix, const AxisChar * pURI) 
+INamespace* HeaderBlock::
+createNamespaceDecl( const AxisChar * pPrefix, const AxisChar * pURI) 
 {
-// Check that the prefix and uri are valid pointers and that the string is not
-// empty.
-	if( pPrefix != NULL && strlen( pPrefix) > 0 &&
-		pURI != NULL && strlen( pURI) > 0)
-	{
+	logEntryEngine("HeaderBlock::createNamespaceDecl")
+	
+    INamespace* returnPtr = NULL;
 
-// Iterate through the namespaces checking that the prefix does not already
-// exist.
-		bool						bNameFound = false;
+	// Check that the prefix and uri are valid pointers and that the string is not empty.
+	if( pPrefix != NULL && strlen( pPrefix) > 0 && pURI != NULL && strlen( pURI) > 0)
+	{
+		// Iterate through the namespaces checking that the prefix does not already exist.
+		bool bNameFound = false;
 		list<Namespace*>::iterator	itCurrNamespaceDecl = m_namespaceDecls.begin();
 
 		while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bNameFound)
 		{
 			if( !(bNameFound = !strcmp( (*itCurrNamespaceDecl)->getPrefix(), pPrefix)))
-			{
 				itCurrNamespaceDecl++;
-			}
 		}    
 
-// If the prefix is found in the declared namespace list, then update the uri
-// for the prefix and return a pointer to that namespace.
+		// If the prefix is found in the declared namespace list, then update the uri
+		// for the prefix and return a pointer to that namespace.
+		// If the prefix was not found, then create a new namespace for the prefix/uri
+		// pair and return the pointer to the new namespace.
 		if( bNameFound)
 		{
 			(*itCurrNamespaceDecl)->setURI( pURI);
-
-			return (INamespace *) *itCurrNamespaceDecl;
+			returnPtr = (INamespace *) *itCurrNamespaceDecl;
 		}
-
-// If the prefix was not found, then create a new namespace for the prefix/uri
-// pair and return the pointer to the new namespace.
-		Namespace *	pNamespace = new Namespace( pPrefix, pURI);
-
-		m_namespaceDecls.push_back( pNamespace);
-
-		return (INamespace *) pNamespace; 
+		else
+		{
+			Namespace *	pNamespace = new Namespace( pPrefix, pURI);
+			m_namespaceDecls.push_back( pNamespace);
+			returnPtr = (INamespace *) pNamespace; 
+		}
 	}
-	else
-	{
-		return NULL;
-	}
+	
+    logExitWithPointer(returnPtr)
+    
+    return returnPtr;
 }
 
-int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack)
+int HeaderBlock::
+serializeNamespaceDecl(SoapSerializer &pSZ, std::list<AxisChar*>& lstTmpNameSpaceStack)
 {
+	logEntryEngine("HeaderBlock::serializeNamespaceDecl")
+
     list<Namespace*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
     while(itCurrNamespaceDecl != m_namespaceDecls.end())
@@ -445,33 +489,41 @@ int HeaderBlock::serializeNamespaceDecl(SoapSerializer &pSZ, std::list<AxisChar*
         itCurrNamespaceDecl++;        
     }    
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-BasicNode* HeaderBlock::getLastChild()
+BasicNode* HeaderBlock::
+getLastChild()
 {
+	logEntryEngine("HeaderBlock::getLastChild")
+
+    BasicNode* returnPtr = NULL;
+    
     list<BasicNode*>::reverse_iterator ritCurrBasicNode= m_children.rbegin();
 
-    if (ritCurrBasicNode != m_children.rend())
-    {        
-        return (*ritCurrBasicNode);
-    }    
+    if (ritCurrBasicNode != m_children.rend())       
+    	returnPtr = *ritCurrBasicNode;    
 
-    return NULL;
+    logExitWithPointer(returnPtr)
+
+    return returnPtr;
 }
 
-BasicNode* HeaderBlock::getChild(int iChildPosition)
+BasicNode* HeaderBlock::
+getChild(int iChildPosition)
 {
+	logEntryEngine("HeaderBlock::getChild")
+
+    BasicNode* returnPtr = NULL;
+
     if ( (iChildPosition<=0) || (iChildPosition > iNoOFChildren) )
-    {
-        return NULL;
-    }
+    	returnPtr = NULL;
     else
     {
         list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
-        /* The following is done since the previous line already takes the
-         * iterator one step forward
-         */
+        // following is done since the previous line already takes the iterator one step forward
         iChildPosition--;
 
         /* Takes the iterator to the relavent positon */
@@ -481,33 +533,33 @@ BasicNode* HeaderBlock::getChild(int iChildPosition)
         }
 
         if (itCurrBasicNode != m_children.end())
-        {
-            return *itCurrBasicNode;
-        }
-        else
-        {
-            return NULL;
-        }
+        	returnPtr = *itCurrBasicNode;
     }
+    
+    logExitWithPointer(returnPtr)
+
+    return returnPtr;
 }
 
-BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE)
+BasicNode* HeaderBlock::
+createChild(NODE_TYPE eNODE_TYPE)
 {
+	logEntryEngine("HeaderBlock::createChild")
+
     BasicNode* pBasicNode = NULL;
 
     if(eNODE_TYPE==CHARACTER_NODE)
-    {
         pBasicNode = new CharacterElement();
-    }
     else if (eNODE_TYPE==ELEMENT_NODE)
-    {
         pBasicNode = new ComplexElement();
-    }
+
+    logExitWithPointer(pBasicNode)
 
     return pBasicNode;
 }
 
-bool HeaderBlock::operator ==( const HeaderBlock &objHeaderBlock)
+bool HeaderBlock::
+operator ==( const HeaderBlock &objHeaderBlock)
 {
     /*
      * TODO : the logic
@@ -538,30 +590,28 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
                                          const AxisChar * pURI,
                                          const AxisChar * pValue)
 {
-// Check that the contents of the passed parameters are valid.
+	logEntryEngine("HeaderBlock::createAttribute")
+
+    // Check that the contents of the passed parameters are valid.
 	if( NULL == pLocalName || 0 == strlen( pLocalName))
 	{
+	    logExitWithPointer(NULL)
+
 		return NULL;
 	}
 
 	if( !pPrefix)
-	{
 		pPrefix = "";
-	}
 
 	if( !pURI)
-	{
 		pURI = "";
-	}
 
 	if( !pValue)
-	{
 		pValue = "";
-	}
 
-// Check that the local name and prefix have not already been defined.  If
-// they have, then return NULL indicating that the prefix/localname pair have
-// already been defined.
+	// Check that the local name and prefix have not already been defined.  If
+	// they have, then return NULL indicating that the prefix/localname pair have
+	// already been defined.
 	list<Attribute*>::iterator	itCurrAttribute= m_attributes.begin();
 
 	while( itCurrAttribute != m_attributes.end())
@@ -569,6 +619,8 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 		if( (strcmp( (*itCurrAttribute)->getLocalName(), pLocalName) == 0) && 
 			(strcmp( (*itCurrAttribute)->getPrefix(), pPrefix) == 0))
 		{
+		    logExitWithPointer(NULL)
+
 			return NULL;
 		}
 		else
@@ -577,11 +629,11 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 		}
 	}    
 
-// Check that the prefix has not already been defined in the namespace
-// declarations.  If it has, then return NULL indicating that the
-// prefix/localname pair has already been defined and 'copy down' the
-// namespace decl into the attribute list as this will help in the
-// serialisation.
+	// Check that the prefix has not already been defined in the namespace
+	// declarations.  If it has, then return NULL indicating that the
+	// prefix/localname pair has already been defined and 'copy down' the
+	// namespace decl into the attribute list as this will help in the
+	// serialisation.
 	list<Namespace*>::iterator	itCurrNamespaceDecls = m_namespaceDecls.begin();
 
 	while( itCurrNamespaceDecls != m_namespaceDecls.end())
@@ -595,6 +647,8 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 
 			m_attributes.push_back( pAttribute);
 
+		    logExitWithPointer(pAttribute)
+
 			return pAttribute;
 		}
 		else
@@ -603,19 +657,22 @@ IAttribute* HeaderBlock::createAttribute(const AxisChar * pLocalName,
 		}
 	}    
 
-// If the prefix/localname pair have not previously been defined, then create
-// and return the attribute.
+	// If the prefix/localname pair have not previously been defined, then create
+	// and return the attribute.
 	Attribute *	pAttribute = new Attribute( m_attributes, pLocalName, pPrefix, pURI, pValue);
 
 	m_attributes.push_back( pAttribute);
 
+    logExitWithPointer(pAttribute)
+    
 	return pAttribute;
 }
 
-IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE 
-                                           eStdAttrType, 
-                                           SOAP_VERSION eSOAP_VERSION)
+IAttribute* HeaderBlock::
+createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE eStdAttrType, SOAP_VERSION eSOAP_VERSION)
 {
+	logEntryEngine("HeaderBlock::createStdAttribute")
+
     Attribute* pAttribute = NULL;
     bool blnStatus = true;
 
@@ -693,44 +750,53 @@ IAttribute* HeaderBlock::createStdAttribute(HEADER_BLOCK_STD_ATTR_TYPE
 
     if (blnStatus)
     {
-        // Samisa: AXISCPP-452 - got to check for duplicate attributes
+        // got to check for duplicate attributes
         list<Attribute*>::iterator itAttr = m_attributes.begin();
         while (itAttr != m_attributes.end())
         {
                 Attribute* pCurrentAttribute = *itAttr;
                 if (!strcmp(pCurrentAttribute->getLocalName(),pAttribute->getLocalName() ) &&
                         !strcmp(pCurrentAttribute->getPrefix(), pAttribute->getPrefix() ) )
-                        {
-                            // we have the attribute set already, so only change the value
-                            pCurrentAttribute->setValue( pAttribute->getValue() );
-                            delete pAttribute;
-                            return pCurrentAttribute; // return the currently set attributes pointer
-                                                      // job done
-                        }
+                {
+                    // we have the attribute set already, so only change the value
+                    pCurrentAttribute->setValue( pAttribute->getValue() );
+                    delete pAttribute;
+                    
+                    logExitWithPointer(pCurrentAttribute)
+
+                    return pCurrentAttribute; 
+                }
+                
                 itAttr++;
         }
 
         // we do not have the attribute set already, hence add it
         m_attributes.push_back(pAttribute);
+        
+        logExitWithPointer(pAttribute)
+        
         return pAttribute;
     }
     else
     {
+        logExitWithPointer(NULL)
+
         return NULL;
     }
 }
 
-const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
-                                         const AxisChar *prefix)
+const AxisChar* HeaderBlock::
+getAttributeValue(const AxisChar *localname, const AxisChar *prefix)
 {
+	logEntryEngine("HeaderBlock::getAttributeValue")
+
+    const AxisChar* returnValue = NULL;
+
      if(!localname)
-     {
         localname="";
-     }
+
      if(!prefix)
-     {
         prefix="";
-     }
  
    	list<Attribute*>::iterator itAttr = m_attributes.begin();
  	while (itAttr != m_attributes.end()) 
@@ -739,16 +805,24 @@ const AxisChar* HeaderBlock::getAttributeValue(const AxisChar *localname,
  		if (!strcmp(pAttribute->getLocalName(),localname) &&
  			!strcmp(pAttribute->getPrefix(),prefix)) 
  			{
- 				return pAttribute->getValue();
+ 				returnValue = pAttribute->getValue();
+ 				break;
  			}
  		itAttr++;
  	}
-    return NULL;
+ 	
+    logExitWithString(returnValue)
+
+    return returnValue;
 }
  
-const AxisChar * HeaderBlock::getAttributeUri( const AxisChar * localname,
-											   const AxisChar * prefix)
+const AxisChar * HeaderBlock::
+getAttributeUri( const AxisChar * localname,  const AxisChar * prefix)
 {
+	logEntryEngine("HeaderBlock::getAttributeUri")
+
+    const AxisChar* returnValue = NULL;
+	
 	list<Attribute*>::iterator itAttr = m_attributes.begin();
 
 	while( itAttr != m_attributes.end()) 
@@ -758,120 +832,100 @@ const AxisChar * HeaderBlock::getAttributeUri( const AxisChar * localname,
 		if( !strcmp( pAttribute->getLocalName(),localname) &&
 			!strcmp( pAttribute->getPrefix(),prefix)) 
 		{
-			return pAttribute->getURI();
+			returnValue = pAttribute->getURI();
+			break;
 		}
 		
-		if( strlen( localname) == 0 &&
-			!strcmp( pAttribute->getPrefix(), prefix)) 
+		if( strlen( localname) == 0 && !strcmp( pAttribute->getPrefix(), prefix)) 
 		{
-			return pAttribute->getURI();
+			returnValue = pAttribute->getURI();
+			break;
 		}
 
 		itAttr++;
 	}
 
-	return NULL;
+    logExitWithString(returnValue)
+
+    return returnValue;
 }
 
-BasicNode* HeaderBlock::createImmediateChild(NODE_TYPE eNODE_TYPE,
-                                             AxisChar *pachLocalName,
-                                             AxisChar *pachPrefix,
-                                             AxisChar *pachUri,
-                                             AxisChar* pachValue)
+BasicNode* HeaderBlock::
+createImmediateChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri, AxisChar* pachValue)
 {
+	logEntryEngine("HeaderBlock::createImmediateChild")
+
     BasicNode* pBasicNode = NULL;
     if(!pachLocalName)
-    {
      pachLocalName="";
-    }
-    if(!pachPrefix)
-    {
-     pachPrefix="";
-    }
-    if(!pachUri)
-    {
-     pachUri="";
-    }
-    if(!pachValue)
-    {
-     pachValue="";
-    }
-    
 
+    if(!pachPrefix)
+     pachPrefix="";
+
+    if(!pachUri)
+     pachUri="";
+
+    if(!pachValue)
+     pachValue="";
+    
     do
     {
-
         if(eNODE_TYPE==CHARACTER_NODE)
-        {
             pBasicNode = new CharacterElement(pachValue);
-        }
         else if (eNODE_TYPE==ELEMENT_NODE)
         {
             if ( (pachLocalName) && (pachUri) )
-            {
-                pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
-                    pachUri);
-            }
+                pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
             else
-            {
                 break;
-            }
         }
         else
-        {
             break;
-        }
 
         if (pBasicNode)
         {
             m_children.push_back(pBasicNode);
             iNoOFChildren++;
         }
-    } while (0);
+    } 
+    while (0);
 
+    logExitWithPointer(pBasicNode)
+    
     return pBasicNode;
 }
 
-BasicNode* HeaderBlock::createChild(NODE_TYPE eNODE_TYPE,
-                                    AxisChar *pachLocalName,
-                                    AxisChar *pachPrefix, 
-                                    AxisChar *pachUri,
-                                    AxisChar *pachValue)
+BasicNode* HeaderBlock::
+createChild(NODE_TYPE eNODE_TYPE, AxisChar *pachLocalName,
+            AxisChar *pachPrefix, AxisChar *pachUri, AxisChar *pachValue)
 {
+	logEntryEngine("HeaderBlock::createChild")
+
     BasicNode* pBasicNode = NULL;
     if(!pachLocalName)
-    {
      pachLocalName="";
-    }
+
     if(!pachPrefix)
-    {
      pachPrefix="";
-    }
+
     if(!pachUri)
-    {
      pachUri="";
-    }
+    
     if(!pachValue)
-    {
      pachValue="";
-    }
 
     do
     {
         if(eNODE_TYPE==CHARACTER_NODE)
-        {
             pBasicNode = new CharacterElement(pachValue);
-        }
         else if (eNODE_TYPE==ELEMENT_NODE)
-        {
-            pBasicNode = new ComplexElement(pachLocalName, pachPrefix,
-                pachUri);
-        }
+            pBasicNode = new ComplexElement(pachLocalName, pachPrefix, pachUri);
         else
-        {
             break;
-        }
-    } while (0);
+    } 
+    while (0);
+
+    logExitWithPointer(pBasicNode)
 
     return pBasicNode;
 }
@@ -881,24 +935,25 @@ int HeaderBlock::getNoOfChildren()
     return iNoOFChildren;
 }
 
-BasicNode* HeaderBlock::getFirstChild()
+BasicNode* HeaderBlock::
+getFirstChild()
 {
+	logEntryEngine("HeaderBlock::getFirstChild")
+
+    BasicNode* returnValue = NULL;
+	
     list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
     
     if (itCurrBasicNode != m_children.end())
     {        
-        return (*itCurrBasicNode);
+    	returnValue = (*itCurrBasicNode);
     }
 
-    return NULL;
+    logExitWithPointer(returnValue)
+
+    return returnValue;
 }
 
-HeaderBlock::HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix)
-{
-	iNoOFChildren = 0;
-    m_localname = pachLocalName;
-    m_uri = pachUri;
-    m_sPrefix = pachPrefix;
-}
+
 
 AXIS_CPP_NAMESPACE_END

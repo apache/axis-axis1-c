@@ -29,6 +29,8 @@
 HTTPChannel::
 HTTPChannel()
 {
+    logEntryTransport("HTTPChannel::HTTPChannel")
+
     m_LastError = "No Errors";
 
     m_Sock = INVALID_SOCKET;
@@ -47,8 +49,12 @@ HTTPChannel()
 
     if( !StartSockets())
     {
+        logThrowException("HTTPTransportException - SERVER_TRANSPORT_CHANNEL_INIT_ERROR")
+
         throw HTTPTransportException( SERVER_TRANSPORT_CHANNEL_INIT_ERROR);
     }
+    
+    logExit()
 }
 
 /**
@@ -61,8 +67,12 @@ HTTPChannel()
 HTTPChannel::
 ~HTTPChannel()
 {
+	logEntryTransport("HTTPChannel::~HTTPChannel")
+
     CloseChannel();
     StopSockets();
+    
+    logExit()
 }
 
 /**
@@ -90,7 +100,11 @@ getURL()
 void HTTPChannel::
 setURL( const char * cpURL)
 {
+	logEntryTransport("HTTPChannel::setURL")
+
     m_URL.setURL( cpURL);
+	
+	logExit()
 }
 
 /**
@@ -122,6 +136,8 @@ getURLObject()
 bool HTTPChannel::
 open() throw (HTTPTransportException&)
 {
+	logEntryTransport("HTTPChannel::open")
+
     bool    bSuccess = (bool) AXIS_FAIL;
 
     CloseChannel();
@@ -130,9 +146,13 @@ open() throw (HTTPTransportException&)
 
     if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
     {
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CONNECT_ERROR", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, m_LastError.c_str());
     }
 
+    logExit()
+    
     return bSuccess;
 }
 
@@ -148,7 +168,12 @@ open() throw (HTTPTransportException&)
 bool HTTPChannel::
 close()
 {
+	logEntryTransport("HTTPChannel::close")
+
     CloseChannel();
+	
+	logExit()
+	
     return AXIS_SUCCESS;
 }
 
@@ -184,9 +209,14 @@ GetLastErrorMsg()
 int HTTPChannel::
 readBytes(char *buf, int bufLen)
 {
+	logEntryTransport("HTTPChannel::readBytes")
+
     if (INVALID_SOCKET == m_Sock)
     {
         m_LastError = "Unable to perform read operation.";
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_INVALID_SOCKET", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
@@ -201,12 +231,17 @@ readBytes(char *buf, int bufLen)
         // Handle timeout outcome
         if( iTimeoutStatus < 0)
         {
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_TIMEOUT_EXCEPTION", m_LastError.c_str())
+
             throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, m_LastError.c_str());
         }
     
         if( iTimeoutStatus == 0)
         {
             m_LastError = "Read operation timed-out while waiting for data.";
+            
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_TIMEOUT_EXPIRED", m_LastError.c_str())
+
             throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, m_LastError.c_str() );
         }
     }
@@ -221,15 +256,23 @@ readBytes(char *buf, int bufLen)
 
         if( !bNoExceptionOnForceClose)
         {
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_INPUT_STREAMING_ERROR", m_LastError.c_str())
+
             throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
         }
     }
     else if ( 0 == nByteRecv )
     {
+        logDebug("Read-side of socket has been closed.")
+
         // read-side of socket is closed.
     }
     else if( nByteRecv)
         buf[nByteRecv] = '\0';
+
+    logDebugBuffer(buf, nByteRecv)
+
+	logExitWithInteger(nByteRecv)
 
     return nByteRecv;
 }
@@ -248,9 +291,16 @@ readBytes(char *buf, int bufLen)
 int HTTPChannel::
 writeBytes(const char *buf, int numBytes)
 {
+	logEntryTransport("HTTPChannel::writeBytes")
+
+    logDebugBuffer(buf, numBytes)
+
     if( INVALID_SOCKET == m_Sock)
     {
         m_LastError = "No valid socket to perform write operation.";
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_INVALID_SOCKET", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
     }
 
@@ -268,8 +318,12 @@ writeBytes(const char *buf, int numBytes)
         // Close the channel and throw an exception.
         CloseChannel();
 
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
     }
+
+	logExitWithInteger(nByteSent)
 
     return nByteSent;
 }
@@ -285,7 +339,11 @@ writeBytes(const char *buf, int numBytes)
 void HTTPChannel::
 setTimeout( long lSeconds)
 {
+	logEntryTransport("HTTPChannel::setTimeout")
+
     m_lTimeoutSeconds = lSeconds;
+	
+	logExit()
 }
 
 /**
@@ -368,9 +426,13 @@ getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 void HTTPChannel::
 setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 {
+	logEntryTransport("HTTPChannel::setProxy")
+
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
+    
+    logExit()
 }
 
 // +--------------------------------------------------------------------------+
@@ -390,6 +452,8 @@ setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 bool HTTPChannel::
 OpenChannel()
 {
+	logEntryTransport("HTTPChannel::OpenChannel")
+
     // This method is common to all channel implementations
     bool    bSuccess = (bool) AXIS_FAIL;
 
@@ -422,6 +486,9 @@ OpenChannel()
     if( getaddrinfo( pszHost, szPort, &aiHints, &paiAddrInfo0))
     {
         m_LastError = "Unable to get address information.";
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CREATE_ERROR", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
 
@@ -449,6 +516,8 @@ OpenChannel()
             
             m_LastError = fullMessage;
 
+            logThrowExceptionWithData("HTTPTransportException - CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED", m_LastError.c_str())
+
             throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED, m_LastError.c_str());
         }
 
@@ -462,6 +531,9 @@ OpenChannel()
     {
         ReportError();        
         CloseChannel();
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CREATE_ERROR", m_LastError.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
 
@@ -471,6 +543,9 @@ OpenChannel()
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
     {
         ReportError();
+        
+    	logExitWithBoolean(bSuccess)
+
         return bSuccess;
     }
 
@@ -487,6 +562,9 @@ OpenChannel()
     {
         ReportError();        
         CloseChannel();
+        
+    	logExitWithBoolean(bSuccess)
+
         return bSuccess;
     }
 
@@ -548,6 +626,8 @@ OpenChannel()
 
         m_LastError = fullMessage;
 
+    	logExitWithBoolean(bSuccess)
+
         return bSuccess;
     }
     else
@@ -568,6 +648,8 @@ OpenChannel()
     int one = 1;
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *) &one, sizeof( int));
 
+	logExitWithBoolean(bSuccess)
+
     return bSuccess;
 }
 
@@ -583,6 +665,8 @@ OpenChannel()
 void HTTPChannel::
 CloseChannel()
 {
+	logEntryTransport("HTTPChannel::CloseChannel")
+
     if( INVALID_SOCKET != m_Sock)
     {
 #ifdef WIN32
@@ -592,6 +676,8 @@ CloseChannel()
 #endif
         m_Sock = INVALID_SOCKET;
     }
+	
+	logExit()
 }
 
 /**
@@ -680,6 +766,8 @@ StopSockets()
 int HTTPChannel::
 applyTimeout()
 {
+	logEntryTransport("HTTPChannel::applyTimeout")
+
     fd_set          set;
     struct timeval  timeout;
 
@@ -697,6 +785,8 @@ applyTimeout()
     if (rc < 0)
         ReportError();
         
+	logExitWithReturnCode(rc)
+
     return rc;
 }
 
@@ -713,4 +803,11 @@ void HTTPChannel::
 closeQuietly( bool bNoExceptionOnForceClose_Update)
 {
     bNoExceptionOnForceClose = bNoExceptionOnForceClose_Update;
+}
+
+void HTTPChannel::
+enableTrace(const char* logFilePath, const char *filters)
+{
+	AxisTrace::setLogFilter(filters);
+	AxisTrace::startTrace(logFilePath, false);
 }

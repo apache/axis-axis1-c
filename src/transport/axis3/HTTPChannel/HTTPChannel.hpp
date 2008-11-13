@@ -82,6 +82,8 @@ public:
     void				setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
 	bool		        reopenRequired() { return (INVALID_SOCKET == m_Sock); }
 	void				closeQuietly( bool bNoExceptionOnForceClose);
+    void                enableTrace(const char* logFilePath, const char *filters);
+
 
 protected:
 	bool				OpenChannel();

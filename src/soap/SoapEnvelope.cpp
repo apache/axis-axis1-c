@@ -37,14 +37,22 @@ AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
-SoapEnvelope::SoapEnvelope()
+SoapEnvelope::
+SoapEnvelope()
 {
+	logEntryEngine("SoapEnvelope::SoapEnvelope")
+
     m_pSoapHeader= NULL;
     m_pSoapBody= NULL;
+    
+	logExit()
 }
 
-SoapEnvelope::~SoapEnvelope()
+SoapEnvelope::
+~SoapEnvelope()
 {
+	logEntryEngine("SoapEnvelope::~SoapEnvelope")
+
     // deletion of attributes 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
@@ -68,30 +76,39 @@ SoapEnvelope::~SoapEnvelope()
     m_namespaceDecls.clear();
 
     // deletion of soap header 
-    if (m_pSoapHeader)
-    {
-        delete m_pSoapHeader;
-    }
+    delete m_pSoapHeader;
 
     // deletion of soap body 
-    if (m_pSoapBody)
-    {
-        delete m_pSoapBody;
-    }
+    delete m_pSoapBody;
+    
+	logExit()
 }
 
-void SoapEnvelope::setSoapHeader(SoapHeader* soapHeader)
+void SoapEnvelope::
+setSoapHeader(SoapHeader* soapHeader)
 {
+	logEntryEngine("SoapEnvelope::setSoapHeader")
+
     m_pSoapHeader= soapHeader;
+	
+	logExit()
 }
 
-void SoapEnvelope::setSoapBody(SoapBody* soapBody)
+void SoapEnvelope::
+setSoapBody(SoapBody* soapBody)
 {
+	logEntryEngine("SoapEnvelope::setSoapBody")
+
     m_pSoapBody= soapBody;
+	
+	logExit()
 }
 
-int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+int SoapEnvelope::
+serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {    
+	logEntryEngine("SoapEnvelope::serialize")
+
     int iStatus= AXIS_SUCCESS;
     do
     {            
@@ -106,47 +123,57 @@ int SoapEnvelope::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         {
             iStatus= m_pSoapHeader->serialize(pSZ, eSoapVersion);
             if (iStatus == AXIS_FAIL)
-            {
                 break;
-            }
         }
         if (m_pSoapBody!=NULL)
         {
             iStatus= m_pSoapBody->serialize(pSZ, eSoapVersion);
             if (iStatus == AXIS_FAIL)
-            {
                 break;
-            }
         }
         else
-        {
              iStatus = AXIS_FAIL;
-        }
                 
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_ENVELOPE],
             ">\n\n", NULL);
-    } while (0);
+    } 
+    while (0);
 
+	logExitWithReturnCode(iStatus)
+	
     return iStatus;
 }
 
-int SoapEnvelope::addAttribute(Attribute *pAttribute)
+int SoapEnvelope::
+addAttribute(Attribute *pAttribute)
 {
+	logEntryEngine("SoapEnvelope::addAttribute")
+
     m_attributes.push_back(pAttribute);
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
-int SoapEnvelope::addNamespaceDecl(Attribute *pAttribute)
+int SoapEnvelope::
+addNamespaceDecl(Attribute *pAttribute)
 {
+	logEntryEngine("SoapEnvelope::addNamespaceDecl")
+
     m_namespaceDecls.push_back(pAttribute);
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
-int SoapEnvelope::serializeAttributes(SoapSerializer& pSZ)
+int SoapEnvelope::
+serializeAttributes(SoapSerializer& pSZ)
 {    
+	logEntryEngine("SoapEnvelope::serializeAttributes")
+
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while (itCurrAttribute != m_attributes.end())
@@ -155,11 +182,15 @@ int SoapEnvelope::serializeAttributes(SoapSerializer& pSZ)
         itCurrAttribute++;        
     }    
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;    
 }
 
-int SoapEnvelope::serializeNamespaceDecl(SoapSerializer& pSZ)
+int SoapEnvelope::
+serializeNamespaceDecl(SoapSerializer& pSZ)
 {    
+	logEntryEngine("SoapEnvelope::serializeNamespaceDecl")
 
     list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
@@ -169,37 +200,60 @@ int SoapEnvelope::serializeNamespaceDecl(SoapSerializer& pSZ)
         (*itCurrNamespaceDecl)->serialize(pSZ);
         itCurrNamespaceDecl++;        
     }    
+    
+	logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
 
-int SoapEnvelope::setPrefix(const AxisChar* prefix)
+int SoapEnvelope::
+setPrefix(const AxisChar* prefix)
 {
+	logEntryEngine("SoapEnvelope::setPrefix")
+
     m_sPrefix= prefix;
+	
+	logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
 
-int SoapEnvelope::addStandardNamespaceDecl(const Attribute *pAttribute)
+int SoapEnvelope::
+addStandardNamespaceDecl(const Attribute *pAttribute)
 {
+	logEntryEngine("SoapEnvelope::addStandardNamespaceDecl")
+
     m_StandardNamespaceDecls.push_back(pAttribute);
+	
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
-void SoapEnvelope::clearStandardNamespaceDecl()
+void SoapEnvelope::
+clearStandardNamespaceDecl()
 {
+	logEntryEngine("SoapEnvelope::clearStandardNamespaceDecl")
+
     m_StandardNamespaceDecls.clear();
+	
+	logExit()
 }
 
-int SoapEnvelope::serializeStandardNamespaceDecl(SoapSerializer &pSZ)
+int SoapEnvelope::
+serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 {
-    list<const Attribute*>::iterator itCurrNamespaceDecl= 
-        m_StandardNamespaceDecls.begin();
+	logEntryEngine("SoapEnvelope::serializeStandardNamespaceDecl")
+
+    list<const Attribute*>::iterator itCurrNamespaceDecl= m_StandardNamespaceDecls.begin();
     while (itCurrNamespaceDecl != m_StandardNamespaceDecls.end()) 
     {            
         (*itCurrNamespaceDecl)->serialize(pSZ);
         itCurrNamespaceDecl++;        
     }    
+    
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 

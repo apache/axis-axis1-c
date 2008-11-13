@@ -39,12 +39,15 @@
 
 AXIS_CPP_NAMESPACE_START 
 
-AxisConfig::AxisConfig()
+AxisConfig::
+AxisConfig()
 {
     m_pcKeyArray[AXCONF_WSDDFILEPATH]       = AXCONF_WSDDFILEPATH_TAGNAME;
     m_pcKeyArray[AXCONF_LOGPATH]            = AXCONF_LOGPATH_TAGNAME;
     m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = AXCONF_CLIENTLOGPATH_TAGNAME;
     m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = AXCONF_CLIENTWSDDFILEPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_LOGFILTER]          = AXCONF_LOGFILTER_TAGNAME;
+
   
     m_pcKeyArray[AXCONF_AXISHOME]       = "\0"; // will be obtained dynamically.
     m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = AXCONF_TRANSPORTHTTP_TAGNAME;
@@ -66,15 +69,18 @@ AxisConfig::AxisConfig()
     m_pcValueArray[AXCONF_CHANNEL_HTTP]      = PLATFORM_CHANNEL_PATH;
     m_pcValueArray[AXCONF_SECUREINFO]        = PLATFORM_SECUREINFO;
     m_pcValueArray[AXCONF_AXISHOME]          = PLATFORM_DEFAULT_DEPLOY_PATH;
+    m_pcValueArray[AXCONF_LOGFILTER]         = "";
 }
 
 //AxisConfig::AxisConfig( bool bDefaultsOnly)
-AxisConfig::AxisConfig( AxisConfig * pOrgAxisConfig)
+AxisConfig::
+AxisConfig( AxisConfig * pOrgAxisConfig)
 {
     m_pcKeyArray[AXCONF_WSDDFILEPATH]       = AXCONF_WSDDFILEPATH_TAGNAME;
     m_pcKeyArray[AXCONF_LOGPATH]            = AXCONF_LOGPATH_TAGNAME;
     m_pcKeyArray[AXCONF_CLIENTLOGPATH]      = AXCONF_CLIENTLOGPATH_TAGNAME;
     m_pcKeyArray[AXCONF_CLIENTWSDDFILEPATH] = AXCONF_CLIENTWSDDFILEPATH_TAGNAME;
+    m_pcKeyArray[AXCONF_LOGFILTER]          = AXCONF_LOGFILTER_TAGNAME;
   
     m_pcKeyArray[AXCONF_AXISHOME]       = "\0"; // will be obtained dynamically.
     m_pcKeyArray[AXCONF_TRANSPORTHTTP]  = AXCONF_TRANSPORTHTTP_TAGNAME;
@@ -86,50 +92,42 @@ AxisConfig::AxisConfig( AxisConfig * pOrgAxisConfig)
     m_pcKeyArray[AXCONF_LISTENPORT]     = AXCONF_LISTENPORT_TAGNAME;
     m_pcKeyArray[AXCONF_SECUREINFO]     = AXCONF_SECUREINFO_TAGNAME;
 
-	char *	pszDefaultValues[] = {"",							// (AXCONF_WSDDFILEPATH) Server WSDD File Path
-								  PLATFORM_LOG_PATH,			// (AXCONF_LOGPATH) Server log path
-								  PLATFORM_CLIENTLOG_PATH,		// (AXCONF_CLIENTLOGPATH) Client log path
-								  "",							// (AXCONF_CLIENTWSDDFILEPATH) Client WSDD File Path
-								  PLATFORM_DEFAULT_DEPLOY_PATH,	// (AXCONF_AXISHOME) Axis home
-								  PLATFORM_TRANSPORTHTTP_PATH,	// (AXCONF_TRANSPORTHTTP) Transport HTTP path
-								  "",							// (AXCONF_TRANSPORTSMTP) Transport SMTP path
-								  PLATFORM_XMLPARSER_PATH,		// (AXCONF_XMLPARSER) XML Parser path
-								  "server name",				// (AXCONF_NODENAME) Node name
-								  "listen port",				// (AXCONF_LISTENPORT) Listener port
-								  PLATFORM_SSLCHANNEL_PATH,		// (AXCONF_SSLCHANNEL_HTTP) HTTP SSL Channel
-								  PLATFORM_CHANNEL_PATH,		// (AXCONF_CHANNEL_HTTP) HTTP Channel
-								  PLATFORM_SECUREINFO};			// (AXCONF_SECUREINFO) HTTP SSL secure information
+    char *    pszDefaultValues[] = {
+    		"",                           // (AXCONF_WSDDFILEPATH) Server WSDD File Path
+            PLATFORM_LOG_PATH,            // (AXCONF_LOGPATH) Server log path
+            PLATFORM_CLIENTLOG_PATH,      // (AXCONF_CLIENTLOGPATH) Client log path
+            "",                           // (AXCONF_CLIENTWSDDFILEPATH) Client WSDD File Path
+            PLATFORM_DEFAULT_DEPLOY_PATH, // (AXCONF_AXISHOME) Axis home
+            PLATFORM_TRANSPORTHTTP_PATH,  // (AXCONF_TRANSPORTHTTP) Transport HTTP path
+            "",                           // (AXCONF_TRANSPORTSMTP) Transport SMTP path
+            PLATFORM_XMLPARSER_PATH,      // (AXCONF_XMLPARSER) XML Parser path
+            "server name",                // (AXCONF_NODENAME) Node name
+            "listen port",                // (AXCONF_LISTENPORT) Listener port
+            PLATFORM_SSLCHANNEL_PATH,     // (AXCONF_SSLCHANNEL_HTTP) HTTP SSL Channel
+            PLATFORM_CHANNEL_PATH,        // (AXCONF_CHANNEL_HTTP) HTTP Channel
+            PLATFORM_SECUREINFO,          // (AXCONF_SECUREINFO) HTTP SSL secure information
+            ""                            // (AXCONF_LOGFILTER) Log level
+    };
 
-	for( int iPropertyCount = 0; iPropertyCount < AXCONF_LAST; iPropertyCount++)
-	{
-		char *	pszValue = pOrgAxisConfig->getAxisConfProperty( (g_axconfig) iPropertyCount);
+    for( int iPropertyCount = 0; iPropertyCount < AXCONF_LAST; iPropertyCount++)
+    {
+        char *    pszValue = pOrgAxisConfig->getAxisConfProperty( (g_axconfig) iPropertyCount);
 
-		if( pszValue == NULL)
-		{
-			m_pcValueArray[iPropertyCount] = pszDefaultValues[iPropertyCount];
-		}
-		else
-		{
-			m_pcValueArray[iPropertyCount] = pszValue;
-		}
-	}
+        if( pszValue == NULL)
+        {
+            m_pcValueArray[iPropertyCount] = pszDefaultValues[iPropertyCount];
+        }
+        else
+        {
+            m_pcValueArray[iPropertyCount] = pszValue;
+        }
+    }
 
-	delete pOrgAxisConfig;
-/*
-	m_pcValueArray[AXCONF_NODENAME]			 = "server name";
-    m_pcValueArray[AXCONF_LISTENPORT]        = "listen port";
-    m_pcValueArray[AXCONF_XMLPARSER]         = PLATFORM_XMLPARSER_PATH;
-    m_pcValueArray[AXCONF_TRANSPORTHTTP]     = PLATFORM_TRANSPORTHTTP_PATH;
-    m_pcValueArray[AXCONF_LOGPATH]           = PLATFORM_LOG_PATH;
-    m_pcValueArray[AXCONF_CLIENTLOGPATH]     = PLATFORM_CLIENTLOG_PATH;
-    m_pcValueArray[AXCONF_SSLCHANNEL_HTTP]   = PLATFORM_SSLCHANNEL_PATH;
-    m_pcValueArray[AXCONF_CHANNEL_HTTP]      = PLATFORM_CHANNEL_PATH;
-    m_pcValueArray[AXCONF_SECUREINFO]        = PLATFORM_SECUREINFO;
-    m_pcValueArray[AXCONF_AXISHOME]          = PLATFORM_DEFAULT_DEPLOY_PATH;
-*/
+    delete pOrgAxisConfig;
 }
 
-int AxisConfig::readConfFile ()
+int AxisConfig::
+readConfFile ()
 {
     char carrLine[CONFBUFFSIZE];
     char *pcValue = NULL;
@@ -222,19 +220,69 @@ int AxisConfig::readConfFile ()
     return AXIS_SUCCESS;
 }
 
-void AxisConfig::setValue (int valuelength, g_axconfig valueindex, char *value)
+void AxisConfig::
+setValue (int valuelength, g_axconfig valueindex, char *value)
 {
     // m_pcValueArray is a string and the string class will copy the value, so 
     // no need to copy the value into our own storage here.
     m_pcValueArray[valueindex] = value;
 }
 
-char* AxisConfig::getAxisConfProperty (g_axconfig property)
+char* AxisConfig::
+getAxisConfProperty (g_axconfig property)
 {
     if (0 == m_pcValueArray[property].length()) return NULL;
     return (char*)(m_pcValueArray[property].c_str());
 }
 
+std::string AxisConfig::
+toString()
+{
+    // Write out the config settings
+    string confLine="-------------- Config File settings START ----------------\n";
+
+    const char *confProps[]={
+        "AXCONF_WSDDFILEPATH",        //0
+        "AXCONF_LOGPATH",             //1
+        "AXCONF_CLIENTLOGPATH",       //2
+        "AXCONF_CLIENTWSDDFILEPATH",  //3
+        "AXCONF_AXISHOME",         //4
+        "AXCONF_TRANSPORTHTTP",    //5
+        "AXCONF_TRANSPORTSMTP",    //6
+        "AXCONF_XMLPARSER",        //7
+        "AXCONF_NODENAME",         //8
+        "AXCONF_LISTENPORT",       //9
+        "AXCONF_SSLCHANNEL_HTTP",  //10
+        "AXCONF_CHANNEL_HTTP",     //11
+        "AXCONF_SECUREINFO",       //12 
+        "AXCONF_LOGFILTER"         //13 Please use this number in the #if below
+    };
+
+// Check at build time whether the lists of properties are in sync
+#if AXCONF_LAST > 14
+#error "The list of configuration properties in AxisConfig.h and AxisTrace.cpp are different. Please keep them in sync."
+#endif
+
+    for (unsigned j=0; j<sizeof(confProps)/sizeof(char*); j++) 
+    {
+        confLine += confProps[j];
+        confLine += " = ";
+
+        const char *value = getAxisConfProperty((g_axconfig)j);
+        if (NULL==value)
+            confLine += "NULL\n";
+        else 
+        {
+            confLine += value;
+            confLine += "\n";
+        }
+    }
+
+    
+    confLine += "-------------- Config File settings END OF ----------------\n";
+    
+    return confLine;
+}
 
 /*
 int main(void)

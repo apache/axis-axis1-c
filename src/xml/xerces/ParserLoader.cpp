@@ -23,7 +23,6 @@
 // !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
-#define AXISTRACE_LIBRARY_MAINENTRYPOINT
 #include "../../common/AxisTrace.h"
 
 #include "XMLParserXerces.h"
@@ -64,12 +63,9 @@ int DestroyInstance(XMLParser *inst)
 	return AXIS_FAIL;
 }
 
-STORAGE_CLASS_INFO void initializeLibrary (AxisTraceEntrypoints* ep)
+STORAGE_CLASS_INFO void initializeLibrary (void)
 {
       // Do init actions
-#ifdef ENABLE_AXISTRACE
-      AxisTrace::setTraceEntrypoints(ep);
-#endif
 }
 
 //  uninitializeLibrary() Is a C interface.

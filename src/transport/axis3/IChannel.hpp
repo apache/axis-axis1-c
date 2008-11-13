@@ -61,6 +61,7 @@ public:
     virtual void                setProxy(const char *pcProxyHost,unsigned int uiProxyPort)=0;
     virtual bool                reopenRequired()=0;
     virtual void                closeQuietly( bool bNoExceptionOnForceClose) = 0;
+    virtual void                enableTrace(const char* logFilePath, const char *filters) { }
 };
 
 #endif

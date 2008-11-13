@@ -35,12 +35,19 @@ AXIS_CPP_NAMESPACE_START
 
 extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
-SoapHeader::SoapHeader()
+SoapHeader::
+SoapHeader()
 {	
+	logEntryEngine("SoapHeader::SoapHeader")
+	
+    logExit()
 }
 
-SoapHeader::~SoapHeader()
+SoapHeader::
+~SoapHeader()
 {
+	logEntryEngine("SoapHeader::~SoapHeader")
+
     // Header blocks are not deleted here any more. Its the responsibility of
     // either a handler or stub etc to delete any header block created by them
     // Here we will just clear the list of header block pointers
@@ -56,23 +63,34 @@ SoapHeader::~SoapHeader()
     }
 
     m_attributes.clear();
+    
+    logExit()
 }
 
-void SoapHeader::addHeaderBlock(IHeaderBlock* pHeaderBlock)
+void SoapHeader::
+addHeaderBlock(IHeaderBlock* pHeaderBlock)
 {
+	logEntryEngine("SoapHeader::addHeaderBlock")
+
     if (pHeaderBlock)
     {
         m_headerBlocks.push_back(pHeaderBlock);
     }
+	
+	logExit()
 }
 
-int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
+int SoapHeader::
+serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {    
+	logEntryEngine("SoapHeader::serialize")
+
     int iStatus= AXIS_SUCCESS;
 
     do
     {
-		if (0 == m_headerBlocks.size()) break;
+		if (0 == m_headerBlocks.size()) 
+			break;
         
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
@@ -82,9 +100,7 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         iStatus= serializeAttributes(pSZ);
 
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
         
         pSZ.serialize(">", NULL);
 
@@ -94,44 +110,49 @@ int SoapHeader::serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         {
             iStatus= ((HeaderBlock*)(*itCurrHeaderBlock))->serialize(pSZ);
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
             itCurrHeaderBlock++;            
         }
 
         if(iStatus==AXIS_FAIL)
-        {
             break;
-        }
         
         pSZ.serialize("</", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
             ">\n", NULL);
         
-    } while(0);
+    } 
+    while(0);
+
+	logExitWithReturnCode(iStatus)
 
     return iStatus;
-
 }
 
-int SoapHeader::addAttribute(Attribute *pAttribute)
+int SoapHeader::
+addAttribute(Attribute *pAttribute)
 {
+	logEntryEngine("SoapHeader::addAttribute")
+	
+	int iStatus = AXIS_FAIL;
+
     if (pAttribute)
     {
         m_attributes.push_back(pAttribute);
+        iStatus = AXIS_SUCCESS;
+    }
 
-        return AXIS_SUCCESS;
-    }
-    else
-    {
-        return AXIS_FAIL;
-    }
+	logExitWithReturnCode(iStatus)
+
+    return iStatus;
 }
 
 
-int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
+int SoapHeader::
+serializeAttributes(SoapSerializer& pSZ)
 {
+	logEntryEngine("SoapHeader::serializeAttributes")
+
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
     while(itCurrAttribute != m_attributes.end())
@@ -140,39 +161,52 @@ int SoapHeader::serializeAttributes(SoapSerializer& pSZ)
         itCurrAttribute++;        
     }    
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;    
 }
 
-int SoapHeader::addNamespaceDecl(Attribute *pAttribute)
+int SoapHeader::
+addNamespaceDecl(Attribute *pAttribute)
 {
+	logEntryEngine("SoapHeader::addNamespaceDecl")
+
+	int iStatus = AXIS_FAIL;
+	
     if (pAttribute)
     {
         m_namespaceDecls.push_back(pAttribute);
+        iStatus = AXIS_SUCCESS;
+    }
+	
+	logExitWithReturnCode(iStatus)
 
-        return AXIS_SUCCESS;
-    }
-    else
-    {
-        return AXIS_FAIL;
-    }
+    return iStatus;
 }
 
-int SoapHeader::serializeNamespaceDecl(SoapSerializer& pSZ)
+int SoapHeader::
+serializeNamespaceDecl(SoapSerializer& pSZ)
 {
+	logEntryEngine("SoapHeader::serializeNamespaceDecl")
+
     list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
     while(itCurrNamespaceDecl != m_namespaceDecls.end())
     {
-
         (*itCurrNamespaceDecl)->serialize(pSZ);
         itCurrNamespaceDecl++;        
     }    
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
-IHeaderBlock* SoapHeader::getHeaderBlock(bool bRemoveOrNot)
+IHeaderBlock* SoapHeader::
+getHeaderBlock(bool bRemoveOrNot)
 {
+	logEntryEngine("SoapHeader::getHeaderBlock")
+
     IHeaderBlock* tmpHeaderBlock = NULL;
 
     list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
@@ -180,30 +214,32 @@ IHeaderBlock* SoapHeader::getHeaderBlock(bool bRemoveOrNot)
     if(itCurrHeaderBlock != m_headerBlocks.end())
     {
         tmpHeaderBlock = (*itCurrHeaderBlock);
-		if (bRemoveOrNot == true) {
+		if (bRemoveOrNot == true)
 			m_headerBlocks.pop_front();
-		}
     }
+
+    logExitWithPointer(tmpHeaderBlock)
 
     return tmpHeaderBlock;
 
 }
 
-int SoapHeader::setPrefix(const char* pcPrefix)
+int SoapHeader::
+setPrefix(const char* pcPrefix)
 {
     m_pcPrefix = pcPrefix;
 
     return AXIS_SUCCESS;
 }
 
-IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
-                                         const AxisChar *pNamespace, 
-										 bool bRemoveOrNot)
+IHeaderBlock* SoapHeader::
+getHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace, bool bRemoveOrNot)
 {
+	logEntryEngine("SoapHeader::getHeaderBlock")
+
     HeaderBlock* tmpHeaderBlock = NULL;
 
     list<IHeaderBlock*>::iterator itCurrHeaderBlock= m_headerBlocks.begin();
-    bool blnFoundStatus = false;
 
     while (itCurrHeaderBlock != m_headerBlocks.end())
     {
@@ -212,60 +248,73 @@ IHeaderBlock* SoapHeader::getHeaderBlock(const AxisChar *pName,
         if ((strcmp(((tmpHeaderBlock)->m_localname).c_str(), pName) == 0) && 
                 (strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0))
         {
-            blnFoundStatus = true;
-			if (bRemoveOrNot == true) {
+			if (bRemoveOrNot == true)
 				m_headerBlocks.remove(tmpHeaderBlock);
-			}
             break;
         }
         else
         {
+        	tmpHeaderBlock = NULL;
             itCurrHeaderBlock++;
         }
     }
 
-    if (blnFoundStatus == true)
-    {
-        return tmpHeaderBlock;
-    }
-    else
-    {
-        return NULL;
-    }
+    logExitWithPointer(tmpHeaderBlock)
+
+    return tmpHeaderBlock;
 }
 
  
-IHeaderBlock* SoapHeader::getFirstHeaderBlock() 
+IHeaderBlock* SoapHeader::
+getFirstHeaderBlock() 
 {
+	logEntryEngine("SoapHeader::getFirstHeaderBlock")
+
 	m_itHeaderBlocks = m_headerBlocks.begin();
 	IHeaderBlock* tmpIHeaderBlock=NULL;
 	if (m_itHeaderBlocks != m_headerBlocks.end())
 		tmpIHeaderBlock = *m_itHeaderBlocks;
+	
+    logExitWithPointer(tmpIHeaderBlock)
+
 	return tmpIHeaderBlock;
 }
 
-IHeaderBlock* SoapHeader::getNextHeaderBlock() 
+IHeaderBlock* SoapHeader::
+getNextHeaderBlock() 
 {
+	logEntryEngine("SoapHeader::getNextHeaderBlock")
+
 	m_itHeaderBlocks++;
 	IHeaderBlock* tmpIHeaderBlock=NULL;
 	if (m_itHeaderBlocks != m_headerBlocks.end())
 		tmpIHeaderBlock = *m_itHeaderBlocks;
+	
+    logExitWithPointer(tmpIHeaderBlock)
+
 	return tmpIHeaderBlock;
 }
 
-IHeaderBlock* SoapHeader::getCurrentHeaderBlock()
+IHeaderBlock* SoapHeader::
+getCurrentHeaderBlock()
 {
+	logEntryEngine("SoapHeader::getCurrentHeaderBlock")
+
 	IHeaderBlock* tmpIHeaderBlock=NULL;
 	if (m_itHeaderBlocks != m_headerBlocks.end())
 		tmpIHeaderBlock = *m_itHeaderBlocks;
 
+    logExitWithPointer(tmpIHeaderBlock)
+
 	return tmpIHeaderBlock;
 }
 
 
-int SoapHeader::deleteHeaderBlock(const AxisChar *pName,
-                                         const AxisChar *pNamespace)
+int SoapHeader::
+deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
 {
+	logEntryEngine("SoapHeader::deleteHeaderBlock")
+
     int iStatus = AXIS_SUCCESS;
     HeaderBlock* tmpHeaderBlock = NULL;
 
@@ -282,21 +331,22 @@ int SoapHeader::deleteHeaderBlock(const AxisChar *pName,
             break; 
         }
         else
-        {
             itCurrHeaderBlock++;
-        }
-    
     }
 
     if (m_headerBlocks.empty())
-    {
-        iStatus = AXIS_NO_REMAINING_SOAP_HEADERS;                     
-    }
+        iStatus = AXIS_NO_REMAINING_SOAP_HEADERS;
     
+	logExitWithReturnCode(iStatus)
+
     return iStatus;
 }
-void SoapHeader::clear()
+
+void SoapHeader::
+clear()
 {
+	logEntryEngine("SoapHeader::clear")
+
     // Header blocks are not deleted here. Its the responsibility of
     // either a handler or stub etc to delete any header block created by them
     // Here we will just clear the list of header block pointers
@@ -312,6 +362,8 @@ void SoapHeader::clear()
     }
 
     m_attributes.clear();
+    
+    logExit()
 }
 
 

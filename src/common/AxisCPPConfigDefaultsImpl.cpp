@@ -106,7 +106,6 @@ void AxisCPPConfigDefaultsImpl::apply ()
   }
   else
   {
-      AXISTRACE1 ("configuration defaults aleady set", WARN);
       throw AxisConfigException(CONFIG_DEFAULTS_ALREADY_SET);
   }
 }
@@ -203,8 +202,5 @@ char* AxisCPPConfigDefaultsImpl::getAxisHome ()
     if (0 == m_pcAxisHome.length()) return NULL;
     return (char*)(m_pcAxisHome.c_str());
 }
-
-/** /todo place some sample code here
-*/
 
 AXIS_CPP_NAMESPACE_END

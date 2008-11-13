@@ -71,7 +71,8 @@ static int axtoi( char *pcHexString);
 /*
  * HTTPTransport constuctor
  */
-HTTPTransport::HTTPTransport ():
+HTTPTransport::
+HTTPTransport ():
 m_bReopenConnection (false),
 m_strHTTPProtocol ("HTTP/1.1"),
 m_strHTTPMethod ("POST"),
@@ -80,6 +81,8 @@ m_uiProxyPort (0),
 m_bUseProxy (false),
 m_bMaintainSession (false)
 {
+	logEntryTransport("HTTPTransport::HTTPTransport")
+
     m_pcEndpointUri = NULL;
     m_pReleaseBufferCallback = 0;
     m_eProtocolType = APTHTTP1_1;
@@ -104,6 +107,8 @@ m_bMaintainSession (false)
     m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
 
     resetInputStateMachine();
+    
+    logExit()
 }
 
 /*
@@ -112,14 +117,20 @@ m_bMaintainSession (false)
 HTTPTransport::
 ~HTTPTransport()
 {
+	logEntryTransport("HTTPTransport::~HTTPTransport")
+
     delete [] m_pcEndpointUri;
     delete m_pChannelFactory; // should also destroy channels
     delete [] m_pszRxBuffer;
+    
+    logExit()
 }
 
 void HTTPTransport::
 resetInputStateMachine()
 {
+	logEntryTransport("HTTPTransport::resetInputStateMachine")
+
     m_GetBytesState = eWaitingForHTTPHeader;
     
     m_strReceived.erase();
@@ -128,6 +139,8 @@ resetInputStateMachine()
     m_iNextChunkedDataSize = 0;
     m_iContentLength = 0;
     m_bMimeTrue = false;  
+    
+    logExit()
 }
 
 /*
@@ -141,9 +154,17 @@ resetInputStateMachine()
 void HTTPTransport::
 setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::setEndpointUri")
+
+    logDebugArg1("Endpoint is %s", pcEndpointUri ? pcEndpointUri : "NULL")
+
     // if URI not valid, return
     if (!pcEndpointUri || strlen(pcEndpointUri) < strlen("http://") )
-        return;                                                  
+    {
+    	logExit()
+    	
+        return;  
+    }
 
     // Does the new URI equal the existing channel URI?
     // If there is a new URI, then connection will be closed and a secure or unsecure channel 
@@ -169,7 +190,11 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
             }
 
             if( !m_bChannelSecure)
+            {
+                logThrowException("HTTPTransportException - CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER")
+
                 throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_SECURE_TRANSPORT_LAYER);
+            }
         }
         else if (m_bChannelSecure)
         {
@@ -182,7 +207,11 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
             }
 
             if( m_bChannelSecure)
+            {
+                logThrowException("HTTPTransportException - CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER")
+
                 throw HTTPTransportException( CLIENT_TRANSPORT_HAS_NO_UNSECURE_TRANSPORT_LAYER);
+            }
         }
     }
 
@@ -191,6 +220,8 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
     // the channel is sure to have the correct timeout value next time the channel is read.
     if( m_pActiveChannel != NULL)
         m_pActiveChannel->setTimeout( m_lChannelTimeout);
+    
+    logExit()
 }
 
 /*
@@ -200,17 +231,24 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
 int HTTPTransport::
 openConnection()
 {
+	logEntryTransport("HTTPTransport::openConnection")
+
     // If connection not valid or reopen required, open a connection to server.
     if (m_pActiveChannel->reopenRequired() || m_bReopenConnection)
     {
         closeConnection(true);
         if( m_pActiveChannel->open() != AXIS_SUCCESS)
         {
+            logThrowExceptionWithData("HTTPTransportException - CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED", 
+            		                  m_pActiveChannel->GetLastErrorMsg().c_str())
+
             throw HTTPTransportException( CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED,
                                           m_pActiveChannel->GetLastErrorMsg().c_str());
         }
     }
 
+	logExitWithReturnCode(AXIS_SUCCESS)
+	
     return AXIS_SUCCESS;
 }
 
@@ -220,6 +258,8 @@ openConnection()
 void HTTPTransport::
 closeConnection(bool forceClose)
 {
+	logEntryTransport("HTTPTransport::closeConnection")
+
     resetInputStateMachine();
     
     // We will close the connection if forced close, or if "Connection: close" 
@@ -229,6 +269,8 @@ closeConnection(bool forceClose)
         m_bReopenConnection = false;
         m_pActiveChannel->close();
     }
+    
+    logExit()
 }
 
 /*
@@ -244,6 +286,8 @@ closeConnection(bool forceClose)
 AXIS_TRANSPORT_STATUS HTTPTransport::
 flushOutput() throw (AxisException, HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::flushOutput")
+
     char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
 
     // In preperation for sending the message, set Content-Length HTTP header.
@@ -256,7 +300,7 @@ flushOutput() throw (AxisException, HTTPTransportException)
     {
         // Generate HTTP header string
         generateHTTPHeaders ();
-        
+                
         // Send HTTP headers and body
 #ifndef __OS400__
         m_pActiveChannel->writeBytes(m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length());
@@ -280,6 +324,9 @@ flushOutput() throw (AxisException, HTTPTransportException)
             free(utf8Buf);
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
+        
+        logRethrowException()
+        
         throw;
     }
 
@@ -291,6 +338,8 @@ flushOutput() throw (AxisException, HTTPTransportException)
     m_vResponseHTTPHeaders.clear();
     // TODO: Possible memory leak here - does the clear op clean out the memory too?
 
+    logExit()
+    
     return TRANSPORT_FINISHED;
 }
 
@@ -303,6 +352,8 @@ flushOutput() throw (AxisException, HTTPTransportException)
 const char * HTTPTransport::
 generateHTTPHeaders()
 {
+	logEntryTransport("HTTPTransport::generateHTTPHeaders")
+
     URL & url = m_pActiveChannel->getURLObject();
     unsigned short uiPort;
     char buff[32];
@@ -421,6 +472,8 @@ generateHTTPHeaders()
 
     m_strHeaderBytesToSend += "\r\n";
 
+    logExit()
+    
     return m_strHeaderBytesToSend.c_str ();
 }
 
@@ -445,7 +498,14 @@ getHTTPMethod()
 void HTTPTransport::
 setHTTPMethod( const char *cpMethod)
 {
-    m_strHTTPMethod = std::string( cpMethod);
+	logEntryTransport("HTTPTransport::setHTTPMethod")
+	
+    logDebugArg1("HTTP method is %s", cpMethod ? cpMethod : "NULL")
+
+    if (cpMethod)
+        m_strHTTPMethod = std::string( cpMethod);
+	
+	logExit()
 }
 
 /* HTTPTransport::sendBytes( SendBuffer, BufferId) Is a public method that
@@ -470,10 +530,16 @@ sendBytes( const char *pcSendBuffer, const void *pBufferId)
 bool HTTPTransport::
 isThereResponseData()
 {
+	logEntryTransport("HTTPTransport::isThereResponseData")
+
     // We do not want to consume any SOAP data, just find out if there is any data.
     int bufLen = 0;
     getBytes(NULL, &bufLen);
-    return (m_GetBytesState != eWaitingForHTTPHeader || m_iBytesLeft != 0);
+    bool returnValue = (m_GetBytesState != eWaitingForHTTPHeader || m_iBytesLeft != 0);
+    
+    logExitWithBoolean(returnValue)
+    
+    return returnValue;
 }
 
 /* HTTPTransport::getBytes( ReceiveBuffer, Size) Is a public method that will
@@ -490,6 +556,8 @@ isThereResponseData()
 AXIS_TRANSPORT_STATUS HTTPTransport::
 getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::getBytes")
+
     // The method getBytes has three distinct states.  These are defined as
     // follows:-
     //   eWaitingForHTTPHeader        - Waiting for HTTP response header. Initiate processing
@@ -540,7 +608,9 @@ getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportExce
     }
     else
         *piSize = 0;
-
+    
+    logExit()
+    
     // Set transport status 
     return (m_iBytesLeft > 0 || (m_GetBytesState != eWaitingForHTTPHeader)) ? 
                 TRANSPORT_IN_PROGRESS : TRANSPORT_FINISHED;
@@ -553,6 +623,8 @@ getBytes( char * pcBuffer, int * piSize) throw (AxisException, HTTPTransportExce
 int HTTPTransport::
 getBytes_MessageHasContentLength(char * pcBuffer, int * piSize)
 {
+	logEntryTransport("HTTPTransport::getBytes_MessageHasContentLength")
+
     // If we do not have data to give back, read more.  
     if (m_iContentLength > 0 && m_iBytesLeft == 0)
     {
@@ -576,6 +648,8 @@ getBytes_MessageHasContentLength(char * pcBuffer, int * piSize)
     if (0 == m_iContentLength)
         m_GetBytesState = eWaitingForHTTPHeader;
         
+    logExitWithInteger(m_iBytesLeft)
+
     // Return number of bytes that can be copied
     return m_iBytesLeft;
 }
@@ -589,6 +663,8 @@ getBytes_MessageHasContentLength(char * pcBuffer, int * piSize)
 int HTTPTransport::
 getBytes_MessageIsNotChunked(char * pcBuffer, int * piSize)
 {
+	logEntryTransport("HTTPTransport::getBytes_MessageIsNotChunked")
+
     // Keep reading until the connection is closed by the server.
     getNextDataPacket( "Expecting server connection to close.");
 
@@ -599,6 +675,8 @@ getBytes_MessageIsNotChunked(char * pcBuffer, int * piSize)
         m_iBytesLeft = m_strReceived.length();
     }
     
+    logExitWithInteger(m_iBytesLeft)
+
     // Return number of bytes that can be copied
     return m_iBytesLeft;
 }
@@ -636,6 +714,8 @@ getBytes_MessageIsNotChunked(char * pcBuffer, int * piSize)
 int HTTPTransport::
 getBytes_MessageIsChunked(char * pcBuffer, int * piSize)
 {
+	logEntryTransport("HTTPTransport::getBytes_MessageIsChunked")
+
     // We only read the next chunk if the chunk we have has been consumed. 
     if (m_iChunkedDataLeftToConsume == 0)
     {
@@ -711,6 +791,8 @@ getBytes_MessageIsChunked(char * pcBuffer, int * piSize)
         m_iChunkedDataLeftToConsume -= *piSize;
     }
     
+    logExitWithInteger(iDataToCpyLen)
+
     return iDataToCpyLen;
 }
 
@@ -722,6 +804,8 @@ getBytes_MessageIsChunked(char * pcBuffer, int * piSize)
 int HTTPTransport::
 getChunkSize(string::size_type pos)
 {
+	logEntryTransport("HTTPTransport::getChunkSize")
+
     string::size_type iEndOfChunkSize;
     string::size_type iEndOfChunkLine;
     
@@ -757,6 +841,9 @@ getChunkSize(string::size_type pos)
         
         PLATFORM_ASCTOSTR(chunkSizeLine.c_str());
         string errorMessage = string("Chunk size (") + chunkSizeLine + string(") not valid.");
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_HTTP_EXCEPTION", errorMessage.c_str())
+               		                  
         throw HTTPTransportException(SERVER_TRANSPORT_HTTP_EXCEPTION, errorMessage.c_str());        
     }
 
@@ -777,6 +864,8 @@ getChunkSize(string::size_type pos)
         m_strReceived.erase(0, iEndOfChunkLine + 2); // "+2" for CRLF
     m_iBytesLeft  = m_strReceived.length();   
     
+    logExitWithInteger(chunkSize)
+ 
     // return chunksize
     return chunkSize;
 }
@@ -793,6 +882,8 @@ getChunkSize(string::size_type pos)
 int HTTPTransport::
 setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) throw (HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::setTransportProperty")
+
     const char *key = NULL;
     int   iSuccess = AXIS_SUCCESS;
 
@@ -863,6 +954,8 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
     if( key)
         setTransportProperty( key, value);
 
+    logExitWithReturnCode(iSuccess)
+    
     return iSuccess;
 }
 
@@ -878,34 +971,45 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
 int HTTPTransport::
 setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTransportException)
 {
-    if( !pcKey || !pcValue)   
-        return AXIS_SUCCESS;
+	logEntryTransport("HTTPTransport::setTransportProperty")
 
-    bool b_KeyFound = false;
+    int   iSuccess = AXIS_SUCCESS;
 
-    // Check for well known headers that we add on in every iteration
-    if (strcmp( pcKey, "SOAPAction") == 0 
-            || strcmp( pcKey, "Content-Length") == 0
-            || strcmp( pcKey, "Connection") == 0)
+    if( pcKey && pcValue) 
     {
-        std::string strKeyToFind = std::string( pcKey);
+        logDebugArg2("Transport property to set: %s=%s", pcKey, pcValue)
 
-        for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
-            if (m_vHTTPHeaders[i].first == strKeyToFind)
-            {
-                m_vHTTPHeaders[i].second = (string) pcValue;
-                b_KeyFound = true;
-
-                break;
-            }
+	    bool b_KeyFound = false;
+	
+	    // Check for well known headers that we add on in every iteration
+	    if (strcmp( pcKey, "SOAPAction") == 0 
+	            || strcmp( pcKey, "Content-Length") == 0
+	            || strcmp( pcKey, "Connection") == 0)
+	    {
+	        std::string strKeyToFind = std::string( pcKey);
+	
+	        for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
+	            if (m_vHTTPHeaders[i].first == strKeyToFind)
+	            {
+	                m_vHTTPHeaders[i].second = (string) pcValue;
+	                b_KeyFound = true;
+	
+	                break;
+	            }
+	    }
+	    else if(strcmp(pcKey, "Cookie")==0)
+	    {
+	    	iSuccess = addCookie(pcValue);
+	    	b_KeyFound = true;
+	    }
+	    
+	    if( !b_KeyFound)
+	        m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
     }
-    else if(strcmp(pcKey, "Cookie")==0)
-        return addCookie(pcValue);
-
-    if( !b_KeyFound)
-        m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
     
-    return AXIS_SUCCESS;
+    logExitWithReturnCode(iSuccess)
+
+    return iSuccess;
 }
 
 /* HTTPTransport::getTransportProperty( Type) Is a public method that will
@@ -921,6 +1025,8 @@ setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTranspo
 const char * HTTPTransport::
 getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::getTransportProperty")
+
     const char *pszPropValue = NULL;
 
     switch( eType)
@@ -969,6 +1075,8 @@ getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTranspor
             break;
         }
     }
+
+    logExitWithString(pszPropValue)
 
     return pszPropValue;
 }
@@ -1066,10 +1174,16 @@ getSubProtocol()
 void HTTPTransport::
 setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
 {
+	logEntryTransport("HTTPTransport::setProxy")
+
+    logDebugArg2("Proxy host is %s, proxy port is %d", pcProxyHost ? pcProxyHost : "NULL", uiProxyPort)
+
     m_pActiveChannel->setProxy(pcProxyHost,uiProxyPort);
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
     m_bUseProxy = true;
+    
+    logExit()
 }
 
 /* HTTPTransport::setTimeout( Timeout) Is a public method for setting the
@@ -1081,10 +1195,14 @@ setProxy( const char *pcProxyHost, unsigned int uiProxyPort)
 void HTTPTransport::
 setTimeout( long lSeconds)
 {
+	logEntryTransport("HTTPTransport::setTimeout")
+
     if( m_pActiveChannel != NULL)
         m_pActiveChannel->setTimeout( lSeconds);
 
     m_lChannelTimeout = lSeconds;
+    
+    logExit()
 }
 
 /* HTTPTransport::getHTTPProtocol() Is a public method for retrieving the
@@ -1159,6 +1277,8 @@ static int axtoi( char *pcHexString)
 void HTTPTransport::
 processHTTPHeader()
 {
+	logEntryTransport("HTTPTransport::processHTTPHeader")
+
     // Prior to calling this method, m_strResponseHTTPHeaders should have been 
     // set to the HTTP header in the response, which is in ascii.  For EBCDIC 
     // systems, we need to convert the data from ASCII to EBCDIC.
@@ -1179,6 +1299,8 @@ processHTTPHeader()
     
     if( (iPosition = m_strResponseHTTPHeaders.find( "HTTP" )) == std::string::npos)
     {
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE", "Protocol is not HTTP.")
+
         throw HTTPTransportException( SERVER_TRANSPORT_UNKNOWN_HTTP_RESPONSE,
                                       "Protocol is not HTTP.");
     }
@@ -1312,6 +1434,8 @@ processHTTPHeader()
         m_GetBytesState = eWaitingForHTTPHeader;
     else if (m_GetBytesState == eWaitingForHTTPHeader)
         m_GetBytesState = eSOAPMessageIsNotChunked;
+    
+    logExit()
 }
 
 /* HTTPTransport::processRootMimeBody() Is a public method used to
@@ -1320,6 +1444,8 @@ processHTTPHeader()
 void HTTPTransport::
 processRootMimeBody()
 {
+	logEntryTransport("HTTPTransport::processRootMimeBody")
+
     int numberOfBytesRead = 0;
     
     if( false == m_bReadPastRootMimeHeader)
@@ -1367,9 +1493,9 @@ processRootMimeBody()
             // Using m_strMimeReceived will be continued when getAttachment is called.
             m_bMimeTrue = false;
         }
-
-        return;
     }
+    
+    logExit()
 }
 
 /* HTTPTransport::processMimeHeaders() Is a public method used to
@@ -1378,6 +1504,8 @@ processRootMimeBody()
 void HTTPTransport::
 processMimeHeader()
 {
+	logEntryTransport("HTTPTransport::processMimeHeader")
+
     string::size_type pos = 0;
     string::size_type temppos = 0;
 
@@ -1421,6 +1549,8 @@ processMimeHeader()
         temppos = m_strMimeContentLocation.find( "\r\n");
         m_strMimeContentLocation = m_strMimeContentLocation.substr( 0, temppos);
     }
+    
+    logExit()
 }
 
 void HTTPTransport::
@@ -1431,6 +1561,8 @@ processMimeBody ()
 void HTTPTransport::
 getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 {
+	logEntryTransport("HTTPTransport::getAttachment")
+
     int numberOfBytesRead = 0;
     
     do
@@ -1446,6 +1578,8 @@ getAttachment( char * pStrAttachment, int * pIntSize, int intAttachmentId)
 
     m_strMimeReceived = m_strMimeReceived.substr( m_strMimeReceived.find( "\r\n\r\n"));
     processMimeBody();
+    
+    logExit()
 }
 
 void HTTPTransport::
@@ -1457,6 +1591,10 @@ setSocket( unsigned int uiNewSocket)
 const char * HTTPTransport::
 getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportException)
 {
+	logEntryTransport("HTTPTransport::getTransportProperty")
+	
+	const char *returnValue = NULL;
+
     std::string strKeyToFind = std::string( pcKey);
     std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
     
@@ -1467,9 +1605,14 @@ getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportExc
 
     for( unsigned int i = 0; i < hdrs->size(); i++)
         if( (*hdrs)[i].first == strKeyToFind)
-            return (*hdrs)[i].second.c_str();
+        {
+        	returnValue = (*hdrs)[i].second.c_str();
+        	break;
+        }
 
-    return NULL;
+    logExitWithString(returnValue)
+
+    return returnValue;
 }
 
 const char * HTTPTransport::
@@ -1637,6 +1780,8 @@ getLastChannelError()
 void HTTPTransport::
 readHTTPHeader()
 {    
+	logEntryTransport("HTTPTransport::readHTTPHeader")
+
     m_pActiveChannel->closeQuietly( false);
     
     // The parser is expecting a SOAP message.  Thus, the HTTP header must have
@@ -1667,6 +1812,10 @@ readHTTPHeader()
             else
             {
                 m_bReopenConnection = true;
+                
+                logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_INPUT_STREAMING_ERROR", 
+                		                   "Socket connection has been closed.")
+
                 throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
                                               "Socket connection has been closed.");
             }
@@ -1678,7 +1827,7 @@ readHTTPHeader()
         iHTTPEnd    = m_strReceived.find( ASCII_S_CRLFCRLF, iHTTPStart);
     
         m_strResponseHTTPHeaders = m_strReceived.substr( iHTTPStart, iHTTPEnd + 4 - iHTTPStart); 
-        
+                
         // Process the HTTP header
         processHTTPHeader();
         
@@ -1697,13 +1846,21 @@ readHTTPHeader()
           m_strResponseHTTPStatusMessage +  std::string("'\n");
 
         m_GetBytesState = eWaitingForHTTPHeader;
+        
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_HTTP_EXCEPTION", 
+        		                  m_strResponseHTTPStatusMessage.c_str())
+
         throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, m_strResponseHTTPStatusMessage.c_str());
-    }      
+    }  
+    
+    logExit()
 }
 
 int HTTPTransport::
 getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse, int *bufferLen)
 {
+	logEntryTransport("HTTPTransport::getNextDataPacket")
+
     int numberOfBytesRead;
 
     // Read whatever part of the response message that has arrived at the active channel socket.
@@ -1732,15 +1889,24 @@ getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse, int *bu
         m_bReopenConnection = true;
 
         if( pcszExceptionMessage != NULL && strlen( pcszExceptionMessage) > 0)
+        {
+            logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_HTTP_EXCEPTION", 
+            		                  pcszExceptionMessage)
+
             throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, pcszExceptionMessage);
+        }
     }
 
+    logExitWithInteger(numberOfBytesRead)
+    
     return numberOfBytesRead;
 }
 
 int HTTPTransport::
 addCookie(const string name, const string value)
 {
+	logEntryTransport("HTTPTransport::addCookie")
+
     // trim the name
     string theName(name);
     trim(theName);
@@ -1761,12 +1927,16 @@ addCookie(const string name, const string value)
     if(!b_keyFound)
         m_vCookies.push_back( std::make_pair( theName, value));
     
+    logExit()
+    
     return true;
 }
 
 int HTTPTransport::
 addCookie(const string nameValuePair)
 {
+	logEntryTransport("HTTPTransport::addCookie")
+
     // Spec syntax : Set-Cookie: NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure
     // This code assumes it to be : Set-Cookie: NAME=VALUE; Anything_else
     // And discards stuff after first ';'
@@ -1780,6 +1950,9 @@ addCookie(const string nameValuePair)
 
     // Now split the nameValue up
     string::size_type nameEndsAt = nameValue.find("=");
+    
+    logExit()
+    
     return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
 }
 
@@ -1826,3 +1999,15 @@ trim(string& str)
         str.erase(str.begin(), str.end());
 }
 
+void HTTPTransport::
+enableTrace(const char* logFilePath, const char *filters)
+{
+	AxisTrace::setLogFilter(filters);
+	AxisTrace::startTrace(logFilePath, false);
+	
+	if (m_pNormalChannel)
+		m_pNormalChannel->enableTrace(logFilePath, filters);
+	
+	if (m_pSecureChannel)
+		m_pSecureChannel->enableTrace(logFilePath, filters);
+}

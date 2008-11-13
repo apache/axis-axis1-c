@@ -43,13 +43,17 @@ AXIS_CPP_NAMESPACE_START
 ClientAxisEngine::
 ClientAxisEngine ()
 {
+	logEntryEngine("ClientAxisEngine::ClientAxisEngine")
 
+    logExit()
 }
 
 ClientAxisEngine::
 ~ClientAxisEngine ()
 {
-
+	logEntryEngine("ClientAxisEngine::~ClientAxisEngine")
+	
+    logExit()
 }
 
 MessageData* ClientAxisEngine::
@@ -67,87 +71,93 @@ process (SOAPTransport* pSoap)
 int ClientAxisEngine::
 process (SOAPTransport* pSoap, bool noResponse)
 {
+	logEntryEngine("ClientAxisEngine::process")
+	
     int Status = AXIS_FAIL;
     const WSDDService* pService = NULL;
 
     try
     {
-        if (!pSoap)
-            return AXIS_FAIL;
-
-        m_pSoap = pSoap;
-        string sSessionId = m_pSoap->getSessionId();
-    
-        do
+        if (pSoap)
         {
-            // Get the service name that was specified in the second parameter of the call
-            // to setTransportProperty( SOAPACTION_HEADER , "") matches a service name in
-            // the 'service' part of the WSDD file then call that service now.
-            const char* pchService = pSoap->getServiceName();
-            
-            // Check that there is a valid service name.
-            if( pchService != NULL)
-            {
-                // The convention for the service name appears to be service#port
-                if( strchr( pchService, '#') == NULL)
-                {
-                    int     iStringLength = strlen( pchService);
-                    char *  pszService = new char[iStringLength];
-
-                    memset( pszService, 0, iStringLength);
-                    // If there is no # seperator, then strip off the outer quotes. if they exist !
-                    if(strchr(pchService, '"') == NULL)
-                        memcpy( pszService, pchService, iStringLength);
-                    else
-                        memcpy( pszService, pchService + 1, iStringLength - 2);
-
-                    pService = g_pWSDDDeployment->getService( pszService);
-
-                    delete [] pszService;                
-                  }
-                else
-                {
-                    char * pchTempService = new char [strlen(pchService)+1];
-                    
-                    // Skip the starting double quote
-                    strcpy(pchTempService, pchService+1);
-            
-                    // The String returned as the service name has the format "Calculator#add".
-                    // So null terminate string at #.
-                    *(strchr(pchTempService, '#')) = '\0';
-
-                    // get service description object from the WSDD Deployment object
-                    pService = g_pWSDDDeployment->getService (pchTempService);
-                    
-                    delete [] pchTempService;
-                }
-            }
-            
-            //Get Global and Transport Handlers    
-            Status = initializeHandlers (sSessionId, pSoap->getProtocol());
-            if (AXIS_SUCCESS != Status)
-                throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
-            
-            //Get Service specific Handlers from the pool if configured any
-            if (pService != NULL)
-            {
-                Status = g_pHandlerPool->getRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService);
-                if (AXIS_SUCCESS != Status)
-                    break;  
-
-                Status = g_pHandlerPool->getResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService);
-                if (AXIS_SUCCESS != Status)
-                    break;   
-            }
-    
-            // Invoke all handlers and then the remote webservice
-            // we generate response in the same way even if this has failed 
-            Status = invoke (m_pMsgData, noResponse); 
+	        m_pSoap = pSoap;
+	        string sSessionId = m_pSoap->getSessionId();
+	    
+	        do
+	        {
+	            // Get the service name that was specified in the second parameter of the call
+	            // to setTransportProperty( SOAPACTION_HEADER , "") matches a service name in
+	            // the 'service' part of the WSDD file then call that service now.
+	            const char* pchService = pSoap->getServiceName();
+	            
+	            // Check that there is a valid service name.
+	            if( pchService != NULL)
+	            {
+	                // The convention for the service name appears to be service#port
+	                if( strchr( pchService, '#') == NULL)
+	                {
+	                    int     iStringLength = strlen( pchService);
+	                    char *  pszService = new char[iStringLength];
+	
+	                    memset( pszService, 0, iStringLength);
+	                    // If there is no # seperator, then strip off the outer quotes. if they exist !
+	                    if(strchr(pchService, '"') == NULL)
+	                        memcpy( pszService, pchService, iStringLength);
+	                    else
+	                        memcpy( pszService, pchService + 1, iStringLength - 2);
+	
+	                    pService = g_pWSDDDeployment->getService( pszService);
+	
+	                    delete [] pszService;                
+	                  }
+	                else
+	                {
+	                    char * pchTempService = new char [strlen(pchService)+1];
+	                    
+	                    // Skip the starting double quote
+	                    strcpy(pchTempService, pchService+1);
+	            
+	                    // The String returned as the service name has the format "Calculator#add".
+	                    // So null terminate string at #.
+	                    *(strchr(pchTempService, '#')) = '\0';
+	
+	                    // get service description object from the WSDD Deployment object
+	                    pService = g_pWSDDDeployment->getService (pchTempService);
+	                    
+	                    delete [] pchTempService;
+	                }
+	            }
+	            
+	            //Get Global and Transport Handlers    
+	            Status = initializeHandlers (sSessionId, pSoap->getProtocol());
+	            if (AXIS_SUCCESS != Status)
+	            {
+	            	logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_INIT_FAILED")
+	            	
+	                throw AxisEngineException(SERVER_ENGINE_HANDLER_INIT_FAILED);
+	            }
+	            
+	            //Get Service specific Handlers from the pool if configured any
+	            if (pService != NULL)
+	            {
+	                Status = g_pHandlerPool->getRequestFlowHandlerChain(&m_pSReqFChain, sSessionId, pService);
+	                if (AXIS_SUCCESS != Status)
+	                    break;  
+	
+	                Status = g_pHandlerPool->getResponseFlowHandlerChain(&m_pSResFChain, sSessionId, pService);
+	                if (AXIS_SUCCESS != Status)
+	                    break;   
+	            }
+	    
+	            // Invoke all handlers and then the remote webservice
+	            // we generate response in the same way even if this has failed 
+	            Status = invoke (m_pMsgData, noResponse); 
+	        }
+	        while (0);
+	    
+	        //release the handlers
+	        releaseHandlers(sSessionId);    
         }
-        while (0);
-    
-        //release the handlers
-        releaseHandlers(sSessionId);         
     }
     catch(AxisException& e)
     {
@@ -155,19 +165,28 @@ process (SOAPTransport* pSoap, bool noResponse)
          * the original exception may be an transport exception which will go out of scope when
          * the transport library is unloaded. 
          */
+    	logRethrowException()
+    	
         throw AxisGenException(e);
     }
-    return Status;
+
+	logExitWithReturnCode(Status)
+	
+	return Status;
 }
 
 void ClientAxisEngine::
 releaseHandlers(string sSessionId)
 {
+	logEntryEngine("ClientAxisEngine::releaseHandlers")
+	
     // Pool back the Service specific handlers
     if (m_pSReqFChain) 
         g_pHandlerPool->poolHandlerChain(m_pSReqFChain, sSessionId);
     if (m_pSResFChain) 
         g_pHandlerPool->poolHandlerChain(m_pSResFChain, sSessionId); 
+    
+    logExit()
 }
 
 int ClientAxisEngine::
@@ -179,6 +198,8 @@ invoke (MessageData* pMsg)
 int ClientAxisEngine::
 invoke (MessageData* pMsg, bool noResponse)
 {
+	logEntryEngine("ClientAxisEngine::invoke")
+	
     enum AE_LEVEL { AE_START = 1, AE_SERH, AE_GLH, AE_TRH, AE_SERV };
     int Status = AXIS_FAIL;
     int level = AE_START;
@@ -186,27 +207,54 @@ invoke (MessageData* pMsg, bool noResponse)
     do
     {
         // Invoke client side service specific request handlers
+    	
+        logDebug("Invoke client side request handlers, if any.")
+
         if (m_pSReqFChain)
+        {
+            logDebug("Invoke client side service specific request handlers")
+
             if (AXIS_SUCCESS != (Status = m_pSReqFChain->invoke (pMsg)))
+            {
+                logDebug("Invoke of client side service-specific request handlers failed")
+
                 break;   
+            }
+        }
         
-        // AXISTRACE1("AFTER invoke service specific request handlers");
         level++; //AE_SERH              
 
         // Invoke global request handlers
-        if (m_pGReqFChain)
-            if (AXIS_SUCCESS != (Status = m_pGReqFChain->invoke (pMsg)))
-                break;  
         
-        // AXISTRACE1("AFTER invoke global request handlers");
+        if (m_pGReqFChain)
+        {
+            logDebug("Invoke global request handlers")
+
+            if (AXIS_SUCCESS != (Status = m_pGReqFChain->invoke (pMsg)))
+            {
+                logDebug("Invoke of global request handlers failed")
+
+                break;  
+            }
+        }
+        
         level++; //AE_GLH       
 
         // Invoke transport request handlers
-        if (m_pTReqFChain)
-            if (AXIS_SUCCESS != (Status = m_pTReqFChain->invoke (pMsg)))
-                break;   
+        
 
-        // AXISTRACE1("AFTER invoke transport request handlers");
+        if (m_pTReqFChain)
+        {
+            logDebug("Invoke transport request handlers")
+
+            if (AXIS_SUCCESS != (Status = m_pTReqFChain->invoke (pMsg)))
+            {
+                logDebug("Invoke of transport request handlers failed")
+
+                break;   
+            }
+        }
+
         level++; // AE_TRH
 
         if (AXIS_SUCCESS != (Status = m_pSZ->setOutputStream (m_pSoap)))
@@ -251,6 +299,9 @@ invoke (MessageData* pMsg, bool noResponse)
      *  at some point the response handlers from that point onwards
      *  are invoked.
      */
+    
+    logDebug("Invoke client side response handlers, if any.")
+
     switch (level)
     {
         case AE_SERV: 
@@ -264,21 +315,35 @@ invoke (MessageData* pMsg, bool noResponse)
         case AE_TRH: 
            // After invoking the transport handlers (at actual service invokation) it has failed
             if (m_pTResFChain)
+            {
+                logDebug("Invoke client side transport handlers.")
+
                 m_pTResFChain->invoke (pMsg);
+            }
                 
         case AE_GLH: 
             // transport handlers have failed invoke global response handlers
             if (m_pGResFChain)
+            {
+                logDebug("Invoke client side global response handlers.")
+
                 m_pGResFChain->invoke (pMsg);
+            }
                 
         case AE_SERH: // global handlers have failed
             // invoke web service specific response handlers
             if (m_pSResFChain)
+            {
+                logDebug("Invoke Web service-specific client side handlers.")
+
                 m_pSResFChain->invoke (pMsg);
+            }
                 
         case AE_START:; 
            // service specific handlers have failed
     };
+
+	logExitWithReturnCode(Status)
 
     return Status;
 }

@@ -33,33 +33,50 @@
 
 AXIS_CPP_NAMESPACE_START
 
-BasicTypeSerializer::BasicTypeSerializer ()
+BasicTypeSerializer::
+BasicTypeSerializer ()
 {
+	logEntryEngine("BasicTypeSerializer::BasicTypeSerializer")
+
     m_sSZ = "";
+    
+    logExit()
 }
 
-BasicTypeSerializer::~BasicTypeSerializer ()
+BasicTypeSerializer::
+~BasicTypeSerializer ()
 {
+	logEntryEngine("BasicTypeSerializer::~BasicTypeSerializer")
 
+    logExit()
 }
 
-const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    IAnySimpleType* pSimpleType)
+const AxisChar* BasicTypeSerializer::
+serializeAsElement (const AxisChar* pName,
+                    IAnySimpleType* pSimpleType)
 {
 	return serializeAsElement(pName, NULL, pSimpleType);
 }
 
-const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    const AxisChar* pPrefix, IAnySimpleType* pSimpleType)
+const AxisChar* BasicTypeSerializer::
+serializeAsElement (const AxisChar* pName,
+                    const AxisChar* pPrefix, 
+                    IAnySimpleType* pSimpleType)
 {
     return serializeAsElement(pName, pPrefix, NULL, pSimpleType);
 }
 
-const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
-    const AxisChar* pPrefix, const AxisChar* pNamespace, IAnySimpleType* pSimpleType)
+const AxisChar* BasicTypeSerializer::
+serializeAsElement (const AxisChar* pName,
+                    const AxisChar* pPrefix, 
+                    const AxisChar* pNamespace, 
+                    IAnySimpleType* pSimpleType)
 {
+	logEntryEngine("BasicTypeSerializer::serializeAsElement")
+
     m_sSZ = "<";
-	if (NULL != pPrefix) { 
+	if (NULL != pPrefix) 
+	{ 
 		m_sSZ += pPrefix;
 		m_sSZ += ":";
 	}
@@ -107,23 +124,29 @@ const AxisChar* BasicTypeSerializer::serializeAsElement (const AxisChar* pName,
         m_sSZ += " xsi:nil=\"true\">";
     }
     else
-    {
         m_sSZ += pSimpleType->serialize();
-    }
+    
     m_sSZ += "</";
-	if (NULL != pPrefix) {
+	if (NULL != pPrefix) 
+	{
 		m_sSZ += pPrefix;
 		m_sSZ += ":";
 	}
     m_sSZ += pName;
     m_sSZ += ">\n";
+    
+    logExitWithString(m_sSZ.c_str ())
+    
     return m_sSZ.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::serializeAsAttribute 
-    (const AxisChar* pName, const AxisChar* pPrefix,
-    IAnySimpleType* pSimpleType)
+const AxisChar* BasicTypeSerializer::
+serializeAsAttribute (const AxisChar* pName, 
+		              const AxisChar* pPrefix,
+                      IAnySimpleType* pSimpleType)
 {
+	logEntryEngine("BasicTypeSerializer::serializeAsAttribute")
+
     m_sSZ = ' ';
     if (pPrefix)
     {
@@ -137,10 +160,14 @@ const AxisChar* BasicTypeSerializer::serializeAsAttribute
     m_sSZ += pSimpleType->serialize();
 
     m_sSZ += '"';
+    
+    logExitWithString(m_sSZ.c_str ())
+
     return m_sSZ.c_str ();
 }
 
-const AxisChar* BasicTypeSerializer::basicTypeStr (XSDTYPE type)
+const AxisChar* BasicTypeSerializer::
+basicTypeStr (XSDTYPE type)
 {
     switch (type)
     {

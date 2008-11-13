@@ -32,72 +32,72 @@ extern AXIS_CPP_NAMESPACE_PREFIX HandlerLoader* g_pHandlerLoader;
 
 AXIS_CPP_NAMESPACE_START
 
-RequestScopeHandlerPool::RequestScopeHandlerPool ()
+RequestScopeHandlerPool::
+RequestScopeHandlerPool ()
 {
 
 }
 
-RequestScopeHandlerPool::~RequestScopeHandlerPool ()
+RequestScopeHandlerPool::
+~RequestScopeHandlerPool ()
 {
-    for (map < int, list <BasicHandler*> >::iterator it =
-        m_Handlers.begin (); it != m_Handlers.end (); it++)
+	logEntryEngine("RequestScopeHandlerPool::~RequestScopeHandlerPool")
+
+    for (map < int, list <BasicHandler*> >::iterator it = m_Handlers.begin (); it != m_Handlers.end (); it++)
     {
-        for (list <BasicHandler*>::iterator itr = (*it).second.begin ();
-            itr != (*it).second.end (); itr++)
+        for (list <BasicHandler*>::iterator itr = (*it).second.begin (); itr != (*it).second.end (); itr++)
         {
             g_pHandlerLoader->deleteHandler (*itr, (*it).first);
         }
+        
         (*it).second.clear ();
     }
+	
     m_Handlers.clear ();
+    
+    logExit()
 }
 
-int RequestScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
+int RequestScopeHandlerPool::
+getInstance (BasicHandler** pHandler, int nLibId)
 {
-    //lock ();
+	logEntryEngine("RequestScopeHandlerPool::getInstance")
+
 	Lock l(this);
-    int Status;
+	
+    int Status = AXIS_SUCCESS;
+    
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
         if (m_Handlers[nLibId].empty ())
         {
             Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
             if (AXIS_SUCCESS == Status)
-            {
-                /* This just creates the entry in m_Handlers so that next 
-	         * time we know that the DLL is loaded
-		 */ 
                 m_Handlers[nLibId].clear ();
-            }
-            //unlock ();
-            return Status;
         }
         else
         {
             *pHandler = m_Handlers[nLibId].front ();
             m_Handlers[nLibId].pop_front ();
-            //unlock ();
-            return AXIS_SUCCESS;
         }
     }
     else // Not even the handler DLL loaded
     {
         Status = g_pHandlerLoader->createHandler (pHandler, nLibId);
         if (AXIS_SUCCESS == Status)
-        {
-            /* This just creates the entry in m_Handlers so that next time we 
-	     * know that the DLL is loaded
-	     */ 
             m_Handlers[nLibId].clear ();
-        }
-        //unlock ();
-        return Status;
     }
+    
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
-int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
+int RequestScopeHandlerPool::
+putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
 {
-    //lock ();
+	logEntryEngine("RequestScopeHandlerPool::putInstance")
+
 	Lock l(this);
 
     if (0 != pHandler->_functions)
@@ -111,7 +111,9 @@ int RequestScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId, bo
     }
 
     m_Handlers[nLibId].push_back (pHandler);
-    //unlock ();
+
+	logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 

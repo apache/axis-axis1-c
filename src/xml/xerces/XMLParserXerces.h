@@ -47,6 +47,8 @@ public:
     const char* peek();
     const XML_Ch* getPrefix4NS(const XML_Ch* pcNS);
 
+    void enableTrace(const char* logFilePath, const char *filters);
+    
 private:
     const AnyElement* parse(bool ignoreWhitespace=true, bool peekIt=false);
 

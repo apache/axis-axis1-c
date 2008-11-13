@@ -48,18 +48,25 @@ extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_START
 
-SoapSerializer::SoapSerializer()
+SoapSerializer::
+SoapSerializer()
 {
+	logEntryEngine("SoapSerializer::SoapSerializer")
+
     m_pSoapEnvelope = NULL;
     m_iSoapVersion = SOAP_VER_1_1;
     m_pOutputStream = NULL;
     m_pNamespace = NULL;
     m_pContentIdSet = NULL;
+    
+	logExit()
 }
 
 SoapSerializer::
 ~SoapSerializer()
 {
+	logEntryEngine("SoapSerializer::~SoapSerializer")
+
     delete m_pSoapEnvelope;
 
     /* Cleaning the memory allocated to the SoapAttachments */       
@@ -78,12 +85,18 @@ SoapSerializer::
         itAttRef++;
     }
     m_attachmentRefs.clear();
+    
+    logExit()
 }
 
 int SoapSerializer::
 setSoapEnvelope( SoapEnvelope * pSoapEnvelope)
 {
+	logEntryEngine("SoapSerializer::setSoapEnvelope")
+
     m_pSoapEnvelope = pSoapEnvelope;
+
+	logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -91,6 +104,8 @@ setSoapEnvelope( SoapEnvelope * pSoapEnvelope)
 int SoapSerializer::
 setSoapHeader( SoapHeader * pSoapHeader)
 {
+	logEntryEngine("SoapSerializer::setSoapHeader")
+
     int intStatus = AXIS_FAIL;
 
     if( m_pSoapEnvelope)
@@ -104,6 +119,8 @@ setSoapHeader( SoapHeader * pSoapHeader)
             intStatus= AXIS_SUCCESS;
         }
     }
+    
+    logExitWithReturnCode(intStatus)
 
     return intStatus;
 }
@@ -111,6 +128,8 @@ setSoapHeader( SoapHeader * pSoapHeader)
 int SoapSerializer::
 setSoapBody( SoapBody * pSoapBody)
 {
+	logEntryEngine("SoapSerializer::setSoapBody")
+
     int intStatus = AXIS_FAIL;
 
     if(m_pSoapEnvelope)
@@ -119,12 +138,16 @@ setSoapBody( SoapBody * pSoapBody)
         intStatus = AXIS_SUCCESS;
     }
 
+    logExitWithReturnCode(intStatus)
+
     return intStatus;
 }
 
 int SoapSerializer::
 setSoapMethod( SoapMethod *pSoapMethod)
 {
+	logEntryEngine("SoapSerializer::setSoapMethod")
+
     int intStatus = AXIS_FAIL;
 
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
@@ -135,12 +158,16 @@ setSoapMethod( SoapMethod *pSoapMethod)
         intStatus = AXIS_SUCCESS;
     }
 
+    logExitWithReturnCode(intStatus)
+
     return intStatus;
 }
 
 int SoapSerializer::
 addOutputBasicArrayParam( const Axis_Array * pArray, XSDTYPE nType, const AxisChar * pName)
 {
+	logEntryEngine("SoapSerializer::addOutputBasicArrayParam")
+
     int    iSuccess = AXIS_SUCCESS;
 
     Axis_Array * pLocalArray       = (Axis_Array *)NULL;
@@ -181,6 +208,8 @@ addOutputBasicArrayParam( const Axis_Array * pArray, XSDTYPE nType, const AxisCh
         (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
 
+    logExitWithReturnCode(iSuccess)
+
     return iSuccess;  
 }
 
@@ -189,6 +218,8 @@ addOutputCmplxArrayParam( const Axis_Array * pArray,
                           void * pSZFunct, void * pDelFunct,
                           const AxisChar * pName, const AxisChar * pNamespace)
 {
+	logEntryEngine("SoapSerializer::addOutputCmplxArrayParam")
+
     int    iSuccess = AXIS_SUCCESS;
 
     Axis_Array * pLocalArray       = (Axis_Array *)NULL;
@@ -241,6 +272,8 @@ addOutputCmplxArrayParam( const Axis_Array * pArray,
 
     pParam->setName( pName);
 
+    logExitWithReturnCode(iSuccess)
+    
     return iSuccess;  
 }
 
@@ -249,6 +282,8 @@ addOutputCmplxParam( void * pObject,
                      void * pSZFunct, void * pDelFunct,
                      const AxisChar * pName, const AxisChar * pNamespace)
 { 
+	logEntryEngine("SoapSerializer::addOutputCmplxParam")
+
     int    iSuccess = AXIS_SUCCESS;
 
     Param * pParam = new Param();
@@ -264,6 +299,8 @@ addOutputCmplxParam( void * pObject,
 
     pParam->setName( pName);
     
+    logExitWithReturnCode(iSuccess)
+    
     return iSuccess;  
 }
 
@@ -272,6 +309,8 @@ addFaultDetail( void * pObject,
                 void * pSZFunct, void * pDelFunct,
                 const AxisChar * pName, const AxisChar * pNamespace)
 { 
+	logEntryEngine("SoapSerializer::addFaultDetail")
+
     int    iSuccess = AXIS_SUCCESS;
     Param * pParam = new Param();
 
@@ -287,12 +326,16 @@ addFaultDetail( void * pObject,
 
     pParam->setName( pName);
 
+    logExitWithReturnCode(iSuccess)
+    
     return iSuccess;
 }
 
 int SoapSerializer::
 addFaultDetail( const AxisChar * pDetail)
 {
+	logEntryEngine("SoapSerializer::addFaultDetail")
+
 	int iStatus = AXIS_FAIL;
     if( m_pSoapEnvelope &&
         (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapFault))
@@ -300,12 +343,16 @@ addFaultDetail( const AxisChar * pDetail)
 		iStatus = m_pSoapEnvelope->m_pSoapBody->m_pSoapFault->setFaultDetail(pDetail);
 	}
 
+    logExitWithReturnCode(iStatus)
+    
 	return iStatus;
 }
 
 int SoapSerializer::
 setSoapFault( SoapFault * pSoapFault)
 {
+	logEntryEngine("SoapSerializer::setSoapFault")
+
     int intStatus = AXIS_FAIL;
 
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
@@ -316,12 +363,16 @@ setSoapFault( SoapFault * pSoapFault)
         intStatus = AXIS_SUCCESS;
     }
 
+    logExitWithReturnCode(intStatus)
+    
     return intStatus;
 }
 
 int SoapSerializer::
 setOutputStream( SOAPTransport * pStream)
 {
+	logEntryEngine("SoapSerializer::setOutputStream")
+
     int    iStatus = AXIS_SUCCESS;
 
     m_pOutputStream = pStream;
@@ -379,7 +430,11 @@ setOutputStream( SOAPTransport * pStream)
             serialize( "<?xml version='1.0' encoding='utf-8' ?>", NULL);
 
             if( (iStatus = m_pSoapEnvelope->serialize( *this, (SOAP_VERSION) m_iSoapVersion)) == AXIS_FAIL)
+            {
+            	logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_MESSAGE_INCOMPLETE", "The SOAP serializer has detected errors in the header or envelope. Transmission has been aborted.")
+            	
                 throw AxisSoapException( CLIENT_SOAP_MESSAGE_INCOMPLETE, "The SOAP serializer has detected errors in the header or envelope. Transmission has been aborted.");
+            }
 
             if( checkAttachmentAvailability())
                 serializeAttachments( *this);
@@ -388,17 +443,27 @@ setOutputStream( SOAPTransport * pStream)
     catch( AxisSoapException& e)
     {
         e = e;
+        
+    	logRethrowException()
+
         throw;
     }
     catch( AxisException& e)
     {
         e = e;
+        
+    	logRethrowException()
+
         throw;
     }
     catch( ...)
     {
+    	logRethrowException()
+
         throw;
     }
+
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -410,7 +475,11 @@ setOutputStream( SOAPTransport * pStream)
 void SoapSerializer::
 markEndOfStream()
 {
+	logEntryEngine("SoapSerializer::markEndOfStream")
+
     m_pOutputStream->flushOutput();
+	
+    logExit()
 }
 
 /*
@@ -421,6 +490,8 @@ markEndOfStream()
 int SoapSerializer::
 init()
 {
+	logEntryEngine("SoapSerializer::init")
+
     m_nStatus = AXIS_SUCCESS;
 
     delete m_pSoapEnvelope;
@@ -433,12 +504,16 @@ init()
     m_nCounter=0;
     m_NsStack.clear();
 
+    logExitWithReturnCode(m_nStatus)
+
     return m_nStatus;
 }
 
 int SoapSerializer::
 setSoapVersion( SOAP_VERSION nSoapVersion)
 {
+	logEntryEngine("SoapSerializer::setSoapVersion")
+
     m_iSoapVersion = nSoapVersion;
 
     m_pSoapEnvelope->clearStandardNamespaceDecl(); // Samisa : AXISCPP-368
@@ -454,13 +529,19 @@ setSoapVersion( SOAP_VERSION nSoapVersion)
     m_NsStack[SoapKeywordMapping::map(nSoapVersion).pchNamespaceUri] = 
         SoapKeywordMapping::map(nSoapVersion).pchPrefix;
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 void SoapSerializer::
 removeNamespacePrefix( const AxisChar * pNamespace)
 {
+	logEntryEngine("SoapSerializer::removeNamespacePrefix")
+
     if( m_NsStack.find( pNamespace) != m_NsStack.end())
         m_NsStack.erase( pNamespace);
+	
+	logExit()
 }
 
 const AxisChar * SoapSerializer::
@@ -494,6 +575,8 @@ getNamespacePrefix( const AxisChar * pNamespace, bool & blnIsNewPrefix)
 IWrapperSoapSerializer& SoapSerializer::
 operator << (const AxisChar * cSerialized)
 {
+	logSetFunctionNameEngine("SoapSerializer::operator <<")
+
 	// some thing has gone wrong. So do nothing 
     if( AXIS_SUCCESS != m_nStatus) 
         return *this;
@@ -506,24 +589,34 @@ operator << (const AxisChar * cSerialized)
     catch(AxisSoapException& e)
     {
         e = e;
+        
+    	logRethrowException()
+
         throw;
     }
     catch(AxisException& e)
     {
         e = e;
+        
+    	logRethrowException()
+
         throw;
     }
     catch(...)
     {
+    	logRethrowException()
+
         throw;
     }
-
+    
     return *this;
 }
 
 int SoapSerializer::
 createSoapMethod( const AxisChar * sLocalName, const AxisChar * sURI)
 {
+	logEntryEngine("SoapSerializer::createSoapMethod")
+
 	if (NULL == m_pSoapEnvelope || NULL == m_pSoapEnvelope->m_pSoapBody)
 		return AXIS_FAIL;
 		
@@ -541,6 +634,8 @@ createSoapMethod( const AxisChar * sLocalName, const AxisChar * sURI)
     pMethod->setPrefix( getNamespacePrefix( sURI));
     pMethod->setURI( sURI);
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;
 }
 
@@ -550,6 +645,8 @@ createSoapFault( const AxisChar * sLocalName,
                  const AxisChar * sFaultCode,
                  const AxisChar * sFaultString)
 {
+	logEntryEngine("SoapSerializer::createSoapFault")
+
     SoapFault * pSoapFault = new SoapFault();
 
     setSoapFault( pSoapFault);
@@ -567,6 +664,8 @@ createSoapFault( const AxisChar * sLocalName,
     strUrl += string( pcPort);
     pSoapFault->setFaultactor( strUrl.c_str());
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;  
 }
 
@@ -577,10 +676,14 @@ createSoapFault( const AxisChar * sLocalName,
 ArrayBean * SoapSerializer::
 makeArrayBean( XSDTYPE nType, void ** pArray)
 {
+	logEntryEngine("SoapSerializer::makeArrayBean")
+
     ArrayBean* pAb = new ArrayBean();
 
     pAb->m_type = nType;
     pAb->m_value.sta = pArray;
+
+    logExitWithPointer(pAb)
 
     return pAb;
 }
@@ -592,6 +695,8 @@ makeArrayBean( XSDTYPE nType, void ** pArray)
 ArrayBean * SoapSerializer::
 makeArrayBean(void ** pObject, void * pSZFunct, void * pDelFunct)
 {
+	logEntryEngine("SoapSerializer::makeArrayBean")
+
     ArrayBean* pAb = new ArrayBean();
 
     pAb->m_type = USER_TYPE;
@@ -600,15 +705,21 @@ makeArrayBean(void ** pObject, void * pSZFunct, void * pDelFunct)
     pAb->m_value.cta->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
     pAb->m_value.cta->pObject = pObject;
 
+    logExitWithPointer(pAb)
+
     return pAb;
 }
 
 IHeaderBlock * SoapSerializer::
 createHeaderBlock()
 {
+	logEntryEngine("SoapSerializer::createHeaderBlock")
+
     HeaderBlock * pHeaderBlock= new HeaderBlock();
 
     setHeaderBlock( pHeaderBlock);
+
+    logExitWithPointer(pHeaderBlock)
 
     return pHeaderBlock;
 }
@@ -616,6 +727,8 @@ createHeaderBlock()
 int SoapSerializer::
 setHeaderBlock( HeaderBlock * pHeaderBlock)
 {
+	logEntryEngine("SoapSerializer::setHeaderBlock")
+
     int intStatus = AXIS_FAIL;
 
     if( (m_pSoapEnvelope) && (m_pSoapEnvelope->m_pSoapHeader))
@@ -631,6 +744,8 @@ setHeaderBlock( HeaderBlock * pHeaderBlock)
     m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock( pHeaderBlock);
     intStatus = AXIS_SUCCESS;
 
+    logExitWithReturnCode(intStatus)
+
     return intStatus;
 }
 
@@ -643,8 +758,12 @@ setHeaderBlock( HeaderBlock * pHeaderBlock)
 int SoapSerializer::
 removeSoapHeader()
 {
+	logEntryEngine("SoapSerializer::removeSoapHeader")
+
     delete m_pSoapEnvelope->m_pSoapHeader;
     m_pSoapEnvelope->m_pSoapHeader= NULL;
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;  
 }
@@ -658,6 +777,8 @@ serializeCmplxArray( const Axis_Array * pArray,
                      void * pSZFunct, void * pDelFunct, 
                      const AxisChar * pName, const AxisChar * pNamespace)
 {
+	logEntryEngine("SoapSerializer::serializeCmplxArray")
+
     ArrayBean  * pAb = (ArrayBean *)NULL;
     
     // We need to handle NULL array passed in which means serialize empty array.
@@ -711,6 +832,8 @@ serializeCmplxArray( const Axis_Array * pArray,
     pAb->RemoveArrayPointer();
     delete pParam;
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;  
 }
 
@@ -733,6 +856,8 @@ int SoapSerializer::
 serializeBasicArray(const Axis_Array* pArray, 
                     const AxisChar* pNamespace, XSDTYPE nType, const AxisChar* pName)
 {
+	logEntryEngine("SoapSerializer::serializeBasicArray")
+
     ArrayBean  * pAb = (ArrayBean *)NULL;
     
     // We need to handle NULL array passed in which means serialize empty array.
@@ -783,6 +908,8 @@ serializeBasicArray(const Axis_Array* pArray,
     pAb->RemoveArrayPointer();
     delete pParam;
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;  
 }
 
@@ -801,30 +928,34 @@ int SoapSerializer::setOutputStreamForTesting(SOAPTransport* pStream)
 int SoapSerializer::
 addOutputParam( const AxisChar * pchName, void * pValue, XSDTYPE type)
 {
+	logEntryEngine("SoapSerializer::addOutputParam")
+
     IAnySimpleType* xsdValue = AxisUtils::createSimpleTypeObject(pValue, type);
     
     Param * pParam = new Param();
 
-    if( !pParam)
-        return AXIS_FAIL;
-
-    pParam->m_Type = type;
-    pParam->m_sName = pchName;
-
-
-    pParam->setValue(type, xsdValue);
+    int iStatus = AXIS_FAIL;
     
-    if( m_pSoapEnvelope &&
-        (m_pSoapEnvelope->m_pSoapBody) &&
-        (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
-    else
+    if( pParam)
     {
-        delete pParam;
-        return AXIS_FAIL;
+	    pParam->m_Type = type;
+	    pParam->m_sName = pchName;
+	    pParam->setValue(type, xsdValue);
+	    
+	    if( m_pSoapEnvelope &&
+	        (m_pSoapEnvelope->m_pSoapBody) &&
+	        (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+	    {
+	        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
+	        iStatus = AXIS_SUCCESS;
+	    }
+	    else
+	        delete pParam;
     }
 
-    return AXIS_SUCCESS;  
+    logExitWithReturnCode(iStatus)
+
+    return iStatus;  
 }
 
 int SoapSerializer::serializeAsElement( const AxisChar * pName,
@@ -842,7 +973,6 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     int ret;
     ret = serializeAsElement(pName, pNamespace, pSimpleType);
-    // got to clean memory allocated in AxisUtils::createSimpleTypeObject
     delete pSimpleType;
 
     return ret;
@@ -853,10 +983,15 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
     return serializeAsElement( pName, NULL, pSimpleType);
 }
 
-int SoapSerializer::serializeAsElement( const AxisChar * pName, 
-                                        const AxisChar * pNamespace,
-                                        IAnySimpleType * pSimpleType) 
+int SoapSerializer::
+serializeAsElement( const AxisChar * pName, 
+                    const AxisChar * pNamespace,
+                    IAnySimpleType * pSimpleType) 
 {
+	logEntryEngine("SoapSerializer::serializeAsElement")
+
+    int iStatus = AXIS_FAIL;
+
     const AxisChar* pPrefix = NULL;
     bool blnIsNewPrefix = false;
 
@@ -876,10 +1011,12 @@ int SoapSerializer::serializeAsElement( const AxisChar * pName,
     if( pSerialized)
     {
         *this << pSerialized;
-        return AXIS_SUCCESS;  
+        iStatus = AXIS_SUCCESS;  
     }
 
-    return AXIS_FAIL;  // Can it only be unsuccessful?
+    logExitWithReturnCode(iStatus)
+
+    return iStatus;
 } 
 
 int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
@@ -895,10 +1032,15 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
     return status;
 }
 
-int SoapSerializer::serializeAsAttribute( const AxisChar * pName, 
-                                          const AxisChar * pNamespace, 
-                                          IAnySimpleType* pSimpleType)
+int SoapSerializer::
+serializeAsAttribute( const AxisChar * pName, 
+                      const AxisChar * pNamespace, 
+                      IAnySimpleType* pSimpleType)
 {
+	logEntryEngine("SoapSerializer::serializeAsAttribute")
+
+    int iStatus = AXIS_FAIL;
+
     const AxisChar * pPrefix = NULL;
 
     if( pNamespace)
@@ -909,14 +1051,19 @@ int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
     if( pSerialized)
     {
         *this << pSerialized;
-        return AXIS_SUCCESS;   
+        iStatus = AXIS_SUCCESS;   
     }
 
-    return AXIS_FAIL;  // Can it only be unsuccessful?
+    logExitWithReturnCode(iStatus)
+
+    return iStatus; 
 }
 
-void SoapSerializer::serializeVargs( const char * pFirst, va_list vList)
+void SoapSerializer::
+serializeVargs( const char * pFirst, va_list vList)
 {
+	logEntryEngine("SoapSerializer::serializeVargs")
+
     const char * pArg;
     
     if( pFirst)
@@ -930,33 +1077,46 @@ void SoapSerializer::serializeVargs( const char * pFirst, va_list vList)
             *this << pArg;
     } 
     while( pArg != NULL);
+    
+    logExit()
 }
 
-void SoapSerializer::serialize( const char * pFirst, ...)
+void SoapSerializer::
+serialize( const char * pFirst, ...)
 {
+	logEntryEngine("SoapSerializer::serialize")
+
     va_list vList;
 
     va_start( vList, pFirst );   
     serializeVargs(pFirst, vList);
-    va_end( vList);         
+    va_end( vList);  
+    
+    logExit()
 }
 
 /*
  * Used probably by a handler to add a header block to the Serializer. 
  */
-int SoapSerializer::addHeaderBlock( IHeaderBlock * pBlk)
+int SoapSerializer::
+addHeaderBlock( IHeaderBlock * pBlk)
 {
+	logEntryEngine("SoapSerializer::addHeaderBlock")
+
+	int iStatus = AXIS_FAIL;
+	
     if( m_pSoapEnvelope)
     {
         if( !m_pSoapEnvelope->m_pSoapHeader)
             m_pSoapEnvelope->m_pSoapHeader = new SoapHeader();
+        
+        m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock( (HeaderBlock *) pBlk);
+        iStatus = AXIS_SUCCESS;
     }
-    else /* error : by this time there should be an envelope */
-        return AXIS_FAIL;
 
-    m_pSoapEnvelope->m_pSoapHeader->addHeaderBlock( (HeaderBlock *) pBlk);
+    logExitWithReturnCode(iStatus)
 
-    return AXIS_SUCCESS;  
+    return iStatus;  
 }
 
 int SoapSerializer::setBodyAsHexBinary( xsd__hexBinary body)
@@ -1008,52 +1168,77 @@ void SoapSerializer::serializeEndElementOfType( const AxisChar * pName)
     serialize( "</", pName, ">", NULL);
 }
 
-IHeaderBlock * SoapSerializer::createHeaderBlock( const AxisChar * pachLocalName, 
-                                                  const AxisChar * pachUri)
+IHeaderBlock * SoapSerializer::
+createHeaderBlock( const AxisChar * pachLocalName, 
+                   const AxisChar * pachUri)
 {
+	logEntryEngine("SoapSerializer::createHeaderBlock")
+
     HeaderBlock * pHeaderBlock= new HeaderBlock( pachLocalName, pachUri);
 
     setHeaderBlock( pHeaderBlock);
 
+    logExitWithPointer(pHeaderBlock)
+
     return pHeaderBlock;    
 }
 
-SoapMethod * SoapSerializer::getSOAPMethod()
+SoapMethod * SoapSerializer::
+getSOAPMethod()
 {
-    if ( m_pSoapEnvelope &&
-        (m_pSoapEnvelope->m_pSoapBody))
-    	return m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+	logEntryEngine("SoapSerializer::getSOAPMethod")
+
+	SoapMethod * returnValue = NULL;
 	
-    return NULL;
+    if ( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody))
+    	returnValue = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+	
+    logExitWithPointer(returnValue)
+    
+    return returnValue;
 }
 
 int SoapSerializer::
 setSOAPMethodAttribute( Attribute * pAttribute)
 {
+	logEntryEngine("SoapSerializer::setSOAPMethodAttribute")
+	
+	int iStatus = AXIS_FAIL;
+
     if( m_pSoapEnvelope &&
         (m_pSoapEnvelope->m_pSoapBody) &&
         (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
     {
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addAttribute( pAttribute);
 
-        return AXIS_SUCCESS;  
+        iStatus = AXIS_SUCCESS;  
     }
 
-    return AXIS_FAIL;
+    logExitWithReturnCode(iStatus)
+
+    return iStatus;
 }
 void SoapSerializer::
 clearSOAPMethodAttributes()
 {
+	logEntryEngine("SoapSerializer::clearSOAPMethodAttributes")
+
     if (m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapBody
             && m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->clearAttributes();
+	
+	logExit()
 }
 
 int SoapSerializer::
 serializeAnyObject( AnyType * pAnyObject)
 {
+	logEntryEngine("SoapSerializer::serializeAnyObject")
+
     for( int i = 0; i < pAnyObject->_size; i++)
         serialize( pAnyObject->_array[i], 0);
+
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;  
 }
@@ -1061,6 +1246,8 @@ serializeAnyObject( AnyType * pAnyObject)
 int SoapSerializer::
 addOutputAnyObject( AnyType * pAnyObject)
 {
+	logEntryEngine("SoapSerializer::addOutputAnyObject")
+
     Param * pParam = new Param();
 
     pParam->m_Type = XSD_ANY;
@@ -1071,18 +1258,26 @@ addOutputAnyObject( AnyType * pAnyObject)
         (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
 
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;  
 }
 
-IHeaderBlock * SoapSerializer::getHeaderBlock( const AxisChar * pcName, 
-                                               const AxisChar * pcNamespace)
+IHeaderBlock * SoapSerializer::
+getHeaderBlock( const AxisChar * pcName, 
+                const AxisChar * pcNamespace)
 {
+	logEntryEngine("SoapSerializer::getHeaderBlock")
+ 
+    IHeaderBlock * returnValue = NULL;
+	
     // there has been no <Header> element so there can be no Header blocks	
-    if( (!m_pSoapEnvelope) ||
-        (!m_pSoapEnvelope->m_pSoapHeader))
-        return NULL; 
+    if (m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapHeader)
+    	returnValue = m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock( pcName, pcNamespace, false);
+    
+    logExitWithPointer(returnValue)
 
-    return m_pSoapEnvelope->m_pSoapHeader->getHeaderBlock( pcName, pcNamespace, false);
+    return returnValue;
 }
 
 IHeaderBlock * SoapSerializer::getFirstHeaderBlock()
@@ -1095,8 +1290,11 @@ IHeaderBlock * SoapSerializer::getNextHeaderBlock()
     return m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
 }
 
-int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
+int SoapSerializer::
+serializeAsChardata( void * pValue, XSDTYPE type)
 {
+	logEntryEngine("SoapSerializer::serializeAsChardata")
+
     char * pStr = m_Buf;
 
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
@@ -1106,11 +1304,16 @@ int SoapSerializer::serializeAsChardata( void * pValue, XSDTYPE type)
 
     delete pSimpleType;
     
+    logExitWithReturnCode(AXIS_SUCCESS)
+
     return AXIS_SUCCESS;  
 }
 
-void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
+void SoapSerializer::
+serializeAttachments( SoapSerializer &pSZ)
 {
+	logEntryEngine("SoapSerializer::serializeAttachments")
+
     /*serializing the attachments*/
     map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
     while( itCurrAttach != m_SoapAttachments.end())
@@ -1124,14 +1327,18 @@ void SoapSerializer::serializeAttachments( SoapSerializer &pSZ)
         itCurrAttach++;
     }
     pSZ.serialize("\r\n--" MIMEBOUNDARY "--\r\n", NULL);
+    
+    logExit()
 }
 
-void SoapSerializer::addAttachment( const AxisChar * achId, ISoapAttachment * pAttach)
+void SoapSerializer::
+addAttachment( const AxisChar * achId, ISoapAttachment * pAttach)
 {
     m_SoapAttachments[achId] = pAttach;
 }
 
-void SoapSerializer::addAttachments(ISoapAttachment** pAttach, int iAttchArraySize)
+void SoapSerializer::
+addAttachments(ISoapAttachment** pAttach, int iAttchArraySize)
 {   
      for (int i=0; i < iAttchArraySize; i++)
     {
@@ -1141,9 +1348,10 @@ void SoapSerializer::addAttachments(ISoapAttachment** pAttach, int iAttchArraySi
  
 }
 
-void SoapSerializer::addAttachmentHeader(const AxisChar * achId,
-                                         const AxisChar * achHeaderName,
-                                         const AxisChar * achHeaderValue)
+void SoapSerializer::
+addAttachmentHeader(const AxisChar * achId,
+                    const AxisChar * achHeaderName,
+                    const AxisChar * achHeaderValue)
 {
 
     if (m_SoapAttachments[achId] == NULL)
@@ -1152,8 +1360,9 @@ void SoapSerializer::addAttachmentHeader(const AxisChar * achId,
     m_SoapAttachments[achId]->addHeader( achHeaderName, achHeaderValue);
 }
 
-void SoapSerializer::addAttachmentBody( const AxisChar * achId,
-                                        xsd__base64Binary * pAttchBody)
+void SoapSerializer::
+addAttachmentBody( const AxisChar * achId,
+                   xsd__base64Binary * pAttchBody)
 {
     if( m_SoapAttachments[achId] == NULL)
         m_SoapAttachments[achId] = new SoapAttachment(m_pContentIdSet);        
@@ -1161,18 +1370,20 @@ void SoapSerializer::addAttachmentBody( const AxisChar * achId,
     m_SoapAttachments[achId]->addBody( pAttchBody);
 }
 
-void SoapSerializer::addNamespaceToEnvelope( AxisChar * pachNamespaceURI,
-                                             AxisChar * pachPrefix)
+void SoapSerializer::
+addNamespaceToEnvelope( AxisChar * pachNamespaceURI,
+                        AxisChar * pachPrefix)
 {
-        std::list<Attribute*> attributeList;
-    Attribute * pNameSpace = new Attribute( attributeList,
-                                            pachPrefix,
-                                            "xmlns",
-                                            pachNamespaceURI);
+	logEntryEngine("SoapSerializer::addNamespaceToEnvelope")
+
+    std::list<Attribute*> attributeList;
+    Attribute * pNameSpace = new Attribute( attributeList, pachPrefix, "xmlns", pachNamespaceURI);
 
     m_pSoapEnvelope->addNamespaceDecl( pNameSpace);
 
     addNamespaceToNamespaceList( pachNamespaceURI, pachPrefix);
+    
+    logExit()
 }
 
 void SoapSerializer::addNamespaceToNamespaceList( const AxisChar * pachNamespaceURI,
@@ -1296,7 +1507,8 @@ AxisXMLString SoapSerializer::getNamespaceURL( string sNameSpace)
 int SoapSerializer::
 deleteHeaderBlock( const AxisChar * pName, const AxisChar * pNamespace)
 {
-   
+	logEntryEngine("SoapSerializer::deleteHeaderBlock")
+
     int iStatus = AXIS_SUCCESS;
 
     iStatus = m_pSoapEnvelope->m_pSoapHeader->deleteHeaderBlock( pName, pNamespace);
@@ -1309,11 +1521,16 @@ deleteHeaderBlock( const AxisChar * pName, const AxisChar * pNamespace)
         iStatus = AXIS_SUCCESS;
     }
 
+    logExitWithReturnCode(iStatus)
+
     return iStatus; 
 }
 
-void SoapSerializer::reset()
+void SoapSerializer::
+reset()
 {
+	logEntryEngine("SoapSerializer::reset")
+
     m_nCounter = 0; // reset namespace prifix counter 
 
     if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
@@ -1321,6 +1538,8 @@ void SoapSerializer::reset()
 
     if( m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapHeader )
         m_pSoapEnvelope->m_pSoapHeader->clear();
+    
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

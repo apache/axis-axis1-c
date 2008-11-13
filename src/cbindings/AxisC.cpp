@@ -18,6 +18,9 @@
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
+#include <stdarg.h>
+#include <string>
+
 #include <iostream>
 
 #include <axis/ElementMissingException.hpp>
@@ -488,5 +491,40 @@ void axiscAxisGenerateUnknownElementException(const char *s)
 	throw UnknownElementException(s);
 }
 
+AXISC_STORAGE_CLASS_INFO
+int axiscAxisStartTrace(const char* logFilePath, const char *logFilter)
+{
+	return Axis::startTrace(logFilePath, logFilter);
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscAxisStopTrace()
+{
+	Axis::stopTrace();
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscAxisWriteTrace(const char* functionName, const char * fmt, ...)
+{
+	// If logging is not enabled, just return.
+	if (!AxisTrace::isLoggingEnabled() || !AxisTrace::isStubLoggingEnabled())
+		return;
+	
+    // Construct final formatter
+    std::string myfmt;
+    std::string blank = " ";
+    if (NULL == fmt)
+        fmt = "";
+    myfmt += TRACE_COMPONENT_STUB + blank;
+    myfmt += TRACE_TYPE_DEBUG + blank;
+    myfmt += functionName;
+    myfmt += "(): ";
+    myfmt += fmt;
+        
+    va_list vargs;
+    va_start(vargs,fmt);
+    AxisTrace::writeTrace(myfmt.c_str(), vargs);        
+    va_end(vargs);
+}
 
 }

@@ -38,6 +38,8 @@ AXIS_CPP_NAMESPACE_START
 
 AxisEngine::AxisEngine ()
 {
+	logEntryEngine("AxisEngine::AxisEngine")
+
     m_pSZ = NULL;
     m_pDZ = NULL;
     m_pGReqFChain = NULL;
@@ -47,76 +49,84 @@ AxisEngine::AxisEngine ()
     m_pSReqFChain = NULL;
     m_pSResFChain = NULL;
     m_pMsgData = NULL;
-
+    
+    logExit()
 }
 
 AxisEngine::~AxisEngine ()
 {
+	logEntryEngine("AxisEngine::~AxisEngine")
+
     if (m_pDZ)
         g_pDeserializerPool->putInstance (m_pDZ);
     if (m_pSZ)
         g_pSerializerPool->putInstance (m_pSZ);
     if (m_pMsgData)
         delete m_pMsgData;
+    
+    logExit()    
 }
 
 int AxisEngine::initialize ()
 {
-    int Status;
+	logEntryEngine("AxisEngine::initialize")
+
+    int Status = AXIS_SUCCESS;
+	
     m_pMsgData = new MessageData ();
     if (!m_pMsgData)
-        return AXIS_FAIL;
+    	Status = AXIS_FAIL;
+    
     // Create and initialize Serializer and Deserializer objects
-    if (AXIS_SUCCESS != (Status = g_pSerializerPool->getInstance ((IWrapperSoapSerializer**)&m_pSZ)))
-        return Status;
-    if (AXIS_SUCCESS != (Status = g_pDeserializerPool->getInstance ((IWrapperSoapDeSerializer**)&m_pDZ)))
-        return Status;
-    m_pMsgData->setSerializer (m_pSZ);
-    m_pMsgData->setDeSerializer (m_pDZ);
+    if (AXIS_SUCCESS == Status)
+        Status = g_pSerializerPool->getInstance ((IWrapperSoapSerializer**)&m_pSZ);
+    
+    if (AXIS_SUCCESS == Status)
+        Status = g_pDeserializerPool->getInstance ((IWrapperSoapDeSerializer**)&m_pDZ);
 
-    return AXIS_SUCCESS;
+    if (AXIS_SUCCESS == Status)
+    {
+    	m_pMsgData->setSerializer (m_pSZ);
+    	m_pMsgData->setDeSerializer (m_pDZ);
+    }
+
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
 void AxisEngine::unInitialize ()
 {
+	logEntryEngine("AxisEngine::unInitialize")
+
     if (m_pMsgData)
     {
         delete m_pMsgData;
         m_pMsgData = NULL;
     }
-    /* nothing to do with m_pWSDD because its destructor deletes its objects
-     * nothing to do with m_pHandlerPool because its destructor deletes its 
-     * objects
-     */ 
+	
+    logExit()
 }
 
-int AxisEngine::initializeHandlers (string & sSessionId, 
-    AXIS_PROTOCOL_TYPE protocol)
+int AxisEngine::initializeHandlers (string & sSessionId, AXIS_PROTOCOL_TYPE protocol)
 {
-    int Status = AXIS_SUCCESS;
+	logEntryEngine("AxisEngine::initializeHandlers")
+
+    int Status;
+	
     // Get Global Handlers from the pool if configured any
-    if (AXIS_SUCCESS !=
-        (Status =
-        g_pHandlerPool->getGlobalRequestFlowHandlerChain (&m_pGReqFChain,
-        sSessionId)))
-        return Status;
-    if (AXIS_SUCCESS !=
-        (Status =
-        g_pHandlerPool->getGlobalResponseFlowHandlerChain (&m_pGResFChain,
-        sSessionId)))
-        return Status;
+	Status = g_pHandlerPool->getGlobalRequestFlowHandlerChain (&m_pGReqFChain, sSessionId);
+	if (AXIS_SUCCESS == Status)
+		Status = g_pHandlerPool->getGlobalResponseFlowHandlerChain (&m_pGResFChain, sSessionId);
 
     // Get Transport Handlers from the pool if configured any
-    if (AXIS_SUCCESS !=
-        (Status =
-        g_pHandlerPool->getTransportRequestFlowHandlerChain (&m_pTReqFChain,
-        sSessionId, protocol)))
-        return Status;
-    if (AXIS_SUCCESS !=
-        (Status =
-        g_pHandlerPool->getTransportResponseFlowHandlerChain (&m_pTResFChain,
-        sSessionId, protocol)))
-        return Status;
+	if (AXIS_SUCCESS == Status)
+		Status = g_pHandlerPool->getTransportRequestFlowHandlerChain (&m_pTReqFChain, sSessionId, protocol);
+	if (AXIS_SUCCESS == Status)
+        Status = g_pHandlerPool->getTransportResponseFlowHandlerChain (&m_pTResFChain, sSessionId, protocol);
+    
+	logExitWithReturnCode(Status)
+
     return Status;
 }
 

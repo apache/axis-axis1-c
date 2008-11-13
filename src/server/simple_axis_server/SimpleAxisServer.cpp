@@ -114,9 +114,6 @@ acceptTCPConnection (int servSock)
     }
 
     /* clntSock is connected to a client! */
-    /*
-     * AXISTRACE3(strcat("Handling client ", inet_ntoa(echoClntAddr.sin_addr)));
-     */
 
     return clntSock;
 }
@@ -242,8 +239,6 @@ int main (int argc, char *argv[])
       handleTCPClient (acceptTCPConnection (servSock[0]));
        }
    }
-
-   // AXISTRACE3("end of main while");
     }
 
     //uninitializing Axis
@@ -268,8 +263,6 @@ int main (int argc, char *argv[])
     WSACleanup ();      /* Cleanup Winsock */
 #else //Linux
 #endif
-
-    //AXISTRACE3("End of main");
 
     return 0;
 }

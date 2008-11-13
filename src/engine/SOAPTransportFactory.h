@@ -76,21 +76,14 @@ public:
 	static SOAPTransport* getTransportObject(AXIS_PROTOCOL_TYPE eProtocol);
 	static void destroyTransportObject(SOAPTransport* pObject);
 
-    //static void startEventLoop();
-    //static void stopEventLoop();
-
 	static int loadLib();
 	static int unloadLib();
 
 private:
-	static const char* m_pcLibraryPath; /* later this should be a list with libraries with thier other information */
+	static const char* m_pcLibraryPath; 
 	static DLHandler m_LibHandler;
     static CREATE_OBJECT1 m_Create;
     static DELETE_OBJECT1 m_Delete;
-   
-//    static void (*m_startEventLoop) (void);
-//    static void (*m_stopEventLoop) (void);
-
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -37,40 +37,31 @@ DeserializerPool::DeserializerPool()
 	m_DZList.clear();
 }
 
-/*
- * ~DeserializerPool sometimes fails on AIX, so this method has been
- * recoded to make it more defensive and added extra trace. It fails
- * intermittently and the last line in the trace shows the exit of
- * the last ~SoapSerializer().
- * 
- * 
- */
+
 DeserializerPool::~DeserializerPool ()
 {
+	logEntryEngine("DeserializerPool::~DeserializerPool")
+
     list<IWrapperSoapDeSerializer*>::iterator it = m_DZList.begin();
 	while (it != m_DZList.end())
     {
 		IWrapperSoapDeSerializer *dz = *it;
-
-#ifdef ENABLE_AXISTRACE
-		if (AxisTrace::isTraceOn()) 
-		{
-			char text[256];
-			sprintf(text, "~DeserializerPool<%p> dz=%p", this, dz);
-			AxisTrace::traceLine(text);
-		}
-#endif
 
 		if (NULL != dz)
 	        delete dz;
 		it++;
     }
 	m_DZList.clear();
+	
+    logExit()
 }
 
 int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 {
-    //lock ();
+	logEntryEngine("DeserializerPool::getInstance")
+	
+    int Status = AXIS_SUCCESS;
+
 	Lock l(this);
     if (!m_DZList.empty ())
     {
@@ -84,27 +75,32 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
         {
             delete* ppDZ;
             *ppDZ = NULL;
-            //unlock ();
-            AXISTRACE1 ("Deserializer could not be initialized", CRITICAL);
-            return AXIS_FAIL;
+            Status = AXIS_FAIL;
         }
     }
-    //unlock ();
-    return AXIS_SUCCESS;
+    
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
 int DeserializerPool::putInstance (IWrapperSoapDeSerializer* pDZ)
 {
-    if (AXIS_SUCCESS != ((SoapDeSerializer*)pDZ)->init ())
+	logEntryEngine("DeserializerPool::putInstance")
+	
+    int Status = ((SoapDeSerializer*)pDZ)->init ();
+
+    if (AXIS_SUCCESS == Status)
     {
-        delete pDZ;
-        return AXIS_FAIL;
+    	Lock l(this);
+        m_DZList.push_back (pDZ);
     }
-    //lock ();
-	Lock l(this);
-    m_DZList.push_back (pDZ);
-    //unlock ();
-    return AXIS_SUCCESS;
+    else
+        delete pDZ;
+
+	logExitWithReturnCode(Status)
+
+    return Status;
 }
 
 AXIS_CPP_NAMESPACE_END
