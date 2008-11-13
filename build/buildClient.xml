@@ -34,7 +34,6 @@
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
 						<define name="AXIS_CLIENT_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
 					</defineset>
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
@@ -72,7 +71,6 @@
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
 						<define name="AXIS_CLIENT_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
 					</defineset>
 					<!-- Linkers -->
 					<linker refid="AIXLinker"/>

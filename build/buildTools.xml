@@ -17,39 +17,9 @@
 	</target>
 	
 	<!--
-	  Compile, package and run the trace tool
-	  -->
-	<target name="addTrace" depends="buildTools"
-	  description="Run the trace tool">
-		<!--  Ensure that the  directories are clean -->
-		<delete dir="${dir.src.instrumented}"/>
-
-		<path id ="tracecp">
-			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
-		</path>
-
-		<!-- Allow caller to override the config filename -->
-		<property name="trace.config.file" value="${dir.tools}/org/apache/axis/tools/trace/tracetool.conf"/>
-
-		<java classname="org.apache.axis.tools.trace.TraceInstrumentor" fork="true" failonerror="true">
-                  <classpath refid="tracecp"/>
-			<arg value="-config"/>
-			<arg value="${trace.config.file}"/>
-			<arg value="-include"/>
-			<arg value="${dir.src}"/>
-			<arg value="-include"/>
-			<arg value="${dir.include}"/>
-			<arg value="-source"/>
-			<arg value="${dir.src}"/>
-			<arg value="-target"/>
-			<arg value="${dir.src.instrumented}"/>
-		</java>
-      </target>
-
-	<!--
 	  Compile, package and run the C binding generator
 	  -->
-	<target name="buildCBindings" depends="generateCHeaders, compileCBindings" if="buildCBindings"
+	<target name="buildCBindings" depends="compileCBindings" if="buildCBindings"
 	  description="Generate the C bindings and compile and link the C bindings client library"/>
 
 	<target name="generateCHeaders" depends="buildTools"  if="buildCBindings"
@@ -100,7 +70,6 @@
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
 						<define name="AXIS_CLIENTC_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
 					</defineset>
 					<includepath path="${dir.include}${path.separator}${dir.obj}/include"/>
 					<!-- Linkers -->
@@ -129,7 +98,6 @@
 					<!-- Additional compiler flag for Client library on all platforms -->
 					<defineset>
 						<define name="AXIS_CLIENTC_LIB"/>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
 					</defineset>
 					<includepath path="${dir.include}${path.separator}${dir.obj}/include"/>
 					<!-- Linkers -->

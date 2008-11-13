@@ -15,10 +15,6 @@
 				<compiler refid="Linuxgcc"/>
 				<compiler refid="HP-UXaC++"/>
 				<compiler extends="VisualC++"/>
-				<defineset>
-					<define name="ENABLE_AXISTRACE" if="trace"/>
-					<define name="AXISTRACE_LIBRARY"/>
-				</defineset>
 				<compiler refid="OS400icc"/>
 				<!-- Linkers -->
 				<linker refid="SolarisLinker"/>
@@ -41,10 +37,6 @@
 				exceptions="true" multithreaded="true">
 				<!-- Compilers -->
 				<compiler refid="AIXxlc"/>
-				<defineset>
-					<define name="ENABLE_AXISTRACE" if="trace"/>
-					<define name="AXISTRACE_LIBRARY"/>
-				</defineset>
 
 				<!-- Linkers -->
 				<linker refid="AIXLinker"/>

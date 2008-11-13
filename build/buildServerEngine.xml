@@ -26,10 +26,7 @@
 						</defineset>
 					</compiler>
                     <compiler refid="OS400icc"/>
-					<!-- Additional compiler flag for Client library on all platforms -->
-					<defineset>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
-					</defineset>
+
 					<!-- Linkers -->
 					<linker refid="SolarisLinker"/>
 					<linker refid="LinuxLinker"/>
@@ -62,10 +59,7 @@
 				 exceptions="true" multithreaded="true">
 				  	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
-					<!-- Additional compiler flag for Client library on all platforms -->
-					<defineset>
-						<define name="ENABLE_AXISTRACE" if="trace"/>
-					</defineset>
+
 					<!-- Linkers -->
 					<linker refid="AIXLinker"/>
 					<!-- Files to be compiled -->

@@ -37,10 +37,6 @@
 						</defineset>
 					</compiler>
                     <compiler refid="OS400icc"/>
-		            <defineset>
-		                <define name="ENABLE_AXISTRACE" if="trace"/>
-		                <define name="AXISTRACE_LIBRARY"/>
-		            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
 					<includepath path="${dir.xmlParser}"/>
@@ -60,6 +56,9 @@
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.xmlParser}">
 						<include name="*.cpp"/>
+		                <include name="common/AxisTrace.cpp"/>
+	                    <include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
+					    <include name="platforms/windows/PlatformSpecificWindows.cpp" if="windows"/>
 					</fileset>
 				</cc>
 			</then>
@@ -68,10 +67,6 @@
 				 exceptions="true" multithreaded="true">
 				 	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
-			            <defineset>
-			                  <define name="ENABLE_AXISTRACE" if="trace"/>
-			                  <define name="AXISTRACE_LIBRARY"/>
-			            </defineset>
 
 					<!-- Additional include directory for XML Parser -->
 					<includepath path="${dir.xmlParser}"/>
@@ -81,6 +76,7 @@
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.xmlParser}">
 						<include name="*.cpp"/>
+		                <include name="common/AxisTrace.cpp"/>
 					</fileset>
 				</cc>
 			</else>
@@ -111,8 +107,6 @@
 					</compiler>
                     <compiler refid="OS400icc"/>
 		            <defineset>
-	                   <define name="ENABLE_AXISTRACE" if="trace"/>
-	                   <define name="AXISTRACE_LIBRARY"/>
                        <define name="AXIS_XML4C" if="isXML4C" unless="os400"/>
 		            </defineset>
 
@@ -138,7 +132,9 @@
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="xml/${xmlParser}/*.cpp"/>
-						<include name="xml/AxisParseException.cpp"/>
+                        <include name="common/AxisTrace.cpp"/>
+                        <include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
+					    <include name="platforms/windows/PlatformSpecificWindows.cpp" if="windows"/>
 					</fileset>
 				</cc>
 			</then>
@@ -148,8 +144,6 @@
 				 	<!-- Compilers -->
 					<compiler refid="AIXxlc"/>
 			            <defineset>
-			                <define name="ENABLE_AXISTRACE" if="trace"/>
-			                <define name="AXISTRACE_LIBRARY"/>
                             <define name="AXIS_XML4C" if="isXML4C"/>         
 			            </defineset>
 
@@ -164,7 +158,7 @@
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="xml/${xmlParser}/*.cpp"/>
-						<include name="xml/AxisParseException.cpp"/>
+                        <include name="common/AxisTrace.cpp"/>
 					</fileset>
 				</cc>
 			</else>
