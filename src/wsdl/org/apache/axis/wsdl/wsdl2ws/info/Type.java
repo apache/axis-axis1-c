@@ -336,6 +336,14 @@ public class Type
     /**
      * @return boolean
      */
+    public boolean isPrimitiveType()
+    {
+        return CUtils.isPrimitiveType(name);
+    }
+    
+    /**
+     * @return boolean
+     */
     public boolean isSimpleType()
     {
         return isSimpleType;

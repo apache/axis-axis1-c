@@ -1452,8 +1452,10 @@ public class WSDLInfo
         }
         else
         { 
-            // If input element does not contain any sub-elements or attributes, we ignore.
-            if (elementNames.hasNext() 
+            // If input element is complex and does not contain any sub-elements or attributes, we ignore.
+            if (type.isSimpleType() 
+                    || type.isPrimitiveType()
+                    || elementNames.hasNext() 
                     || (attributes != null && attributes.hasNext()))
             {
                 String elementName;
@@ -1468,7 +1470,12 @@ public class WSDLInfo
                 pinfo.setType(type);
                 type.setIsUnwrappedInputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
-                pinfo.setElementName(type.getName());
+                
+                if (!elementNames.hasNext() && type.isSimpleType())
+                    pinfo.setElementName(element.getQName());
+                else
+                    pinfo.setElementName(type.getName());
+                
                 pinfo.setAnyElement(type.isAnyElement());
     
                 // Let us be nice and uppercase the first character in type name, 
@@ -1551,6 +1558,9 @@ public class WSDLInfo
     {
         String minfo_nm = minfo.getMethodname();
         String type_nm  = type.getLanguageSpecificName();
+        
+        if (CUtils.isPrimitiveType(type_nm))
+            return type_nm;
         
         String newName = CUtils.capitalizeFirstCharacter(type_nm);
 
