@@ -42,6 +42,22 @@
  * @file Axis.h
  */
 
+  /**
+   * @enum AXISC_TRACE_TYPE
+   * Trace types 
+   */
+  typedef enum 
+  { 
+	  AXISC_TRACE_TYPE_ENTRY=0,
+	  
+	  AXISC_TRACE_TYPE_EXIT=1,
+	  
+	  AXISC_TRACE_TYPE_EXCEPTION=2,
+	  
+	  AXISC_TRACE_TYPE_DEBUG=3
+	  
+  }  AXISC_TRACE_TYPE;
+	  
 /**
  *
  * Contains methods to initialize and terminate the Axis runtime. Creating a stub also initializes
@@ -191,7 +207,7 @@ void axiscAxisStopTrace();
  * @param  ...           - variable nuumber of parameters.
  */
 AXISC_STORAGE_CLASS_INFO
-void  axiscAxisWriteTrace(const char* functionName, const char * fmt, ...);
+void  axiscAxisWriteTrace(AXISC_TRACE_TYPE type, const char* functionName, const char * fmt, ...);
 
 #ifdef __cplusplus
   }

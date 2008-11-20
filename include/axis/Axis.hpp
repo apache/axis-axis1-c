@@ -57,6 +57,22 @@ AXIS_CPP_NAMESPACE_START
 class STORAGE_CLASS_INFO Axis
 {
   public:
+	  /**
+	   * @enum AXIS_TRACE_TYPE
+	   * Trace types 
+	   */
+	  typedef enum 
+	  { 
+		  AXIS_TRACE_TYPE_ENTRY=0,
+		  
+		  AXIS_TRACE_TYPE_EXIT=1,
+		  
+		  AXIS_TRACE_TYPE_EXCEPTION=2,
+		  
+		  AXIS_TRACE_TYPE_DEBUG=3
+		  
+	  }  AXIS_TRACE_TYPE;
+	  
     /**
      * Initializes the Axis runtime.
      * @param bIsServer should be set to false for client applications.
@@ -122,11 +138,12 @@ class STORAGE_CLASS_INFO Axis
      /**
       * Log trace. 
       * 
+      * @param  type          - trace type 
       * @param  functionName  - class method or function for which trace record is being written.
       * @param  fmt           - format as defined in printf and related functions.
       * @param  ...           - variable nuumber of parameters.
       */
-     static void writeTrace(const char* functionName, const char * fmt, ...);
+     static void writeTrace(AXIS_TRACE_TYPE type, const char* functionName, const char * fmt, ...);
 };
 
 AXIS_CPP_NAMESPACE_END

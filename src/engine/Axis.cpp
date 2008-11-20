@@ -802,7 +802,7 @@ stopTrace()
 }
 
 void Axis::
-writeTrace(const char* functionName, const char * fmt, ...)
+writeTrace(AXIS_TRACE_TYPE type, const char* functionName, const char * fmt, ...)
 {
 	// If logging is not enabled, just return.
 	if (!AxisTrace::isLoggingEnabled() || !AxisTrace::isStubLoggingEnabled())
@@ -811,10 +811,19 @@ writeTrace(const char* functionName, const char * fmt, ...)
     // Construct final formatter
     string myfmt;
     string blank = " ";
+    
+    char *traceType = TRACE_TYPE_DEBUG;
+    if (type == AXIS_TRACE_TYPE_ENTRY)
+    	traceType = TRACE_TYPE_ENTRY;
+    else if (type == AXIS_TRACE_TYPE_EXIT)
+    	traceType = TRACE_TYPE_EXIT;
+    else if (type == AXIS_TRACE_TYPE_EXCEPTION)
+    	traceType = TRACE_TYPE_EXCEPT;
+    
     if (NULL == fmt)
         fmt = "";
     myfmt += TRACE_COMPONENT_STUB + blank;
-    myfmt += TRACE_TYPE_DEBUG + blank;
+    myfmt += traceType + blank;
     myfmt += functionName;
     myfmt += "(): ";
     myfmt += fmt;
