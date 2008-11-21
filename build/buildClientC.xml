@@ -1,45 +1,10 @@
 <project name="Apache Axis C Build Tools" default="" basedir="..">
-	<!--
-	  Compile the build tools
-	  -->
-	<target name="compileBuildTools" depends="initialize">
-		<mkdir dir="${dir.classes}"/>
-		<javac srcdir="${dir.tools}" destdir="${dir.classes}"/>
-	</target>
-	
-	<!--
-	  Package build tools code into buildtools.jar
-	  -->
-	<target name="buildTools" depends="compileBuildTools">
-		<jar jarfile="${dir.classes}/buildtools.jar" basedir="${dir.classes}">
-			<include name="org/apache/axis/tools/**"/>
-		</jar>
-	</target>
-	
+
 	<!--
 	  Compile, package and run the C binding generator
 	  -->
 	<target name="buildCBindings" depends="compileCBindings" if="buildCBindings"
 	  description="Generate the C bindings and compile and link the C bindings client library"/>
-
-	<target name="generateCHeaders" depends="buildTools"  if="buildCBindings"
-	  description="Run the C binding generator tool">
-		<!--  make sure we've got a clean output directory structure -->
-		<delete dir="${dir.obj}/include"/>
-
-		<path id ="cbindcp">
-			<fileset dir="${dir.classes}" includes="buildtools.jar"/>
-		</path>
-		<java classname="org.apache.axis.tools.cbindings.CBindingGenerator" fork="true" failonerror="true">
-                  <classpath refid="cbindcp"/>
-			<arg value="-config"/>
-			<arg value="${dir.tools}/org/apache/axis/tools/cbindings/cbindinggenerator.conf"/>
-			<arg value="-source"/>
-			<arg value="${dir.include}"/>
-			<arg value="-target"/>
-			<arg value="${dir.obj}/include"/>
-		</java>
-      </target>
 
 	<!--
 	  Compile the Axis C Bindings Client Library

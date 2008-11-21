@@ -37,7 +37,7 @@ Notes:
 	</description>
 
 	<import file="${basedir}/build/buildInitialize.xml"/>
-	<import file="${basedir}/build/buildTools.xml"/>
+	<import file="${basedir}/build/buildClientC.xml"/>
 	<import file="${basedir}/build/buildClient.xml"/>
 	<import file="${basedir}/build/buildTransport.xml"/>
 	<import file="${basedir}/build/buildChannel.xml"/>
@@ -282,30 +282,12 @@ Notes:
 		<ant dir="." antFile="unitTest.xml" inheritAll="true"/>
 	</target>
 
-	<target name="buildWithTrace" depends="initialize"
- 	 description="Build traced runtime libraries, WSDL2Ws tool and API Documentation">
-		<antcall target="addTrace" inheritall="true"/>
-		<property name="trace" value="true"/>
-		<antcall target="build" inheritall="true">
-			<param name="dir.src" value="${dir.src.instrumented}"/>
-		</antcall>
-	</target>
-
 	<target name="buildWithDebug" depends="initialize"
 	 description="Build runtime libraries (with debug symbols), WSDL2Ws tool and API Documentation">
 		<property name="debug" value="true"/>
 		<antcall target="build" inheritall="true"/>
 	</target>
 	
-	<target name="buildWithTraceAndDebug" depends="initialize"
-	 description="Build traced runtime libraries (with debug symbols), WSDL2Ws tool and API Documentation">
-		<antcall target="addTrace" inheritall="true"/>
-		<property name="debug" value="true"/>
-		<property name="trace" value="true"/>
-		<antcall target="build" inheritall="true">
-			<param name="dir.src" value="${dir.src.instrumented}"/>
-		</antcall>
-	</target>
 	<!--
 	  Remove all generated artifaces
 	  -->

@@ -27,7 +27,7 @@ will automatically determine the correct one to be used;
 Please use these to configure directories to suit the needs of your system.
 	</description>
 	<import file="${basedir}/build/buildInitialize.xml"/>
-	<import file="${basedir}/build/buildTools.xml"/>
+	<import file="${basedir}/build/buildClientC.xml"/>
 
 	<target name="copySource">
 		<mkdir dir="${dir.release}"/>
@@ -355,7 +355,7 @@ Please use these to configure directories to suit the needs of your system.
     <property name="zipNameTraceSrc" value="${dir.zips}/${release}-trace-src.tar.gz"/>
   </target>
 
-  <target name="ascFiles" depends="initialize, packageWindowsDeliverableName, packageUnixDeliverableName, buildTools">
+  <target name="ascFiles" depends="initialize, packageWindowsDeliverableName, packageUnixDeliverableName, buildCBindings">
     <if>
       <available file="${basedir}/../../SecurityKeys/Apache_1_6/gpg/KEYS"/>
       <then>
