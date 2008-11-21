@@ -255,13 +255,8 @@ toString()
         "AXCONF_SSLCHANNEL_HTTP",  //10
         "AXCONF_CHANNEL_HTTP",     //11
         "AXCONF_SECUREINFO",       //12 
-        "AXCONF_LOGFILTER"         //13 Please use this number in the #if below
+        "AXCONF_LOGFILTER"         //13 
     };
-
-// Check at build time whether the lists of properties are in sync
-#if AXCONF_LAST > 14
-#error "The list of configuration properties in AxisConfig.h and AxisTrace.cpp are different. Please keep them in sync."
-#endif
 
     for (unsigned j=0; j<sizeof(confProps)/sizeof(char*); j++) 
     {
