@@ -785,7 +785,7 @@ applyTimeout()
     if (rc < 0)
         ReportError();
         
-	logExitWithReturnCode(rc)
+	logExitWithInteger(rc)
 
     return rc;
 }
