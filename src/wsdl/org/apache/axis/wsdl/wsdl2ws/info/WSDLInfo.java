@@ -1471,7 +1471,7 @@ public class WSDLInfo
                 type.setIsUnwrappedInputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
                 
-                if (!elementNames.hasNext() && type.isSimpleType())
+                if (!elementNames.hasNext() && (type.isSimpleType() || type.isPrimitiveType()))
                     pinfo.setElementName(element.getQName());
                 else
                     pinfo.setElementName(type.getName());

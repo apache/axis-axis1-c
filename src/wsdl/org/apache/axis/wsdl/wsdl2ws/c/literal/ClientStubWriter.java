@@ -442,7 +442,7 @@ public class ClientStubWriter
                 else
                     c_writer.write("\t{\n"); // following was added to instantiate variables on the fly
                 
-                if (minfo.isUnwrapped())
+                if (minfo.isUnwrapped() && !type.isSimpleType() && !type.isPrimitiveType())
                 {
                     c_writer.write ("\t\tchar cPrefixAndParamName" + i + "[" + "] = \"\";\n");                    
                 }                

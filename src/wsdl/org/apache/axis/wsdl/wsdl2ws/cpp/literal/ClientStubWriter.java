@@ -446,7 +446,7 @@ public class ClientStubWriter
                 }
                 
                 // If unwrapped, we pass in null string for qualified element name. 
-                if (minfo.isUnwrapped())
+                if (minfo.isUnwrapped() && !type.isSimpleType() && !type.isPrimitiveType())
                 {
                     c_writer.write (tab2 + "\t\tchar cPrefixAndParamName" + i + "[" + "] = \"\";\n");                    
                 }

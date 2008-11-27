@@ -70,6 +70,7 @@ private:
     AxisString m_strUri;
     list<Param*> m_OutputParams;
     bool m_isWrapperStyle;
+    bool m_addEndTagForUnwrapped;
 
 public:    
     int reset();

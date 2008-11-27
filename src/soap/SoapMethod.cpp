@@ -97,7 +97,12 @@ addOutputParam(Param *param)
 	logEntryEngine("SoapMethod::addOutputParam")
 
     if (param)
+    {
+    	if (m_OutputParams.empty() && param->isSimpleType())
+    		m_addEndTagForUnwrapped = true;
+    	
         m_OutputParams.push_back(param);
+    }
 	
 	logExit()
 }
@@ -123,9 +128,9 @@ serialize(SoapSerializer& pSZ)
             if(iStatus==AXIS_FAIL)
                 break;
             
-            // If not wrapper style, then end tag will be added by bean. 
+            // If not wrapper style, then end tag will be added by bean - if parameter is complex type. 
             // This is a hack in order to keep backward compatibility.
-            if (m_isWrapperStyle)
+            if (m_isWrapperStyle || m_addEndTagForUnwrapped)
             	pSZ.serialize(">\n", NULL);
 
             // push the current NS to the NS stack
@@ -173,6 +178,7 @@ serializeOutputParam(SoapSerializer& pSZ)
 
     int nStatus = AXIS_SUCCESS;
     
+
     for (list<Param*>::iterator it = m_OutputParams.begin(); it != m_OutputParams.end(); it++)
         if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
             break;
@@ -252,6 +258,7 @@ reset()
 {
 	logEntryEngine("SoapMethod::reset")
 
+    m_addEndTagForUnwrapped = false;
 	m_isWrapperStyle = true;
     m_strUri = "";
     m_strLocalname = "";
