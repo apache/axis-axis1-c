@@ -38,11 +38,11 @@ public :
     ~XercesHandler();
     const XML_Ch* ns4Prefix(const XML_Ch* prefix);
     const XML_Ch* prefix4NS(const XML_Ch* pcNS);
-	AnyElement* getAnyElement();
-	const char* peekNextElementName();
-	const XML_NODE_TYPE peekNextElementType();
-	void setGetPrefixMappings(bool bValue);
-	void reset();
+    AnyElement* getAnyElement();
+    const char* peekNextElementName();
+    const XML_NODE_TYPE peekNextElementType();
+    void setGetPrefixMappings(bool bValue);
+    void reset();
 
 private:
     /* -----------------------------------------------------------------------
@@ -78,14 +78,14 @@ private:
     // Report a fatal XML parsing error.
     void fatalError(const SAXParseException& exception);
 
-	bool m_bEndElementFollows;
+    bool m_bEndElementFollows;
     AnyElement* m_pNextElement;
     AnyElement* m_pPrefixMappingElement;
     AnyElement* m_pCurrElement;
     map<AxisXMLString, AxisXMLString> m_NsStack;
-	map<const AxisChar*, const AxisChar*> m_CurrPrefixMappings;
-	bool m_bGetPrefixMappings;
-	bool m_bStartElementWaiting;
-	void freeAttributes();
+    map<const AxisChar*, const AxisChar*> m_CurrPrefixMappings;
+    bool m_bGetPrefixMappings;
+    bool m_bStartElementWaiting;
+    void freeAttributes();
 };
 

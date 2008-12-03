@@ -32,7 +32,7 @@ using namespace std;
 XMLParserXerces::
 XMLParserXerces() : XMLParser()
 {
-	logEntryParser("XMLParserXerces::XMLParserXerces")
+    logEntryParser("XMLParserXerces::XMLParserXerces")
 
     m_pInputSource = NULL;
     m_bFirstParsed = false;
@@ -47,7 +47,7 @@ XMLParserXerces() : XMLParser()
 XMLParserXerces::
 ~XMLParserXerces()
 {
-	logEntryParser("XMLParserXerces::~XMLParserXerces")
+    logEntryParser("XMLParserXerces::~XMLParserXerces")
 
     // Parser has memory allocated with the last AnyElement parsed; clean that
     m_Xhandler.freeElement();
@@ -61,7 +61,7 @@ XMLParserXerces::
 int XMLParserXerces::
 setInputStream(AxisIOStream* pInputStream)
 {
-	logEntryParser("XMLParserXerces::setInputStream")
+    logEntryParser("XMLParserXerces::setInputStream")
 
     m_pInputStream = pInputStream;
     
@@ -92,7 +92,7 @@ getNS4Prefix(const XML_Ch* prefix)
 const AnyElement* XMLParserXerces::
 parse(bool ignoreWhitespace, bool peekIt)
 {
-	logEntryParser("XMLParserXerces::parse")
+    logEntryParser("XMLParserXerces::parse")
 
     try 
     {
@@ -231,13 +231,13 @@ parse(bool ignoreWhitespace, bool peekIt)
 const AnyElement* XMLParserXerces::
 next(bool isCharData)
 {    
-	logEntryParser("XMLParserXerces::next")
+    logEntryParser("XMLParserXerces::next")
 
     const AnyElement* returnValue = parse(isCharData ? false : true);
-	
+    
     logExitWithPointer(returnValue)
 
-	return returnValue;
+    return returnValue;
 }
 
 // New method which peek a head next element 
@@ -245,7 +245,7 @@ next(bool isCharData)
 const char* XMLParserXerces::
 peek()
 {   
-	logEntryParser("XMLParserXerces::peek")
+    logEntryParser("XMLParserXerces::peek")
 
     const char* returnValue = "";
 
@@ -254,15 +254,15 @@ peek()
     // the last node processed was a start/end element
     if (!m_bStartEndElement)
     {
-	    // get element, ignoring whitespace and indicating this is a peek operation   
-	    const AnyElement* elem = parse(true, true);
-	    if (elem)
-	    {
-		    // We return null string if end-element or unknown type is encountered
-		    const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
-		    if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
-		    	returnValue = m_Xhandler.peekNextElementName();
-	    }
+        // get element, ignoring whitespace and indicating this is a peek operation   
+        const AnyElement* elem = parse(true, true);
+        if (elem)
+        {
+            // We return null string if end-element or unknown type is encountered
+            const XML_NODE_TYPE type = m_Xhandler.peekNextElementType();
+            if(type != END_ELEMENT && type != END_PREFIX && type != UNKNOWN)
+                returnValue = m_Xhandler.peekNextElementName();
+        }
     }
     
     logExitWithString(returnValue)
@@ -273,7 +273,7 @@ peek()
 const AnyElement* XMLParserXerces::
 anyNext()
 {
-	logEntryParser("XMLParserXerces::anyNext")
+    logEntryParser("XMLParserXerces::anyNext")
 
     // Say the SAX event handler to record prefix mappings too 
     // By default the event handler do not record them.
@@ -299,6 +299,6 @@ getPrefix4NS(const XML_Ch* pcNS)
 void XMLParserXerces::
 enableTrace(const char* logFilePath, const char *filters)
 {
-	AxisTrace::setLogFilter(filters);
-	AxisTrace::startTrace(logFilePath, false);
+    AxisTrace::setLogFilter(filters);
+    AxisTrace::startTrace(logFilePath, false);
 }

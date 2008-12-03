@@ -30,7 +30,7 @@ extern "C"
     // CreateInstance() Is a C interface.
     STORAGE_CLASS_INFO int CreateInstance( HTTPChannel ** inst)
     {
-		int iSuccess = AXIS_FAIL;
+        int iSuccess = AXIS_FAIL;
 
         *inst = new HTTPChannel();
 
@@ -45,7 +45,7 @@ extern "C"
     // DestroyInstance() Is a C interface.
     STORAGE_CLASS_INFO int DestroyInstance( HTTPChannel * inst)
     {
-		int iSuccess = AXIS_FAIL;
+        int iSuccess = AXIS_FAIL;
 
         if (inst)
         {
@@ -61,7 +61,7 @@ extern "C"
      */
     STORAGE_CLASS_INFO void initializeLibrary (void)
     {
-    	// Do init actions
+        // Do init actions
     }
 
     /*  uninitializeLibrary() Is a C interface.

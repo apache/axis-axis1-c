@@ -33,7 +33,7 @@ class Event
 public:
     Event();
     virtual ~Event();
-	/* character data, element name or prefix(in case of prefix mapping event) */
+    /* character data, element name or prefix(in case of prefix mapping event) */
     string m_NameOrValue; 
 public:
     virtual XML_NODE_TYPE getType(){ return CHARACTER_ELEMENT;};

@@ -36,31 +36,31 @@ extern "C" {
 STORAGE_CLASS_INFO
 int CreateInstance(XMLParser **inst)
 {
-	/* TODO : Following initialization should be done within a function
-	          called by the library loader at loading time */
+    /* TODO : Following initialization should be done within a function
+              called by the library loader at loading time */
     XMLPlatformUtils::Initialize();
-	*inst = new XMLParserXerces();
-	if (*inst)
-	{
-		return AXIS_SUCCESS;
-	}
-	return AXIS_FAIL;
+    *inst = new XMLParserXerces();
+    if (*inst)
+    {
+        return AXIS_SUCCESS;
+    }
+    return AXIS_FAIL;
 }
 STORAGE_CLASS_INFO 
 int DestroyInstance(XMLParser *inst)
 {
-	if (inst)
-	{
-		delete inst;
-	/* TODO : Following uninitialization should be done within a function
-	          called by the library loader at unloading time */
-		XMLPlatformUtils::Terminate ();
+    if (inst)
+    {
+        delete inst;
+    /* TODO : Following uninitialization should be done within a function
+              called by the library loader at unloading time */
+        XMLPlatformUtils::Terminate ();
 #ifdef AXIS_XML4C
-		u_cleanup();
+        u_cleanup();
 #endif
-		return AXIS_SUCCESS;
-	}
-	return AXIS_FAIL;
+        return AXIS_SUCCESS;
+    }
+    return AXIS_FAIL;
 }
 
 STORAGE_CLASS_INFO void initializeLibrary (void)

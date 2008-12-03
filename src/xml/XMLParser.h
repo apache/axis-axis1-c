@@ -123,7 +123,7 @@ public:
     
     /**
      * Used to get the next XML data event. The valid events are start element, 
-	 * end element and character data. If we think of SAX events the processing 
+     * end element and character data. If we think of SAX events the processing 
      * instruction events, namespace prefix mapping events are not returned by
      * this method. If the implementation of this interface is wrapping up a 
      * SAX parser it should follow the above rules.

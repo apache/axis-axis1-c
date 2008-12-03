@@ -60,7 +60,7 @@ ChannelFactory::
 IChannel * ChannelFactory::
 LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 {
-	logEntryEngine("ChannelFactory::LoadChannelLibrary")
+    logEntryEngine("ChannelFactory::LoadChannelLibrary")
 
     DLHandler    sLibHandler;
     IChannel *    pChannel = NULL;
@@ -133,7 +133,7 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
                 m_pChannel[iLibCount] = pChannel;
                 
                 if (AxisTrace::isTransportLoggingEnabled())
-                	pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
+                    pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
             }
         }
     }
@@ -148,7 +148,7 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
 bool ChannelFactory::
 UnLoadChannelLibrary( g_ChannelType eChannelType)
 {
-	logEntryEngine("ChannelFactory::UnLoadChannelLibrary")
+    logEntryEngine("ChannelFactory::UnLoadChannelLibrary")
 
     bool    bSuccess = false;
     int        iLibIndex = (int) eChannelType;
@@ -196,14 +196,14 @@ UnLoadChannelLibrary( g_ChannelType eChannelType)
 void ChannelFactory::
 preloadChannels(char *unsecChannel, char *secChannel)
 {
-	if (unsecChannel && strcmp(unsecChannel,"Unknown")) preloadChannel(UnsecureChannel, unsecChannel);
-	if (secChannel && strcmp(secChannel,"Unknown")) preloadChannel(SecureChannel, secChannel);
+    if (unsecChannel && strcmp(unsecChannel,"Unknown")) preloadChannel(UnsecureChannel, unsecChannel);
+    if (secChannel && strcmp(secChannel,"Unknown")) preloadChannel(SecureChannel, secChannel);
 }
 
 void ChannelFactory::
 preloadChannel(g_ChannelType type, const char *pcLibraryName)
 {
-	logEntryEngine("ChannelFactory::preloadChannel")
+    logEntryEngine("ChannelFactory::preloadChannel")
 
     int iLibCount = (int)type;
     ChannelLibrary *pCh = new ChannelLibrary();
@@ -259,7 +259,7 @@ preloadChannel(g_ChannelType type, const char *pcLibraryName)
 IChannel *ChannelFactory::
 createChannel(g_ChannelType type) 
 {
-	logEntryEngine("ChannelFactory::createChannel")
+    logEntryEngine("ChannelFactory::createChannel")
 
     int iLibCount = (int)type;
     IChannel *pChannel = NULL;
@@ -269,7 +269,7 @@ createChannel(g_ChannelType type)
         m_pChannel[iLibCount] = pChannel;
         
         if (AxisTrace::isTransportLoggingEnabled())
-        	pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
+            pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
     }
     
     logExitWithPointer(pChannel)
@@ -280,7 +280,7 @@ createChannel(g_ChannelType type)
 void ChannelFactory::
 unloadChannels()
 {
-	logEntryEngine("ChannelFactory::unloadChannels")
+    logEntryEngine("ChannelFactory::unloadChannels")
 
     for (int i=0; i<(int)MaxChannelCount; i++) 
     {
@@ -291,7 +291,7 @@ unloadChannels()
             m_ChannelLibrary[i] = NULL;
         }
     }
-	
+    
     logExit()
 }
 

@@ -28,7 +28,7 @@ SoapInputSource::SoapInputSource(AxisIOStream* pInputStream)
 
 SoapInputSource::~SoapInputSource()
 {
-	/* do not delete the m_pInputStream. See Xerces documentation */
+    /* do not delete the m_pInputStream. See Xerces documentation */
 }
 
 BinInputStream* SoapInputSource::makeStream() const

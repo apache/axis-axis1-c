@@ -78,12 +78,12 @@ typedef struct
     /**
      * Local name in case of StartElement or EndElement event. Character data
      * in case of character data event. Namespace prefix in case of prefix 
-	 * prefix mapping event.
+     * prefix mapping event.
      */
     const char* m_pchNameOrValue;
     /**
      * Namespace of StartElemnt or EndElement tag. In case there is no 
-	 * namespace this should be NULL (not pointing to empty string "" even)
+     * namespace this should be NULL (not pointing to empty string "" even)
      */
     const char* m_pchNamespace;
     /**
@@ -107,7 +107,7 @@ class AnyElemntUtils
     public:
         static string toString(const AnyElement* pNode)
         {
-            string sTmpVal;              			                                                                                                                                                  
+            string sTmpVal;                                                                                                                                                                            
             switch(pNode->m_type)
             {
                 case CHARACTER_ELEMENT:

@@ -67,7 +67,7 @@ HTTPChannel()
 HTTPChannel::
 ~HTTPChannel()
 {
-	logEntryTransport("HTTPChannel::~HTTPChannel")
+    logEntryTransport("HTTPChannel::~HTTPChannel")
 
     CloseChannel();
     StopSockets();
@@ -100,11 +100,11 @@ getURL()
 void HTTPChannel::
 setURL( const char * cpURL)
 {
-	logEntryTransport("HTTPChannel::setURL")
+    logEntryTransport("HTTPChannel::setURL")
 
     m_URL.setURL( cpURL);
-	
-	logExit()
+    
+    logExit()
 }
 
 /**
@@ -136,7 +136,7 @@ getURLObject()
 bool HTTPChannel::
 open() throw (HTTPTransportException&)
 {
-	logEntryTransport("HTTPChannel::open")
+    logEntryTransport("HTTPChannel::open")
 
     bool    bSuccess = (bool) AXIS_FAIL;
 
@@ -168,12 +168,12 @@ open() throw (HTTPTransportException&)
 bool HTTPChannel::
 close()
 {
-	logEntryTransport("HTTPChannel::close")
+    logEntryTransport("HTTPChannel::close")
 
     CloseChannel();
-	
-	logExit()
-	
+    
+    logExit()
+    
     return AXIS_SUCCESS;
 }
 
@@ -209,7 +209,7 @@ GetLastErrorMsg()
 int HTTPChannel::
 readBytes(char *buf, int bufLen)
 {
-	logEntryTransport("HTTPChannel::readBytes")
+    logEntryTransport("HTTPChannel::readBytes")
 
     if (INVALID_SOCKET == m_Sock)
     {
@@ -272,7 +272,7 @@ readBytes(char *buf, int bufLen)
 
     logDebugBuffer(buf, nByteRecv)
 
-	logExitWithInteger(nByteRecv)
+    logExitWithInteger(nByteRecv)
 
     return nByteRecv;
 }
@@ -291,7 +291,7 @@ readBytes(char *buf, int bufLen)
 int HTTPChannel::
 writeBytes(const char *buf, int numBytes)
 {
-	logEntryTransport("HTTPChannel::writeBytes")
+    logEntryTransport("HTTPChannel::writeBytes")
 
     logDebugBuffer(buf, numBytes)
 
@@ -323,7 +323,7 @@ writeBytes(const char *buf, int numBytes)
         throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
     }
 
-	logExitWithInteger(nByteSent)
+    logExitWithInteger(nByteSent)
 
     return nByteSent;
 }
@@ -339,11 +339,11 @@ writeBytes(const char *buf, int numBytes)
 void HTTPChannel::
 setTimeout( long lSeconds)
 {
-	logEntryTransport("HTTPChannel::setTimeout")
+    logEntryTransport("HTTPChannel::setTimeout")
 
     m_lTimeoutSeconds = lSeconds;
-	
-	logExit()
+    
+    logExit()
 }
 
 /**
@@ -426,7 +426,7 @@ getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type)
 void HTTPChannel::
 setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 {
-	logEntryTransport("HTTPChannel::setProxy")
+    logEntryTransport("HTTPChannel::setProxy")
 
     m_strProxyHost = pcProxyHost;
     m_uiProxyPort = uiProxyPort;
@@ -452,7 +452,7 @@ setProxy( const char * pcProxyHost, unsigned int uiProxyPort)
 bool HTTPChannel::
 OpenChannel()
 {
-	logEntryTransport("HTTPChannel::OpenChannel")
+    logEntryTransport("HTTPChannel::OpenChannel")
 
     // This method is common to all channel implementations
     bool    bSuccess = (bool) AXIS_FAIL;
@@ -544,7 +544,7 @@ OpenChannel()
     {
         ReportError();
         
-    	logExitWithBoolean(bSuccess)
+        logExitWithBoolean(bSuccess)
 
         return bSuccess;
     }
@@ -563,7 +563,7 @@ OpenChannel()
         ReportError();        
         CloseChannel();
         
-    	logExitWithBoolean(bSuccess)
+        logExitWithBoolean(bSuccess)
 
         return bSuccess;
     }
@@ -626,7 +626,7 @@ OpenChannel()
 
         m_LastError = fullMessage;
 
-    	logExitWithBoolean(bSuccess)
+        logExitWithBoolean(bSuccess)
 
         return bSuccess;
     }
@@ -648,7 +648,7 @@ OpenChannel()
     int one = 1;
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *) &one, sizeof( int));
 
-	logExitWithBoolean(bSuccess)
+    logExitWithBoolean(bSuccess)
 
     return bSuccess;
 }
@@ -665,7 +665,7 @@ OpenChannel()
 void HTTPChannel::
 CloseChannel()
 {
-	logEntryTransport("HTTPChannel::CloseChannel")
+    logEntryTransport("HTTPChannel::CloseChannel")
 
     if( INVALID_SOCKET != m_Sock)
     {
@@ -676,8 +676,8 @@ CloseChannel()
 #endif
         m_Sock = INVALID_SOCKET;
     }
-	
-	logExit()
+    
+    logExit()
 }
 
 /**
@@ -766,7 +766,7 @@ StopSockets()
 int HTTPChannel::
 applyTimeout()
 {
-	logEntryTransport("HTTPChannel::applyTimeout")
+    logEntryTransport("HTTPChannel::applyTimeout")
 
     fd_set          set;
     struct timeval  timeout;
@@ -785,7 +785,7 @@ applyTimeout()
     if (rc < 0)
         ReportError();
         
-	logExitWithInteger(rc)
+    logExitWithInteger(rc)
 
     return rc;
 }
@@ -808,6 +808,6 @@ closeQuietly( bool bNoExceptionOnForceClose_Update)
 void HTTPChannel::
 enableTrace(const char* logFilePath, const char *filters)
 {
-	AxisTrace::setLogFilter(filters);
-	AxisTrace::startTrace(logFilePath, false);
+    AxisTrace::setLogFilter(filters);
+    AxisTrace::startTrace(logFilePath, false);
 }

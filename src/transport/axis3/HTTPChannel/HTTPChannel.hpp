@@ -43,14 +43,14 @@ inline int WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 #include "../HTTPTransportException.hpp"
 
 #include <unistd.h>
-#include <sys/types.h>		// basic system data types
-#include <sys/socket.h>		// basic socket definitions
+#include <sys/types.h>        // basic system data types
+#include <sys/socket.h>        // basic socket definitions
 #include <netinet/tcp.h>
-#include <fcntl.h>			// for nonblocking if need
+#include <fcntl.h>            // for nonblocking if need
 #include <sys/time.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>		// inet(3) functions
+#include <arpa/inet.h>        // inet(3) functions
 
 const int          INVALID_SOCKET = -1;
 const int          SOCKET_ERROR   = -1;
@@ -63,50 +63,50 @@ AXIS_CPP_NAMESPACE_USE using namespace std;
 class HTTPChannel:public IChannel
 {
 public:
-	HTTPChannel();
-	virtual ~HTTPChannel();
+    HTTPChannel();
+    virtual ~HTTPChannel();
 
-	const char *		getURL();
-	virtual void		setURL( const char * cpURL);
-    virtual URL &		getURLObject();
-    bool				open() throw (HTTPTransportException&);
-    bool				close();
-    const std::string &	GetLastErrorMsg();
+    const char *        getURL();
+    virtual void        setURL( const char * cpURL);
+    virtual URL &        getURLObject();
+    bool                open() throw (HTTPTransportException&);
+    bool                close();
+    const std::string &    GetLastErrorMsg();
     int                 readBytes(char *buf, int bufLen);
     int                 writeBytes(const char *buf, int numBytes);
-    void				setTimeout( long lSeconds);
-    void				setSocket( unsigned int uiNewSocket);
-	int					getSocket() {return m_Sock;}
-	bool				setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value);
-	const char *		getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
-    void				setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
-	bool		        reopenRequired() { return (INVALID_SOCKET == m_Sock); }
-	void				closeQuietly( bool bNoExceptionOnForceClose);
+    void                setTimeout( long lSeconds);
+    void                setSocket( unsigned int uiNewSocket);
+    int                    getSocket() {return m_Sock;}
+    bool                setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value);
+    const char *        getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
+    void                setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
+    bool                reopenRequired() { return (INVALID_SOCKET == m_Sock); }
+    void                closeQuietly( bool bNoExceptionOnForceClose);
     void                enableTrace(const char* logFilePath, const char *filters);
 
 
 protected:
-	bool				OpenChannel();
-	void				CloseChannel();
-	bool				StartSockets();
-	void				StopSockets();
-	int					applyTimeout();
-	void				ReportError();
+    bool                OpenChannel();
+    void                CloseChannel();
+    bool                StartSockets();
+    void                StopSockets();
+    int                    applyTimeout();
+    void                ReportError();
 
 private:
-    URL				m_URL;				// URL
-	string			m_LastError;		// Last error
+    URL                m_URL;                // URL
+    string            m_LastError;        // Last error
 #ifdef WIN32
     unsigned 
 #endif
-    int				m_Sock;						// Socket descriptor
-    bool			m_bUseProxy;				// Use a Proxy?
-    std::string		m_strProxyHost;				// Proxy server name.
-    unsigned int	m_uiProxyPort;				// Proxy server port.
-    long			m_lTimeoutSeconds;			// Timeout in seconds
-	bool			bNoExceptionOnForceClose;	// If the socket is forcably closed, usually an
-												// exception is thrown.  When this flag is set,
-												// nothing happens (but the m_Sock is set to 0).
+    int                m_Sock;                        // Socket descriptor
+    bool            m_bUseProxy;                // Use a Proxy?
+    std::string        m_strProxyHost;                // Proxy server name.
+    unsigned int    m_uiProxyPort;                // Proxy server port.
+    long            m_lTimeoutSeconds;            // Timeout in seconds
+    bool            bNoExceptionOnForceClose;    // If the socket is forcably closed, usually an
+                                                // exception is thrown.  When this flag is set,
+                                                // nothing happens (but the m_Sock is set to 0).
 };
 
 #endif

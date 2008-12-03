@@ -40,9 +40,9 @@ AXIS_CPP_NAMESPACE_USE using namespace std;
 
 typedef enum
 {
-	eWaitingForHTTPHeader,
-	eSOAPMessageIsChunked,
-	eSOAPMessageIsNotChunked,
+    eWaitingForHTTPHeader,
+    eSOAPMessageIsChunked,
+    eSOAPMessageIsNotChunked,
     eSOAPMessageHasContentLength
 } EGETBYTESSTATE;
 
@@ -59,66 +59,66 @@ class HTTPTransport:public SOAPTransport
     * @param pcEndPointURI End point URI of the service to connect to.
     *                       e.g. http://localhost:8080/axis/services/echo
     */
-    void					setEndpointUri( const char * pszEndpointURI) throw (HTTPTransportException);
-    int						openConnection();
-    void					closeConnection(bool forceClose=true);
-    AXIS_TRANSPORT_STATUS	sendBytes( const char *, const void *);
-    AXIS_TRANSPORT_STATUS	getBytes( char *, int *) throw (AxisException, HTTPTransportException);
-    int						setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
-    const char *			getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (HTTPTransportException);
-    int						setTransportProperty( const char *, const char *) throw (HTTPTransportException);
-    const char *			getTransportProperty( const char * pcKey, bool response=true) throw (HTTPTransportException);
-    void					setSessionId( const char * pcSessionId);
-    const char *			getSessionId();
-    const char *			getServiceName ();
+    void                    setEndpointUri( const char * pszEndpointURI) throw (HTTPTransportException);
+    int                        openConnection();
+    void                    closeConnection(bool forceClose=true);
+    AXIS_TRANSPORT_STATUS    sendBytes( const char *, const void *);
+    AXIS_TRANSPORT_STATUS    getBytes( char *, int *) throw (AxisException, HTTPTransportException);
+    int                        setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
+    const char *            getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (HTTPTransportException);
+    int                        setTransportProperty( const char *, const char *) throw (HTTPTransportException);
+    const char *            getTransportProperty( const char * pcKey, bool response=true) throw (HTTPTransportException);
+    void                    setSessionId( const char * pcSessionId);
+    const char *            getSessionId();
+    const char *            getServiceName ();
     bool                    isThereResponseData();
     /* HTTPTransport::getProtocol() Is a public method to return the HTTP protocol
-	 * type.
-	 *
-	 * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
-	 * protocols
-	 */
-    AXIS_PROTOCOL_TYPE		getProtocol();
+     * type.
+     *
+     * @return AXIS_PROTOCOL_TYPE Type is an enumerated type for valid HTTP
+     * protocols
+     */
+    AXIS_PROTOCOL_TYPE        getProtocol();
     /* HTTPTransport::setProtocol() Is a public method to set the HTTP protocol
-	 * type.
-	 *
-	 * @return AXIS_SUCCESS if the set worked and the protocol is supported AXIS_FAIL otherwise
-	 */
-    int						setProtocol( AXIS_PROTOCOL_TYPE eProtocol);
-    int						getSubProtocol();
-    AXIS_TRANSPORT_STATUS	flushOutput() throw (AxisException, HTTPTransportException);
-    void					setProxy( const char *pcProxyHost, unsigned int uiProxyPort);
-    void					setTimeout( long lSeconds);
-    const char *			getHTTPProtocol();
-    const char *			getHTTPMethod();
-    void					setHTTPMethod( const char *);
-    const char *			generateHTTPHeaders();
-    void					setSocket( unsigned int);
-    const char *			getFirstTransportPropertyKey(bool response);
-    const char *			getNextTransportPropertyKey(bool response);
-    const char *			getCurrentTransportPropertyKey(bool response);
-    const char *			getCurrentTransportPropertyValue(bool response);
-    void					deleteCurrentTransportProperty(bool response=true);
-    void					deleteTransportProperty( char* pcKey, unsigned int uiOccurance = 1);
-    virtual void			setMaintainSession( bool bSession);
+     * type.
+     *
+     * @return AXIS_SUCCESS if the set worked and the protocol is supported AXIS_FAIL otherwise
+     */
+    int                        setProtocol( AXIS_PROTOCOL_TYPE eProtocol);
+    int                        getSubProtocol();
+    AXIS_TRANSPORT_STATUS    flushOutput() throw (AxisException, HTTPTransportException);
+    void                    setProxy( const char *pcProxyHost, unsigned int uiProxyPort);
+    void                    setTimeout( long lSeconds);
+    const char *            getHTTPProtocol();
+    const char *            getHTTPMethod();
+    void                    setHTTPMethod( const char *);
+    const char *            generateHTTPHeaders();
+    void                    setSocket( unsigned int);
+    const char *            getFirstTransportPropertyKey(bool response);
+    const char *            getNextTransportPropertyKey(bool response);
+    const char *            getCurrentTransportPropertyKey(bool response);
+    const char *            getCurrentTransportPropertyValue(bool response);
+    void                    deleteCurrentTransportProperty(bool response=true);
+    void                    deleteTransportProperty( char* pcKey, unsigned int uiOccurance = 1);
+    virtual void            setMaintainSession( bool bSession);
 
-    void					setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
-	ISoapAttachment *		getAttachment( const char * pcAttachmentId) { return NULL;};
+    void                    setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
+    ISoapAttachment *        getAttachment( const char * pcAttachmentId) { return NULL;};
     ISoapAttachment**       getAllAttachments(int *pAttchArraySize) { return NULL;}; 
-    char *					getIncomingSOAPMimeHeaders() {return NULL;}
-	const char *			getLastChannelError();
-	
+    char *                    getIncomingSOAPMimeHeaders() {return NULL;}
+    const char *            getLastChannelError();
+    
     void enableTrace(const char* logFilePath, const char *filters);
 
   protected:
-    void					processRootMimeBody();
-    void					processMimeHeader();
-    void					processMimeBody();
-    void					getAttachment( char* pStrAttachment, int* pIntSize, int intAttachmentId);
-    int						FindTransportPropertyIndex( std::string);
-	void					readHTTPHeader();
-	void					processHTTPHeader();
-	int 					getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse=NULL, int *bufferLen=NULL);
+    void                    processRootMimeBody();
+    void                    processMimeHeader();
+    void                    processMimeBody();
+    void                    getAttachment( char* pStrAttachment, int* pIntSize, int intAttachmentId);
+    int                        FindTransportPropertyIndex( std::string);
+    void                    readHTTPHeader();
+    void                    processHTTPHeader();
+    int                     getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse=NULL, int *bufferLen=NULL);
     int                     getBytes_MessageIsChunked(char * pcBuffer, int * piSize);
     int                     getBytes_MessageIsNotChunked(char * pcBuffer, int * piSize);
     int                     getBytes_MessageHasContentLength(char * pcBuffer, int * piSize);
@@ -258,15 +258,15 @@ class HTTPTransport:public SOAPTransport
   /**
     * Channel used for communication
     */
-    IChannel *	m_pNormalChannel;
-    IChannel *	m_pSecureChannel;
-    IChannel *	m_pActiveChannel;
-    bool		m_bChannelSecure;
+    IChannel *    m_pNormalChannel;
+    IChannel *    m_pSecureChannel;
+    IChannel *    m_pActiveChannel;
+    bool        m_bChannelSecure;
 
   /**
     * Message header string to be sent.
     */
-    std::string m_strHeaderBytesToSend;	
+    std::string m_strHeaderBytesToSend;    
     
   /**
     * Should the Stub maintain session with service?
@@ -316,16 +316,16 @@ class HTTPTransport:public SOAPTransport
     std::string m_strMimeReceived;
     ChannelFactory* m_pChannelFactory;
 
-	char *	m_pszRxBuffer;
+    char *    m_pszRxBuffer;
 
-	long	m_lChannelTimeout;
+    long    m_lChannelTimeout;
 
-	std::string	m_strBuffered;
+    std::string    m_strBuffered;
 
   /**
     * New getBytes variables
-	*/
-	EGETBYTESSTATE	m_GetBytesState;
+    */
+    EGETBYTESSTATE    m_GetBytesState;
 };
 
 #endif
