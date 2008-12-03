@@ -39,7 +39,7 @@ AdminUtils MessageData::m_AdminUtil;
 MessageData::
 MessageData ()
 {
-	logEntryEngine("MessageData::MessageData")
+    logEntryEngine("MessageData::MessageData")
 
     m_pSZ = NULL;
     m_pDZ = NULL;
@@ -51,14 +51,14 @@ MessageData ()
 MessageData::
 ~MessageData ()
 {
-	logEntryEngine("MessageData::~MessageData")
+    logEntryEngine("MessageData::~MessageData")
 
     map < const AxisChar*, const AxisChar*, ltstr >::const_iterator itCurrentItem = m_Properties.begin ();
 
     while (itCurrentItem != m_Properties.end ())
     {
         delete [] (char*)(*itCurrentItem).first;
-		delete [] (char*)(*itCurrentItem).second;
+        delete [] (char*)(*itCurrentItem).second;
 
         itCurrentItem++;
     }
@@ -83,12 +83,12 @@ setDeSerializer (IWrapperSoapDeSerializer* pDZ)
 void MessageData::
 setOperationName(const AxisChar* pchOperation)
 {
-	m_sOperationName = pchOperation;
+    m_sOperationName = pchOperation;
 }
 const AxisChar* MessageData::
 getOperationName()
 {
-	return m_sOperationName.c_str();
+    return m_sOperationName.c_str();
 }
 
 void MessageData::
@@ -151,7 +151,7 @@ getSoapDeSerializer (IHandlerSoapDeSerializer** pIHandlerSoapDeSerializer)
 
 int MessageData::
 setProperty (const AxisChar* pachName, 
-		     const AxisChar* pachValue)
+             const AxisChar* pachValue)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -165,8 +165,8 @@ setProperty (const AxisChar* pachName,
 
 int MessageData::
 setProperty (const AxisChar* pachName, 
-		     const void* pachValue, 
-		     int len)
+             const void* pachValue, 
+             int len)
 {
      AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
      strcpy (pachTmpName, pachName);
@@ -180,8 +180,8 @@ setProperty (const AxisChar* pachName,
 
 void MessageData::
 setComplexProperty(const AxisChar* pachName, 
-		           void* pValue, 
-		           int iObjectSize)
+                   void* pValue, 
+                   int iObjectSize)
 {
     AxisChar* pachTmpName = new AxisChar[strlen (pachName) + 1];
     strcpy (pachTmpName, pachName);
@@ -215,7 +215,7 @@ getComplexProperty(const AxisChar* pachName)
         return m_ComplexProperties[pachName];
     }
                                                                                                                                                                             
-    return NULL;	
+    return NULL;    
 }
 
 void MessageData::

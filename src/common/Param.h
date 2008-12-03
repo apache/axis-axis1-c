@@ -33,7 +33,7 @@ public:
     ArrayBean* pArray; /* this is used to hold arrays */
     ComplexObjectHandler* pCplxObj;
     AnyType* pAnyObject; /* used to hold AnyType struct for xsd:any and xsd:anyType */
-	SoapAttachmentReference* pAttachmentRef;
+    SoapAttachmentReference* pAttachmentRef;
 };
 
 /*

@@ -45,41 +45,41 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaultsImpl
     AxisCPPConfigDefaultsImpl();
     ~AxisCPPConfigDefaultsImpl();
  
-	  char* getClientLog();
-	  char* getClientWSDDFile();
-	  char* getXMLParserLibrary();
-	  char* getHTTPTransportLibrary();
-	  char* getHTTPChannelLibrary();
-	  char* getHTTPSSLChannelLibrary();
-	  char* getNodeName();
-	  char* getListenPort();
-	  char* getSecureInfo();
-	  char* getAxisHome();
+      char* getClientLog();
+      char* getClientWSDDFile();
+      char* getXMLParserLibrary();
+      char* getHTTPTransportLibrary();
+      char* getHTTPChannelLibrary();
+      char* getHTTPSSLChannelLibrary();
+      char* getNodeName();
+      char* getListenPort();
+      char* getSecureInfo();
+      char* getAxisHome();
         
-	  void setClientLog(char*);
-	  void setClientWSDDFile(char*);
-	  void setXMLParserLibrary(char*);
-	  void setHTTPTransportLibrary(char*);
-	  void setHTTPChannelLibrary(char*);
-	  void setHTTPSSLChannelLibrary(char*);
-	  void setNodeName(char*);
-	  void setListenPort(char*);
-	  void setSecureInfo(char*);
-	  void setAxisHome(char*);
+      void setClientLog(char*);
+      void setClientWSDDFile(char*);
+      void setXMLParserLibrary(char*);
+      void setHTTPTransportLibrary(char*);
+      void setHTTPChannelLibrary(char*);
+      void setHTTPSSLChannelLibrary(char*);
+      void setNodeName(char*);
+      void setListenPort(char*);
+      void setSecureInfo(char*);
+      void setAxisHome(char*);
 
       void apply();
 
     private:         
-		std::string m_pcClientLog;
-		std::string m_pcClientWSDDFile;
-		std::string m_pcXMLParserLibrary;
-		std::string m_pcHTTPTransportLibrary;
-		std::string m_pcHTTPChannelLibrary;
-		std::string m_pcHTTPSSLChannelLibrary;
-		std::string m_pcNodeName;
-		std::string m_pcListenPort;
-		std::string m_pcSecureInfo;
-		std::string m_pcAxisHome;
+        std::string m_pcClientLog;
+        std::string m_pcClientWSDDFile;
+        std::string m_pcXMLParserLibrary;
+        std::string m_pcHTTPTransportLibrary;
+        std::string m_pcHTTPChannelLibrary;
+        std::string m_pcHTTPSSLChannelLibrary;
+        std::string m_pcNodeName;
+        std::string m_pcListenPort;
+        std::string m_pcSecureInfo;
+        std::string m_pcAxisHome;
 
 };
 

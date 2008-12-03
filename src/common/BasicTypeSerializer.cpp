@@ -36,7 +36,7 @@ AXIS_CPP_NAMESPACE_START
 BasicTypeSerializer::
 BasicTypeSerializer ()
 {
-	logEntryEngine("BasicTypeSerializer::BasicTypeSerializer")
+    logEntryEngine("BasicTypeSerializer::BasicTypeSerializer")
 
     m_sSZ = "";
     
@@ -46,7 +46,7 @@ BasicTypeSerializer ()
 BasicTypeSerializer::
 ~BasicTypeSerializer ()
 {
-	logEntryEngine("BasicTypeSerializer::~BasicTypeSerializer")
+    logEntryEngine("BasicTypeSerializer::~BasicTypeSerializer")
 
     logExit()
 }
@@ -55,7 +55,7 @@ const AxisChar* BasicTypeSerializer::
 serializeAsElement (const AxisChar* pName,
                     IAnySimpleType* pSimpleType)
 {
-	return serializeAsElement(pName, NULL, pSimpleType);
+    return serializeAsElement(pName, NULL, pSimpleType);
 }
 
 const AxisChar* BasicTypeSerializer::
@@ -72,14 +72,14 @@ serializeAsElement (const AxisChar* pName,
                     const AxisChar* pNamespace, 
                     IAnySimpleType* pSimpleType)
 {
-	logEntryEngine("BasicTypeSerializer::serializeAsElement")
+    logEntryEngine("BasicTypeSerializer::serializeAsElement")
 
     m_sSZ = "<";
-	if (NULL != pPrefix) 
-	{ 
-		m_sSZ += pPrefix;
-		m_sSZ += ":";
-	}
+    if (NULL != pPrefix) 
+    { 
+        m_sSZ += pPrefix;
+        m_sSZ += ":";
+    }
     
     m_sSZ += pName;
 
@@ -127,11 +127,11 @@ serializeAsElement (const AxisChar* pName,
         m_sSZ += pSimpleType->serialize();
     
     m_sSZ += "</";
-	if (NULL != pPrefix) 
-	{
-		m_sSZ += pPrefix;
-		m_sSZ += ":";
-	}
+    if (NULL != pPrefix) 
+    {
+        m_sSZ += pPrefix;
+        m_sSZ += ":";
+    }
     m_sSZ += pName;
     m_sSZ += ">\n";
     
@@ -142,10 +142,10 @@ serializeAsElement (const AxisChar* pName,
 
 const AxisChar* BasicTypeSerializer::
 serializeAsAttribute (const AxisChar* pName, 
-		              const AxisChar* pPrefix,
+                      const AxisChar* pPrefix,
                       IAnySimpleType* pSimpleType)
 {
-	logEntryEngine("BasicTypeSerializer::serializeAsAttribute")
+    logEntryEngine("BasicTypeSerializer::serializeAsAttribute")
 
     m_sSZ = ' ';
     if (pPrefix)

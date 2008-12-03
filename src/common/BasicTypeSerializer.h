@@ -84,7 +84,7 @@ public:
      * @param pPrefix the optional prefix for this element.
      * @param pSimpleType the value for this element.
      */
-	const AxisChar* serializeAsElement(const AxisChar* pName, 
+    const AxisChar* serializeAsElement(const AxisChar* pName, 
         const AxisChar* pPrefix, IAnySimpleType* pSimpleType);
     /**
      * Serializes a SOAP Element.

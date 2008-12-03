@@ -138,29 +138,29 @@ char* AxisUtils::toLowerCase (const char* pchWord)
 xsd__base64Binary * AxisUtils::decodeFromBase64Binary(const AxisChar *pValue)
 {
     xsd__base64Binary* value = new xsd__base64Binary();
-	int size = apr_base64_decode_len (pValue);
-	xsd__unsignedByte * pTemp = new unsigned char[size + 1];
-	size = apr_base64_decode_binary (pTemp, pValue);
-	pTemp[size] = 0; // Null terminate so it could be used as a string
-	value->set(pTemp, size);
-	delete [] pTemp;
+    int size = apr_base64_decode_len (pValue);
+    xsd__unsignedByte * pTemp = new unsigned char[size + 1];
+    size = apr_base64_decode_binary (pTemp, pValue);
+    pTemp[size] = 0; // Null terminate so it could be used as a string
+    value->set(pTemp, size);
+    delete [] pTemp;
     return value;
 }
 
 bool AxisUtils::isStringOnlyWithSpaces(const char* pchWord)
 {
-	bool blnStatus = true;
+    bool blnStatus = true;
 
-	int iLen = strlen(pchWord);
+    int iLen = strlen(pchWord);
 
-	for (int i=0; i<iLen; i++) {	
-		if (pchWord[i] != ' ') {
-			blnStatus = false;	
-			break;
-		}
-	}
+    for (int i=0; i<iLen; i++) {    
+        if (pchWord[i] != ' ') {
+            blnStatus = false;    
+            break;
+        }
+    }
 
-	return blnStatus;
+    return blnStatus;
 }
 
 IAnySimpleType* AxisUtils::createSimpleTypeObject(XSDTYPE type)
@@ -170,61 +170,61 @@ IAnySimpleType* AxisUtils::createSimpleTypeObject(XSDTYPE type)
 
 IAnySimpleType* AxisUtils::createSimpleTypeObject(void * pValue, XSDTYPE type)
 {
-	logEntryEngine("AxisUtils::createSimpleTypeObject")
+    logEntryEngine("AxisUtils::createSimpleTypeObject")
 
     IAnySimpleType* xsdValue = NULL;
     
     // Put commonly used type at top of switch statement!
     switch (type)
     {
-	    case XSD_STRING:
-	        xsdValue = new String((xsd__string) pValue);
-	        break;
-	    case XSD_NORMALIZEDSTRING:
-	        xsdValue = new NormalizedString((xsd__normalizedString) pValue);
-	        break;
-	    case XSD_DECIMAL:
-	        xsdValue = new Decimal((xsd__decimal*) pValue);
-	        break;
-	    case XSD_INTEGER:
-	        xsdValue = new Integer((xsd__integer*) pValue);
-	        break;
-	    case XSD_LONG:
-	        xsdValue = new Long((xsd__long*) pValue);
-	        break;
-	    case XSD_INT:
-	        xsdValue = new Int((xsd__int*) pValue);
-	        break;
-	    case XSD_SHORT:
-	        xsdValue = new Short((xsd__short*) pValue);
-	        break;
-	    case XSD_BYTE:
-	        xsdValue = new Byte((xsd__byte*) pValue);
-	        break;
-	    case XSD_NONNEGATIVEINTEGER:
-	        xsdValue = new NonNegativeInteger((xsd__nonNegativeInteger*) pValue);
-	        break;
-	    case XSD_UNSIGNEDLONG:
-	        xsdValue = new UnsignedLong((xsd__unsignedLong*) pValue);
-	        break;
-	    case XSD_UNSIGNEDINT:
-	        xsdValue = new UnsignedInt((xsd__unsignedInt*) pValue);
-	        break;
-	    case XSD_UNSIGNEDSHORT:
-	        xsdValue = new UnsignedShort((xsd__unsignedShort*) pValue);
-	        break;
-	    case XSD_UNSIGNEDBYTE:
-	        xsdValue = new UnsignedByte((xsd__unsignedByte*) pValue);
-	        break;
-	    case XSD_POSITIVEINTEGER:
-	        xsdValue = new PositiveInteger((xsd__positiveInteger*) pValue);
-	        break;
-	    case XSD_NONPOSITIVEINTEGER:
-	        xsdValue = new NonPositiveInteger((xsd__nonPositiveInteger*) pValue);
-	        break;
-	    case XSD_NEGATIVEINTEGER:
-	        xsdValue = new NegativeInteger((xsd__negativeInteger*) pValue);
-	        break;
+        case XSD_STRING:
+            xsdValue = new String((xsd__string) pValue);
+            break;
+        case XSD_NORMALIZEDSTRING:
+            xsdValue = new NormalizedString((xsd__normalizedString) pValue);
+            break;
+        case XSD_DECIMAL:
+            xsdValue = new Decimal((xsd__decimal*) pValue);
+            break;
+        case XSD_INTEGER:
+            xsdValue = new Integer((xsd__integer*) pValue);
+            break;
+        case XSD_LONG:
+            xsdValue = new Long((xsd__long*) pValue);
+            break;
+        case XSD_INT:
+            xsdValue = new Int((xsd__int*) pValue);
+            break;
+        case XSD_SHORT:
+            xsdValue = new Short((xsd__short*) pValue);
+            break;
+        case XSD_BYTE:
+            xsdValue = new Byte((xsd__byte*) pValue);
+            break;
+        case XSD_NONNEGATIVEINTEGER:
+            xsdValue = new NonNegativeInteger((xsd__nonNegativeInteger*) pValue);
+            break;
+        case XSD_UNSIGNEDLONG:
+            xsdValue = new UnsignedLong((xsd__unsignedLong*) pValue);
+            break;
+        case XSD_UNSIGNEDINT:
+            xsdValue = new UnsignedInt((xsd__unsignedInt*) pValue);
+            break;
+        case XSD_UNSIGNEDSHORT:
+            xsdValue = new UnsignedShort((xsd__unsignedShort*) pValue);
+            break;
+        case XSD_UNSIGNEDBYTE:
+            xsdValue = new UnsignedByte((xsd__unsignedByte*) pValue);
+            break;
+        case XSD_POSITIVEINTEGER:
+            xsdValue = new PositiveInteger((xsd__positiveInteger*) pValue);
+            break;
+        case XSD_NONPOSITIVEINTEGER:
+            xsdValue = new NonPositiveInteger((xsd__nonPositiveInteger*) pValue);
+            break;
+        case XSD_NEGATIVEINTEGER:
+            xsdValue = new NegativeInteger((xsd__negativeInteger*) pValue);
+            break;
         case XSD_FLOAT:
             xsdValue = new Float((xsd__float*) pValue);
             break;

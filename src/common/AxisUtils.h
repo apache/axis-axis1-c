@@ -118,56 +118,56 @@ class STORAGE_CLASS_INFO AxisUtils
 
         static bool isStringOnlyWithSpaces(const char* pchWord);
 
-	/**
-	 * Decodes the given base64 string and returns it.
-	 */
+    /**
+     * Decodes the given base64 string and returns it.
+     */
     static xsd__base64Binary * decodeFromBase64Binary(const AxisChar* pValue);
 
         /*
-	 * Converts the given character pointer value to lowercase.
-	 * @param pchWord The character pointer to be converted.
-	 * @return The converted lowercase character value
-	 */
+     * Converts the given character pointer value to lowercase.
+     * @param pchWord The character pointer to be converted.
+     * @return The converted lowercase character value
+     */
         static char *toLowerCase (const char* pchWord);
         /*
-	 * Converts the given string to lowercase.
-	 * @param pchWord The string to be converted.
-	 * @return The converted lowercase string value
-	 */
+     * Converts the given string to lowercase.
+     * @param pchWord The string to be converted.
+     * @return The converted lowercase string value
+     */
         static string toLowerCase (const string sWord);
         /*
-	 * Converts the given character pointer value to uppercase.
-	 * @param pchWord The character pointer to be converted.
-	 * @return The converted uppercase character value
-	 */
+     * Converts the given character pointer value to uppercase.
+     * @param pchWord The character pointer to be converted.
+     * @return The converted uppercase character value
+     */
         static char *toUpperCase (const char* pchWord);
         /*
-	 * Converts the given string to uppercase.
-	 * @param pchWord The string to be converted.
-	 * @return The converted uppercase string value
-	 */
+     * Converts the given string to uppercase.
+     * @param pchWord The string to be converted.
+     * @return The converted uppercase string value
+     */
         static string toUpperCase (const string sWord);
         /*
-	 * Searchs for the specified character in the given character array and
-	 * returns whether it is found or not.
-	 * @param pchStringToSearch The character array to be searched.
-	 * @param cCharacter The character to search.
-	 */
+     * Searchs for the specified character in the given character array and
+     * returns whether it is found or not.
+     * @param pchStringToSearch The character array to be searched.
+     * @param cCharacter The character to search.
+     */
         static bool isCharacterAvailable (const char* pchStringToSearch,
             const char cCharacter);
         /*
-	 * Searchs for the specified character in the given string and returns 
-	 * whether it is found or not.
-	 * @param sString The string array to be searched.
-	 * @param cCharacter The character to search.
-	 */
+     * Searchs for the specified character in the given string and returns 
+     * whether it is found or not.
+     * @param sString The string array to be searched.
+     * @param cCharacter The character to search.
+     */
         static bool isCharacterAvailable (const string &sString,
             const char cCharacter);
         /*
-	 * Clears the content of passed character array
-	 * @param arrCh The character array which is to be cleared.
-	 * @param iSize The size of the array which is to be cleared.
-	 */
+     * Clears the content of passed character array
+     * @param arrCh The character array which is to be cleared.
+     * @param iSize The size of the array which is to be cleared.
+     */
         static int clearArray (char* arrCh, int iSize);
         static void initialize ();
         static const AxisXMLCh* ToAxisXMLCh (const AxisChar* pch);

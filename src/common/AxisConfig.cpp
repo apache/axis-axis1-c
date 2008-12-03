@@ -93,7 +93,7 @@ AxisConfig( AxisConfig * pOrgAxisConfig)
     m_pcKeyArray[AXCONF_SECUREINFO]     = AXCONF_SECUREINFO_TAGNAME;
 
     char *    pszDefaultValues[] = {
-    		"",                           // (AXCONF_WSDDFILEPATH) Server WSDD File Path
+            "",                           // (AXCONF_WSDDFILEPATH) Server WSDD File Path
             PLATFORM_LOG_PATH,            // (AXCONF_LOGPATH) Server log path
             PLATFORM_CLIENTLOG_PATH,      // (AXCONF_CLIENTLOGPATH) Client log path
             "",                           // (AXCONF_CLIENTWSDDFILEPATH) Client WSDD File Path

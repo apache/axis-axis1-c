@@ -26,20 +26,20 @@
 #if !defined(__AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__)
 #define __AXIS_AXISCONFIG_H_OF_AXIS_INCLUDED__
 
-#define CONFBUFFSIZE						1024
+#define CONFBUFFSIZE                        1024
 
-#define AXCONF_WSDDFILEPATH_TAGNAME			"WSDDFilePath"
-#define AXCONF_LOGPATH_TAGNAME				"LogPath"
-#define AXCONF_CLIENTLOGPATH_TAGNAME		"ClientLogPath"
-#define AXCONF_CLIENTWSDDFILEPATH_TAGNAME	"ClientWSDDFilePath"
-#define AXCONF_TRANSPORTHTTP_TAGNAME		"Transport_http"
-#define AXCONF_SSLCHANNEL_HTTP_TAGNAME		"Channel_HTTP_SSL"
-#define AXCONF_CHANNEL_HTTP_TAGNAME			"Channel_HTTP"
-#define AXCONF_TRANSPORTSMTP_TAGNAME		"Transport_smtp"
-#define AXCONF_XMLPARSER_TAGNAME			"XMLParser"
-#define AXCONF_NODENAME_TAGNAME				"NodeName"
-#define AXCONF_LISTENPORT_TAGNAME			"ListenPort"
-#define AXCONF_SECUREINFO_TAGNAME			"SecureInfo"
+#define AXCONF_WSDDFILEPATH_TAGNAME            "WSDDFilePath"
+#define AXCONF_LOGPATH_TAGNAME                "LogPath"
+#define AXCONF_CLIENTLOGPATH_TAGNAME        "ClientLogPath"
+#define AXCONF_CLIENTWSDDFILEPATH_TAGNAME    "ClientWSDDFilePath"
+#define AXCONF_TRANSPORTHTTP_TAGNAME        "Transport_http"
+#define AXCONF_SSLCHANNEL_HTTP_TAGNAME        "Channel_HTTP_SSL"
+#define AXCONF_CHANNEL_HTTP_TAGNAME            "Channel_HTTP"
+#define AXCONF_TRANSPORTSMTP_TAGNAME        "Transport_smtp"
+#define AXCONF_XMLPARSER_TAGNAME            "XMLParser"
+#define AXCONF_NODENAME_TAGNAME                "NodeName"
+#define AXCONF_LISTENPORT_TAGNAME            "ListenPort"
+#define AXCONF_SECUREINFO_TAGNAME            "SecureInfo"
 #define AXCONF_LOGFILTER_TAGNAME            "LogFilter"
 
 
@@ -61,21 +61,21 @@
 
 enum g_axconfig 
 {
-	AXCONF_WSDDFILEPATH=0, 
-	AXCONF_LOGPATH, 
-	AXCONF_CLIENTLOGPATH, 
-	AXCONF_CLIENTWSDDFILEPATH, 
-	AXCONF_AXISHOME, 
-	AXCONF_TRANSPORTHTTP, 
-	AXCONF_TRANSPORTSMTP, 
-	AXCONF_XMLPARSER,
-	AXCONF_NODENAME,
-	AXCONF_LISTENPORT,
-	AXCONF_SSLCHANNEL_HTTP,
-	AXCONF_CHANNEL_HTTP,
-	AXCONF_SECUREINFO,
-	AXCONF_LOGFILTER,
-	AXCONF_LAST
+    AXCONF_WSDDFILEPATH=0, 
+    AXCONF_LOGPATH, 
+    AXCONF_CLIENTLOGPATH, 
+    AXCONF_CLIENTWSDDFILEPATH, 
+    AXCONF_AXISHOME, 
+    AXCONF_TRANSPORTHTTP, 
+    AXCONF_TRANSPORTSMTP, 
+    AXCONF_XMLPARSER,
+    AXCONF_NODENAME,
+    AXCONF_LISTENPORT,
+    AXCONF_SSLCHANNEL_HTTP,
+    AXCONF_CHANNEL_HTTP,
+    AXCONF_SECUREINFO,
+    AXCONF_LOGFILTER,
+    AXCONF_LAST
 };
 
 AXIS_CPP_NAMESPACE_START
@@ -97,12 +97,12 @@ class AxisConfig
 
     /**
      * This is called to get the value of a property as defined by the g_axconfig
-	 * enumeration.
+     * enumeration.
      * 
      * @return the requested value or NULL if the property is not set.
      */
 
-	char* getAxisConfProperty(g_axconfig property);
+    char* getAxisConfProperty(g_axconfig property);
     void setValue(int valuelength, g_axconfig valueindex, char* value);
     
     /** 
@@ -111,8 +111,8 @@ class AxisConfig
     std::string toString();
         
     private:
-		std::string m_pcKeyArray [AXCONF_LAST];
-		std::string m_pcValueArray [AXCONF_LAST];
+        std::string m_pcKeyArray [AXCONF_LAST];
+        std::string m_pcValueArray [AXCONF_LAST];
 };
 
 AXIS_CPP_NAMESPACE_END

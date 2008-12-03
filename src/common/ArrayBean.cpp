@@ -38,8 +38,8 @@ AXIS_CPP_NAMESPACE_START
 ArrayBean::
 ArrayBean()
 {
-	logEntryEngine("ArrayBean::ArrayBean")
-	
+    logEntryEngine("ArrayBean::ArrayBean")
+    
     m_type = XSD_UNKNOWN;
     m_ItemName = "";
     m_value.sta = NULL;
@@ -50,7 +50,7 @@ ArrayBean()
 ArrayBean::
 ~ArrayBean()
 {
-	logEntryEngine("ArrayBean::~ArrayBean")
+    logEntryEngine("ArrayBean::~ArrayBean")
 
     if (USER_TYPE == m_type)
     {
@@ -75,29 +75,29 @@ ArrayBean::
     }
     else if (AxisEngine::m_bServer && m_value.sta)
     {
-    	// TODO - Why do we only do this for server? I think we need to do for client also.
+        // TODO - Why do we only do this for server? I think we need to do for client also.
         if (m_nSize > 0)
         {
             for (int count = 0 ; count < m_nSize ; count++)
-            	if (((void **) m_value.sta)[count] != NULL)
-            		Axis::AxisDelete(((void **) m_value.sta)[count], m_type);
+                if (((void **) m_value.sta)[count] != NULL)
+                    Axis::AxisDelete(((void **) m_value.sta)[count], m_type);
         }
         delete [] m_value.sta;
     }
-	
-	logExit()
+    
+    logExit()
 }
 
 int ArrayBean::
 GetArraySize()
-{	
+{    
     return m_nSize;
 }
 
 int ArrayBean::
 Serialize(SoapSerializer& pSZ)
-{	
-	logEntryEngine("ArrayBean::Serialize")
+{    
+    logEntryEngine("ArrayBean::Serialize")
 
     if (USER_TYPE == m_type)
     {
@@ -114,26 +114,26 @@ Serialize(SoapSerializer& pSZ)
             {
                 pItem = ptrval[x];
 
-				// try to find the prefix - array prefix overrides the
-				// serializer prefix
-            	const AxisChar* pNamespace = pSZ.getNamespace();
-				const AxisChar* pPrefix = NULL;
+                // try to find the prefix - array prefix overrides the
+                // serializer prefix
+                const AxisChar* pNamespace = pSZ.getNamespace();
+                const AxisChar* pPrefix = NULL;
                 bool blnIsNewPrefix = false;
-				if (NULL != pNamespace)
-					if (strlen(pNamespace) > 0)
-            	        pPrefix = pSZ.getNamespacePrefix(pNamespace, blnIsNewPrefix);
+                if (NULL != pNamespace)
+                    if (strlen(pNamespace) > 0)
+                        pPrefix = pSZ.getNamespacePrefix(pNamespace, blnIsNewPrefix);
 
-            	if (pPrefix != NULL)
+                if (pPrefix != NULL)
                 {
-	                pSZ.serialize("<", pPrefix, ":", m_ItemName.c_str(), NULL); 
+                    pSZ.serialize("<", pPrefix, ":", m_ItemName.c_str(), NULL); 
                     if (blnIsNewPrefix)
                     {
                         pSZ.serialize(" xmlns:", pPrefix, "=\"", pNamespace, "\"", NULL);
                     }
                 }
-	            else
-	                pSZ.serialize("<", m_ItemName.c_str(), NULL); 
-				
+                else
+                    pSZ.serialize("<", m_ItemName.c_str(), NULL); 
+                
                 // note : ">" is not serialized to enable the type's serializer
                 // to add attributes 
 
@@ -145,10 +145,10 @@ Serialize(SoapSerializer& pSZ)
                 logDebugArg2("Returned from calling object serializer function %p, status %d", m_value.cta->pSZFunct, stat)
 
                 // no matter true or false is passed
-            	if (pPrefix != NULL)
-                	pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
-	            else
-                	pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
+                if (pPrefix != NULL)
+                    pSZ.serialize("</", pPrefix, ":", m_ItemName.c_str(), ">", NULL);
+                else
+                    pSZ.serialize("</", m_ItemName.c_str(), ">", NULL);
                   
                 if (blnIsNewPrefix)
                 {
@@ -181,10 +181,10 @@ Serialize(SoapSerializer& pSZ)
         
         // this is to prevent serializing type information for basic array elements 
  
-	   	const AxisChar* pNamespace = pSZ.getNamespace();
-       	        
-       	if (RPC_ENCODED == nStyle) 
-       		pSZ.setStyle(RPC_LITERAL); 
+           const AxisChar* pNamespace = pSZ.getNamespace();
+                   
+           if (RPC_ENCODED == nStyle) 
+               pSZ.setStyle(RPC_LITERAL); 
 
         void ** p = (void **) m_value.sta;
         for (int ix = 0 ; ix < m_nSize ; ix++ )
@@ -192,13 +192,13 @@ Serialize(SoapSerializer& pSZ)
             pSZ.serializeAsElement(m_ItemName.c_str(), pNamespace, p[ix], m_type);
         }
 
-    	// restore Serializer's style after array serialization is finished
-    	if (RPC_ENCODED == nStyle) 
-    		pSZ.setStyle(RPC_ENCODED);
+        // restore Serializer's style after array serialization is finished
+        if (RPC_ENCODED == nStyle) 
+            pSZ.setStyle(RPC_ENCODED);
     }
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
@@ -235,17 +235,17 @@ SetUri(const AxisChar* sURI)
 void ArrayBean::
 RemoveArrayPointer()
 {
-	logEntryEngine("ArrayBean::RemoveArrayPointer")
+    logEntryEngine("ArrayBean::RemoveArrayPointer")
 
     if (USER_TYPE == m_type)
     {
         if (m_value.cta)
-            m_value.cta->pObject = NULL;	
+            m_value.cta->pObject = NULL;    
     }
     else
         m_value.sta = NULL;
-	
-	logExit()
+    
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

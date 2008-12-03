@@ -82,44 +82,44 @@ AXIS_CPP_NAMESPACE_START
  */
 class AxisTrace
 {
-public:		
-	// Starting and stopping trace.  If log file path is not set, no logging is done
-	// unless ConsoleMode is enabled, in which case log records will be written to stdout.
-	static int startTrace(const char* logFilePath, bool dumpEnvironment=true);
-	static void stopTrace();
-	static bool isLoggingEnabled() { return (m_logFileIsSet || m_consoleMode); }  
-	
-	static std::string& getLogFilePath() { return m_logFilePath; }
-	
-	// Setting log filters.  The string filter is a semicolon delimited string
-	// of possible filters.  For example, setLogFilter("noEntryExit;").
-	static void setLogFilter(const char *filters);
-	static std::string getLogFilter();
-	
-	// Rest log filters to default values, which is: "stub;engine;transport;parser"
-	static void resetLogFilter();
-	
-	// Whether to print log records to the console (i.e. stdout).
-	static void enableConsoleMode();
-	static void disableConsoleMode();
-	
-	// Entry/exit tracing.
-	static void writeEntry  (const char* component, const char* functionName, const char * fmt, ...);
-	static void writeExit   (const char* component, const char* functionName, const char * fmt, ...);
+public:        
+    // Starting and stopping trace.  If log file path is not set, no logging is done
+    // unless ConsoleMode is enabled, in which case log records will be written to stdout.
+    static int startTrace(const char* logFilePath, bool dumpEnvironment=true);
+    static void stopTrace();
+    static bool isLoggingEnabled() { return (m_logFileIsSet || m_consoleMode); }  
+    
+    static std::string& getLogFilePath() { return m_logFilePath; }
+    
+    // Setting log filters.  The string filter is a semicolon delimited string
+    // of possible filters.  For example, setLogFilter("noEntryExit;").
+    static void setLogFilter(const char *filters);
+    static std::string getLogFilter();
+    
+    // Rest log filters to default values, which is: "stub;engine;transport;parser"
+    static void resetLogFilter();
+    
+    // Whether to print log records to the console (i.e. stdout).
+    static void enableConsoleMode();
+    static void disableConsoleMode();
+    
+    // Entry/exit tracing.
+    static void writeEntry  (const char* component, const char* functionName, const char * fmt, ...);
+    static void writeExit   (const char* component, const char* functionName, const char * fmt, ...);
 
-	// Write trace data. Trace records will include prefix (i.e. timestamp, etc).
-	static void writeTrace  (const char* component, const char* type, const char* functionName,
-			                 const char * fmt, ...);
-	static void writeTrace  (const char* component, const char* type, const char* functionName,
-			                 int lineNumber, const char* fileName, const char * fmt, ...);
-	static void writeTrace  (const char* component, const char* type, const char* functionName,
-			                 bool hexFormat, int dataLen, const char *data);
-	static void writeTrace  (const char *fmt, va_list vargs);
+    // Write trace data. Trace records will include prefix (i.e. timestamp, etc).
+    static void writeTrace  (const char* component, const char* type, const char* functionName,
+                             const char * fmt, ...);
+    static void writeTrace  (const char* component, const char* type, const char* functionName,
+                             int lineNumber, const char* fileName, const char * fmt, ...);
+    static void writeTrace  (const char* component, const char* type, const char* functionName,
+                             bool hexFormat, int dataLen, const char *data);
+    static void writeTrace  (const char *fmt, va_list vargs);
 
-	// Write trace data.  No trace record prefix is printed out (i.e. no timestamp, etc).
-	static void writeTrace  (std::string& s);
-	static void writeTrace  (const char *data, int dataLen, bool hexFormat=false);
-	static void writeTrace  (const char *str) { writeTrace(str, strlen(str)); }
+    // Write trace data.  No trace record prefix is printed out (i.e. no timestamp, etc).
+    static void writeTrace  (std::string& s);
+    static void writeTrace  (const char *data, int dataLen, bool hexFormat=false);
+    static void writeTrace  (const char *str) { writeTrace(str, strlen(str)); }
 
     // To determine when a log component is enabled.
     static bool isStubLoggingEnabled()      { return  m_stubLogLevelEnabled;      }
@@ -128,20 +128,20 @@ public:
     static bool isTransportLoggingEnabled() { return  m_transportLogLevelEnabled; }
 
 private:
-	// Internal function for writing trace data
-	static void generatePrefix(std::string &prefix, const char *fmt);
+    // Internal function for writing trace data
+    static void generatePrefix(std::string &prefix, const char *fmt);
 
-	// Data fields.
-	static bool          m_logFileIsSet;
-	
-	static bool          m_stubLogLevelEnabled;
-	static bool          m_engineLogLevelEnabled;
-	static bool          m_parserLogLevelEnabled;
-	static bool          m_transportLogLevelEnabled;
+    // Data fields.
+    static bool          m_logFileIsSet;
+    
+    static bool          m_stubLogLevelEnabled;
+    static bool          m_engineLogLevelEnabled;
+    static bool          m_parserLogLevelEnabled;
+    static bool          m_transportLogLevelEnabled;
 
-	static bool          m_consoleMode;
-	
-	static bool          m_noEntryExit;
+    static bool          m_consoleMode;
+    
+    static bool          m_noEntryExit;
 
     static std::string   m_logFilePath;        
 };
@@ -181,7 +181,7 @@ bool              loggingEnabled    = (AxisTrace::isLoggingEnabled() && AxisTrac
 logSetFunctionNameStub(lFunctionName) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
   } \
 }
 
@@ -189,7 +189,7 @@ logSetFunctionNameStub(lFunctionName) \
 logSetFunctionNameEngine(lFunctionName) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
   } \
 }
 
@@ -197,7 +197,7 @@ logSetFunctionNameEngine(lFunctionName) \
 logSetFunctionNameParser(lFunctionName) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
   } \
 }
 
@@ -205,7 +205,7 @@ logSetFunctionNameParser(lFunctionName) \
 logSetFunctionNameTransport(lFunctionName) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeEntry(logComponent, logFunctionName, NULL); \
   } \
 }
 
@@ -216,49 +216,49 @@ logSetFunctionNameTransport(lFunctionName) \
 #define logExit() \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
   } \
 }
 
 #define logExitWithReturnCode(lRC) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "Exit with return code of %s", lRC == AXIS_SUCCESS ? "AXIS_SUCCESS" : "AXIS_FAIL"); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "Exit with return code of %s", lRC == AXIS_SUCCESS ? "AXIS_SUCCESS" : "AXIS_FAIL"); \
   } \
 }
 
 #define logExitWithInteger(lint) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "Exit with integer value of %d", lint); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "Exit with integer value of %d", lint); \
   } \
 }
 
 #define logExitWithPointer(lPointer) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "Exit with object pointer %p", lPointer); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "Exit with object pointer %p", lPointer); \
   } \
 }
 
 #define logExitWithString(lString) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "Exit with string \"%s\"", lString); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "Exit with string \"%s\"", lString); \
   } \
 }
 
 #define logExitWithBoolean(lBoolean) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "Exit with boolean %s", lBoolean ? "true" : "false"); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "Exit with boolean %s", lBoolean ? "true" : "false"); \
   } \
 }
 
 #define logExitWithMessage(lfmt) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, lfmt); \
+      AxisTrace::writeExit(logComponent, logFunctionName, lfmt); \
   } \
 }
 
@@ -269,23 +269,23 @@ logSetFunctionNameTransport(lFunctionName) \
 #define logThrowException(lException) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, lException); \
-	  AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, lException); \
+      AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
   } \
 }
 
 #define logThrowExceptionWithData(lException, lExceptionMessage) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, "%s: %s", lException, lExceptionMessage); \
-	  AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, "%s: %s", lException, lExceptionMessage); \
+      AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
   } \
 }
 
 #define logRethrowException() \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeExit(logComponent, logFunctionName, "%s", "Rethrowing exception"); \
+      AxisTrace::writeExit(logComponent, logFunctionName, "%s", "Rethrowing exception"); \
   } \
 }
 
@@ -296,42 +296,42 @@ logSetFunctionNameTransport(lFunctionName) \
 #define logDebug(lFmt) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt); \
   } \
 }
 
 #define logDebugArg1(lFmt, lArg1) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1); \
   } \
 }
 
 #define logDebugArg2(lFmt, lArg1, lArg2) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2); \
   } \
 }
 
 #define logDebugArg3(lFmt, lArg1, lArg2, lArg3) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2, lArg3); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2, lArg3); \
   } \
 }
 
 #define logDebugArg4(lFmt, lArg1, lArg2, lArg3, lArg4) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2, lArg3, lArg4); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, lFmt, lArg1, lArg2, lArg3, lArg4); \
   } \
 }
 
 #define logDebugBuffer(lBuf, lBufLen) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, false, lBufLen, lBuf); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_DEBUG, logFunctionName, false, lBufLen, lBuf); \
   } \
 }
 
@@ -339,7 +339,7 @@ logSetFunctionNameTransport(lFunctionName) \
 #define logWarning(lFmt) \
 { \
   if (loggingEnabled) { \
-	  AxisTrace::writeTrace(logComponent, TRACE_TYPE_WARN, logFunctionName, lFmt); \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_WARN, logFunctionName, lFmt); \
   } \
 }
 

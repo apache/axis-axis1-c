@@ -108,10 +108,10 @@ void TypeMapping::initialize ()
 void TypeMapping::uninitialize()
 {
     if (m_bInit)
-	{
+    {
         m_sTypeMap.clear();
-		m_bInit = false;
-	}
+        m_bInit = false;
+    }
 }
 
 

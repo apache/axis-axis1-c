@@ -59,7 +59,7 @@ public:
     /**
      * 
      */
-	void stopAxis();
+    void stopAxis();
 };
 
 AXIS_CPP_NAMESPACE_END

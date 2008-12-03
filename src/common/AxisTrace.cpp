@@ -57,7 +57,7 @@ string AxisTrace::m_logFilePath = "";
 //******************************************************************************
 int AxisTrace::
 startTrace(const char* logFilePath, 
-		   bool dumpEnvironment)
+           bool dumpEnvironment)
 {
     // If startTrace() already invoked, just return.
     if (NULL == logFilePath || 0x00 == *logFilePath)
@@ -78,31 +78,31 @@ startTrace(const char* logFilePath,
     // Now dump out environment information
     if (dumpEnvironment)
     {
-	    string text = "************ Start Display Current Environment ************\n";
-	    text += "Axis C++ libraries built on ";
-	    text += __DATE__;
-	    text += " at ";
-	    text += __TIME__;
-	    text += "\n";
-	    writeTrace(text);
-	
-	    char *envVars[]={"AXISCPP_DEPLOY", "PATH","LIBPATH","LD_LIBRARY_PATH","SHLIB_PATH", 
-	        "PWD","CLASSPATH","INCLUDE","LIB","NLSPATH","OS",
-	        "COMPUTERNAME","USERNAME","HOSTNAME","LANG","LOGIN","LOGNAME",
-	        "MACHTYPE","OSTYPE","UID","USER"};
-	    for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
-	    {
-	        text = envVars[i];
-	        const char *value = getenv(envVars[i]);
-	        if (NULL!=value)
-	        {
-	            text += "=";
-	            text += value;
-	            text += "\n";
-	            writeTrace(text);
-	        }
-	    }
-	    writeTrace("************* End Display Current Environment *************\n");   
+        string text = "************ Start Display Current Environment ************\n";
+        text += "Axis C++ libraries built on ";
+        text += __DATE__;
+        text += " at ";
+        text += __TIME__;
+        text += "\n";
+        writeTrace(text);
+    
+        char *envVars[]={"AXISCPP_DEPLOY", "PATH","LIBPATH","LD_LIBRARY_PATH","SHLIB_PATH", 
+            "PWD","CLASSPATH","INCLUDE","LIB","NLSPATH","OS",
+            "COMPUTERNAME","USERNAME","HOSTNAME","LANG","LOGIN","LOGNAME",
+            "MACHTYPE","OSTYPE","UID","USER"};
+        for (unsigned i=0; i<(sizeof(envVars)/sizeof(char*)); i++) 
+        {
+            text = envVars[i];
+            const char *value = getenv(envVars[i]);
+            if (NULL!=value)
+            {
+                text += "=";
+                text += value;
+                text += "\n";
+                writeTrace(text);
+            }
+        }
+        writeTrace("************* End Display Current Environment *************\n");   
     }
     
     return AXIS_SUCCESS;
@@ -116,8 +116,8 @@ startTrace(const char* logFilePath,
 void AxisTrace::
 stopTrace()
 {
-	m_logFilePath  = "";
-	m_logFileIsSet = false;
+    m_logFilePath  = "";
+    m_logFileIsSet = false;
 }
 
 //******************************************************************************
@@ -128,8 +128,8 @@ stopTrace()
 void AxisTrace::
 setLogFilter(const char *filters)
 {
-	resetLogFilter();
-	
+    resetLogFilter();
+    
     if (filters == NULL || *filters == 0x00)
         return;
     
@@ -159,25 +159,25 @@ setLogFilter(const char *filters)
 string AxisTrace::
 getLogFilter()
 {
-	string filters   = "";
-	string delimiter = ";";
-	
-	if (m_noEntryExit)
-		filters += TRACE_FILTER_NOENTRYEXIT + delimiter;
-	
-	if (m_stubLogLevelEnabled)
-		filters += TRACE_FILTER_STUB + delimiter;
-	
-	if (m_engineLogLevelEnabled)
-		filters += TRACE_FILTER_ENGINE + delimiter;
-	
-	if (m_parserLogLevelEnabled)
-		filters += TRACE_FILTER_PARSER + delimiter;
-	
-	if (m_transportLogLevelEnabled)
-		filters += TRACE_FILTER_TRANSPORT + delimiter;
-	
-	return filters;
+    string filters   = "";
+    string delimiter = ";";
+    
+    if (m_noEntryExit)
+        filters += TRACE_FILTER_NOENTRYEXIT + delimiter;
+    
+    if (m_stubLogLevelEnabled)
+        filters += TRACE_FILTER_STUB + delimiter;
+    
+    if (m_engineLogLevelEnabled)
+        filters += TRACE_FILTER_ENGINE + delimiter;
+    
+    if (m_parserLogLevelEnabled)
+        filters += TRACE_FILTER_PARSER + delimiter;
+    
+    if (m_transportLogLevelEnabled)
+        filters += TRACE_FILTER_TRANSPORT + delimiter;
+    
+    return filters;
 }
 
 //******************************************************************************
@@ -188,11 +188,11 @@ getLogFilter()
 void AxisTrace::
 resetLogFilter()
 {
-	m_stubLogLevelEnabled      = true;
-	m_engineLogLevelEnabled    = true;
-	m_parserLogLevelEnabled    = true;
-	m_transportLogLevelEnabled = true;
-	m_noEntryExit              = false;
+    m_stubLogLevelEnabled      = true;
+    m_engineLogLevelEnabled    = true;
+    m_parserLogLevelEnabled    = true;
+    m_transportLogLevelEnabled = true;
+    m_noEntryExit              = false;
 }
 
 //******************************************************************************
@@ -224,14 +224,14 @@ disableConsoleMode()
 //******************************************************************************
 void AxisTrace::
 writeEntry   (const char* component, 
-		      const char* functionName, 
+              const char* functionName, 
               const char * fmt, 
               ...)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     // Filter out entry/exit? If so, simply return.
     if (m_noEntryExit)
         return;
@@ -255,14 +255,14 @@ writeEntry   (const char* component,
 //******************************************************************************
 void AxisTrace::
 writeExit   (const char* component,
-		     const char* functionName, 
+             const char* functionName, 
              const char * fmt, 
              ...)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     // Filter out entry/exit? If so, simply return.
     if (m_noEntryExit)
         return;
@@ -286,15 +286,15 @@ writeExit   (const char* component,
 //******************************************************************************
 void AxisTrace::
 writeTrace  (const char* component,
-		     const char* type,
+             const char* type,
              const char* functionName, 
              const char * fmt, 
              ...)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     // Construct final formatter
     char myfmt[1024];
     if (NULL == fmt)
@@ -314,17 +314,17 @@ writeTrace  (const char* component,
 //******************************************************************************
 void AxisTrace::
 writeTrace   (const char* component,
-		      const char* type,
+              const char* type,
               const char* functionName, 
               int lineNumber, 
               const char* fileName, 
               const char * fmt, 
               ...)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     // Construct final formatter
     char myfmt[1024];
     if (NULL == fmt)
@@ -344,16 +344,16 @@ writeTrace   (const char* component,
 //******************************************************************************
 void AxisTrace::
 writeTrace(const char* component, 
-		   const char* type, 
-		   const char* functionName,
+           const char* type, 
+           const char* functionName,
            bool hexFormat, 
            int dataLen, 
            const char *data)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     int len = 0;
     
     if (NULL == data || dataLen==0)
@@ -380,7 +380,7 @@ writeTrace(const char* component,
     
     if (m_consoleMode)
     {
-    	fprintf(stdout, myfmt, dataLen, data);
+        fprintf(stdout, myfmt, dataLen, data);
         fflush(stdout);
     }
 }
@@ -393,10 +393,10 @@ writeTrace(const char* component,
 void AxisTrace::
 writeTrace(const char* data, int dataLen, bool hexFormat)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     int len = 0;
     
     if (NULL == data || dataLen==0)
@@ -428,10 +428,10 @@ writeTrace(const char* data, int dataLen, bool hexFormat)
 void AxisTrace::
 writeTrace(string& s)
 {
-	// If logging is not enabled, just return
-	if (!isLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return
+    if (!isLoggingEnabled())
+        return;
+    
     writeTrace(s.c_str(), s.length());
 }
 
@@ -478,7 +478,7 @@ generatePrefix(string &prefix, const char *fmt)
 {
     if (NULL == fmt)
         fmt = "";
-		
+        
     const int workBufLen=1024;
     char workBuf[workBufLen];
     memset(workBuf,0,workBufLen);

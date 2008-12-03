@@ -162,7 +162,7 @@ AnyType::AnyType()
 
 AnyType::~AnyType() 
 { 
-	// TODO add code to free storage!
+    // TODO add code to free storage!
 }
 
 Axis_Array::Axis_Array()
@@ -215,12 +215,12 @@ void Axis_Array::set(void** array, int size, XSDTYPE type)
 
         switch (m_Type)
         {
-	        case XSD_STRING:
-	        {
-	            ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1];
-	            strcpy(((xsd__string*) m_Array)[count], ((xsd__string*) array)[count]);
-	            break;
-	        }
+            case XSD_STRING:
+            {
+                ((xsd__string*) m_Array)[count] = new char[strlen(((xsd__string*) array)[count])+1];
+                strcpy(((xsd__string*) m_Array)[count], ((xsd__string*) array)[count]);
+                break;
+            }
             case XSD_DURATION:
             {
                 ((xsd__duration**) m_Array)[count] = new xsd__duration();
@@ -531,12 +531,12 @@ void Axis_Array::addElement(void* element)
     {
         switch (m_Type)
         {
-	        case XSD_STRING:
-	        {
-	            ((xsd__string*) m_Array)[m_Size] = new char[strlen((xsd__string) element)+1];
-	            strcpy(((xsd__string*) m_Array)[m_Size], (xsd__string) element);
-	            break;
-	        }
+            case XSD_STRING:
+            {
+                ((xsd__string*) m_Array)[m_Size] = new char[strlen((xsd__string) element)+1];
+                strcpy(((xsd__string*) m_Array)[m_Size], (xsd__string) element);
+                break;
+            }
             case XSD_DURATION:
             {
                 ((xsd__duration**) m_Array)[m_Size] = new xsd__duration();
@@ -836,7 +836,7 @@ void Axis_Array::clear()
     {
         for (int count = 0 ; count < m_Size ; count++)
             if (m_Array[count] != NULL)
-            	Axis::AxisDelete(m_Array[count], m_Type);
+                Axis::AxisDelete(m_Array[count], m_Type);
 
         m_Size = 0;
     }
@@ -845,7 +845,7 @@ void Axis_Array::clear()
         delete [] m_Array;
     else
     {   
-    	// Warning!!  This could introduce memory leaks if used incorrectly!!!
+        // Warning!!  This could introduce memory leaks if used incorrectly!!!
         m_Array = NULL;
         m_belongsToAxisEngine = true;
     }

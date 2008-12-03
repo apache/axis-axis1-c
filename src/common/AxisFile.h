@@ -54,7 +54,7 @@ public:
      */
     AxisFile()
     {
-		pFILEFile = NULL;
+        pFILEFile = NULL;
     }
 
     /**
@@ -86,14 +86,14 @@ public:
     int fileGet(char* sLine, int iBufferSize)
     {
         if(fgets (sLine, iBufferSize, pFILEFile) != NULL )
-		{
-			char * newline = strpbrk(sLine, "\n");
-			if(newline)
-			{
-				*newline = '\0';
-			}
-			return AXIS_SUCCESS;
-		}
+        {
+            char * newline = strpbrk(sLine, "\n");
+            if(newline)
+            {
+                *newline = '\0';
+            }
+            return AXIS_SUCCESS;
+        }
 
         return AXIS_FAIL;
     }
@@ -104,8 +104,8 @@ public:
     int filePuts (const char* pcWrite)
     {
         if (-1 < fputs(pcWrite, pFILEFile))
-			return AXIS_SUCCESS;
-		return AXIS_FAIL;
+            return AXIS_SUCCESS;
+        return AXIS_FAIL;
     }
 
     /**   Use this flush the buffer 
@@ -113,8 +113,8 @@ public:
     int fileFlush ()
     {
         if (0 == fflush(pFILEFile))
-			return AXIS_SUCCESS;
-		return AXIS_FAIL;
+            return AXIS_SUCCESS;
+        return AXIS_FAIL;
     }
     
     ~AxisFile()
