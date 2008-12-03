@@ -46,36 +46,36 @@ AXIS_CPP_NAMESPACE_START
 class XMLParserFactory  
 {
 public:
-	XMLParserFactory();
-	virtual ~XMLParserFactory();
-	/**
+    XMLParserFactory();
+    virtual ~XMLParserFactory();
+    /**
      * Used to initialize the global object. Following tasks are done
      * 1. Get the parser library name from the configuration file.
      * 2. Load that dynamic parser library.
      * 3. Get the function pointers of the exported functions
      * 4. Get any other information about the library.
      */
-	static int initialize();
-	/** 
-	 * Used to uninitialize the global object.
-	 * 1. Unloads dynamic parser library.
-	 */
-	static int uninitialize();
-	/**
-	 * Used to create a parser object 
-	 */
-	static XMLParser* getParserObject();
-	/**
-	 * Destroys the parser object 
-	 */
-	static void destroyParserObject(XMLParser* pObject);
+    static int initialize();
+    /** 
+     * Used to uninitialize the global object.
+     * 1. Unloads dynamic parser library.
+     */
+    static int uninitialize();
+    /**
+     * Used to create a parser object 
+     */
+    static XMLParser* getParserObject();
+    /**
+     * Destroys the parser object 
+     */
+    static void destroyParserObject(XMLParser* pObject);
 
-	static int loadLib();
-	static int unloadLib();
+    static int loadLib();
+    static int unloadLib();
 
 private:
-	static const char* m_pcLibraryPath;
-	static DLHandler m_LibHandler;
+    static const char* m_pcLibraryPath;
+    static DLHandler m_LibHandler;
     static CREATE_OBJECT2 m_Create;
     static DELETE_OBJECT2 m_Delete;
 

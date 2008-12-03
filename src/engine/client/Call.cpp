@@ -60,7 +60,7 @@ m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
     initialize_module (0);
     
     // This needs to be here, after the initialize_module, otherwise, trace filter is not honored.
-	logEntryEngine("Call::Call")
+    logEntryEngine("Call::Call")
 
     m_pTransport = NULL;
     m_nTransportType = APTHTTP1_1;
@@ -103,9 +103,9 @@ m_bCallInitialized(false), m_pContentIdSet(NULL), m_pStub(NULL)
 Call::
 ~Call ()
 {
-	logEntryEngine("Call::~Call")
+    logEntryEngine("Call::~Call")
 
-	if (m_pAxisEngine)
+    if (m_pAxisEngine)
         m_pAxisEngine->unInitialize ();
     
     cleanup();
@@ -163,7 +163,7 @@ void Call::setOperation (const char* pchOperation,
                          const char* pchNamespace,
                          bool bIsWrapperStyle)
 {
-	logEntryEngine("Call::setOperation")
+    logEntryEngine("Call::setOperation")
 
     m_pIWSSZ->createSoapMethod (pchOperation, pchNamespace);
     m_pAxisEngine->getMessageData()->setOperationName(pchOperation);
@@ -215,7 +215,7 @@ void Call::addCmplxParameter( void *            pObject,
 
 int Call::sendAndReceive()
 {
-	logEntryEngine("Call::sendAndReceive")
+    logEntryEngine("Call::sendAndReceive")
 
     m_nStatus = m_pAxisEngine->process( m_pTransport, false);
 
@@ -226,7 +226,7 @@ int Call::sendAndReceive()
 
 int Call::send()
 {
-	logEntryEngine("Call::send")
+    logEntryEngine("Call::send")
 
     m_nStatus = m_pAxisEngine->process( m_pTransport, true);
 
@@ -248,7 +248,7 @@ public:
 
 int Call::initialize( PROVIDERTYPE nStyle)
 {
-	logEntryEngine("Call::initialize")
+    logEntryEngine("Call::initialize")
 
     m_bCallInitialized = true;
 
@@ -365,7 +365,7 @@ int Call::initialize( PROVIDERTYPE nStyle)
 
 int Call::unInitialize()
 {
-	logEntryEngine("Call::unInitialize")
+    logEntryEngine("Call::unInitialize")
 
     m_bCallInitialized = false;
 
@@ -443,7 +443,7 @@ AXIS_PROTOCOL_TYPE Call::getProtocol ()
 
 int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)
 {
-	logEntryEngine("Call::setTransportProperty")
+    logEntryEngine("Call::setTransportProperty")
 
     int    iSuccess = AXIS_SUCCESS;
 
@@ -471,7 +471,7 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
 
     if( iSuccess < 0)
     {
-    	logThrowExceptionWithData("AxisGenException", m_pTransport->getLastChannelError())
+        logThrowExceptionWithData("AxisGenException", m_pTransport->getLastChannelError())
 
         throw AxisGenException( -iSuccess, m_pTransport->getLastChannelError());
     }
@@ -1071,15 +1071,15 @@ int Call::checkMessage( const AxisChar * pName, const AxisChar * pNamespace)
 }
 
 int Call::validateMessage( const AxisChar * pName, 
-		                   const AxisChar * pNamespace,
-		                   bool consumeIt)
+                           const AxisChar * pNamespace,
+                           bool consumeIt)
 {
     return m_pIWSDZ->validateMessageBody( pName, pNamespace, consumeIt);
 }
 
 void Call::getChardataAs(void** pValue, XSDTYPE type)
 {
-	m_pIWSDZ->getChardataAs( pValue,  type);
+    m_pIWSDZ->getChardataAs( pValue,  type);
 }
 
 void* Call::checkFault (const AxisChar* pName, const AxisChar* pNamespace)
@@ -1235,7 +1235,7 @@ void Call::addSoapFaultToList(const char *faultName,
 void Call::processSoapFault(AxisException *e, 
                             void *exceptionHandlerFp)
 {
-	logEntryEngine("Call::processSoapFault")
+    logEntryEngine("Call::processSoapFault")
 
     AXIS_EXCEPTION_HANDLER_FUNCT excFp = (AXIS_EXCEPTION_HANDLER_FUNCT)exceptionHandlerFp;
     ISoapFault* pSoapFault             = NULL;
@@ -1246,9 +1246,9 @@ void Call::processSoapFault(AxisException *e,
 
     if(pSoapFault)
     {
-	    void *pFaultDetail = NULL;
-	    bool faultIsDefined = false;
-	    bool isFaultDetailXMLString = false;
+        void *pFaultDetail = NULL;
+        bool faultIsDefined = false;
+        bool isFaultDetailXMLString = false;
         FaultInformation_t *fi;
         const char* pcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();
 

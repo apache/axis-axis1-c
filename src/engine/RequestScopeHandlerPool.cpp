@@ -41,7 +41,7 @@ RequestScopeHandlerPool ()
 RequestScopeHandlerPool::
 ~RequestScopeHandlerPool ()
 {
-	logEntryEngine("RequestScopeHandlerPool::~RequestScopeHandlerPool")
+    logEntryEngine("RequestScopeHandlerPool::~RequestScopeHandlerPool")
 
     for (map < int, list <BasicHandler*> >::iterator it = m_Handlers.begin (); it != m_Handlers.end (); it++)
     {
@@ -52,7 +52,7 @@ RequestScopeHandlerPool::
         
         (*it).second.clear ();
     }
-	
+    
     m_Handlers.clear ();
     
     logExit()
@@ -61,10 +61,10 @@ RequestScopeHandlerPool::
 int RequestScopeHandlerPool::
 getInstance (BasicHandler** pHandler, int nLibId)
 {
-	logEntryEngine("RequestScopeHandlerPool::getInstance")
+    logEntryEngine("RequestScopeHandlerPool::getInstance")
 
-	Lock l(this);
-	
+    Lock l(this);
+    
     int Status = AXIS_SUCCESS;
     
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
@@ -88,7 +88,7 @@ getInstance (BasicHandler** pHandler, int nLibId)
             m_Handlers[nLibId].clear ();
     }
     
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
 
     return Status;
 }
@@ -96,9 +96,9 @@ getInstance (BasicHandler** pHandler, int nLibId)
 int RequestScopeHandlerPool::
 putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
 {
-	logEntryEngine("RequestScopeHandlerPool::putInstance")
+    logEntryEngine("RequestScopeHandlerPool::putInstance")
 
-	Lock l(this);
+    Lock l(this);
 
     if (0 != pHandler->_functions)
     {
@@ -112,7 +112,7 @@ putInstance (BasicHandler* pHandler, int nLibId, bool bWebService)
 
     m_Handlers[nLibId].push_back (pHandler);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

@@ -41,13 +41,13 @@ DELETE_OBJECT1 SOAPTransportFactory::m_Delete = 0;
 SOAPTransportFactory::
 SOAPTransportFactory()
 {
-	m_LibHandler = 0;
+    m_LibHandler = 0;
 }
 
 SOAPTransportFactory::
 ~SOAPTransportFactory()
 {
-	logEntryEngine("SOAPTransportFactory::~SOAPTransportFactory")
+    logEntryEngine("SOAPTransportFactory::~SOAPTransportFactory")
 
     logExit()
 }
@@ -55,12 +55,12 @@ SOAPTransportFactory::
 int SOAPTransportFactory::
 initialize()
 {
-	logEntryEngine("SOAPTransportFactory::initialize")
+    logEntryEngine("SOAPTransportFactory::initialize")
 
-	m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
+    m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_TRANSPORTHTTP);
 
-	if (!loadLib())
-	{
+    if (!loadLib())
+    {
         m_Create = (CREATE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION1);
         if (m_Create)
             m_Delete = (DELETE_OBJECT1) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION1);
@@ -79,23 +79,23 @@ initialize()
             throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED,  sFullMessage.c_str());
         }
 
-		void (*preloadChannels) (char*, char*);
-		preloadChannels = (void (*)(char*, char*))PLATFORM_GETPROCADDR(m_LibHandler, "preloadChannels");
-		if (preloadChannels)
-			(*preloadChannels)(g_pConfig->getAxisConfProperty( AXCONF_CHANNEL_HTTP), 
-				g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL_HTTP));
-	}
-	else
-	{
+        void (*preloadChannels) (char*, char*);
+        preloadChannels = (void (*)(char*, char*))PLATFORM_GETPROCADDR(m_LibHandler, "preloadChannels");
+        if (preloadChannels)
+            (*preloadChannels)(g_pConfig->getAxisConfProperty( AXCONF_CHANNEL_HTTP), 
+                g_pConfig->getAxisConfProperty( AXCONF_SSLCHANNEL_HTTP));
+    }
+    else
+    {
         // dead code - will never be reached, need to remove.
-    	logThrowException("AxisEngineException - SERVER_ENGINE_LOADING_TRANSPORT_FAILED")
+        logThrowException("AxisEngineException - SERVER_ENGINE_LOADING_TRANSPORT_FAILED")
 
         throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED);
-	}
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
-	return AXIS_SUCCESS;
+    }
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
+    return AXIS_SUCCESS;
 }
 
 int SOAPTransportFactory::
@@ -121,37 +121,37 @@ uninitialize()
 SOAPTransport* SOAPTransportFactory::
 getTransportObject(AXIS_PROTOCOL_TYPE eProtocol)
 {
-	logEntryEngine("SOAPTransportFactory::getTransportObject")
+    logEntryEngine("SOAPTransportFactory::getTransportObject")
 
-	SOAPTransport* pTpt = NULL;
-	m_Create(&pTpt);
-	
-	if (pTpt)
-	{
+    SOAPTransport* pTpt = NULL;
+    m_Create(&pTpt);
+    
+    if (pTpt)
+    {
         pTpt->setProtocol(eProtocol);
         if (AxisTrace::isTransportLoggingEnabled())
-        	pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
-	}
+            pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
+    }
     
     logExitWithPointer(pTpt)
     
-	return pTpt;
+    return pTpt;
 }
 
 void SOAPTransportFactory::
 destroyTransportObject(SOAPTransport* pObject)
 {
-	logEntryEngine("SOAPTransportFactory::destroyTransportObject")
+    logEntryEngine("SOAPTransportFactory::destroyTransportObject")
 
-	m_Delete(pObject);
-	
+    m_Delete(pObject);
+    
     logExit()
 }
 
 int SOAPTransportFactory::
 loadLib()
 {
-	logEntryEngine("SOAPTransportFactory::loadLib")
+    logEntryEngine("SOAPTransportFactory::loadLib")
 
     logDebugArg1("Loading transport %s", m_pcLibraryPath)
 
@@ -168,22 +168,22 @@ loadLib()
         throw AxisEngineException(SERVER_ENGINE_LOADING_TRANSPORT_FAILED, sFullMessage.c_str());
     }
     
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 int SOAPTransportFactory::
 unloadLib()
 {
-	logEntryEngine("SOAPTransportFactory::unloadLib")
+    logEntryEngine("SOAPTransportFactory::unloadLib")
 
     logDebugArg1("Unloading transport %s", m_pcLibraryPath)
 
     PLATFORM_UNLOADLIB(m_LibHandler);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 

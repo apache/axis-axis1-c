@@ -54,9 +54,9 @@ typedef int (* DELETE_OBJECT1) (SOAPTransport* inst);
 class SOAPTransportFactory  
 {
 public:
-	SOAPTransportFactory();
-	virtual ~SOAPTransportFactory();
-	/**
+    SOAPTransportFactory();
+    virtual ~SOAPTransportFactory();
+    /**
      * Used to initialize the global object. Following tasks are done
      * 1. Get the transport library name(s) from the configuration file.
      * 2. Load those dynamic transport libraries.
@@ -64,24 +64,24 @@ public:
      * 4. Get any other information about the library. (ex: what protocols
      *    are supported etc)
      */
-	static int initialize();
-	/** 
-	 * Used to uninitialize the global object.
-	 * 1. Unloads all dynamic transport libraries.
-	 */
-	static int uninitialize();
-	/**
-	 * Used to create a transport object of given protocol 
-	 */
-	static SOAPTransport* getTransportObject(AXIS_PROTOCOL_TYPE eProtocol);
-	static void destroyTransportObject(SOAPTransport* pObject);
+    static int initialize();
+    /** 
+     * Used to uninitialize the global object.
+     * 1. Unloads all dynamic transport libraries.
+     */
+    static int uninitialize();
+    /**
+     * Used to create a transport object of given protocol 
+     */
+    static SOAPTransport* getTransportObject(AXIS_PROTOCOL_TYPE eProtocol);
+    static void destroyTransportObject(SOAPTransport* pObject);
 
-	static int loadLib();
-	static int unloadLib();
+    static int loadLib();
+    static int unloadLib();
 
 private:
-	static const char* m_pcLibraryPath; 
-	static DLHandler m_LibHandler;
+    static const char* m_pcLibraryPath; 
+    static DLHandler m_LibHandler;
     static CREATE_OBJECT1 m_Create;
     static DELETE_OBJECT1 m_Delete;
 };

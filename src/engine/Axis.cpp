@@ -357,37 +357,37 @@ int initialize_module (int bServer)
             status = g_pConfig->readConfFile (); 
             if (status == AXIS_SUCCESS)
             {
-            	// One can also start trace via Axis::startTrace().  If that has been done, 
-            	// ignore the config file. 
-            	if (!AxisTrace::isLoggingEnabled())
-            	{
-	            	AxisTrace::setLogFilter(g_pConfig->getAxisConfProperty(AXCONF_LOGFILTER));
-	            	
-	            	if (bServer)
-	            		AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH));
-	            	else
-	            		AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH));
-            	}
-            	
-            	string configProperties = g_pConfig->toString();
-            	AxisTrace::writeTrace(configProperties.c_str(), configProperties.length());
+                // One can also start trace via Axis::startTrace().  If that has been done, 
+                // ignore the config file. 
+                if (!AxisTrace::isLoggingEnabled())
+                {
+                    AxisTrace::setLogFilter(g_pConfig->getAxisConfProperty(AXCONF_LOGFILTER));
+                    
+                    if (bServer)
+                        AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_LOGPATH));
+                    else
+                        AxisTrace::startTrace(g_pConfig->getAxisConfProperty(AXCONF_CLIENTLOGPATH));
+                }
+                
+                string configProperties = g_pConfig->toString();
+                AxisTrace::writeTrace(configProperties.c_str(), configProperties.length());
             }
             
             // The entry log must start here - may revisit so as to start earlier. 
-        	logEntryEngine("initialize_module")
+            logEntryEngine("initialize_module")
             
             if (bServer) // no client side wsdd processing at the moment
             {
                 if (status == AXIS_SUCCESS)
-                {             	
+                {                 
                     try
                     {            
                         XMLParserFactory::initialize();
                     }
                     catch (AxisException& e)
                     {
-                    	logRethrowException()
-                    	
+                        logRethrowException()
+                        
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
 
@@ -400,8 +400,8 @@ int initialize_module (int bServer)
                     }
                     catch (AxisException& e)
                     {
-                    	logRethrowException()
-                    	
+                        logRethrowException()
+                        
                         throw AxisEngineException(e.getExceptionCode(), e.what());
                     }
                 }
@@ -411,7 +411,7 @@ int initialize_module (int bServer)
            else if (bServer == 0)      // client side module initialization
            {
                 if (status == AXIS_SUCCESS)
-                {                	
+                {                    
                    XMLParserFactory::initialize();
                    SOAPTransportFactory::initialize();
 
@@ -430,10 +430,10 @@ int initialize_module (int bServer)
            }
            g_isRunning = true;
            
-       	   logExitWithReturnCode(status)
+              logExitWithReturnCode(status)
        }
        else if (AxisEngine::m_bServer != bServer)
-       {    	   
+       {           
            throw AxisEngineException(SERVER_ENGINE_EXCEPTION);
        }
     }
@@ -455,7 +455,7 @@ extern "C" {
 STORAGE_CLASS_INFO
 int uninitialize_module ()
 {
-	logEntryEngine("uninitialize_module")
+    logEntryEngine("uninitialize_module")
 
     start_initializing();
 
@@ -465,7 +465,7 @@ int uninitialize_module ()
         {
             if (--g_uModuleInitialize == 0)
             {
-				g_isRunning = false;
+                g_isRunning = false;
                 TypeMapping::uninitialize();
                 URIMapping::uninitialize();
                 if (!AxisEngine::m_bServer) 
@@ -496,7 +496,7 @@ int uninitialize_module ()
 
 void Ax_Sleep (int nTime)
 {
-	PLATFORM_SLEEP(0);
+    PLATFORM_SLEEP(0);
 }
 
 
@@ -504,41 +504,41 @@ void Ax_Sleep (int nTime)
 
 void Axis::initialize(bool bIsServer)
 {
-	logEntryEngine("Axis::initialize")
+    logEntryEngine("Axis::initialize")
 
     initialize_module(bIsServer);
-	
+    
     logExit()
 }
 
 void Axis::terminate()
 {
-	logEntryEngine("Axis::terminate")
+    logEntryEngine("Axis::terminate")
 
     uninitialize_module();
-	
+    
     logExit()
 }
 
 void Axis::AxisDelete(void *pValue, XSDTYPE type)
 {
-	logEntryEngine("Axis::AxisDelete")
+    logEntryEngine("Axis::AxisDelete")
 
     if (pValue == NULL)
         return;
         
     switch (type)
     {
-	    case XSD_STRING:
-	    {
-	        delete [] (xsd__string) pValue;
-	        break;
-	    }
-	    case XSD_NORMALIZEDSTRING:
-	    {
-	        delete [] (xsd__normalizedString) pValue;
-	        break;
-	    }
+        case XSD_STRING:
+        {
+            delete [] (xsd__string) pValue;
+            break;
+        }
+        case XSD_NORMALIZEDSTRING:
+        {
+            delete [] (xsd__normalizedString) pValue;
+            break;
+        }
         case XSD_FLOAT:
         {
             delete (xsd__float*) pValue;
@@ -618,7 +618,7 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         {
             delete (xsd__double*) pValue;
             break;
-        }	    
+        }        
         case XSD_DURATION:
         {
             delete (xsd__duration*) pValue;
@@ -761,7 +761,7 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
         {
             delete [] (xsd__anyType) pValue;
             break;
-        }        	
+        }            
         case XSD_ANY:
         case ATTACHMENT:
         case XSD_UNKNOWN:
@@ -774,12 +774,12 @@ void Axis::AxisDelete(void *pValue, XSDTYPE type)
 
 bool Axis::isRunning()
 {
-	return g_isRunning;
+    return g_isRunning;
 }
 
 void Axis::stopAxis()
 {
-	logEntryEngine("Axis::stopAxis")
+    logEntryEngine("Axis::stopAxis")
 
     start_initializing();
     g_isRunning = false;
@@ -791,34 +791,34 @@ void Axis::stopAxis()
 int Axis::
 startTrace(const char* logFilePath, const char *logFilter)
 {
-	AxisTrace::setLogFilter(logFilter);
-	return AxisTrace::startTrace(logFilePath);
+    AxisTrace::setLogFilter(logFilter);
+    return AxisTrace::startTrace(logFilePath);
 }
 
 void Axis::
 stopTrace()
 {
-	AxisTrace::stopTrace();
+    AxisTrace::stopTrace();
 }
 
 void Axis::
 writeTrace(AXIS_TRACE_TYPE type, const char* functionName, const char * fmt, ...)
 {
-	// If logging is not enabled, just return.
-	if (!AxisTrace::isLoggingEnabled() || !AxisTrace::isStubLoggingEnabled())
-		return;
-	
+    // If logging is not enabled, just return.
+    if (!AxisTrace::isLoggingEnabled() || !AxisTrace::isStubLoggingEnabled())
+        return;
+    
     // Construct final formatter
     string myfmt;
     string blank = " ";
     
     char *traceType = TRACE_TYPE_DEBUG;
     if (type == AXIS_TRACE_TYPE_ENTRY)
-    	traceType = TRACE_TYPE_ENTRY;
+        traceType = TRACE_TYPE_ENTRY;
     else if (type == AXIS_TRACE_TYPE_EXIT)
-    	traceType = TRACE_TYPE_EXIT;
+        traceType = TRACE_TYPE_EXIT;
     else if (type == AXIS_TRACE_TYPE_EXCEPTION)
-    	traceType = TRACE_TYPE_EXCEPT;
+        traceType = TRACE_TYPE_EXCEPT;
     
     if (NULL == fmt)
         fmt = "";

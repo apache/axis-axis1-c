@@ -34,35 +34,35 @@ using namespace std;
 
 DeserializerPool::DeserializerPool()
 {
-	m_DZList.clear();
+    m_DZList.clear();
 }
 
 
 DeserializerPool::~DeserializerPool ()
 {
-	logEntryEngine("DeserializerPool::~DeserializerPool")
+    logEntryEngine("DeserializerPool::~DeserializerPool")
 
     list<IWrapperSoapDeSerializer*>::iterator it = m_DZList.begin();
-	while (it != m_DZList.end())
+    while (it != m_DZList.end())
     {
-		IWrapperSoapDeSerializer *dz = *it;
+        IWrapperSoapDeSerializer *dz = *it;
 
-		if (NULL != dz)
-	        delete dz;
-		it++;
+        if (NULL != dz)
+            delete dz;
+        it++;
     }
-	m_DZList.clear();
-	
+    m_DZList.clear();
+    
     logExit()
 }
 
 int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
 {
-	logEntryEngine("DeserializerPool::getInstance")
-	
+    logEntryEngine("DeserializerPool::getInstance")
+    
     int Status = AXIS_SUCCESS;
 
-	Lock l(this);
+    Lock l(this);
     if (!m_DZList.empty ())
     {
         *ppDZ = m_DZList.front ();
@@ -79,26 +79,26 @@ int DeserializerPool::getInstance (IWrapperSoapDeSerializer** ppDZ)
         }
     }
     
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
 
     return Status;
 }
 
 int DeserializerPool::putInstance (IWrapperSoapDeSerializer* pDZ)
 {
-	logEntryEngine("DeserializerPool::putInstance")
-	
+    logEntryEngine("DeserializerPool::putInstance")
+    
     int Status = ((SoapDeSerializer*)pDZ)->init ();
 
     if (AXIS_SUCCESS == Status)
     {
-    	Lock l(this);
+        Lock l(this);
         m_DZList.push_back (pDZ);
     }
     else
         delete pDZ;
 
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
 
     return Status;
 }

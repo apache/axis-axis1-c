@@ -47,20 +47,20 @@ HandlerPool ()
 HandlerPool::
 ~HandlerPool ()
 {
-	logEntryEngine("HandlerPool::~HandlerPool")
+    logEntryEngine("HandlerPool::~HandlerPool")
 
     for (list <HandlerChain*>::iterator it = m_ChainStore.begin (); it != m_ChainStore.end (); it++)
     {
         delete (*it);
     }
-	
+    
     logExit()
 }
 
 int HandlerPool::
 getHandler (BasicHandler** ppHandler, string & sSessionId, int nScope, int nLibId)
 {
-	logEntryEngine("HandlerPool::getHandler")
+    logEntryEngine("HandlerPool::getHandler")
 
     *ppHandler = NULL;
     int Status = AXIS_FAIL;
@@ -70,12 +70,12 @@ getHandler (BasicHandler** ppHandler, string & sSessionId, int nScope, int nLibI
         case AH_APPLICATION:
             do
             {
-            	Status = g_pAppScopeHandlerPool->getInstance (ppHandler, nLibId);
+                Status = g_pAppScopeHandlerPool->getInstance (ppHandler, nLibId);
                 if (AXIS_SUCCESS == Status)
-                	break;
+                    break;
                 else if (Status == SERVER_ENGINE_HANDLER_BEING_USED)
                 {             
-                	//block this thread not this object
+                    //block this thread not this object
                     PLATFORM_SLEEP(0);
                 }
                 else
@@ -86,23 +86,23 @@ getHandler (BasicHandler** ppHandler, string & sSessionId, int nScope, int nLibI
             break;
             
         case AH_SESSION:
-        	Status = g_pSessionScopeHandlerPool->getInstance (sSessionId, ppHandler, nLibId);
-        	break;
-        	
+            Status = g_pSessionScopeHandlerPool->getInstance (sSessionId, ppHandler, nLibId);
+            break;
+            
         case AH_REQUEST:
-        	Status = g_pRequestScopeHandlerPool->getInstance (ppHandler, nLibId);
-        	break;
+            Status = g_pRequestScopeHandlerPool->getInstance (ppHandler, nLibId);
+            break;
     }
     
-	logExitWithReturnCode(Status)
-	
-	return Status; 
+    logExitWithReturnCode(Status)
+    
+    return Status; 
 }
 
 int HandlerPool::
 poolHandler (string &sSessionId, BasicHandler* pHandler, int nScope, int nLibId, bool bWebService)
 {
-	logEntryEngine("HandlerPool::poolHandler")
+    logEntryEngine("HandlerPool::poolHandler")
 
     switch (nScope)
     {
@@ -116,52 +116,52 @@ poolHandler (string &sSessionId, BasicHandler* pHandler, int nScope, int nLibId,
             g_pRequestScopeHandlerPool->putInstance (pHandler, nLibId, bWebService);
             break;
     }
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 int HandlerPool::
 getGlobalRequestFlowHandlerChain (HandlerChain** ppChain, string & sSessionId)
 {
-	logEntryEngine("HandlerPool::getGlobalRequestFlowHandlerChain")
+    logEntryEngine("HandlerPool::getGlobalRequestFlowHandlerChain")
 
     int Status = AXIS_SUCCESS;
 
     const WSDDHandlerList* pHandlerList = g_pWSDDDeployment->getGlobalRequestFlowHandlers ();
     if (pHandlerList)
-    	Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
+        Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status; 
+    logExitWithReturnCode(Status)
+    
+    return Status; 
 }
 
 int HandlerPool::
 getGlobalResponseFlowHandlerChain (HandlerChain** ppChain, string &sSessionId)
 {
-	logEntryEngine("HandlerPool::getGlobalResponseFlowHandlerChain")
+    logEntryEngine("HandlerPool::getGlobalResponseFlowHandlerChain")
 
     int Status = AXIS_SUCCESS;
 
     const WSDDHandlerList *pHandlerList = g_pWSDDDeployment->getGlobalResponseFlowHandlers ();
     if (pHandlerList)
-    	Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
+        Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status; 
+    logExitWithReturnCode(Status)
+    
+    return Status; 
 }
 
 int HandlerPool::
 getTransportRequestFlowHandlerChain (HandlerChain** ppChain, string &sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
-	logEntryEngine("HandlerPool::getTransportRequestFlowHandlerChain")
+    logEntryEngine("HandlerPool::getTransportRequestFlowHandlerChain")
 
     int Status = AXIS_SUCCESS;
 
@@ -171,15 +171,15 @@ getTransportRequestFlowHandlerChain (HandlerChain** ppChain, string &sSessionId,
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status; 
+    logExitWithReturnCode(Status)
+    
+    return Status; 
 }
 
 int HandlerPool::
 getTransportResponseFlowHandlerChain (HandlerChain** ppChain, string & sSessionId, AXIS_PROTOCOL_TYPE Protocol)
 {
-	logEntryEngine("HandlerPool::getTransportResponseFlowHandlerChain")
+    logEntryEngine("HandlerPool::getTransportResponseFlowHandlerChain")
 
     int Status = AXIS_SUCCESS;
 
@@ -189,53 +189,53 @@ getTransportResponseFlowHandlerChain (HandlerChain** ppChain, string & sSessionI
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status;   
+    logExitWithReturnCode(Status)
+    
+    return Status;   
 }
 
 int HandlerPool::
 getRequestFlowHandlerChain (HandlerChain** ppChain, string &sSessionId, const WSDDService* pService)
 {
-	logEntryEngine("HandlerPool::getRequestFlowHandlerChain")
+    logEntryEngine("HandlerPool::getRequestFlowHandlerChain")
 
     int Status = AXIS_SUCCESS;
 
     const WSDDHandlerList* pHandlerList = pService->getRequestFlowHandlers ();
     if (pHandlerList)
-    	Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
+        Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status;    
+    logExitWithReturnCode(Status)
+    
+    return Status;    
 }
 
 int HandlerPool::
 getResponseFlowHandlerChain (HandlerChain** ppChain, string &sSessionId, const WSDDService* pService)
 {
-	logEntryEngine("HandlerPool::getResponseFlowHandlerChain")
-	
+    logEntryEngine("HandlerPool::getResponseFlowHandlerChain")
+    
     int Status = AXIS_SUCCESS;
 
     const WSDDHandlerList* pHandlerList = pService->getResponseFlowHandlers ();
     if (pHandlerList)
-    	Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
+        Status = getHandlerChain (sSessionId, ppChain, pHandlerList);
     else
         *ppChain = NULL;
     
-	logExitWithReturnCode(Status)
-	
-	return Status;
+    logExitWithReturnCode(Status)
+    
+    return Status;
 }
 
 int HandlerPool::
 getHandlerChain (string &sSessionId, HandlerChain** ppChain, const WSDDHandlerList* pHandlerList)
 {
-	logEntryEngine("HandlerPool::getHandlerChain")
+    logEntryEngine("HandlerPool::getHandlerChain")
 
-	Lock l(this);
+    Lock l(this);
     *ppChain = NULL;
     HandlerChain* pChain = NULL;
     
@@ -301,15 +301,15 @@ getHandlerChain (string &sSessionId, HandlerChain** ppChain, const WSDDHandlerLi
     else
         *ppChain = pChain;
     
-	logExitWithReturnCode(Status)
-	
+    logExitWithReturnCode(Status)
+    
     return Status;
 }
 
 void HandlerPool::
 poolHandlerChain (HandlerChain* pChain, string &sSessionId)
 {
-	logEntryEngine("HandlerPool::poolHandlerChain")
+    logEntryEngine("HandlerPool::poolHandlerChain")
 
     for (pChain->m_itCurrHandler = pChain->m_HandlerList.begin ();
         pChain->m_itCurrHandler != pChain->m_HandlerList.end ();
@@ -324,7 +324,7 @@ poolHandlerChain (HandlerChain* pChain, string &sSessionId)
     }
     pChain->fini ();
 
-	Lock l(this);
+    Lock l(this);
     m_ChainStore.push_back (pChain);
     
     logExit()
@@ -333,7 +333,7 @@ poolHandlerChain (HandlerChain* pChain, string &sSessionId)
 int HandlerPool::
 getWebService( BasicHandler ** ppHandler, string & sSessionId, const WSDDHandler * pService)
 {
-	logEntryEngine("HandlerPool::getWebService")
+    logEntryEngine("HandlerPool::getWebService")
 
     int Status = getHandler( ppHandler, sSessionId, pService->getScope(), pService->getLibId());
 
@@ -353,9 +353,9 @@ getWebService( BasicHandler ** ppHandler, string & sSessionId, const WSDDHandler
             }*/
         }
         else if( NULL == (*ppHandler)->_object)
-		{
+        {
             Status = AXIS_FAIL;
-		}
+        }
         else
         // C++ web service 
         {
@@ -371,7 +371,7 @@ getWebService( BasicHandler ** ppHandler, string & sSessionId, const WSDDHandler
         }
     }
     
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
 
     return Status;
 }
@@ -379,10 +379,10 @@ getWebService( BasicHandler ** ppHandler, string & sSessionId, const WSDDHandler
 void HandlerPool::
 poolWebService (string &sSessionId, BasicHandler* pHandler, const WSDDHandler * pHandlerInfo)
 {
-	logEntryEngine("HandlerPool::poolWebService")
+    logEntryEngine("HandlerPool::poolWebService")
 
     poolHandler (sSessionId, pHandler, pHandlerInfo->getScope (), pHandlerInfo->getLibId (), true);
-	
+    
     logExit()
 }
 

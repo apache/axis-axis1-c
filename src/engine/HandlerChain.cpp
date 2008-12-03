@@ -45,7 +45,7 @@ HandlerChain::
 int HandlerChain::
 invoke (void* pMsg)
 {
-	logEntryEngine("HandlerChain::invoke")
+    logEntryEngine("HandlerChain::invoke")
 
     int Status=AXIS_SUCCESS;
 
@@ -62,7 +62,7 @@ invoke (void* pMsg)
         {
             logDebugArg1("Calling invoke() method for handler %p", pHandler->_object)
 
-        	Status = ((Handler *) (pHandler->_object))->invoke (pMsg);
+            Status = ((Handler *) (pHandler->_object))->invoke (pMsg);
             
             logDebugArg2("Returned from invoke() method for handler %p with status=%d", pHandler->_object, Status)
 
@@ -76,7 +76,7 @@ invoke (void* pMsg)
         }
     }
 
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
 
     return Status;
 }
@@ -84,7 +84,7 @@ invoke (void* pMsg)
 void HandlerChain::
 onFault (void* pMsg)
 {
-	logEntryEngine("HandlerChain::onFault")
+    logEntryEngine("HandlerChain::onFault")
 
     while (m_itCurrHandler != m_HandlerList.begin ())
     {
@@ -98,14 +98,14 @@ onFault (void* pMsg)
 
         m_itCurrHandler--;
     }
-	
-	logExit()
+    
+    logExit()
 }
 
 int HandlerChain::
 addHandler (BasicHandler* pHandler, int nScope, int nLibId)
 {
-	logEntryEngine("HandlerChain::addHandler")
+    logEntryEngine("HandlerChain::addHandler")
 
     ChainItem item;
     item.m_pHandler = pHandler;
@@ -113,7 +113,7 @@ addHandler (BasicHandler* pHandler, int nScope, int nLibId)
     item.m_nLibId = nLibId;
     m_HandlerList.push_back (item);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

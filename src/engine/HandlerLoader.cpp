@@ -45,10 +45,10 @@ HandlerLoader ()
 HandlerLoader::
 ~HandlerLoader ()
 {
-	logEntryEngine("HandlerLoader::~HandlerLoader")
+    logEntryEngine("HandlerLoader::~HandlerLoader")
 
     //lock ();
-	Lock l(this);
+    Lock l(this);
     HandlerInformation* pHandlerInfo = NULL;
     for (map < int, HandlerInformation* >::iterator it =
          m_HandlerInfoList.begin (); it != m_HandlerInfoList.end (); it++)
@@ -57,7 +57,7 @@ HandlerLoader::
         unloadLib (pHandlerInfo);
         delete pHandlerInfo;
     }
-	l.unlock ();
+    l.unlock ();
     PLATFORM_LOADLIBEXIT()
     
     logExit()
@@ -66,9 +66,9 @@ HandlerLoader::
 int HandlerLoader::
 deleteHandler (BasicHandler* pHandler, int nLibId)
 {
-	logEntryEngine("HandlerLoader::deleteHandler")
+    logEntryEngine("HandlerLoader::deleteHandler")
 
-	Lock l(this);
+    Lock l(this);
     if (m_HandlerInfoList.find (nLibId) != m_HandlerInfoList.end ())
     {
         HandlerInformation* pHandlerInfo = m_HandlerInfoList[nLibId];
@@ -77,12 +77,12 @@ deleteHandler (BasicHandler* pHandler, int nLibId)
     }
     else
     {
-    	logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_NOT_LOADED")
+        logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_NOT_LOADED")
 
         throw AxisEngineException(SERVER_ENGINE_HANDLER_NOT_LOADED);
     }
     
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -90,7 +90,7 @@ deleteHandler (BasicHandler* pHandler, int nLibId)
 int HandlerLoader::
 loadLib (HandlerInformation* pHandlerInfo)
 {
-	logEntryEngine("HandlerLoader::loadLib")
+    logEntryEngine("HandlerLoader::loadLib")
 
     logDebugArg1("Loading handler %s", pHandlerInfo->m_sLib.c_str())
     
@@ -115,24 +115,24 @@ loadLib (HandlerInformation* pHandlerInfo)
 int HandlerLoader::
 unloadLib (HandlerInformation* pHandlerInfo)
 {
-	logEntryEngine("HandlerLoader::unloadLib")
+    logEntryEngine("HandlerLoader::unloadLib")
 
     logDebugArg1("Unloading handler %s", pHandlerInfo->m_sLib.c_str())
 
     PLATFORM_UNLOADLIB(pHandlerInfo->m_Handler);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 int HandlerLoader::
 createHandler (BasicHandler** pHandler, int nLibId)
 {
-	logEntryEngine("HandlerLoader::createHandler")
+    logEntryEngine("HandlerLoader::createHandler")
 
     //lock ();
-	Lock l(this);
+    Lock l(this);
     *pHandler = NULL;
     HandlerInformation* pHandlerInfo = NULL;
     if (m_HandlerInfoList.find (nLibId) == m_HandlerInfoList.end ())

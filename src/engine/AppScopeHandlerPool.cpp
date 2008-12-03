@@ -43,7 +43,7 @@ AppScopeHandlerPool::AppScopeHandlerPool ()
 
 AppScopeHandlerPool::~AppScopeHandlerPool ()
 {
-	logEntryEngine("AppScopeHandlerPool::~AppScopeHandlerPool")
+    logEntryEngine("AppScopeHandlerPool::~AppScopeHandlerPool")
 
     for (map < int, list <BasicHandler*> >::iterator it =
         m_Handlers.begin (); it != m_Handlers.end (); it++)
@@ -66,21 +66,21 @@ AppScopeHandlerPool::~AppScopeHandlerPool ()
 
 int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
 {
-	logEntryEngine("AppScopeHandlerPool::getInstance")
-	
-	Lock l(this);
+    logEntryEngine("AppScopeHandlerPool::getInstance")
+    
+    Lock l(this);
     int Status = AXIS_SUCCESS;
     
     if (m_Handlers.find (nLibId) != m_Handlers.end ())
     {
         if (m_Handlers[nLibId].empty ())
             /* this means that the object is being used by some other thread
-	     * but we cannot create any more objects because this is an 
-	     * application scope object. So just return SERVER_ENGINE_HANDLERBEINGUSED
-	     */
+         * but we cannot create any more objects because this is an 
+         * application scope object. So just return SERVER_ENGINE_HANDLERBEINGUSED
+         */
         {
-        	logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_BEING_USED")
-        	
+            logThrowException("AxisEngineException - SERVER_ENGINE_HANDLER_BEING_USED")
+            
             throw AxisEngineException(SERVER_ENGINE_HANDLER_BEING_USED);
         }
         else
@@ -95,25 +95,25 @@ int AppScopeHandlerPool::getInstance (BasicHandler** pHandler, int nLibId)
         if (AXIS_SUCCESS == Status)
         {
             /* This just creates the entry in m_Handlers so that next time we 
-	     * know that the DLL is loaded
-	     */ 
+         * know that the DLL is loaded
+         */ 
             m_Handlers[nLibId].clear ();
         }
     }
     
-	logExitWithReturnCode(Status)
+    logExitWithReturnCode(Status)
     
     return Status;
 }
 
 int AppScopeHandlerPool::putInstance (BasicHandler* pHandler, int nLibId)
 {
-	logEntryEngine("AppScopeHandlerPool::putInstance")
+    logEntryEngine("AppScopeHandlerPool::putInstance")
 
-	Lock l(this);
+    Lock l(this);
     m_Handlers[nLibId].push_back (pHandler);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

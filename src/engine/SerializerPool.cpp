@@ -32,7 +32,7 @@ AXIS_CPP_NAMESPACE_START
 SerializerPool::
 SerializerPool ()
 {
-	logEntryEngine("SerializerPool::SerializerPool")
+    logEntryEngine("SerializerPool::SerializerPool")
 
     logExit()
 }
@@ -40,14 +40,14 @@ SerializerPool ()
 SerializerPool::
 ~SerializerPool ()
 {
-	logEntryEngine("SerializerPool::~SerializerPool")
+    logEntryEngine("SerializerPool::~SerializerPool")
 
     for (list <IWrapperSoapSerializer*>::iterator it = m_SZList.begin ();
          it != m_SZList.end (); it++)
     {
         delete (*it);
     }
-	
+    
     logExit()
 }
 
@@ -55,11 +55,11 @@ SerializerPool::
 int SerializerPool::
 getInstance (IWrapperSoapSerializer** ppSZ)
 {
-	logEntryEngine("SerializerPool::getInstance")
+    logEntryEngine("SerializerPool::getInstance")
 
-	Lock l(this);
-	
-	int Status = AXIS_SUCCESS;
+    Lock l(this);
+    
+    int Status = AXIS_SUCCESS;
 
     if (!m_SZList.empty ())
     {
@@ -75,7 +75,7 @@ getInstance (IWrapperSoapSerializer** ppSZ)
 #endif
         
     }
-	
+    
     if (AXIS_SUCCESS != ((SoapSerializer*)(*ppSZ))->init ())
     {
         delete *ppSZ;
@@ -83,21 +83,21 @@ getInstance (IWrapperSoapSerializer** ppSZ)
         Status = AXIS_FAIL;
     }
     
-	logExitWithReturnCode(Status)
-	
+    logExitWithReturnCode(Status)
+    
     return Status;
 }
 
 int SerializerPool::
 putInstance (IWrapperSoapSerializer* pSZ)
 {
-	logEntryEngine("SerializerPool::putInstance")
+    logEntryEngine("SerializerPool::putInstance")
 
-	Lock l(this);
+    Lock l(this);
 
     m_SZList.push_back (pSZ);
     
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

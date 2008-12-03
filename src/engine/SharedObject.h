@@ -46,20 +46,20 @@ class SharedObject
         int lock ();
 
     protected:
-		class Lock
-		{
-			public:
-				inline Lock();
-				inline Lock(SharedObject *obj);
-				inline ~Lock();
-				inline void unlock();
+        class Lock
+        {
+            public:
+                inline Lock();
+                inline Lock(SharedObject *obj);
+                inline ~Lock();
+                inline void unlock();
 
-			private:
-				SharedObject *m_locked;
-		};
+            private:
+                SharedObject *m_locked;
+        };
 
-	
-	private:
+    
+    private:
         bool m_bLocked;
 #ifdef WIN32
     HANDLE          mut;

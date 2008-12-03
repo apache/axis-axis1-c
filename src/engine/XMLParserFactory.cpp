@@ -39,26 +39,26 @@ DELETE_OBJECT2 XMLParserFactory::m_Delete = 0;
 XMLParserFactory::
 XMLParserFactory()
 {
-	m_LibHandler = 0;
+    m_LibHandler = 0;
 }
 
 XMLParserFactory::
 ~XMLParserFactory()
 {
-	logEntryEngine("XMLParserFactory::~XMLParserFactory")
-	
-	logExit()
+    logEntryEngine("XMLParserFactory::~XMLParserFactory")
+    
+    logExit()
 }
 
 int XMLParserFactory::
 initialize()
 {
-	logEntryEngine("XMLParserFactory::initialize")
+    logEntryEngine("XMLParserFactory::initialize")
 
     m_pcLibraryPath = g_pConfig->getAxisConfProperty(AXCONF_XMLPARSER);
 
-	if (!loadLib())
-	{
+    if (!loadLib())
+    {
         m_Create = (CREATE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, CREATE_FUNCTION2);
         if (m_Create)
             m_Delete = (DELETE_OBJECT2) PLATFORM_GETPROCADDR(m_LibHandler, DELETE_FUNCTION2);
@@ -76,30 +76,30 @@ initialize()
 
             throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, sFullMessage.c_str());
         } 
-	}
-	else
-	{
+    }
+    else
+    {
         // dead code - will never be reached, need to remove.
-    	logThrowException("AxisEngineException - SERVER_ENGINE_LOADING_PARSER_FAILED")
-    	
+        logThrowException("AxisEngineException - SERVER_ENGINE_LOADING_PARSER_FAILED")
+        
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED);
-	}
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
+    }
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 int XMLParserFactory::
 uninitialize()
 {
-	logEntryEngine("XMLParserFactory::uninitialize")
+    logEntryEngine("XMLParserFactory::uninitialize")
 
-	int Status = unloadLib();
-	
-	logExitWithReturnCode(Status)
-	   
-	return Status;
+    int Status = unloadLib();
+    
+    logExitWithReturnCode(Status)
+       
+    return Status;
 }
 
 /**
@@ -108,37 +108,37 @@ uninitialize()
 XMLParser* XMLParserFactory::
 getParserObject()
 {
-	logEntryEngine("XMLParserFactory::getParserObject")
+    logEntryEngine("XMLParserFactory::getParserObject")
 
-	XMLParser* pTpt = 0;
-	if (m_Create) 
-		m_Create(&pTpt);
-	
-	if (pTpt)
-	{
+    XMLParser* pTpt = 0;
+    if (m_Create) 
+        m_Create(&pTpt);
+    
+    if (pTpt)
+    {
         if (AxisTrace::isParserLoggingEnabled())
-        	pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
-	}
-	
+            pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
+    }
+    
     logExitWithPointer(pTpt)
 
-	return pTpt;
+    return pTpt;
 }
 
 void XMLParserFactory::
 destroyParserObject(XMLParser* pObject)
 {
-	logEntryEngine("XMLParserFactory::destroyParserObject")
+    logEntryEngine("XMLParserFactory::destroyParserObject")
 
-	m_Delete(pObject);
-	
+    m_Delete(pObject);
+    
     logExit()
 }
 
 int XMLParserFactory::
 loadLib()
 {
-	logEntryEngine("XMLParserFactory::loadLib")
+    logEntryEngine("XMLParserFactory::loadLib")
 
     logDebugArg1("Loading parser %s", m_pcLibraryPath)
 
@@ -155,7 +155,7 @@ loadLib()
         throw AxisEngineException(SERVER_ENGINE_LOADING_PARSER_FAILED, sFullMessage.c_str());
     }
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -163,13 +163,13 @@ loadLib()
 int XMLParserFactory::
 unloadLib()
 {
-	logEntryEngine("XMLParserFactory::unloadLib")
+    logEntryEngine("XMLParserFactory::unloadLib")
 
     logDebugArg1("Unloading parser %s", m_pcLibraryPath)
 
     PLATFORM_UNLOADLIB(m_LibHandler);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
