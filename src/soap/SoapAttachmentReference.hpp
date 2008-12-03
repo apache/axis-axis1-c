@@ -31,16 +31,16 @@ class Attribute;
 
 class SoapAttachmentReference
 {
-private:	
-	SoapAttachment *m_attachment;
-	list<Attribute*> m_attributes;
+private:    
+    SoapAttachment *m_attachment;
+    list<Attribute*> m_attributes;
 
-public:	
-	SoapAttachmentReference(SoapAttachment *att);
-	virtual ~SoapAttachmentReference();	
+public:    
+    SoapAttachmentReference(SoapAttachment *att);
+    virtual ~SoapAttachmentReference();    
     SoapAttachment* getAttachment();
-	void serialize(SoapSerializer& pSZ, const char *name);
-	void addAttributes(IAttribute **attributes, int nAttributes);
+    void serialize(SoapSerializer& pSZ, const char *name);
+    void addAttributes(IAttribute **attributes, int nAttributes);
 };
 
 AXIS_CPP_NAMESPACE_END

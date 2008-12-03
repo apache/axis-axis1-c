@@ -26,44 +26,44 @@
 AXIS_CPP_NAMESPACE_START
 
 SoapAttachmentReference::SoapAttachmentReference(SoapAttachment *att)
-{	
-	m_attachment = att;
+{    
+    m_attachment = att;
 }
 
 SoapAttachmentReference::~SoapAttachmentReference() {}
 
 void SoapAttachmentReference::serialize(SoapSerializer& pSZ, const char *name)
 {
-	string data = "<";
-	data += name;
-	if (NULL==m_attachment->getBody())
-		data += " xsi:nil=\"true\"";
-	else
-	{
-		data += " href=\"cid:";
-		data += m_attachment->getHeader(AXIS_CONTENT_ID);
-		data += "\"";
-	}
-	pSZ.serialize(data.c_str(), NULL);
+    string data = "<";
+    data += name;
+    if (NULL==m_attachment->getBody())
+        data += " xsi:nil=\"true\"";
+    else
+    {
+        data += " href=\"cid:";
+        data += m_attachment->getHeader(AXIS_CONTENT_ID);
+        data += "\"";
+    }
+    pSZ.serialize(data.c_str(), NULL);
 
-	list<Attribute*>::iterator it = m_attributes.begin();
-	while (it != m_attributes.end())
-	{
-		pSZ.serialize("\r\n  ",NULL);
-		(*it)->serialize(pSZ);
-		it++;
-	}
-	pSZ.serialize("/>\r\n",NULL);
+    list<Attribute*>::iterator it = m_attributes.begin();
+    while (it != m_attributes.end())
+    {
+        pSZ.serialize("\r\n  ",NULL);
+        (*it)->serialize(pSZ);
+        it++;
+    }
+    pSZ.serialize("/>\r\n",NULL);
 }
 
 void SoapAttachmentReference::addAttributes(IAttribute **attributes, int nAttributes)
 {
-	if (0==nAttributes || NULL==attributes) return;
-	for (int i=0; i<nAttributes; i++)
-		if (NULL!=attributes[i]) 
-			m_attributes.push_back(static_cast<Attribute*>(attributes[i]));
+    if (0==nAttributes || NULL==attributes) return;
+    for (int i=0; i<nAttributes; i++)
+        if (NULL!=attributes[i]) 
+            m_attributes.push_back(static_cast<Attribute*>(attributes[i]));
 
-	return;
+    return;
 }
 
 AXIS_CPP_NAMESPACE_END

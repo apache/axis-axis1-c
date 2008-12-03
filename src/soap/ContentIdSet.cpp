@@ -31,61 +31,61 @@ AXIS_CPP_NAMESPACE_START
 
 ContentIdSet::ContentIdSet()
 {
-	m_maxId = 0;
+    m_maxId = 0;
 }
 
 ContentIdSet::~ContentIdSet()
 {
-	clearAll();
+    clearAll();
 }
 
 void ContentIdSet::registerId(const char* id)
 {
-	for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
-	{
-		if ((*it) && 0==strcmp(id,*it)) throw AxisSoapException(CLIENT_MIME_CONTENT_ID_NOT_UNIQUE);
-	}
-	char *copy = new char[strlen(id)+1];
-	strcpy(copy,id);
-	m_set.push_back(const_cast<const char *>(copy));
+    for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
+    {
+        if ((*it) && 0==strcmp(id,*it)) throw AxisSoapException(CLIENT_MIME_CONTENT_ID_NOT_UNIQUE);
+    }
+    char *copy = new char[strlen(id)+1];
+    strcpy(copy,id);
+    m_set.push_back(const_cast<const char *>(copy));
 }
 
 const char *ContentIdSet::generateId()
 {
-	m_maxId++;
-	char pszId[8];
-	sprintf(pszId,"%u",m_maxId);
-	bool found = true;
-	while (found)
-	{
-		found = false;
-		for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
-		{
-			if ((*it) && 0==strcmp(*it,pszId))
-			{
-				m_maxId++;
-				sprintf(pszId,"%u",m_maxId);
-				found = true;
-				break;
-			}
-		}
-	}
+    m_maxId++;
+    char pszId[8];
+    sprintf(pszId,"%u",m_maxId);
+    bool found = true;
+    while (found)
+    {
+        found = false;
+        for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
+        {
+            if ((*it) && 0==strcmp(*it,pszId))
+            {
+                m_maxId++;
+                sprintf(pszId,"%u",m_maxId);
+                found = true;
+                break;
+            }
+        }
+    }
 
-	char *copy = new char[strlen(pszId)+1];
-	strcpy(copy,pszId);
-	m_set.push_back(const_cast<const char *>(copy));
-	return const_cast<const char *>(copy);
+    char *copy = new char[strlen(pszId)+1];
+    strcpy(copy,pszId);
+    m_set.push_back(const_cast<const char *>(copy));
+    return const_cast<const char *>(copy);
 }
 
 void ContentIdSet::clearAll()
 {
-	for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
-	{
-		char *id = const_cast<char*>(*it);
-		delete [] id;
-	}
-	m_set.clear();
-	m_maxId = 0;
+    for (list<const char*>::iterator it = m_set.begin(); it != m_set.end(); it++)
+    {
+        char *id = const_cast<char*>(*it);
+        delete [] id;
+    }
+    m_set.clear();
+    m_maxId = 0;
 }
 
 

@@ -41,15 +41,15 @@ class SoapSerializer;
 
 class SoapAttachmentHeaders  
 {
-private:	
-	vector < pair < AxisString, AxisString > > m_AttachHeaders;
+private:    
+    vector < pair < AxisString, AxisString > > m_AttachHeaders;
 
 public:
-	const char *getHeader(AxisString sName);
-	void serialize(SoapSerializer& pSZ);
-	void addHeader(AxisString name, AxisString value);
-	SoapAttachmentHeaders();
-	virtual ~SoapAttachmentHeaders();
+    const char *getHeader(AxisString sName);
+    void serialize(SoapSerializer& pSZ);
+    void addHeader(AxisString name, AxisString value);
+    SoapAttachmentHeaders();
+    virtual ~SoapAttachmentHeaders();
 };
 
 AXIS_CPP_NAMESPACE_END

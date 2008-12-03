@@ -63,7 +63,7 @@ AXIS_CPP_NAMESPACE_START
 SoapDeSerializer::
 SoapDeSerializer ()
 {
-	logEntryEngine("SoapDeSerializer::SoapDeSerializer")
+    logEntryEngine("SoapDeSerializer::SoapDeSerializer")
 
     m_pParser = XMLParserFactory::getParserObject ();
     m_pEnv = NULL;
@@ -74,13 +74,13 @@ SoapDeSerializer ()
     m_nStatus = AXIS_SUCCESS;
     m_nSoapVersion = VERSION_LAST;
     
-	logExit()
+    logExit()
 }
 
 SoapDeSerializer::
 ~SoapDeSerializer ()
 {
-	logEntryEngine("SoapDeSerializer::~SoapDeSerializer")
+    logEntryEngine("SoapDeSerializer::~SoapDeSerializer")
 
     delete m_pEnv;
     delete m_pHeader;
@@ -94,14 +94,14 @@ SoapDeSerializer::
 int SoapDeSerializer::
 setInputStream (SOAPTransport * pInputStream)
 {
-	logEntryEngine("SoapDeSerializer::setInputStream")
+    logEntryEngine("SoapDeSerializer::setInputStream")
 
-	int iStatus = AXIS_FAIL;
-	
+    int iStatus = AXIS_FAIL;
+    
     if (NULL != pInputStream)
     {
-    	m_pInputStream = pInputStream;
-    	iStatus        = m_pParser->setInputStream (pInputStream);
+        m_pInputStream = pInputStream;
+        iStatus        = m_pParser->setInputStream (pInputStream);
     }
     
     logExitWithReturnCode(iStatus)
@@ -115,7 +115,7 @@ setInputStream (SOAPTransport * pInputStream)
 void SoapDeSerializer::
 throwParserException()
 {
-	logEntryEngine("SoapDeSerializer::throwParserException")
+    logEntryEngine("SoapDeSerializer::throwParserException")
 
     AxisParseException e;
     
@@ -137,9 +137,9 @@ throwParserException()
 int SoapDeSerializer::
 getNextNode(bool ifNotSet, bool characterMode, bool throwExcOnError)
 {
-	logSetFunctionNameEngine("SoapDeSerializer::getNextNode")
-	
-	int iStatus = AXIS_FAIL;
+    logSetFunctionNameEngine("SoapDeSerializer::getNextNode")
+    
+    int iStatus = AXIS_FAIL;
 
     // If node pointer is set and user requested that we 
     // only get next element if not set, return.
@@ -147,38 +147,38 @@ getNextNode(bool ifNotSet, bool characterMode, bool throwExcOnError)
         iStatus = AXIS_SUCCESS;
     else
     {
-	    // Ensure m_pNode is NULL before calling parser in case of exceptions.
-	    m_pNode = NULL;
-	    
-	    // Just a sanity check
-	    if (m_pParser)
-		{
-		    try
-		    { 
-		        m_pNode = m_pParser->next(characterMode);
-		    }
-		    catch (AxisException &e)
-		    {
-		        // Exception processing will be handled in subsequent code
-		    }
-		    
-		    // If no node obtained, either there is no more data to read (at this time
-		    // we treat this as an error but we do not throw an exception for this) or the 
-		    // parser had an exception, in which case we throw an exception if requested.
-		    if (!m_pNode)
-		    {
-		        m_nStatus = AXIS_FAIL;
-		        if (throwExcOnError && (AXIS_FAIL == m_pParser->getStatus()))
-		            throwParserException();
-		    }
-		    else
-		    	iStatus = AXIS_SUCCESS;
-	    }
+        // Ensure m_pNode is NULL before calling parser in case of exceptions.
+        m_pNode = NULL;
+        
+        // Just a sanity check
+        if (m_pParser)
+        {
+            try
+            { 
+                m_pNode = m_pParser->next(characterMode);
+            }
+            catch (AxisException &e)
+            {
+                // Exception processing will be handled in subsequent code
+            }
+            
+            // If no node obtained, either there is no more data to read (at this time
+            // we treat this as an error but we do not throw an exception for this) or the 
+            // parser had an exception, in which case we throw an exception if requested.
+            if (!m_pNode)
+            {
+                m_nStatus = AXIS_FAIL;
+                if (throwExcOnError && (AXIS_FAIL == m_pParser->getStatus()))
+                    throwParserException();
+            }
+            else
+                iStatus = AXIS_SUCCESS;
+        }
     }
     
     if (AXIS_SUCCESS != iStatus)
     {
-    	logDebug("Status being returned is AXIS_FAIL")
+        logDebug("Status being returned is AXIS_FAIL")
     }
 
     return iStatus;
@@ -191,7 +191,7 @@ getNextNode(bool ifNotSet, bool characterMode, bool throwExcOnError)
 int SoapDeSerializer::
 skipNode(bool verifyIfEndNode, bool throwExcOnError)
 {
-	logEntryEngine("SoapDeSerializer::skipNode")
+    logEntryEngine("SoapDeSerializer::skipNode")
 
     int rc = getNextNode(false, false, throwExcOnError);
     
@@ -209,7 +209,7 @@ skipNode(bool verifyIfEndNode, bool throwExcOnError)
         m_pNode = NULL;
     }
     
-	logExitWithReturnCode(rc)
+    logExitWithReturnCode(rc)
 
     return rc;
 }
@@ -217,7 +217,7 @@ skipNode(bool verifyIfEndNode, bool throwExcOnError)
 SoapEnvelope *SoapDeSerializer::
 getEnvelope ()
 {
-	logEntryEngine("SoapDeSerializer::getEnvelope")
+    logEntryEngine("SoapDeSerializer::getEnvelope")
 
     if (AXIS_FAIL == getNextNode(true))  
     {
@@ -231,7 +231,7 @@ getEnvelope ()
     {
         m_nStatus = AXIS_FAIL;
         
-    	logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element for SOAP Envelope not found.")
+        logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element for SOAP Envelope not found.")
 
         throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element for SOAP Envelope not found.");
     }
@@ -241,7 +241,7 @@ getEnvelope ()
     {
         m_nStatus = AXIS_FAIL;
         
-    	logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Element is not a SOAP Envelope.")
+        logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Element is not a SOAP Envelope.")
 
         throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Element is not a SOAP Envelope.");
     }
@@ -291,12 +291,12 @@ getEnvelope ()
 IHeaderBlock *SoapDeSerializer::
 getHeaderBlock (const AxisChar * pName, const AxisChar * pNamespace)
 {
-	logEntryEngine("SoapDeSerializer::getHeaderBlock")
+    logEntryEngine("SoapDeSerializer::getHeaderBlock")
 
     IHeaderBlock * returnValue = NULL;
-	
+    
     if (m_pHeader)
-    	returnValue = m_pHeader->getHeaderBlock (pName, pNamespace, true);
+        returnValue = m_pHeader->getHeaderBlock (pName, pNamespace, true);
     
     logExitWithPointer(returnValue)
 
@@ -306,11 +306,11 @@ getHeaderBlock (const AxisChar * pName, const AxisChar * pNamespace)
 int SoapDeSerializer::
 getHeader ()
 {
-	logEntryEngine("SoapDeSerializer::getHeader")
+    logEntryEngine("SoapDeSerializer::getHeader")
 
     if (m_pHeader || AXIS_FAIL == getNextNode())
     {
-    	logExitWithReturnCode(m_nStatus)
+        logExitWithReturnCode(m_nStatus)
 
         return m_nStatus;
     }
@@ -432,7 +432,7 @@ getHeader ()
         }
     }
 
-	logExitWithReturnCode(m_nStatus)
+    logExitWithReturnCode(m_nStatus)
 
     return m_nStatus;
 }
@@ -441,14 +441,14 @@ getHeader ()
 const char*SoapDeSerializer::
 peekNextElementName ()
 { 
-	logEntryEngine("SoapDeSerializer::peekNextElementName")
+    logEntryEngine("SoapDeSerializer::peekNextElementName")
 
     const char*name = NULL;
-	
+    
     if (m_pParser)
         name = m_pParser->peek ();
             
-	logExitWithString(name)
+    logExitWithString(name)
 
     return name;
 }
@@ -456,30 +456,30 @@ peekNextElementName ()
 int SoapDeSerializer::
 getBody ()
 {
-	logEntryEngine("SoapDeSerializer::getBody")
+    logEntryEngine("SoapDeSerializer::getBody")
 
-	int iStatus = AXIS_FAIL;
-	
+    int iStatus = AXIS_FAIL;
+    
     if (AXIS_FAIL == getNextNode(true))
-    	iStatus = m_nStatus;
+        iStatus = m_nStatus;
     else
     {
-	    // previous header searching may have left a node unidentified
-	    if ((START_ELEMENT == m_pNode->m_type) 
-	            && (m_nSoapVersion != VERSION_LAST)
-	            && (0 == strcmp (m_pNode->m_pchNameOrValue,SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
-	    {
-	        // indicate node consumed
-	        m_pNode = NULL; 
-	
-	        // peek for the method name
-	        m_strMethodNameToInvoke = m_pParser->peek();
-	        
-	        iStatus = AXIS_SUCCESS;
-	    }
+        // previous header searching may have left a node unidentified
+        if ((START_ELEMENT == m_pNode->m_type) 
+                && (m_nSoapVersion != VERSION_LAST)
+                && (0 == strcmp (m_pNode->m_pchNameOrValue,SoapKeywordMapping::map (m_nSoapVersion).pchWords[SKW_BODY])))
+        {
+            // indicate node consumed
+            m_pNode = NULL; 
+    
+            // peek for the method name
+            m_strMethodNameToInvoke = m_pParser->peek();
+            
+            iStatus = AXIS_SUCCESS;
+        }
     }
 
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -487,45 +487,45 @@ getBody ()
 int SoapDeSerializer::
 checkMessageBody (const AxisChar * pName, const AxisChar * pNamespace)
 {
-	return validateMessageBody(pName, pNamespace, true);
+    return validateMessageBody(pName, pNamespace, true);
 }
 
 int SoapDeSerializer::
 validateMessageBody(const AxisChar * pName, const AxisChar * pNamespace, bool consumeIt)
 {
-	logEntryEngine("SoapDeSerializer::validateMessageBody")
+    logEntryEngine("SoapDeSerializer::validateMessageBody")
 
-	int iStatus = AXIS_FAIL;
-	
+    int iStatus = AXIS_FAIL;
+    
     // Will throw exception if failure in parser
     if (AXIS_FAIL != getNextNode(true))
     {
-	    if (START_ELEMENT != m_pNode->m_type)
-	    {
-	    	logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element was not found.")
+        if (START_ELEMENT != m_pNode->m_type)
+        {
+            logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element was not found.")
 
-	        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
-	    }
-	
-	    // If a fault has occurred or the node name is unexpected, throw exception
-	    // deserialize it as doc literal by setting style. 
-	    if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
-	    {
-	        setStyle (DOC_LITERAL);
-	        
-	        logThrowException("AxisGenException - AXISC_NODE_VALUE_MISMATCH_EXCEPTION")
-	        		
-	        throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
-	    }
-	
-	    // indicate node consumed
-	    if (consumeIt)
-	    	m_pNode = NULL; 
-	    
-	    iStatus = AXIS_SUCCESS;
+            throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
+        }
+    
+        // If a fault has occurred or the node name is unexpected, throw exception
+        // deserialize it as doc literal by setting style. 
+        if (0 != strcmp (m_pNode->m_pchNameOrValue, pName))
+        {
+            setStyle (DOC_LITERAL);
+            
+            logThrowException("AxisGenException - AXISC_NODE_VALUE_MISMATCH_EXCEPTION")
+                    
+            throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION);
+        }
+    
+        // indicate node consumed
+        if (consumeIt)
+            m_pNode = NULL; 
+        
+        iStatus = AXIS_SUCCESS;
     }
     
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -534,32 +534,32 @@ validateMessageBody(const AxisChar * pName, const AxisChar * pNamespace, bool co
 void SoapDeSerializer::
 initiateFault (const AxisChar * pNamespace)
 {
-	logEntryEngine("SoapDeSerializer::initiateFault")
+    logEntryEngine("SoapDeSerializer::initiateFault")
 
     // Will throw exception if failure in parser
     if (AXIS_FAIL != getNextNode(true))
     {
-	    if (START_ELEMENT != m_pNode->m_type)
-	    {
-	    	logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element was not found.")
-	    	
-	        throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
-	    }
-	
-	    setStyle (DOC_LITERAL);
-	    
+        if (START_ELEMENT != m_pNode->m_type)
+        {
+            logThrowExceptionWithData("AxisSoapException - CLIENT_SOAP_SOAP_CONTENT_ERROR", "Start-element was not found.")
+            
+            throw AxisSoapException (CLIENT_SOAP_SOAP_CONTENT_ERROR, "Start-element was not found.");
+        }
+    
+        setStyle (DOC_LITERAL);
+        
         logThrowException("AxisGenException - AXISC_NODE_VALUE_MISMATCH_EXCEPTION")
 
-	    throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION); 
+        throw AxisGenException (AXISC_NODE_VALUE_MISMATCH_EXCEPTION); 
     }
-	
-	logExit()
+    
+    logExit()
 }
 
 void *SoapDeSerializer::
 checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
 {
-	logEntryEngine("SoapDeSerializer::checkForFault")
+    logEntryEngine("SoapDeSerializer::checkForFault")
 
     if (0 != strcmp ("Fault", pName))
     {
@@ -666,7 +666,7 @@ checkForFault (const AxisChar * pName, const AxisChar * pNamespace)
 int SoapDeSerializer::
 init ()
 {
-	logEntryEngine("SoapDeSerializer::init")
+    logEntryEngine("SoapDeSerializer::init")
 
     m_pNode = NULL;
     m_pCurrNode = NULL;
@@ -680,7 +680,7 @@ init ()
     m_nSoapVersion = VERSION_LAST;
     m_nStatus = AXIS_SUCCESS;
 
-	logExitWithReturnCode(m_nStatus)
+    logExitWithReturnCode(m_nStatus)
 
     return m_nStatus;
 }
@@ -688,7 +688,7 @@ init ()
 int SoapDeSerializer::
 getVersion ()
 {
-	logEntryEngine("SoapDeSerializer::getVersion")
+    logEntryEngine("SoapDeSerializer::getVersion")
 
     if (VERSION_LAST == m_nSoapVersion)
     {
@@ -697,8 +697,8 @@ getVersion ()
         m_pEnv = getEnvelope ();
     }
 
-	logExitWithInteger(m_nSoapVersion)
-	
+    logExitWithInteger(m_nSoapVersion)
+    
     return m_nSoapVersion;
 }
 
@@ -710,16 +710,16 @@ getVersion ()
 int SoapDeSerializer::
 getArraySize ()
 {
-	logEntryEngine("SoapDeSerializer::getArraySize")
+    logEntryEngine("SoapDeSerializer::getArraySize")
 
     int nSize = 0;
     
     // If not RPC or failure in getNextNode, return zero.
     if (RPC_ENCODED != m_nStyle || (AXIS_FAIL == getNextNode()))
     {
-    	logExitWithInteger(nSize)
+        logExitWithInteger(nSize)
 
-    	return nSize;
+        return nSize;
     }
     
     // first check whether this is a start element node
@@ -730,14 +730,14 @@ getArraySize ()
         {
             skipNode();
             
-        	logExitWithInteger(nSize)
+            logExitWithInteger(nSize)
 
             return nSize;
         }
     }
     else if (END_ELEMENT == m_pNode->m_type)
     {
-    	logExitWithInteger(nSize)
+        logExitWithInteger(nSize)
 
         return nSize;
     }
@@ -757,13 +757,13 @@ getArraySize ()
             if (nSize == 0)
                 skipNode();
                 
-        	logExitWithInteger(nSize)
+            logExitWithInteger(nSize)
 
             return nSize;
         }
     }
 
-	logExitWithInteger(nSize)
+    logExitWithInteger(nSize)
 
     return nSize;
 }
@@ -788,38 +788,38 @@ getCmplxArray (Axis_Array* pArray,
                void *pDZFunct, void *pCreFunct, void *pDelFunct, 
                const AxisChar * pName, const AxisChar * pNamespace)
 {
-	logEntryEngine("SoapDeSerializer::getCmplxArray")
+    logEntryEngine("SoapDeSerializer::getCmplxArray")
 
     // if anything has gone wrong earlier just do nothing 
     if (AXIS_SUCCESS == m_nStatus)
     {
-	    // Loop through the array adding elements.
-	    int arraySize = getArraySize ();    
-	    int count = 0;
-	    const char* elementName;
-	    
-	    while(RPC_ENCODED != m_nStyle || count < arraySize)
-	    {
-	        // For RPC-encoded arrays, the element name in array cannot be derived - 
-	        // within an array value element names are not significant - so  
-	        // we read until end-of-element is encountered (i.e. null string 
-	        // is returned from peek()). 
-	        elementName = m_pParser->peek();
-	        if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
-	            pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
-	        else
-	            break;    
-	            
-	        ++count;    
-	    }
-	    
-	    if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
-	        m_pNode = NULL;         // TODO - not sure this line is needed
-	    else if (arraySize > 0)
-	        skipNode();
+        // Loop through the array adding elements.
+        int arraySize = getArraySize ();    
+        int count = 0;
+        const char* elementName;
+        
+        while(RPC_ENCODED != m_nStyle || count < arraySize)
+        {
+            // For RPC-encoded arrays, the element name in array cannot be derived - 
+            // within an array value element names are not significant - so  
+            // we read until end-of-element is encountered (i.e. null string 
+            // is returned from peek()). 
+            elementName = m_pParser->peek();
+            if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
+                pArray->addElement(getCmplxObject(pDZFunct, pCreFunct, pDelFunct, pName, pNamespace));
+            else
+                break;    
+                
+            ++count;    
+        }
+        
+        if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
+            m_pNode = NULL;         // TODO - not sure this line is needed
+        else if (arraySize > 0)
+            skipNode();
     }
         
-	logExitWithPointer(pArray)
+    logExitWithPointer(pArray)
 
     return pArray;
 }
@@ -842,7 +842,7 @@ getCmplxArray (Axis_Array* pArray,
 Axis_Array*SoapDeSerializer::
 getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespace)
 {
-	logEntryEngine("SoapDeSerializer::getBasicArray")
+    logEntryEngine("SoapDeSerializer::getBasicArray")
 
     int size = 0;      
     Axis_Array* Array = new Axis_Array();
@@ -851,75 +851,75 @@ getBasicArray (XSDTYPE nType, const AxisChar * pName, const AxisChar * pNamespac
     // if anything has gone wrong earlier just do nothing
     if (AXIS_SUCCESS == m_nStatus)
     {
-	    // Loop through the array adding elements.
-	    IAnySimpleType* pSimpleType = NULL;
-	    void * pValue = NULL;
-	    
-	    try
-	    {
-	        size = getArraySize ();
-	        const char* elementName;
-	        int count = 0;
-	                
-	        while(RPC_ENCODED != m_nStyle || count < size)
-	        {
-	            // For RPC-encoded arrays, the element name in array cannot be derived - 
-	            // within an array value element names are not significant -   
-	            // so we read until end-of-element is encountered (i.e. null string 
-	            // is returned from peek()). 
-	            elementName = m_pParser->peek();
-	            if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
-	            {
-	            	// TODO instead of deleting the pointer use it by by-passing addElement().
-	            	if (XSD_ANYTYPE != nType)
-	            	{
-		                if (0 == count)
-		                    pSimpleType = AxisUtils::createSimpleTypeObject(nType);
-		                getElement(pName, pNamespace, pSimpleType, (bool)(RPC_ENCODED == m_nStyle));
-		                pValue = pSimpleType->getValue();
-		                Array->addElement(pValue);
-		                Axis::AxisDelete(pValue, pSimpleType->getType());
-	            	}
-	            	else
-	            	{
-	            		pValue = getElementAsAnyType(pName, pNamespace);
-	            		Array->addElement(pValue);
-	            		Axis::AxisDelete(pValue, XSD_ANYTYPE);
-	            	}
-	            	
-	                pValue = NULL;
-	            }
-	            else
-	                break;
-	                
-	            ++count;
-	        }             
-	    }
-	    catch ( ... )
-	    {
-	        if (pSimpleType)
-	        { 
-	            if (pValue)
-	                Axis::AxisDelete(pValue, pSimpleType->getType());
-	            delete pSimpleType;
-	        }
-	        
-	        delete Array;
-	        
-	        logRethrowException()
-	        
-	        throw;
-	    }
-	    
-	    delete pSimpleType;
-	    
-	    if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
-	        m_pNode = NULL;         // TODO - not sure this line is needed
-	    else if (size > 0)
-	        skipNode();
+        // Loop through the array adding elements.
+        IAnySimpleType* pSimpleType = NULL;
+        void * pValue = NULL;
+        
+        try
+        {
+            size = getArraySize ();
+            const char* elementName;
+            int count = 0;
+                    
+            while(RPC_ENCODED != m_nStyle || count < size)
+            {
+                // For RPC-encoded arrays, the element name in array cannot be derived - 
+                // within an array value element names are not significant -   
+                // so we read until end-of-element is encountered (i.e. null string 
+                // is returned from peek()). 
+                elementName = m_pParser->peek();
+                if ((RPC_ENCODED == m_nStyle && 0x00 != *elementName) || strcmp(elementName, pName) == 0)
+                {
+                    // TODO instead of deleting the pointer use it by by-passing addElement().
+                    if (XSD_ANYTYPE != nType)
+                    {
+                        if (0 == count)
+                            pSimpleType = AxisUtils::createSimpleTypeObject(nType);
+                        getElement(pName, pNamespace, pSimpleType, (bool)(RPC_ENCODED == m_nStyle));
+                        pValue = pSimpleType->getValue();
+                        Array->addElement(pValue);
+                        Axis::AxisDelete(pValue, pSimpleType->getType());
+                    }
+                    else
+                    {
+                        pValue = getElementAsAnyType(pName, pNamespace);
+                        Array->addElement(pValue);
+                        Axis::AxisDelete(pValue, XSD_ANYTYPE);
+                    }
+                    
+                    pValue = NULL;
+                }
+                else
+                    break;
+                    
+                ++count;
+            }             
+        }
+        catch ( ... )
+        {
+            if (pSimpleType)
+            { 
+                if (pValue)
+                    Axis::AxisDelete(pValue, pSimpleType->getType());
+                delete pSimpleType;
+            }
+            
+            delete Array;
+            
+            logRethrowException()
+            
+            throw;
+        }
+        
+        delete pSimpleType;
+        
+        if (AXIS_FAIL == m_nStatus) // TODO - not sure this line is needed
+            m_pNode = NULL;         // TODO - not sure this line is needed
+        else if (size > 0)
+            skipNode();
     }
     
-	logExitWithPointer(Array)
+    logExitWithPointer(Array)
 
     return Array;    
 }
@@ -943,13 +943,13 @@ void *SoapDeSerializer::
 getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct, 
                 const AxisChar * pName, const AxisChar * pNamespace, bool isFault)
 {
-	logEntryEngine("SoapDeSerializer::getCmplxObject")
+    logEntryEngine("SoapDeSerializer::getCmplxObject")
 
     if (!isFault)
     {
         if (AXIS_SUCCESS != m_nStatus || (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle)))
         {
-        	logExitWithPointer(NULL)
+            logExitWithPointer(NULL)
 
             return NULL;  
         }
@@ -964,7 +964,7 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
              * null value or none filled value. Some Web services servers work
              * like this. This apply for all the rest of the deserializer.
              */
-        	logExitWithPointer(NULL)
+            logExitWithPointer(NULL)
 
             return NULL;            
         }
@@ -979,7 +979,7 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
     {
         skipNode();
         
-    	logExitWithPointer(NULL)
+        logExitWithPointer(NULL)
 
         return NULL;
     }
@@ -994,7 +994,7 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
     
     if (!isFault && AXIS_FAIL == m_nStatus)  
     {
-    	logExitWithPointer(NULL)
+        logExitWithPointer(NULL)
 
         return NULL;  
     }
@@ -1046,7 +1046,7 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
         }
     }
 
-	logExitWithPointer(pObject)
+    logExitWithPointer(pObject)
 
     return pObject;
 }
@@ -1054,10 +1054,10 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
 void * SoapDeSerializer::
 getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType * pSimpleType)
 {
-	logEntryEngine("SoapDeSerializer::getAttribute")
+    logEntryEngine("SoapDeSerializer::getAttribute")
 
     void *returnValue = NULL;
-	
+    
     if (m_pCurrNode)
     {
         for (int i=0; m_pCurrNode->m_pchAttributes[i]; i += 3)
@@ -1071,7 +1071,7 @@ getAttribute(const AxisChar* pName, const AxisChar * pNamespace, IAnySimpleType 
         }
     }
     
-	logExitWithPointer(returnValue)
+    logExitWithPointer(returnValue)
 
     return returnValue;
 }
@@ -1387,7 +1387,7 @@ getAttributeAsDuration (const AxisChar * pName, const AxisChar * pNamespace)
 bool SoapDeSerializer::
 isNilValue()
 {
-	logEntryEngine("SoapDeSerializer::isNilValue")
+    logEntryEngine("SoapDeSerializer::isNilValue")
 
     bool isNillResult = false;    
 
@@ -1414,7 +1414,7 @@ isNilValue()
 void SoapDeSerializer::
 processFaultDetail(IAnySimpleType * pSimpleType, const AxisChar* elementValue)
 {
-	logEntryEngine("SoapDeSerializer::processFaultDetail")
+    logEntryEngine("SoapDeSerializer::processFaultDetail")
 
     bool isWhiteSpace = true;
     
@@ -1466,19 +1466,19 @@ getElement (const AxisChar * pName, const AxisChar * pNamespace,
             IAnySimpleType * pSimpleType,
             bool isArrayElement)
 {  
-	logEntryEngine("SoapDeSerializer::getElement")
+    logEntryEngine("SoapDeSerializer::getElement")
 
     if (AXIS_SUCCESS != m_nStatus)
     {
-    	logExit()
-    	
+        logExit()
+        
         return;
     }
         
     if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
     {
-    	logExit()
-    	
+        logExit()
+        
         return;
     }
 
@@ -1496,24 +1496,24 @@ getElement (const AxisChar * pName, const AxisChar * pNamespace,
     }
     else if (0 != strcmp (pName, m_pNode->m_pchNameOrValue))
     {
-    	logExit()
-    	
-    	return;
+        logExit()
+        
+        return;
     }
     
     if (AXIS_FAIL == m_nStatus)
     {
-    	logExit()
-    	
+        logExit()
+        
         return;
     }
     
     // get next element, character mode 
     if (AXIS_FAIL == getNextNode(false, true))
     {
-    	logExit()
-    	
-    	return;
+        logExit()
+        
+        return;
     }
       
     if (CHARACTER_ELEMENT == m_pNode->m_type)
@@ -1915,13 +1915,13 @@ getElementAsAnyType(const AxisChar* pName, const AxisChar* pNamespace)
     AnyType *any = getAnyObject();
     if (NULL != any)
     {
-	    if (any->_size != 0)
-	    {
-	    	ret = any->_array[0];
-	    	any->_array[0] = NULL;
-	        delete [] any->_array;
-	    }
-	    delete any;
+        if (any->_size != 0)
+        {
+            ret = any->_array[0];
+            any->_array[0] = NULL;
+            delete [] any->_array;
+        }
+        delete any;
     }
     
     return ret;
@@ -1942,11 +1942,11 @@ getFaultAsXMLString()
     xsd__string ret = new char[len];
     memset(ret,0,len);
     for (i=0; i<any->_size; i++) 
-    	if (any->_array[i]) 
-	    {
-	        strcat(ret,any->_array[i]);
-	        delete [] any->_array[i];
-	    }
+        if (any->_array[i]) 
+        {
+            strcat(ret,any->_array[i]);
+            delete [] any->_array[i];
+        }
     delete [] any->_array;
     delete any;
     return ret;
@@ -1962,29 +1962,29 @@ getXSDType (const AnyElement * pElement, bool & foundType)
 {
     foundType = false;
     
-	XSDTYPE type = XSD_UNKNOWN;
-	
+    XSDTYPE type = XSD_UNKNOWN;
+    
     /* first check whether this is a start element node */
     if (START_ELEMENT == pElement->m_type)
     {
-	    for (int i = 0; pElement->m_pchAttributes[i]; i += 3)
-	    {
-	        if (URI_XSI == URIMapping::getURI (pElement->m_pchAttributes[i + 1]))
-	        {
-	            ::QName qn;
-	            
-	            qn.splitQNameString (pElement->m_pchAttributes[i + 2], ':');
-	            const char * pNS = m_pParser->getNS4Prefix (qn.uri);
-	            if (pNS)
-	            {
-	                if (URI_XSD == URIMapping::getURI (pNS) || URI_ENC == URIMapping::getURI (pNS))
-	                    type = TypeMapping::map (qn.localname);
-	            }
-	            qn.mergeQNameString (':');
-	            foundType = true;
-	            break;
-	        }
-	    }
+        for (int i = 0; pElement->m_pchAttributes[i]; i += 3)
+        {
+            if (URI_XSI == URIMapping::getURI (pElement->m_pchAttributes[i + 1]))
+            {
+                ::QName qn;
+                
+                qn.splitQNameString (pElement->m_pchAttributes[i + 2], ':');
+                const char * pNS = m_pParser->getNS4Prefix (qn.uri);
+                if (pNS)
+                {
+                    if (URI_XSD == URIMapping::getURI (pNS) || URI_ENC == URIMapping::getURI (pNS))
+                        type = TypeMapping::map (qn.localname);
+                }
+                qn.mergeQNameString (':');
+                foundType = true;
+                break;
+            }
+        }
     }
 
     return type;
@@ -1999,12 +1999,12 @@ getXSDType (const AnyElement * pElement, bool & foundType)
 HeaderBlock * SoapDeSerializer::
 getHeaderBlock ()
 {
-	logEntryEngine("SoapDeSerializer::getHeaderBlock")
+    logEntryEngine("SoapDeSerializer::getHeaderBlock")
 
     HeaderBlock *returnValue = NULL;
-	
+    
     if (m_pHeader)
-    	returnValue = (HeaderBlock *) m_pHeader->getHeaderBlock (true);
+        returnValue = (HeaderBlock *) m_pHeader->getHeaderBlock (true);
     
     logExitWithPointer(returnValue)
     
@@ -2018,7 +2018,7 @@ getHeaderBlock ()
 int AXISCALL SoapDeSerializer::
 addHeaderBlock (IHeaderBlock * pBlk)
 {
-	logEntryEngine("SoapDeSerializer::addHeaderBlock")
+    logEntryEngine("SoapDeSerializer::addHeaderBlock")
 
     if (!m_pHeader)
         m_pHeader = new SoapHeader ();
@@ -2137,7 +2137,7 @@ isAnyMustUnderstandHeadersLeft ()
 int SoapDeSerializer::
 flushInputStream ()
 {
-	logEntryEngine("SoapDeSerializer::flushInputStream")
+    logEntryEngine("SoapDeSerializer::flushInputStream")
 
     int iStatus = AXIS_FAIL;
     
@@ -2146,8 +2146,8 @@ flushInputStream ()
         int nChars = 100;
         char pBuffer[100];
         
-    	while (TRANSPORT_IN_PROGRESS == m_pInputStream->getBytes (pBuffer, &nChars));
-    	iStatus = AXIS_SUCCESS;
+        while (TRANSPORT_IN_PROGRESS == m_pInputStream->getBytes (pBuffer, &nChars));
+        iStatus = AXIS_SUCCESS;
     }
     
     logExitWithReturnCode(iStatus)
@@ -2158,109 +2158,109 @@ flushInputStream ()
 AnyType * SoapDeSerializer::
 getAnyObject ()
 {
-	logEntryEngine("SoapDeSerializer::getAnyObject")
+    logEntryEngine("SoapDeSerializer::getAnyObject")
 
     // Parser will throw an exception on a parser exception, that is ok...
     if (!m_pNode)
         m_pNode = m_pParser->anyNext();
-	
-	AnyType *pAny = NULL;
-	
+    
+    AnyType *pAny = NULL;
+    
     if (m_pNode)
-	{    
-	    int tagCount = 0;
-	    int lstSize = 0;
-	    bool bContinue = false;
-	
-	    AxisString xmlStr = "";
-	    AxisString nsDecls = "";
-	
-	    list < AxisString > lstXML;
-	
-		AxisString inValue = "";
-		AxisString outValue = "";
-	
-	    while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
-	    {
-	        // Continue if processing start prefix,
-	        // as we haven't yet found the true start of the tag
-	        if (START_PREFIX == m_pNode->m_type)
-	            bContinue = true;
-	        else
-	            bContinue = false;
-	        
-	        // Increment counter if entering new tag, Decrement counter if exiting tag
-	        if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
-	            tagCount++;
-	        else if (END_ELEMENT == m_pNode->m_type)
-	            tagCount--;
-	
-	        if (START_PREFIX == m_pNode->m_type)
-	        {
-	            nsDecls += " xmlns";
-	            if (m_pNode->m_pchNameOrValue && (*(m_pNode->m_pchNameOrValue) != 0x00))
-	            {
-	                nsDecls += ":";
-	                nsDecls += m_pNode->m_pchNameOrValue;
-	            }
-	            nsDecls += "=\"";
-	            nsDecls += m_pNode->m_pchNamespace;
-	            nsDecls += "\"";
-	        }
-	        else if (CHARACTER_ELEMENT != m_pNode->m_type)
-	        {
-	            serializeTag (xmlStr, m_pNode, nsDecls);
-	            nsDecls = "";
-	        }
-	        else
-	        {
-	        	inValue = m_pNode->m_pchNameOrValue;
-	        	IAnySimpleType::replaceReservedCharacters(inValue, outValue);
-	            xmlStr += outValue;
-	        }
-	    
-	        if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))    /* copying the First level element into the list */
-	        {
-	            lstXML.push_back (xmlStr);
-	            xmlStr = "";
-	            m_pNode = NULL;
-	            break;
-	        }
-	    
-	        m_pNode = m_pParser->anyNext ();
-	    
-	        if (!m_pNode) // there is something wrong in the XSD Any XML stream
-	        {          
-	            // Store whatever we have by now and break
-	            if (!xmlStr.empty ())
-	            {
-	                lstXML.push_back (xmlStr);
-	                xmlStr = "";
-	            }
-	            break;
-	        }
-	    }
-	
-	    pAny = new AnyType ();
-	    pAny->_array = 0;
-	    pAny->_size = 0;
-	    
-	    lstSize = lstXML.size ();
-	    
-	    if (lstSize > 0)
-	    {
-	        pAny->_array = new char *[lstSize];
-	
-	        list < AxisString >::iterator i;    /* Iterator for traversing the list */
-	    
-	        for (i = lstXML.begin (); i != lstXML.end (); i++)
-	        {
-	            const char *s = (*i).c_str ();
-	            pAny->_array[pAny->_size] = new char[strlen (s) + 1];
-	            strcpy (pAny->_array[pAny->_size], s);
-	            pAny->_size++;
-	        }
-	    }
+    {    
+        int tagCount = 0;
+        int lstSize = 0;
+        bool bContinue = false;
+    
+        AxisString xmlStr = "";
+        AxisString nsDecls = "";
+    
+        list < AxisString > lstXML;
+    
+        AxisString inValue = "";
+        AxisString outValue = "";
+    
+        while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
+        {
+            // Continue if processing start prefix,
+            // as we haven't yet found the true start of the tag
+            if (START_PREFIX == m_pNode->m_type)
+                bContinue = true;
+            else
+                bContinue = false;
+            
+            // Increment counter if entering new tag, Decrement counter if exiting tag
+            if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
+                tagCount++;
+            else if (END_ELEMENT == m_pNode->m_type)
+                tagCount--;
+    
+            if (START_PREFIX == m_pNode->m_type)
+            {
+                nsDecls += " xmlns";
+                if (m_pNode->m_pchNameOrValue && (*(m_pNode->m_pchNameOrValue) != 0x00))
+                {
+                    nsDecls += ":";
+                    nsDecls += m_pNode->m_pchNameOrValue;
+                }
+                nsDecls += "=\"";
+                nsDecls += m_pNode->m_pchNamespace;
+                nsDecls += "\"";
+            }
+            else if (CHARACTER_ELEMENT != m_pNode->m_type)
+            {
+                serializeTag (xmlStr, m_pNode, nsDecls);
+                nsDecls = "";
+            }
+            else
+            {
+                inValue = m_pNode->m_pchNameOrValue;
+                IAnySimpleType::replaceReservedCharacters(inValue, outValue);
+                xmlStr += outValue;
+            }
+        
+            if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))    /* copying the First level element into the list */
+            {
+                lstXML.push_back (xmlStr);
+                xmlStr = "";
+                m_pNode = NULL;
+                break;
+            }
+        
+            m_pNode = m_pParser->anyNext ();
+        
+            if (!m_pNode) // there is something wrong in the XSD Any XML stream
+            {          
+                // Store whatever we have by now and break
+                if (!xmlStr.empty ())
+                {
+                    lstXML.push_back (xmlStr);
+                    xmlStr = "";
+                }
+                break;
+            }
+        }
+    
+        pAny = new AnyType ();
+        pAny->_array = 0;
+        pAny->_size = 0;
+        
+        lstSize = lstXML.size ();
+        
+        if (lstSize > 0)
+        {
+            pAny->_array = new char *[lstSize];
+    
+            list < AxisString >::iterator i;    /* Iterator for traversing the list */
+        
+            for (i = lstXML.begin (); i != lstXML.end (); i++)
+            {
+                const char *s = (*i).c_str ();
+                pAny->_array[pAny->_size] = new char[strlen (s) + 1];
+                strcpy (pAny->_array[pAny->_size], s);
+                pAny->_size++;
+            }
+        }
     }
 
     logExitWithPointer(pAny)
@@ -2418,18 +2418,18 @@ serializeTag (AxisString & xmlStr,
 void SoapDeSerializer::
 getChardataAs (void **pValue, XSDTYPE type)
 {  
-	logEntryEngine("SoapDeSerializer::getChardataAs")
+    logEntryEngine("SoapDeSerializer::getChardataAs")
 
     if (pValue && AXIS_FAIL != getNextNode(true, true))
     {
-	    *pValue = NULL;
-	    if (CHARACTER_ELEMENT == m_pNode->m_type)
-	    {
-	        IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(type);
-	        pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
-	        *pValue = pSimpleType->getValue();
-	        delete pSimpleType;
-	    }
+        *pValue = NULL;
+        if (CHARACTER_ELEMENT == m_pNode->m_type)
+        {
+            IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(type);
+            pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
+            *pValue = pSimpleType->getValue();
+            delete pSimpleType;
+        }
     }
     
     logExit()
@@ -2447,19 +2447,19 @@ AXIS_TRANSPORT_STATUS SoapDeSerializer::
 DeSerializerMemBufInputStream::
 getBytes (char *pcBuffer, int *piRetSize)
 {
-	logEntryEngine("SoapDeSerializer::DeSerializerMemBufInputStream::getBytes")
+    logEntryEngine("SoapDeSerializer::DeSerializerMemBufInputStream::getBytes")
 
     if (!m_pcDeSeriaMemBuffer)
     {
-    	logExitWithMessage("Returned return code of TRANSPORT_FAILED")
-    	
+        logExitWithMessage("Returned return code of TRANSPORT_FAILED")
+        
         return TRANSPORT_FAILED;
     }
         
     int nBufLen = strlen (m_pcDeSeriaMemBuffer);
     if (0 == nBufLen)
     {
-    	logExitWithMessage("Returned return code of TRANSPORT_FINISHED")
+        logExitWithMessage("Returned return code of TRANSPORT_FINISHED")
 
         return TRANSPORT_FINISHED;
     }
@@ -2469,7 +2469,7 @@ getBytes (char *pcBuffer, int *piRetSize)
     pcBuffer[nBufLen] = 0;
     m_pcDeSeriaMemBuffer += nBufLen;
     
-	logExitWithMessage("Returned return code of TRANSPORT_IN_PROGRESS")
+    logExitWithMessage("Returned return code of TRANSPORT_IN_PROGRESS")
 
     return TRANSPORT_IN_PROGRESS;
 }
@@ -2495,10 +2495,10 @@ getMethodNameToInvoke()
 void SoapDeSerializer::
 setMethodNameToInvoke(const char* methodName)
 {
-	logEntryEngine("SoapDeSerializer::setMethodNameToInvoke")
+    logEntryEngine("SoapDeSerializer::setMethodNameToInvoke")
 
     m_strMethodNameToInvoke = methodName;
-	
+    
     logExit()
 }
 

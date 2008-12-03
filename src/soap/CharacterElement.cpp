@@ -94,7 +94,7 @@ int CharacterElement::setValue(const AxisChar* pachValue)
    }
    else
    {
-	   return AXIS_FAIL;
+       return AXIS_FAIL;
    }
 }
 

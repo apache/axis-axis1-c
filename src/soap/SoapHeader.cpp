@@ -37,16 +37,16 @@ extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 
 SoapHeader::
 SoapHeader()
-{	
-	logEntryEngine("SoapHeader::SoapHeader")
-	
+{    
+    logEntryEngine("SoapHeader::SoapHeader")
+    
     logExit()
 }
 
 SoapHeader::
 ~SoapHeader()
 {
-	logEntryEngine("SoapHeader::~SoapHeader")
+    logEntryEngine("SoapHeader::~SoapHeader")
 
     // Header blocks are not deleted here any more. Its the responsibility of
     // either a handler or stub etc to delete any header block created by them
@@ -70,27 +70,27 @@ SoapHeader::
 void SoapHeader::
 addHeaderBlock(IHeaderBlock* pHeaderBlock)
 {
-	logEntryEngine("SoapHeader::addHeaderBlock")
+    logEntryEngine("SoapHeader::addHeaderBlock")
 
     if (pHeaderBlock)
     {
         m_headerBlocks.push_back(pHeaderBlock);
     }
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapHeader::
 serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {    
-	logEntryEngine("SoapHeader::serialize")
+    logEntryEngine("SoapHeader::serialize")
 
     int iStatus= AXIS_SUCCESS;
 
     do
     {
-		if (0 == m_headerBlocks.size()) 
-			break;
+        if (0 == m_headerBlocks.size()) 
+            break;
         
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_HEADER],
@@ -124,7 +124,7 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     } 
     while(0);
 
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -132,9 +132,9 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 int SoapHeader::
 addAttribute(Attribute *pAttribute)
 {
-	logEntryEngine("SoapHeader::addAttribute")
-	
-	int iStatus = AXIS_FAIL;
+    logEntryEngine("SoapHeader::addAttribute")
+    
+    int iStatus = AXIS_FAIL;
 
     if (pAttribute)
     {
@@ -142,7 +142,7 @@ addAttribute(Attribute *pAttribute)
         iStatus = AXIS_SUCCESS;
     }
 
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -151,7 +151,7 @@ addAttribute(Attribute *pAttribute)
 int SoapHeader::
 serializeAttributes(SoapSerializer& pSZ)
 {
-	logEntryEngine("SoapHeader::serializeAttributes")
+    logEntryEngine("SoapHeader::serializeAttributes")
 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
@@ -161,7 +161,7 @@ serializeAttributes(SoapSerializer& pSZ)
         itCurrAttribute++;        
     }    
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;    
 }
@@ -169,17 +169,17 @@ serializeAttributes(SoapSerializer& pSZ)
 int SoapHeader::
 addNamespaceDecl(Attribute *pAttribute)
 {
-	logEntryEngine("SoapHeader::addNamespaceDecl")
+    logEntryEngine("SoapHeader::addNamespaceDecl")
 
-	int iStatus = AXIS_FAIL;
-	
+    int iStatus = AXIS_FAIL;
+    
     if (pAttribute)
     {
         m_namespaceDecls.push_back(pAttribute);
         iStatus = AXIS_SUCCESS;
     }
-	
-	logExitWithReturnCode(iStatus)
+    
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -187,7 +187,7 @@ addNamespaceDecl(Attribute *pAttribute)
 int SoapHeader::
 serializeNamespaceDecl(SoapSerializer& pSZ)
 {
-	logEntryEngine("SoapHeader::serializeNamespaceDecl")
+    logEntryEngine("SoapHeader::serializeNamespaceDecl")
 
     list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
@@ -197,7 +197,7 @@ serializeNamespaceDecl(SoapSerializer& pSZ)
         itCurrNamespaceDecl++;        
     }    
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -205,7 +205,7 @@ serializeNamespaceDecl(SoapSerializer& pSZ)
 IHeaderBlock* SoapHeader::
 getHeaderBlock(bool bRemoveOrNot)
 {
-	logEntryEngine("SoapHeader::getHeaderBlock")
+    logEntryEngine("SoapHeader::getHeaderBlock")
 
     IHeaderBlock* tmpHeaderBlock = NULL;
 
@@ -214,8 +214,8 @@ getHeaderBlock(bool bRemoveOrNot)
     if(itCurrHeaderBlock != m_headerBlocks.end())
     {
         tmpHeaderBlock = (*itCurrHeaderBlock);
-		if (bRemoveOrNot == true)
-			m_headerBlocks.pop_front();
+        if (bRemoveOrNot == true)
+            m_headerBlocks.pop_front();
     }
 
     logExitWithPointer(tmpHeaderBlock)
@@ -235,7 +235,7 @@ setPrefix(const char* pcPrefix)
 IHeaderBlock* SoapHeader::
 getHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace, bool bRemoveOrNot)
 {
-	logEntryEngine("SoapHeader::getHeaderBlock")
+    logEntryEngine("SoapHeader::getHeaderBlock")
 
     HeaderBlock* tmpHeaderBlock = NULL;
 
@@ -248,13 +248,13 @@ getHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace, bool bRemoveOr
         if ((strcmp(((tmpHeaderBlock)->m_localname).c_str(), pName) == 0) && 
                 (strcmp(((tmpHeaderBlock)->m_uri).c_str(), pNamespace) == 0))
         {
-			if (bRemoveOrNot == true)
-				m_headerBlocks.remove(tmpHeaderBlock);
+            if (bRemoveOrNot == true)
+                m_headerBlocks.remove(tmpHeaderBlock);
             break;
         }
         else
         {
-        	tmpHeaderBlock = NULL;
+            tmpHeaderBlock = NULL;
             itCurrHeaderBlock++;
         }
     }
@@ -268,52 +268,52 @@ getHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace, bool bRemoveOr
 IHeaderBlock* SoapHeader::
 getFirstHeaderBlock() 
 {
-	logEntryEngine("SoapHeader::getFirstHeaderBlock")
+    logEntryEngine("SoapHeader::getFirstHeaderBlock")
 
-	m_itHeaderBlocks = m_headerBlocks.begin();
-	IHeaderBlock* tmpIHeaderBlock=NULL;
-	if (m_itHeaderBlocks != m_headerBlocks.end())
-		tmpIHeaderBlock = *m_itHeaderBlocks;
-	
+    m_itHeaderBlocks = m_headerBlocks.begin();
+    IHeaderBlock* tmpIHeaderBlock=NULL;
+    if (m_itHeaderBlocks != m_headerBlocks.end())
+        tmpIHeaderBlock = *m_itHeaderBlocks;
+    
     logExitWithPointer(tmpIHeaderBlock)
 
-	return tmpIHeaderBlock;
+    return tmpIHeaderBlock;
 }
 
 IHeaderBlock* SoapHeader::
 getNextHeaderBlock() 
 {
-	logEntryEngine("SoapHeader::getNextHeaderBlock")
+    logEntryEngine("SoapHeader::getNextHeaderBlock")
 
-	m_itHeaderBlocks++;
-	IHeaderBlock* tmpIHeaderBlock=NULL;
-	if (m_itHeaderBlocks != m_headerBlocks.end())
-		tmpIHeaderBlock = *m_itHeaderBlocks;
-	
+    m_itHeaderBlocks++;
+    IHeaderBlock* tmpIHeaderBlock=NULL;
+    if (m_itHeaderBlocks != m_headerBlocks.end())
+        tmpIHeaderBlock = *m_itHeaderBlocks;
+    
     logExitWithPointer(tmpIHeaderBlock)
 
-	return tmpIHeaderBlock;
+    return tmpIHeaderBlock;
 }
 
 IHeaderBlock* SoapHeader::
 getCurrentHeaderBlock()
 {
-	logEntryEngine("SoapHeader::getCurrentHeaderBlock")
+    logEntryEngine("SoapHeader::getCurrentHeaderBlock")
 
-	IHeaderBlock* tmpIHeaderBlock=NULL;
-	if (m_itHeaderBlocks != m_headerBlocks.end())
-		tmpIHeaderBlock = *m_itHeaderBlocks;
+    IHeaderBlock* tmpIHeaderBlock=NULL;
+    if (m_itHeaderBlocks != m_headerBlocks.end())
+        tmpIHeaderBlock = *m_itHeaderBlocks;
 
     logExitWithPointer(tmpIHeaderBlock)
 
-	return tmpIHeaderBlock;
+    return tmpIHeaderBlock;
 }
 
 
 int SoapHeader::
 deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
 {
-	logEntryEngine("SoapHeader::deleteHeaderBlock")
+    logEntryEngine("SoapHeader::deleteHeaderBlock")
 
     int iStatus = AXIS_SUCCESS;
     HeaderBlock* tmpHeaderBlock = NULL;
@@ -337,7 +337,7 @@ deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
     if (m_headerBlocks.empty())
         iStatus = AXIS_NO_REMAINING_SOAP_HEADERS;
     
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -345,7 +345,7 @@ deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
 void SoapHeader::
 clear()
 {
-	logEntryEngine("SoapHeader::clear")
+    logEntryEngine("SoapHeader::clear")
 
     // Header blocks are not deleted here. Its the responsibility of
     // either a handler or stub etc to delete any header block created by them

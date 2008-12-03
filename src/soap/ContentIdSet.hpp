@@ -38,14 +38,14 @@ AXIS_CPP_NAMESPACE_START
 class ContentIdSet
 {
 public:
-	ContentIdSet();
-	virtual ~ContentIdSet();
-	void registerId(const char* id);
-	const char *generateId();
-	void clearAll();
-private:	
-	list<const char*> m_set;
-	int m_maxId;
+    ContentIdSet();
+    virtual ~ContentIdSet();
+    void registerId(const char* id);
+    const char *generateId();
+    void clearAll();
+private:    
+    list<const char*> m_set;
+    int m_maxId;
 };
 
 AXIS_CPP_NAMESPACE_END

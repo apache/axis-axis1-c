@@ -81,13 +81,7 @@ private:
     AxisString m_uri;
     AxisString m_value;
 	list<const char*>	m_PrefixList;
-	
-	/**
-	  *Dushshantha:
-	  *namespace declaration list 
-	  */
-	  
-	list<Namespace*> m_namespaceDecls;
+	list<Namespace*>    m_namespaceDecls;
 };
 
 AXIS_CPP_NAMESPACE_END

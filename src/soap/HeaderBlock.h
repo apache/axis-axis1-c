@@ -75,7 +75,7 @@ private:
       * Serializes the namespace decl.
       */
     int serializeNamespaceDecl(SoapSerializer& pSZ,
-			std::list<AxisChar*>& lstTmpNameSpaceStack);
+            std::list<AxisChar*>& lstTmpNameSpaceStack);
 
     int serializeChildren(SoapSerializer& pSZ, 
         std::list<AxisChar*>& lstTmpNameSpaceStack);
@@ -94,9 +94,9 @@ private:
     AxisString m_sPrefix;
     AxisString m_uri;
     std::list<Attribute*> m_attributes;    
-	std::list<Namespace*> m_namespaceDecls;	
+    std::list<Namespace*> m_namespaceDecls;    
 
-public:	
+public:    
 
     INamespace* createNamespaceDecl(const AxisChar *prefix, 
             const AxisChar *uri); 
@@ -136,14 +136,14 @@ public:
     int setPrefix(const AxisChar* prefix);
 
 
-	/**
+    /**
       * The Constructor.
       *
       * @param pachLocalName The local name of this Header Block.
       * @param pachPrefix The prefix of this Header Block.
       * @param pachUri The namespace uri of this Header Block.
       */
-	HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix);
+    HeaderBlock(const AxisChar *pachLocalName, const AxisChar *pachUri, const AxisChar *pachPrefix);
 
     /**
       * The Constructor.

@@ -50,7 +50,7 @@ void URIMapping::initialize()
             URI_XSI;
 
         m_sURIMap[std::string("http://www.w3.org/2001/06/soap-encoding")] = URI_ENC;
-		m_sURIMap[std::string("http://schemas.xmlsoap.org/soap/encoding/")] = URI_ENC;
+        m_sURIMap[std::string("http://schemas.xmlsoap.org/soap/encoding/")] = URI_ENC;
         m_sURIMap[std::string("http://schemas.xmlsoap.org/soap/envelope/")] = 
             URI_ENVELOPE;
 
@@ -66,13 +66,13 @@ void URIMapping::uninitialize()
 {
     if (m_bInit)
     {
-		m_sURIMap.clear();
+        m_sURIMap.clear();
         m_bInit = false;
-	}
+    }
 }
 URITYPE URIMapping::getURI(const AxisXMLCh* uri)
 {
-	if (m_sURIMap.find(std::string(uri)) != m_sURIMap.end())
+    if (m_sURIMap.find(std::string(uri)) != m_sURIMap.end())
     {
         return m_sURIMap[std::string(uri)];
     }

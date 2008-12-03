@@ -44,48 +44,48 @@ SoapAttachmentHeaders::~SoapAttachmentHeaders()
 
 void SoapAttachmentHeaders::addHeader(AxisString name, AxisString value)
 {
-	bool found = false;
-	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
-	{
-		if (m_AttachHeaders[i].first == name)
-		{
-			m_AttachHeaders[i] = make_pair(name, value);
-			found = true;
-			break;
-		}
-	}
+    bool found = false;
+    for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
+    {
+        if (m_AttachHeaders[i].first == name)
+        {
+            m_AttachHeaders[i] = make_pair(name, value);
+            found = true;
+            break;
+        }
+    }
 
-	if (!found)
-		m_AttachHeaders.push_back (make_pair (name, value));
+    if (!found)
+        m_AttachHeaders.push_back (make_pair (name, value));
 }
 
 void SoapAttachmentHeaders::serialize(SoapSerializer &pSZ)
 {
-	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
-	{
-	    if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
-	    {
-			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": <", NULL);
-			pSZ.serialize((m_AttachHeaders[i].second).c_str(), ">\r\n", NULL);
-		} else {
-			pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": ", NULL);
-			pSZ.serialize((m_AttachHeaders[i].second).c_str(), "\r\n", NULL); 
-		}
-	}
+    for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
+    {
+        if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
+        {
+            pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": <", NULL);
+            pSZ.serialize((m_AttachHeaders[i].second).c_str(), ">\r\n", NULL);
+        } else {
+            pSZ.serialize((m_AttachHeaders[i].first).c_str(), ": ", NULL);
+            pSZ.serialize((m_AttachHeaders[i].second).c_str(), "\r\n", NULL); 
+        }
+    }
 }
 
 const char *SoapAttachmentHeaders::getHeader(AxisString sName)
 {
 
-	for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
-	{
-		if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
-		{
-			return m_AttachHeaders[i].second.c_str();
-		}
-	}
+    for (unsigned int i = 0; i < m_AttachHeaders.size (); i++)
+    {
+        if (m_AttachHeaders[i].first == AXIS_CONTENT_ID)
+        {
+            return m_AttachHeaders[i].second.c_str();
+        }
+    }
 
-	return "";
+    return "";
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -32,49 +32,49 @@ extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 SoapBody::
 SoapBody()
 {
-	logEntryEngine("SoapBody::SoapBody")
+    logEntryEngine("SoapBody::SoapBody")
 
     m_pSoapMethod= NULL;
     m_pSoapFault= NULL;
     
-	logExit()
+    logExit()
 }
 
 SoapBody::
 ~SoapBody()
 {
-	logEntryEngine("SoapBody::~SoapBody")
+    logEntryEngine("SoapBody::~SoapBody")
 
     delete m_pSoapMethod;
     delete m_pSoapFault;
     
-	logExit()
+    logExit()
 }
 
 void SoapBody::
 setSoapMethod(SoapMethod* ptrSoapMethod)
 {
-	logEntryEngine("SoapBody::setSoapMethod")
+    logEntryEngine("SoapBody::setSoapMethod")
 
     m_pSoapMethod= ptrSoapMethod;
-	
-	logExit()
+    
+    logExit()
 }
 
 void SoapBody::
 setSoapFault(SoapFault *pSoapFault)
 {
-	logEntryEngine("SoapBody::setSoapFault")
+    logEntryEngine("SoapBody::setSoapFault")
 
     m_pSoapFault= pSoapFault;
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapBody::
 serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {
-	logEntryEngine("SoapBody::serialize")
+    logEntryEngine("SoapBody::serialize")
 
     int iStatus= AXIS_SUCCESS;
 
@@ -97,15 +97,15 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         }
         else if(NULL != m_pSoapMethod)
         {
-        	// A null-string namespace means the operation does not have input parameters and
-        	// thus we skip this serialization step!
-        	AxisString prefix = m_pSoapMethod->getPrefix();
-        	if (prefix.length() != 0)
-        	{
-        		iStatus= m_pSoapMethod->serialize(pSZ);
-        		if(iStatus==AXIS_FAIL)
-        			break;
-        	}
+            // A null-string namespace means the operation does not have input parameters and
+            // thus we skip this serialization step!
+            AxisString prefix = m_pSoapMethod->getPrefix();
+            if (prefix.length() != 0)
+            {
+                iStatus= m_pSoapMethod->serialize(pSZ);
+                if(iStatus==AXIS_FAIL)
+                    break;
+            }
         }
         else
         {
@@ -124,7 +124,7 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     } 
     while(0);
 
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -132,17 +132,17 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 void SoapBody::
 addAttribute(Attribute *attr)
 {
-	logEntryEngine("SoapBody::addAttribute")
+    logEntryEngine("SoapBody::addAttribute")
 
     m_attributes.push_back(attr);
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapBody::
 serializeAttributes(SoapSerializer& pSZ)
 {
-	logEntryEngine("SoapBody::serializeAttributes")
+    logEntryEngine("SoapBody::serializeAttributes")
 
     int iStatus= AXIS_SUCCESS;
 
@@ -156,7 +156,7 @@ serializeAttributes(SoapSerializer& pSZ)
         itCurrAttribute++;        
     }    
 
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }

@@ -46,23 +46,23 @@ class SoapSerializer;
 
 class STORAGE_CLASS_INFO SoapAttachment : public ISoapAttachment
 {
-private:	
-	SoapAttachmentHeaders *m_AttachmentHeaders;
-	xsd__base64Binary* m_AttachmentBody;
+private:    
+    SoapAttachmentHeaders *m_AttachmentHeaders;
+    xsd__base64Binary* m_AttachmentBody;
     char *m_binaryBody;
     int iEncodingStyle;
     ContentIdSet *m_pContentIdSet;
 
-public:	
-	SoapAttachment(ContentIdSet *pContentIdSet=NULL);
-	virtual ~SoapAttachment();	
+public:    
+    SoapAttachment(ContentIdSet *pContentIdSet=NULL);
+    virtual ~SoapAttachment();    
     const char* getAttachmentId();
-	const char* getHeader(const char* pchName);
-	xsd__base64Binary* getBody();
-	void serialize(SoapSerializer& pSZ);
-	void addBody(xsd__base64Binary* objBody);
+    const char* getHeader(const char* pchName);
+    xsd__base64Binary* getBody();
+    void serialize(SoapSerializer& pSZ);
+    void addBody(xsd__base64Binary* objBody);
     void addBody(char* pchBinaryBody);
-	void addHeader(const char* pchName, const char* pchValue);
+    void addHeader(const char* pchName, const char* pchValue);
 };
 
 AXIS_CPP_NAMESPACE_END

@@ -43,8 +43,8 @@ public:
       * method.
       */
     IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,
-	    AxisChar* pachLocalname)
-	{return NULL;}
+        AxisChar* pachLocalname)
+    {return NULL;}
 
     /**
       * This method is overridden to always return NULL because this is a CharacterElement.

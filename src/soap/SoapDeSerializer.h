@@ -72,13 +72,13 @@ public:
     const char* getMethodNameToInvoke();
     void setMethodNameToInvoke(const char*);
     
-	/**
-	* This method allows to peek for the name of the next element in XML stream.
-	* Useful in supporting "all" & "choice" WSDL constructs.
-	* @return Name of the next element in XML stream 
-	*/
-	const char* peekNextElementName(); 
-	
+    /**
+    * This method allows to peek for the name of the next element in XML stream.
+    * Useful in supporting "all" & "choice" WSDL constructs.
+    * @return Name of the next element in XML stream 
+    */
+    const char* peekNextElementName(); 
+    
     int flushInputStream();
     PROVIDERTYPE getCurrentProviderType() { return m_ProviderType;};
     void setCurrentProviderType(PROVIDERTYPE nType) { m_ProviderType = nType;};
@@ -210,7 +210,7 @@ public:
     xsd__anyType AXISCALL getElementAsAnyType(const AxisChar* pName,
         const AxisChar* pNamespace);
 
-	void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
+    void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
         IAnySimpleType* pSimpleType);
     xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
         const AxisChar* pNamespace);
@@ -304,7 +304,7 @@ public:
     void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
     int AXISCALL getStatus(){return m_nStatus;};
-	AnyType* AXISCALL getAnyObject();
+    AnyType* AXISCALL getAnyObject();
     void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
     void getChardataAs(void** pValue, XSDTYPE type);
 
@@ -314,10 +314,10 @@ public:
     ISoapAttachment* getAttachment(const char* pcAttachmentid);
     ISoapAttachment** getAllAttachments(int *pAttchArraySize);
 
-	/**
-	 * Returns a complex fault as an XML string 
-	 */
-	xsd__string getFaultAsXMLString();
+    /**
+     * Returns a complex fault as an XML string 
+     */
+    xsd__string getFaultAsXMLString();
 
     /*
      *This class is used by the DeSerializer to set the input stream back to 

@@ -42,15 +42,15 @@ Namespace::~Namespace()
 
 Namespace::Namespace(const AxisChar* achPrefix, const AxisChar* achURI)
 {
-	m_asPrefix = achPrefix;
-	m_asURI = achURI;
+    m_asPrefix = achPrefix;
+    m_asURI = achURI;
 }
 
 int Namespace::setPrefix(const AxisChar* achPrefix)
 {
     if (achPrefix)
     {
-	   m_asPrefix = achPrefix;
+       m_asPrefix = achPrefix;
        return AXIS_SUCCESS;
     }
     return AXIS_FAIL;
@@ -68,27 +68,27 @@ int Namespace::setURI(const AxisChar* achURI)
 
 const AxisChar* Namespace::getURI()
 {
-	return m_asURI.c_str();
+    return m_asURI.c_str();
 }
 
 const AxisChar* Namespace::getPrefix()
 {
-	return m_asPrefix.c_str();
+    return m_asPrefix.c_str();
 }
 
 int Namespace::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
-	/*Adding the new namespace to the Serializer*/
-	pSZ.addNamespaceToNamespaceList(m_asURI.c_str(), m_asPrefix.c_str());
-	/*Adding the namespace to the temporary stack, so that it will be removed
-	*  at the end of the logical block. The logical block could be a HeaderBlock,
-	*  a Soap Method etc.
-	*/
-	lstTmpNameSpaceStack.push_back((AxisChar*)m_asURI.c_str());
+    /*Adding the new namespace to the Serializer*/
+    pSZ.addNamespaceToNamespaceList(m_asURI.c_str(), m_asPrefix.c_str());
+    /*Adding the namespace to the temporary stack, so that it will be removed
+    *  at the end of the logical block. The logical block could be a HeaderBlock,
+    *  a Soap Method etc.
+    */
+    lstTmpNameSpaceStack.push_back((AxisChar*)m_asURI.c_str());
 
-	pSZ.serialize(" xmlns:", m_asPrefix.c_str(), "=\"", m_asURI.c_str(), "\"", NULL);
+    pSZ.serialize(" xmlns:", m_asPrefix.c_str(), "=\"", m_asURI.c_str(), "\"", NULL);
 
-	return AXIS_SUCCESS;
+    return AXIS_SUCCESS;
 }
 
 AXIS_CPP_NAMESPACE_END

@@ -40,18 +40,18 @@ extern SoapEnvVersionsStruct gs_SoapEnvVersionsStruct[VERSION_LAST];
 SoapEnvelope::
 SoapEnvelope()
 {
-	logEntryEngine("SoapEnvelope::SoapEnvelope")
+    logEntryEngine("SoapEnvelope::SoapEnvelope")
 
     m_pSoapHeader= NULL;
     m_pSoapBody= NULL;
     
-	logExit()
+    logExit()
 }
 
 SoapEnvelope::
 ~SoapEnvelope()
 {
-	logEntryEngine("SoapEnvelope::~SoapEnvelope")
+    logEntryEngine("SoapEnvelope::~SoapEnvelope")
 
     // deletion of attributes 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
@@ -81,33 +81,33 @@ SoapEnvelope::
     // deletion of soap body 
     delete m_pSoapBody;
     
-	logExit()
+    logExit()
 }
 
 void SoapEnvelope::
 setSoapHeader(SoapHeader* soapHeader)
 {
-	logEntryEngine("SoapEnvelope::setSoapHeader")
+    logEntryEngine("SoapEnvelope::setSoapHeader")
 
     m_pSoapHeader= soapHeader;
-	
-	logExit()
+    
+    logExit()
 }
 
 void SoapEnvelope::
 setSoapBody(SoapBody* soapBody)
 {
-	logEntryEngine("SoapEnvelope::setSoapBody")
+    logEntryEngine("SoapEnvelope::setSoapBody")
 
     m_pSoapBody= soapBody;
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapEnvelope::
 serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 {    
-	logEntryEngine("SoapEnvelope::serialize")
+    logEntryEngine("SoapEnvelope::serialize")
 
     int iStatus= AXIS_SUCCESS;
     do
@@ -140,39 +140,39 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
     } 
     while (0);
 
-	logExitWithReturnCode(iStatus)
-	
+    logExitWithReturnCode(iStatus)
+    
     return iStatus;
 }
 
 int SoapEnvelope::
 addAttribute(Attribute *pAttribute)
 {
-	logEntryEngine("SoapEnvelope::addAttribute")
+    logEntryEngine("SoapEnvelope::addAttribute")
 
     m_attributes.push_back(pAttribute);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 int SoapEnvelope::
 addNamespaceDecl(Attribute *pAttribute)
 {
-	logEntryEngine("SoapEnvelope::addNamespaceDecl")
+    logEntryEngine("SoapEnvelope::addNamespaceDecl")
 
     m_namespaceDecls.push_back(pAttribute);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 int SoapEnvelope::
 serializeAttributes(SoapSerializer& pSZ)
 {    
-	logEntryEngine("SoapEnvelope::serializeAttributes")
+    logEntryEngine("SoapEnvelope::serializeAttributes")
 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
@@ -182,15 +182,15 @@ serializeAttributes(SoapSerializer& pSZ)
         itCurrAttribute++;        
     }    
 
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;    
 }
 
 int SoapEnvelope::
 serializeNamespaceDecl(SoapSerializer& pSZ)
 {    
-	logEntryEngine("SoapEnvelope::serializeNamespaceDecl")
+    logEntryEngine("SoapEnvelope::serializeNamespaceDecl")
 
     list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
@@ -201,7 +201,7 @@ serializeNamespaceDecl(SoapSerializer& pSZ)
         itCurrNamespaceDecl++;        
     }    
     
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -209,11 +209,11 @@ serializeNamespaceDecl(SoapSerializer& pSZ)
 int SoapEnvelope::
 setPrefix(const AxisChar* prefix)
 {
-	logEntryEngine("SoapEnvelope::setPrefix")
+    logEntryEngine("SoapEnvelope::setPrefix")
 
     m_sPrefix= prefix;
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -221,29 +221,29 @@ setPrefix(const AxisChar* prefix)
 int SoapEnvelope::
 addStandardNamespaceDecl(const Attribute *pAttribute)
 {
-	logEntryEngine("SoapEnvelope::addStandardNamespaceDecl")
+    logEntryEngine("SoapEnvelope::addStandardNamespaceDecl")
 
     m_StandardNamespaceDecls.push_back(pAttribute);
-	
-	logExitWithReturnCode(AXIS_SUCCESS)
-	
+    
+    logExitWithReturnCode(AXIS_SUCCESS)
+    
     return AXIS_SUCCESS;
 }
 
 void SoapEnvelope::
 clearStandardNamespaceDecl()
 {
-	logEntryEngine("SoapEnvelope::clearStandardNamespaceDecl")
+    logEntryEngine("SoapEnvelope::clearStandardNamespaceDecl")
 
     m_StandardNamespaceDecls.clear();
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapEnvelope::
 serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 {
-	logEntryEngine("SoapEnvelope::serializeStandardNamespaceDecl")
+    logEntryEngine("SoapEnvelope::serializeStandardNamespaceDecl")
 
     list<const Attribute*>::iterator itCurrNamespaceDecl= m_StandardNamespaceDecls.begin();
     while (itCurrNamespaceDecl != m_StandardNamespaceDecls.end()) 
@@ -252,7 +252,7 @@ serializeStandardNamespaceDecl(SoapSerializer &pSZ)
         itCurrNamespaceDecl++;        
     }    
     
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }

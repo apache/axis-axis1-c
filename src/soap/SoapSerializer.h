@@ -56,11 +56,11 @@ class SoapAttachmentReference;
 class SoapSerializer : public IHandlerSoapSerializer
 {
 private:
-	map<AxisString, ISoapAttachment*> m_SoapAttachments;
-	list<SoapAttachmentReference*> m_attachmentRefs;
+    map<AxisString, ISoapAttachment*> m_SoapAttachments;
+    list<SoapAttachmentReference*> m_attachmentRefs;
     int m_nCounter;
     AxisChar m_Buf[BTS_BUFFSIZE];
-    SoapEnvelope* m_pSoapEnvelope;    	
+    SoapEnvelope* m_pSoapEnvelope;        
     int m_iSoapVersion;
     AXIS_BINDING_STYLE m_nStyle;
     /* Overall status of Serializer. If anything goes wrong this is not AXIS_SUCCESS */
@@ -69,13 +69,13 @@ private:
     map<AxisXMLString, AxisXMLString> m_NsStack;
     /* Provider type of current service that uses this Serializer object */
     PROVIDERTYPE m_ProviderType;
-	/* the local namespace for this serializer */
+    /* the local namespace for this serializer */
     AxisChar* m_pNamespace;
-	ContentIdSet *m_pContentIdSet;
+    ContentIdSet *m_pContentIdSet;
 
 public:
-	inline const AxisChar* AXISCALL getNamespace() const {return m_pNamespace;}; 
-	inline void AXISCALL setNamespace(const AxisChar* pNamespace) {m_pNamespace = (const_cast<AxisChar*>(pNamespace));}; 
+    inline const AxisChar* AXISCALL getNamespace() const {return m_pNamespace;}; 
+    inline void AXISCALL setNamespace(const AxisChar* pNamespace) {m_pNamespace = (const_cast<AxisChar*>(pNamespace));}; 
 
 #ifdef UNIT_TESTING_ON
     int setOutputStreamForTesting(SOAPTransport* pStream);
@@ -84,7 +84,7 @@ public:
 
     int AXISCALL createSoapFault(const AxisChar* sLocalName, 
         const AxisChar* sURI, const AxisChar* sFaultCode,
-	const AxisChar* sFaultString);
+    const AxisChar* sFaultString);
 
     IWrapperSoapSerializer& operator<<(const AxisChar* cSerialized);
     /**
@@ -140,9 +140,9 @@ public:
 
     int AXISCALL serializeBasicArray(const Axis_Array* pArray, XSDTYPE nType, 
         const AxisChar* pName);
-	
+    
     int AXISCALL serializeBasicArray(const Axis_Array* pArray, const AxisChar* pNamespace,
-		XSDTYPE nType, const AxisChar* pName);
+        XSDTYPE nType, const AxisChar* pName);
 
 
     /* following two functions are needed by serializer functions of complex 
@@ -165,29 +165,29 @@ public: /* Basic Type Serializing methods */
     IHeaderBlock* createHeaderBlock();
     
 private:
-	bool checkAttachmentAvailability();
-	void serializeAttachments(SoapSerializer &pSZ);
+    bool checkAttachmentAvailability();
+    void serializeAttachments(SoapSerializer &pSZ);
     BasicTypeSerializer m_BTSZ;
     SOAPTransport* m_pOutputStream;
 
 public:
-	IHeaderBlock* getCurrentHeaderBlock();
-	ISoapAttachment* createSoapAttachment();
-	void addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
-	void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
-	void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
-	void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
-	void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
+    IHeaderBlock* getCurrentHeaderBlock();
+    ISoapAttachment* createSoapAttachment();
+    void addNamespaceToNamespaceList(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
+    void addNamespaceToEnvelope(AxisChar *pachNamespaceURI, AxisChar* pachPrefix);
+    void addAttachmentBody(const AxisChar* achId, xsd__base64Binary* pAttchBody);
+    void addAttachmentHeader(const AxisChar* achId, const AxisChar* achHeaderName, const AxisChar* achHeaderValue);
+    void addAttachment(const AxisChar* achId, ISoapAttachment* pAttach);
     void addAttachments(ISoapAttachment** pAttach, int iAttchArraySize);
-	void setContentIdSet(ContentIdSet *pContentIdSet);
-	void addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes);
-	IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
-	IHeaderBlock* getFirstHeaderBlock();
-	IHeaderBlock* getNextHeaderBlock();
+    void setContentIdSet(ContentIdSet *pContentIdSet);
+    void addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes);
+    IHeaderBlock* getHeaderBlock(const AxisChar* pcName, const AxisChar* pcNamespace);
+    IHeaderBlock* getFirstHeaderBlock();
+    IHeaderBlock* getNextHeaderBlock();
 
-	int setSOAPMethodAttribute(Attribute* pAttribute);
+    int setSOAPMethodAttribute(Attribute* pAttribute);
     void clearSOAPMethodAttributes();
-	SoapMethod* getSOAPMethod();
+    SoapMethod* getSOAPMethod();
     IHeaderBlock* createHeaderBlock(const AxisChar *pachLocalName,
         const AxisChar *pachUri);
     /* to add a header block to the Serializer. Probably by a handler */
@@ -203,7 +203,7 @@ public:
                                     XSDTYPE type);
     int AXISCALL serializeAsElement(const AxisChar* pchName,
                                     IAnySimpleType* pSimpleType);
-	int AXISCALL serializeAsElement(const AxisChar* pchName,
+    int AXISCALL serializeAsElement(const AxisChar* pchName,
                                     const AxisChar* pNamespace,
                                     IAnySimpleType* pSimpleType);
     int AXISCALL serializeAsAttribute(const AxisChar* pName,
@@ -221,10 +221,10 @@ public:
     int AXISCALL setBodyAsHexBinary(xsd__hexBinary body);
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
     const AxisChar* AXISCALL getBodyAsString();
-	int addOutputAnyObject(AnyType* pAnyObject);
-	int serializeAnyObject(AnyType* pAnyObject);
+    int addOutputAnyObject(AnyType* pAnyObject);
+    int serializeAnyObject(AnyType* pAnyObject);
     int serializeAsChardata(void* pValue, XSDTYPE type);
-	AxisXMLString getNamespaceURL( string sNameSpace);
+    AxisXMLString getNamespaceURL( string sNameSpace);
     int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);    
 
   /**

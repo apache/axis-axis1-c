@@ -31,23 +31,23 @@ AXIS_CPP_NAMESPACE_START
 
 SoapAttachment::
 SoapAttachment(ContentIdSet *pContentIdSet)
-{	
-	m_AttachmentHeaders = new SoapAttachmentHeaders();
-	m_AttachmentBody = NULL;
+{    
+    m_AttachmentHeaders = new SoapAttachmentHeaders();
+    m_AttachmentBody = NULL;
     m_binaryBody = NULL;
-	m_pContentIdSet = pContentIdSet;
-	if (NULL!=m_pContentIdSet)
-		m_AttachmentHeaders->addHeader(AXIS_CONTENT_ID, pContentIdSet->generateId());
+    m_pContentIdSet = pContentIdSet;
+    if (NULL!=m_pContentIdSet)
+        m_AttachmentHeaders->addHeader(AXIS_CONTENT_ID, pContentIdSet->generateId());
 
-	// Set up some sensible default values for mandatory headers.
-	m_AttachmentHeaders->addHeader(AXIS_CONTENT_TYPE,"text/plain");
-	m_AttachmentHeaders->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
+    // Set up some sensible default values for mandatory headers.
+    m_AttachmentHeaders->addHeader(AXIS_CONTENT_TYPE,"text/plain");
+    m_AttachmentHeaders->addHeader(AXIS_CONTENT_TRANSFER_ENCODING,"base64");
 }
 
 SoapAttachment::
 ~SoapAttachment()
 {
-	delete m_AttachmentHeaders;
+    delete m_AttachmentHeaders;
     // client code generation does not assume this object will 
     // assume ownership of m_AttachmentBody!
     // Need to revisit, maybe add boolean that can be 
@@ -58,17 +58,17 @@ SoapAttachment::
 void SoapAttachment::
 addHeader(const char* pchName, const char* pchValue)
 {
-	// Registering the contentid here ensures that it is unique within the mime message.
-	if (NULL!=m_pContentIdSet && 0==strcmp(AXIS_CONTENT_ID,pchName)) 
-		m_pContentIdSet->registerId(pchValue);
-	m_AttachmentHeaders->addHeader(pchName, pchValue);
+    // Registering the contentid here ensures that it is unique within the mime message.
+    if (NULL!=m_pContentIdSet && 0==strcmp(AXIS_CONTENT_ID,pchName)) 
+        m_pContentIdSet->registerId(pchValue);
+    m_AttachmentHeaders->addHeader(pchName, pchValue);
 }
 
 void SoapAttachment::
 addBody(xsd__base64Binary* objBody)
 {
     iEncodingStyle = AXIS_BASE64;
-	m_AttachmentBody = objBody;
+    m_AttachmentBody = objBody;
 }
 
 void SoapAttachment::
@@ -86,18 +86,18 @@ addBody(char* pchBinaryBody)
 void SoapAttachment::
 serialize(SoapSerializer &pSZ)
 {
-	/* Serialize the Attachment Headers */
-	pSZ.serialize("\r\n", NULL);
-	m_AttachmentHeaders->serialize(pSZ);
+    /* Serialize the Attachment Headers */
+    pSZ.serialize("\r\n", NULL);
+    m_AttachmentHeaders->serialize(pSZ);
 
-	/* Serialize the Attachment Body */
+    /* Serialize the Attachment Body */
     if (iEncodingStyle == AXIS_BASE64)
     {
-	    if (m_AttachmentBody) 
+        if (m_AttachmentBody) 
         {
-		    pSZ.serialize("\r\n", NULL);
-		    pSZ.serializeAsChardata(m_AttachmentBody, XSD_BASE64BINARY);
-	    }
+            pSZ.serialize("\r\n", NULL);
+            pSZ.serializeAsChardata(m_AttachmentBody, XSD_BASE64BINARY);
+        }
     } 
     else if (iEncodingStyle == AXIS_BINARY)
     {
@@ -121,19 +121,19 @@ serialize(SoapSerializer &pSZ)
         }
     }
 
-	pSZ.serialize("\r\n", NULL);
+    pSZ.serialize("\r\n", NULL);
 }
 
 xsd__base64Binary* SoapAttachment::
 getBody()
 {
-	return m_AttachmentBody;
+    return m_AttachmentBody;
 }
 
 const char* SoapAttachment::
 getHeader(const char *pchName)
 {
-	return m_AttachmentHeaders->getHeader(pchName);
+    return m_AttachmentHeaders->getHeader(pchName);
 }
 
 const char* SoapAttachment::

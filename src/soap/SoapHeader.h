@@ -66,7 +66,7 @@ private:
     
     const char* m_pcPrefix;
 public:
-	IHeaderBlock* getCurrentHeaderBlock();
+    IHeaderBlock* getCurrentHeaderBlock();
     /**
       * Gets and returns the Header Block, of the given name.
       *

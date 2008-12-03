@@ -54,7 +54,7 @@ public:
       * If not found returns NULL.
       */
     IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,
-	    AxisChar* pachLocalname);
+        AxisChar* pachLocalname);
                                                                                                                                                                             
     /**
       * Returns the first Attribute of this node. NOTE: When traversing the 
