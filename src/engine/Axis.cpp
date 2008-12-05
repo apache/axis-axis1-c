@@ -99,11 +99,6 @@ void ModuleInitialize ()
     g_pHandlerPool = new HandlerPool ();
     // unsynchronized read-only global variables.
     g_pWSDDDeployment = new WSDDDeployment ();
-
-    if( g_pConfig != NULL)
-        g_pConfig = new AxisConfig( g_pConfig);
-    else
-        g_pConfig = new AxisConfig();
 }
 
 void ModuleUnInitialize ()
@@ -343,17 +338,13 @@ int initialize_module (int bServer)
     {
         if (g_uModuleInitialize == 0)
         {
-            // order of these initialization method invocation should not be changed
-            AxisEngine::m_bServer = bServer;
-            AxisUtils::initialize ();
-            WSDDKeywords::initialize ();
-            SoapKeywordMapping::initialize ();
-            TypeMapping::initialize ();
-            URIMapping::initialize ();
-            SoapFault::initialize ();
-            ModuleInitialize ();
-
+            // Read config file and enable trace....this should be first thing that is done!!!
             // Read from the configuration file
+            if( g_pConfig != NULL)
+                g_pConfig = new AxisConfig( g_pConfig);
+            else
+                g_pConfig = new AxisConfig();
+            
             status = g_pConfig->readConfFile (); 
             if (status == AXIS_SUCCESS)
             {
@@ -375,6 +366,16 @@ int initialize_module (int bServer)
             
             // The entry log must start here - may revisit so as to start earlier. 
             logEntryEngine("initialize_module")
+            
+            // order of these initialization method invocation should not be changed
+            AxisEngine::m_bServer = bServer;
+            AxisUtils::initialize ();
+            WSDDKeywords::initialize ();
+            SoapKeywordMapping::initialize ();
+            TypeMapping::initialize ();
+            URIMapping::initialize ();
+            SoapFault::initialize ();
+            ModuleInitialize ();
             
             if (bServer) // no client side wsdd processing at the moment
             {
@@ -428,9 +429,10 @@ int initialize_module (int bServer)
                /* Ok if we can't read config file */
                status = AXIS_SUCCESS;
            }
+            
            g_isRunning = true;
            
-              logExitWithReturnCode(status)
+           logExitWithReturnCode(status)
        }
        else if (AxisEngine::m_bServer != bServer)
        {           
