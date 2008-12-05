@@ -195,6 +195,10 @@ Axis_Array * Axis_Array::clone() const
 void Axis_Array::set(void** array, int size, XSDTYPE type)
 {
     clear();
+    
+    if (array == NULL)
+    	size = 0;
+    
     m_Size = size;
     m_Array = NULL;
     m_Type = type;
