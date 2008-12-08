@@ -74,6 +74,9 @@ public:
     void setSoapHeader(SoapHeader* soapHeader);
     SoapEnvelope();
     virtual ~SoapEnvelope();
+    
+    void clearNonStandardNamespaceDecl();
+    void reset();
 };
 
 AXIS_CPP_NAMESPACE_END

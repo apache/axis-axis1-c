@@ -79,7 +79,8 @@ public:
     void setSoapMethod(SoapMethod* ptrSoapMethod);
     SoapBody();
     virtual ~SoapBody();
-
+    
+    SoapMethod *getSoapMethod() { return m_pSoapMethod; }
 };
 
 AXIS_CPP_NAMESPACE_END

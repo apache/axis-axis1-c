@@ -64,16 +64,7 @@ SoapEnvelope::
 
     m_attributes.clear();
 
-    // deletion of namespace declerations 
-    list<Attribute*>::iterator itCurrNamespaceDecls= m_namespaceDecls.begin();
-
-    while (itCurrNamespaceDecls != m_namespaceDecls.end())
-    {        
-        delete *itCurrNamespaceDecls;
-        itCurrNamespaceDecls++;
-    }
-
-    m_namespaceDecls.clear();
+    clearNonStandardNamespaceDecl();
 
     // deletion of soap header 
     delete m_pSoapHeader;
@@ -240,6 +231,24 @@ clearStandardNamespaceDecl()
     logExit()
 }
 
+void SoapEnvelope::
+clearNonStandardNamespaceDecl()
+{
+    logEntryEngine("SoapEnvelope::clearNonStandardNamespaceDecl")
+
+    list<Attribute*>::iterator itCurrNamespaceDecls= m_namespaceDecls.begin();
+
+    while (itCurrNamespaceDecls != m_namespaceDecls.end())
+    {
+        delete *itCurrNamespaceDecls;
+        itCurrNamespaceDecls++;
+    }
+
+    m_namespaceDecls.clear();      
+    
+    logExit()
+}
+
 int SoapEnvelope::
 serializeStandardNamespaceDecl(SoapSerializer &pSZ)
 {
@@ -257,5 +266,24 @@ serializeStandardNamespaceDecl(SoapSerializer &pSZ)
     return AXIS_SUCCESS;
 }
 
+void SoapEnvelope::
+reset()
+{
+    logEntryEngine("SoapEnvelope::reset")
+
+    clearNonStandardNamespaceDecl();
+    
+    if (m_pSoapBody)
+    {
+        SoapMethod * soapMethod = m_pSoapBody->getSoapMethod();
+        if ( soapMethod )
+            soapMethod->clearOutParams(); 
+    } 
+    
+    if ( m_pSoapHeader )
+        m_pSoapHeader->clear();
+    
+    logExit()
+}
 AXIS_CPP_NAMESPACE_END
 

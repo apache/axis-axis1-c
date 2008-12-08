@@ -1533,11 +1533,8 @@ reset()
 
     m_nCounter = 0; // reset namespace prifix counter 
 
-    if( m_pSoapEnvelope && (m_pSoapEnvelope->m_pSoapBody) && (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->clearOutParams();    
-
-    if( m_pSoapEnvelope && m_pSoapEnvelope->m_pSoapHeader )
-        m_pSoapEnvelope->m_pSoapHeader->clear();
+    if( m_pSoapEnvelope )
+        m_pSoapEnvelope->reset();
     
     logExit()
 }
