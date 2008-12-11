@@ -1,0 +1,13 @@
+<test>
+    <name>DocLitNonwrapperTests</name>
+    <description>DocLitNonwrapperTests</description>
+    <clientLang>cpp</clientLang>
+    <clientCode>DocLitNonwrapperTestsClient.cpp</clientCode>
+    <wsdl>DocLitNonwrapperTests.wsdl</wsdl>
+    <expected>
+        <request>DocLitNonwrapperTests_ClientRequest.expected</request>
+        <output>DocLitNonwrapperTests.cpp.out</output>
+		<serverResponse>DocLitNonwrapperTests_ServerResponse.expected</serverResponse>
+    </expected>
+	<endpoint>http://localhost:80/axis/Operation</endpoint>
+</test>

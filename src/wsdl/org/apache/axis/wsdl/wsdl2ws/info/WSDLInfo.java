@@ -1261,13 +1261,14 @@ public class WSDLInfo
         // For wrapped style, inner attributes and elements are added as parameters.
         // For unwrapped style, objects are used for the parameters (i.e. classes or structures).
         
-        Iterator names = type.getElementnames();
+        Iterator elementNames = type.getElementnames();
+        Iterator attributes   = type.getAttributes();
         if (!minfo.isUnwrapped())
         {
-            if (!names.hasNext())
+            if (!elementNames.hasNext())
             {
-                // TODO what if not simple?
-                if (type.isSimpleType())
+                // Type must be simple or primitive...we do a check just to make sure.
+                if (type.isSimpleType() || type.isPrimitiveType())
                 {
                     String elementName = (String) element.getQName().getLocalPart();
                     ParameterInfo pinfo = new ParameterInfo();
@@ -1281,9 +1282,9 @@ public class WSDLInfo
             }
             else
             {
-                while (names.hasNext())
+                while (elementNames.hasNext())
                 {
-                    String elementname  = (String) names.next();
+                    String elementname  = (String) elementNames.next();
                     CElementDecl eleinfo = type.getElementForElementName(elementname);
                     Type innerType      = eleinfo.getType();
                     
@@ -1302,25 +1303,37 @@ public class WSDLInfo
         }
         else
         { 
-            String elementName = (String) element.getQName().getLocalPart();
-            
-            ParameterInfo pinfo = new ParameterInfo();
-            pinfo.setType(type);
-            type.setIsUnwrappedOutputType(true);
-            pinfo.setParamName(elementName, c_typeMap);
-            
-            if (!names.hasNext() && type.isSimpleType())
-                pinfo.setElementName(element.getQName());
-            else
-                pinfo.setElementName(type.getName());
-            
-            pinfo.setAnyElement(type.isAnyElement());
-            
-            // Let us be nice and uppercase the first character in type name, 
-            // in addition to resolving method name/type conflicts.
-            type.setLanguageSpecificName(generateNewTypeName(type, minfo));
-            
-            minfo.addOutputParameter(pinfo);
+            // Ensure there is a response, if not, then operation is a one-way operation.
+            if (type.isSimpleType() 
+                    || type.isPrimitiveType()
+                    || elementNames.hasNext() 
+                    || (attributes != null && attributes.hasNext()))
+            {
+                String elementName = (String) element.getQName().getLocalPart();
+                
+                ParameterInfo pinfo = new ParameterInfo();
+                pinfo.setType(type);
+                type.setIsUnwrappedOutputType(true);
+                pinfo.setParamName(elementName, c_typeMap);
+                
+                if (!elementNames.hasNext() && (type.isSimpleType() || type.isPrimitiveType()))
+                    pinfo.setElementName(element.getQName());
+                else
+                    pinfo.setElementName(type.getName());
+                
+                pinfo.setAnyElement(type.isAnyElement());
+                
+                // Let us be nice and uppercase the first character in type name, 
+                // in addition to resolving method name/type conflicts.
+                type.setLanguageSpecificName(generateNewTypeName(type, minfo));
+                
+                minfo.addOutputParameter(pinfo);
+            }
+            else if (!elementNames.hasNext())
+            {
+                // empty element....check message response but no deserialization necessary
+                minfo.setConsumeBodyOnMessageValidation(true);
+            }
         }
     }
 

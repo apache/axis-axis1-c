@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2003-2004 The Apache Software Foundation.                      -->
+<!-- (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved                   -->
+<!--                                                                          -->
+<!-- Licensed under the Apache License, Version 2.0 (the "License");          -->
+<!-- you may not use this file except in compliance with the License.         -->
+<!-- You may obtain a copy of the License at                                  -->
+<!--                                                                          -->
+<!--        http://www.apache.org/licenses/LICENSE-2.0                        -->
+<!--                                                                          -->
+<!-- Unless required by applicable law or agreed to in writing, software      -->
+<!-- distributed under the License is distributed on an "AS IS" BASIS,        -->
+<!-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
+<!-- See the License for the specific language governing permissions and      -->
+<!-- limitations under the License.                                           -->
+
+
+<!-- WSDL to test doc/lit non-wrapper  -->
+
+<wsdl:definitions targetNamespace="http://localhost/axis/Version" 
+                  xmlns="http://schemas.xmlsoap.org/wsdl/" 
+                  xmlns:intf="http://localhost/axis/Version" 
+                  xmlns:tns1="http://dom.w3c.org" 
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+                  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" 
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema targetNamespace="http://dom.w3c.org" xmlns="http://www.w3.org/2001/XMLSchema">
+    
+      <element name="inDocument" nillable="true" type="xsd:string" />
+      <element name="return" nillable="true" type="xsd:string" />
+
+
+
+      <element name="Operation2Request">
+      	<xsd:complexType>
+      		<sequence>
+      			<element name="number1" type="xsd:int" />
+      		</sequence>
+      	</xsd:complexType>
+      </element>
+      
+      <element name="Operation2Response">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<element name="result" type="xsd:int" />
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </element>
+      
+      
+      <element name="Operation3Request">
+        <xsd:complexType/>
+      </element>
+      
+      <element name="Operation3Response">
+        <xsd:complexType>
+            <xsd:sequence>
+                <element name="result" type="xsd:int" />
+            </xsd:sequence>
+        </xsd:complexType>
+      </element>
+
+
+      <xsd:complexType name="aRecord">
+      	<xsd:sequence>
+      		<xsd:element name="field1" type="xsd:string" nillable="false" />
+      		<xsd:element name="field2" type="xsd:string" nillable="false" />
+      		<xsd:element name="field3" type="xsd:string" nillable="false" />
+      	</xsd:sequence>
+      </xsd:complexType>
+
+      <element name="Operation4Request">
+        <xsd:complexType>
+            <sequence>
+                <element name="record" type="tns1:aRecord" />
+            </sequence>
+        </xsd:complexType>
+      </element>
+      
+      <element name="Operation4Response">
+        <xsd:complexType/>
+      </element>      
+                  
+      <element name="Operation5Request">
+        <xsd:complexType>
+            <sequence>
+                <element name="record" type="tns1:aRecord" />
+            </sequence>
+        </xsd:complexType>
+      </element>
+      
+    </schema>
+  </wsdl:types>
+  
+  <wsdl:message name="Operation1Response">
+    <wsdl:part element="tns1:return" name="return" />
+  </wsdl:message>
+  
+  <wsdl:message name="Operation1Request">
+    <wsdl:part element="tns1:inDocument" name="inDocument" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation2Response">
+  	<wsdl:part element="tns1:Operation2Response" name="Operation2Response" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation2Request">
+  	<wsdl:part element="tns1:Operation2Request" name="Operation2Request" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation3Response">
+    <wsdl:part element="tns1:Operation3Response" name="Operation3Response" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation3Request">
+    <wsdl:part element="tns1:Operation3Request" name="Operation3Request" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation4Response">
+    <wsdl:part element="tns1:Operation4Response" name="Operation4Response" />
+  </wsdl:message>
+
+  <wsdl:message name="Operation4Request">
+    <wsdl:part element="tns1:Operation4Request" name="Operation4Request" />
+  </wsdl:message>
+  
+  <wsdl:message name="Operation5Request">
+    <wsdl:part element="tns1:Operation5Request" name="Operation5Request" />
+  </wsdl:message>
+  
+  <wsdl:portType name="OperationWS">
+  
+    <wsdl:operation name="Operation1">
+      <wsdl:input message="intf:Operation1Request" name="Operation1Request" />
+      <wsdl:output message="intf:Operation1Response" name="Operation1Response" />
+    </wsdl:operation>
+
+    <wsdl:operation name="Operation2">
+    	<wsdl:input message="intf:Operation2Request" name="Operation2Request" />
+    	<wsdl:output message="intf:Operation2Response"	name="Operation2Response" />
+    </wsdl:operation>
+
+    <wsdl:operation name="Operation3">
+        <wsdl:input message="intf:Operation3Request" name="Operation3Request" />
+        <wsdl:output message="intf:Operation3Response"  name="Operation3Response" />
+    </wsdl:operation>
+      
+    <wsdl:operation name="Operation4">
+        <wsdl:input message="intf:Operation4Request" name="Operation4Request" />
+        <wsdl:output message="intf:Operation4Response"  name="Operation4Response" />
+    </wsdl:operation>
+            
+    <wsdl:operation name="Operation5">
+        <wsdl:input message="intf:Operation5Request" name="Operation5Request" />
+    </wsdl:operation>
+                    
+  </wsdl:portType>
+  
+  <wsdl:binding name="OperationSoapBinding" type="intf:OperationWS">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    
+    <wsdl:operation name="Operation1">
+      <wsdlsoap:operation soapAction="" />
+      
+      <wsdl:input name="Operation1Request">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      
+      <wsdl:output name="Operation1Response">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="Operation2">
+      <wsdlsoap:operation soapAction="" />
+      
+      <wsdl:input name="Operation2Request">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      
+      <wsdl:output name="Operation2Response">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+ 
+    
+    <wsdl:operation name="Operation3">
+      <wsdlsoap:operation soapAction="" />
+      
+      <wsdl:input name="Operation3Request">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      
+      <wsdl:output name="Operation3Response">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+     
+    
+    <wsdl:operation name="Operation4">
+      <wsdlsoap:operation soapAction="" />
+      
+      <wsdl:input name="Operation4Request">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      
+      <wsdl:output name="Operation4Response">
+        <wsdlsoap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+         
+    <wsdl:operation name="Operation5">
+      <wsdlsoap:operation soapAction="" />
+      
+      <wsdl:input name="Operation5Request">
+        <wsdlsoap:body use="literal" />
+      </wsdl:input>
+      
+    </wsdl:operation>         
+  </wsdl:binding>
+  
+  <wsdl:service name="OperationWSService">
+    <wsdl:port binding="intf:OperationSoapBinding" name="Operation">
+      <wsdlsoap:address location="http://localhost/axis/Operation" />
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>

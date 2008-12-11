@@ -367,13 +367,23 @@ public class ClientStubWriter
             namespaceURI = "";
 
         // Need to give indication to serializer whether wrapped or unwrapped style is being done.
-        // Note that the only time we override this if there are no input parameters.
-        String iswrapperstyle = "true";
-        if (minfo.isUnwrapped() && paramsB.size () > 0)
-            iswrapperstyle = "false";
+        // And for non-wrapper style, the "operation" is not the method name, but the element name
+        // of the root node. 
+        String iswrapperstyle   = "true";
+        String actualMethodName = minfo.getMethodname();
+        
+        if (minfo.isUnwrapped())
+        {
+            iswrapperstyle   = "false";
+            
+            if( minfo.getInputMessage() != null)
+                actualMethodName = minfo.getInputMessage().getLocalPart();
+            else
+                actualMethodName = "";
+        }
         
          c_writer.write( "\t\tm_pCall->setOperation(\""
-                + minfo.getMethodname() + "\", \""
+                + actualMethodName + "\", \""
                 + namespaceURI + "\", " + iswrapperstyle + ");\n");
             
         //=============================================================================
@@ -446,11 +456,7 @@ public class ClientStubWriter
                 }
                 
                 // If unwrapped, we pass in null string for qualified element name. 
-                if (minfo.isUnwrapped() && !type.isSimpleType() && !type.isPrimitiveType())
-                {
-                    c_writer.write (tab2 + "\t\tchar cPrefixAndParamName" + i + "[" + "] = \"\";\n");                    
-                }
-                else if (namespace.length () == 0)
+                if (namespace.length () == 0)
                 {
                     c_writer.write (tab2 + "\t\tchar cPrefixAndParamName"
                               + i + "[" + "] = \"" + parameterName + "\";\n");
@@ -789,7 +795,7 @@ public class ClientStubWriter
         else if (returntype == null)
         {
             if (minfo.getOutputMessage () != null)
-                c_writer.write ("\t\t\t\t// no output?\n\t\t\t}\n");
+                c_writer.write ("\t\t\t\t// no output to process\n\t\t\t}\n");
         }
         else if (returntype.isAnyElement ())
         {

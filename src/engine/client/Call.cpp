@@ -171,6 +171,14 @@ void Call::setOperation (const char* pchOperation,
     SoapMethod* sm = getSOAPSerializer()->getSOAPMethod();
     sm->setWrapperStyle(bIsWrapperStyle); 
     
+    if (!bIsWrapperStyle)
+    {
+        // TODO why can we not do this for wrapper-style also? For wrapper, we add namespace
+        //      definition to wrapper element, but why not to envelope? Investigate.
+        m_pIWSSZ->addNamespaceToEnvelope((AxisChar * )pchNamespace, 
+                                         (AxisChar * )m_pIWSSZ->getNamespacePrefix(pchNamespace));
+    }
+    
     logExit()
 }
 

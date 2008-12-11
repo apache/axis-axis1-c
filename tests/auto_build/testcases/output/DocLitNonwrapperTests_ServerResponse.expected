@@ -1,0 +1,73 @@
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dom="http://dom.w3c.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dom:return>Some textual data</dom:return>
+   </soapenv:Body>
+</soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dom="http://dom.w3c.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dom:Operation2Response>
+         <result>222</result>
+      </dom:Operation2Response>
+   </soapenv:Body>
+</soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dom="http://dom.w3c.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dom:Operation3Response>
+         <result>33</result>
+      </dom:Operation3Response>
+   </soapenv:Body>
+</soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Server: WebSphere Application Server/5.1
+Content-Type: text/xml; charset=utf-8
+Content-Language: en-GB
+Transfer-Encoding: chunked
+
+###
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:dom="http://dom.w3c.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <dom:Operation4Response/>
+   </soapenv:Body>
+</soapenv:Envelope>
+0
+
+HTTP/1.1 200 OK
+Content-Type: text/xml; charset=utf-8
+Content-Length: 0
+Server: Jetty(6.1.x)
+

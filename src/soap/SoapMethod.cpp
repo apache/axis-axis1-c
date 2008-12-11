@@ -34,83 +34,78 @@ AXIS_CPP_NAMESPACE_START
 SoapMethod::
 SoapMethod()
 {
-	logEntryEngine("SoapMethod::SoapMethod")
+    logEntryEngine("SoapMethod::SoapMethod")
 
-	reset();
-	
-	logExit()
+    reset();
+    
+    logExit()
 }
 
 SoapMethod::
 ~SoapMethod()
 {
-	logEntryEngine("SoapMethod::~SoapMethod")
+    logEntryEngine("SoapMethod::~SoapMethod")
 
     clearAttributes();
     clearOutParams();
     
-	logExit()
+    logExit()
 }
 
 void SoapMethod::
 setPrefix(const AxisChar* prefix)
 {
-	logEntryEngine("SoapMethod::setPrefix")
+    logEntryEngine("SoapMethod::setPrefix")
 
-	if (NULL == prefix)
-		m_strPrefix = "";
-	else
-		m_strPrefix = prefix;
-	
-	logExit()
+    if (NULL == prefix)
+        m_strPrefix = "";
+    else
+        m_strPrefix = prefix;
+    
+    logExit()
 }
 
 void SoapMethod::
 setLocalName(const AxisChar* localname)
 {
-	logEntryEngine("SoapMethod::setLocalName")
+    logEntryEngine("SoapMethod::setLocalName")
 
-	if (NULL == localname)
-		m_strLocalname = "";
-	else
-		m_strLocalname = localname;
-	
-	logExit()
+    if (NULL == localname)
+        m_strLocalname = "";
+    else
+        m_strLocalname = localname;
+    
+    logExit()
 }
 
 void SoapMethod::
 setURI(const AxisChar* uri)
 {
-	logEntryEngine("SoapMethod::setURI")
+    logEntryEngine("SoapMethod::setURI")
 
-	if (NULL == uri)
-		m_strUri = "";
-	else
-		m_strUri = uri;
-	
-	logExit()
+    if (NULL == uri)
+        m_strUri = "";
+    else
+        m_strUri = uri;
+    
+    logExit()
 }
 
 void SoapMethod::
 addOutputParam(Param *param)
 {
-	logEntryEngine("SoapMethod::addOutputParam")
+    logEntryEngine("SoapMethod::addOutputParam")
 
     if (param)
-    {
-    	if (m_OutputParams.empty() && param->isSimpleType())
-    		m_addEndTagForUnwrapped = true;
-    	
         m_OutputParams.push_back(param);
-    }
-	
-	logExit()
+    
+    logExit()
 }
 
 int SoapMethod::
 serialize(SoapSerializer& pSZ)
 {   
-	logEntryEngine("SoapMethod::serialize")
+    logEntryEngine("SoapMethod::serialize")
 
     int iStatus= AXIS_SUCCESS;
 
@@ -118,55 +113,83 @@ serialize(SoapSerializer& pSZ)
     {
         if(isSerializable())
         {           
-            pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
-                " xmlns:", m_strPrefix.c_str(),
-                "=\"", m_strUri.c_str(), "\"", NULL);
-
-            list<AxisChar*> lstTmpNameSpaceStack;
-
-            iStatus= serializeAttributes(pSZ, lstTmpNameSpaceStack);
-            if(iStatus==AXIS_FAIL)
-                break;
-            
-            // If not wrapper style, then end tag will be added by bean - if parameter is complex type. 
-            // This is a hack in order to keep backward compatibility.
-            if (m_isWrapperStyle || m_addEndTagForUnwrapped)
-            	pSZ.serialize(">\n", NULL);
-
-            // push the current NS to the NS stack
-            pSZ.getNamespacePrefix(m_strUri.c_str());
-
-            iStatus= serializeOutputParam(pSZ);
-
-            // remove the current NS from the NS stack
-            pSZ.removeNamespacePrefix(m_strUri.c_str());
-
-            if(iStatus==AXIS_FAIL)
-                break;
-            
-            pSZ.serialize("</", NULL);
-
-            if(m_strPrefix.length() != 0)
-                pSZ.serialize(m_strPrefix.c_str(), ":", NULL);
-            
-            pSZ.serialize(m_strLocalname.c_str(), ">\n", NULL);
-
-            // Removing the namespace list of this SOAPMethod from the stack.
-            list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
-            while (itCurrentNamespace != lstTmpNameSpaceStack.end())
+            if (m_isWrapperStyle)
             {
-                pSZ.removeNamespacePrefix(*itCurrentNamespace);
-                itCurrentNamespace++;
+                pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
+                    " xmlns:", m_strPrefix.c_str(),
+                    "=\"", m_strUri.c_str(), "\"", NULL);
+    
+                list<AxisChar*> lstTmpNameSpaceStack;
+    
+                iStatus= serializeAttributes(pSZ, lstTmpNameSpaceStack);
+                if(iStatus==AXIS_FAIL)
+                    break;
+                
+                pSZ.serialize(">\n", NULL);
+    
+                // push the current NS to the NS stack
+                pSZ.getNamespacePrefix(m_strUri.c_str());
+    
+                iStatus= serializeOutputParam(pSZ);
+    
+                // remove the current NS from the NS stack
+                pSZ.removeNamespacePrefix(m_strUri.c_str());
+    
+                if(iStatus==AXIS_FAIL)
+                    break;
+                
+                pSZ.serialize("</", NULL);
+    
+                if(m_strPrefix.length() != 0)
+                    pSZ.serialize(m_strPrefix.c_str(), ":", NULL);
+                
+                pSZ.serialize(m_strLocalname.c_str(), ">\n", NULL);
+    
+                // Removing the namespace list of this SOAPMethod from the stack.
+                list<AxisChar*>::iterator itCurrentNamespace = lstTmpNameSpaceStack.begin();
+                while (itCurrentNamespace != lstTmpNameSpaceStack.end())
+                {
+                    pSZ.removeNamespacePrefix(*itCurrentNamespace);
+                    itCurrentNamespace++;
+                }
+    
+                iStatus= AXIS_SUCCESS;
             }
-
-            iStatus= AXIS_SUCCESS;
+            else
+            {
+            	// We are doing non-wrapper style.  The call to Call::setOperation resulted in 
+            	// initial namespace being added to the envelope.  So we do not have to define
+            	// initial namespace, although we need to define it to the serializer so that
+            	// subsequent namespaces are indexed correctly.
+            	
+            	if (!m_OutputParams.empty())
+            	{
+            		// Serialize parameters....
+            		
+	                // push the current NS to the NS stack
+	                pSZ.getNamespacePrefix(m_strUri.c_str());
+	                
+	                iStatus= serializeOutputParam(pSZ);
+	                
+	                // remove the current NS from the NS stack
+	                pSZ.removeNamespacePrefix(m_strUri.c_str());
+	                
+	                if(iStatus==AXIS_FAIL)
+	                    break;
+            	}
+            	else if (!m_strLocalname.empty())
+            	{
+            		// Serialize an empty element request.
+                    pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(), "/>", NULL);
+            	}
+            }
         }
         else
             iStatus= AXIS_FAIL;
     } 
     while(0);
             
-	logExitWithReturnCode(iStatus)
+    logExitWithReturnCode(iStatus)
 
     return iStatus;
 }
@@ -174,7 +197,7 @@ serialize(SoapSerializer& pSZ)
 int SoapMethod::
 serializeOutputParam(SoapSerializer& pSZ)
 {
-	logEntryEngine("SoapMethod::serializeOutputParam")
+    logEntryEngine("SoapMethod::serializeOutputParam")
 
     int nStatus = AXIS_SUCCESS;
     
@@ -183,7 +206,7 @@ serializeOutputParam(SoapSerializer& pSZ)
         if (AXIS_SUCCESS != (nStatus = (*it)->serialize(pSZ)))
             break;
 
-	logExitWithReturnCode(nStatus)
+    logExitWithReturnCode(nStatus)
 
     return nStatus;
 }
@@ -197,7 +220,7 @@ getMethodName()
 bool SoapMethod::
 isSerializable()
 {
-	logEntryEngine("SoapMethod::isSerializable")
+    logEntryEngine("SoapMethod::isSerializable")
 
     bool bStatus= true;    
 
@@ -225,12 +248,12 @@ isSerializable()
 int SoapMethod::
 addAttribute(Attribute *pAttribute)
 {
-	logEntryEngine("SoapMethod::addAttribute")
+    logEntryEngine("SoapMethod::addAttribute")
 
-	if (pAttribute)
-		m_attributes.push_back(pAttribute);
+    if (pAttribute)
+        m_attributes.push_back(pAttribute);
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -238,7 +261,7 @@ addAttribute(Attribute *pAttribute)
 int SoapMethod::
 serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
-	logEntryEngine("SoapMethod::serializeAttributes")
+    logEntryEngine("SoapMethod::serializeAttributes")
 
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
 
@@ -248,7 +271,7 @@ serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
         itCurrAttribute++;        
     }    
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;    
 }
@@ -256,17 +279,17 @@ serializeAttributes(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 int SoapMethod::
 reset()
 {
-	logEntryEngine("SoapMethod::reset")
+    logEntryEngine("SoapMethod::reset")
 
-    m_addEndTagForUnwrapped = false;
-	m_isWrapperStyle = true;
+    m_isWrapperStyle = true;
     m_strUri = "";
     m_strLocalname = "";
     m_strPrefix = "";
-    m_OutputParams.clear();
-    m_attributes.clear();
+    
+    clearOutParams();
+    clearAttributes();
 
-	logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(AXIS_SUCCESS)
 
     return AXIS_SUCCESS;
 }
@@ -274,16 +297,16 @@ reset()
 void SoapMethod::
 clearOutParams()
 {
-	logEntryEngine("SoapMethod::clearOutParams")
+    logEntryEngine("SoapMethod::clearOutParams")
 
     if ( !m_OutputParams.empty() )
     {
-	    list<Param*>::iterator itParam;
-	    
-	    for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
-	        delete *itParam;
-	        
-	    m_OutputParams.clear();
+        list<Param*>::iterator itParam;
+        
+        for (itParam = m_OutputParams.begin(); itParam != m_OutputParams.end(); itParam++)
+            delete *itParam;
+            
+        m_OutputParams.clear();
     }
     
     logExit()
@@ -292,16 +315,16 @@ clearOutParams()
 void SoapMethod::
 clearAttributes()
 {
-	logEntryEngine("SoapMethod::clearAttributes")
+    logEntryEngine("SoapMethod::clearAttributes")
 
     if (!m_attributes.empty())
     {
-	    list<Attribute*>::iterator it;
-	    
-	    for (it = m_attributes.begin(); it != m_attributes.end(); ++it)
-	        delete *it;
-	    
-	    m_attributes.clear();
+        list<Attribute*>::iterator it;
+        
+        for (it = m_attributes.begin(); it != m_attributes.end(); ++it)
+            delete *it;
+        
+        m_attributes.clear();
     }
     
     logExit()

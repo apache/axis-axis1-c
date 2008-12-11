@@ -366,13 +366,24 @@ public class ClientStubWriter
             namespaceURI = "";
 
         // Need to give indication to serializer whether wrapped or unwrapped style is being done.
-        // Note that the only time we override this if there are no input parameters.
-        if (minfo.isUnwrapped() && paramsB.size () > 0)
-            c_writer.write("\taxiscCallSetOperationUnwrapped(call, \"");
+        // And for non-wrapper style, the "operation" is not the method name, but the element name
+        // of the root node. 
+        
+        if (minfo.isUnwrapped())
+        {
+            String actualMethodName = "";
+
+            if( minfo.getInputMessage() != null)
+                actualMethodName = minfo.getInputMessage().getLocalPart();
+            
+            c_writer.write("\taxiscCallSetOperationUnwrapped(call, \"" +
+                           actualMethodName + "\", \"" + namespaceURI + "\");\n");
+        }
         else
-            c_writer.write("\taxiscCallSetOperation(call, \"");
-        c_writer.write( minfo.getMethodname() + "\", \""
-            + namespaceURI + "\");\n");
+        {
+            c_writer.write("\taxiscCallSetOperation(call, \"" +
+                            minfo.getMethodname() + "\", \"" + namespaceURI + "\");\n");
+        }
         
         //=============================================================================
         // Apply user specified properties
@@ -442,11 +453,7 @@ public class ClientStubWriter
                 else
                     c_writer.write("\t{\n"); // following was added to instantiate variables on the fly
                 
-                if (minfo.isUnwrapped() && !type.isSimpleType() && !type.isPrimitiveType())
-                {
-                    c_writer.write ("\t\tchar cPrefixAndParamName" + i + "[" + "] = \"\";\n");                    
-                }                
-                else if (namespace.length () == 0)
+                if (namespace.length () == 0)
                 {
                     c_writer.write ("\t\tchar cPrefixAndParamName"
                               + i + "[" + "] = \"" + parameterName + "\";\n");
@@ -797,7 +804,7 @@ public class ClientStubWriter
         else if (returntype == null)
         {
             if (minfo.getOutputMessage () != null)
-                c_writer.write ("\t\t\t// no output?\n\t\t}\n");
+                c_writer.write ("\t\t\t// no output to process\n\t\t}\n");
         }
         else if (returntype.isAnyElement ())
         {
