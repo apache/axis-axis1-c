@@ -178,8 +178,6 @@ readConfFile ()
         sscanf (carrLine, "%s", key);
         iValueLength = linesize - strlen (key) - 1;
     
-        bool bKeyFound = false;
-    
         for (int i = 0; i < AXCONF_LAST; i++)
         {
             if (m_pcKeyArray[i] == key)
@@ -206,14 +204,8 @@ readConfFile ()
                     }
                 }
         
-                bKeyFound = true;
                 break;
             }
-        }
-    
-        if (!bKeyFound)
-        {
-            printf ("Warning - Unknown key (%s) in config file.\n", key);
         }
     }
 
