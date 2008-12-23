@@ -81,6 +81,7 @@ public:
     int setOutputStreamForTesting(SOAPTransport* pStream);
 #endif
     int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI);
+    int AXISCALL createSoapMethod(const AxisChar* sLocalName, const AxisChar* sURI, bool bIsWrapperStyle);
 
     int AXISCALL createSoapFault(const AxisChar* sLocalName, 
         const AxisChar* sURI, const AxisChar* sFaultCode,

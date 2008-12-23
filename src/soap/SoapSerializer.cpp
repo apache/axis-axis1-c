@@ -612,8 +612,18 @@ operator << (const AxisChar * cSerialized)
     return *this;
 }
 
+// deprecated.....
 int SoapSerializer::
-createSoapMethod( const AxisChar * sLocalName, const AxisChar * sURI)
+createSoapMethod( const AxisChar * sLocalName, 
+                  const AxisChar * sURI)
+{
+    return createSoapMethod(sLocalName, sURI, true);
+}
+
+int SoapSerializer::
+createSoapMethod( const AxisChar * sLocalName, 
+                  const AxisChar * sURI, 
+                  bool bIsWrapperStyle)
 {
     logEntryEngine("SoapSerializer::createSoapMethod")
 
@@ -629,9 +639,10 @@ createSoapMethod( const AxisChar * sLocalName, const AxisChar * sURI)
     
     // Ensure everything is cleared out if using existing method object.
     pMethod->reset();
-
+    
+    pMethod->setWrapperStyle(bIsWrapperStyle);
     pMethod->setLocalName( sLocalName);
-    pMethod->setPrefix( getNamespacePrefix( sURI));
+    pMethod->setPrefix( getNamespacePrefix(sURI) );
     pMethod->setURI( sURI);
 
     logExitWithReturnCode(AXIS_SUCCESS)
@@ -958,17 +969,19 @@ addOutputParam( const AxisChar * pchName, void * pValue, XSDTYPE type)
     return iStatus;  
 }
 
-int SoapSerializer::serializeAsElement( const AxisChar * pName,
-                                        void * pValue, 
-                                        XSDTYPE type)
+int SoapSerializer::
+serializeAsElement( const AxisChar * pName,
+                    void * pValue, 
+                    XSDTYPE type)
 {
   return serializeAsElement( pName, NULL, pValue, type);
 }
 
-int SoapSerializer::serializeAsElement( const AxisChar * pName, 
-                                        const AxisChar * pNamespace,
-                                        void * pValue, 
-                                        XSDTYPE type) 
+int SoapSerializer::
+serializeAsElement( const AxisChar * pName, 
+                    const AxisChar * pNamespace,
+                    void * pValue, 
+                    XSDTYPE type) 
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     int ret;
@@ -1119,19 +1132,22 @@ addHeaderBlock( IHeaderBlock * pBlk)
     return iStatus;  
 }
 
-int SoapSerializer::setBodyAsHexBinary( xsd__hexBinary body)
+int SoapSerializer::
+setBodyAsHexBinary( xsd__hexBinary body)
 {
     /* TODO */
     return AXIS_SUCCESS;
 }
 
-int SoapSerializer::setBodyAsBase64Binary( xsd__base64Binary body)
+int SoapSerializer::
+setBodyAsBase64Binary( xsd__base64Binary body)
 {
     /* TODO */    
     return AXIS_SUCCESS;
 }
 
-const AxisChar* SoapSerializer::getBodyAsString()
+const AxisChar* SoapSerializer::
+getBodyAsString()
 {
     /* TODO */    
     return NULL;
@@ -1140,9 +1156,10 @@ const AxisChar* SoapSerializer::getBodyAsString()
 /* following two functions are needed by serializer functions of complex types
  * for RPC style web services
  */
-void SoapSerializer::serializeStartElementOfType( const AxisChar * pName, 
-                                                  const AxisChar * pNamespace, 
-                                                  const AxisChar * pPrefix)
+void SoapSerializer::
+serializeStartElementOfType( const AxisChar * pName, 
+                             const AxisChar * pNamespace, 
+                             const AxisChar * pPrefix)
 {
     if( pPrefix)
     {
@@ -1163,7 +1180,8 @@ void SoapSerializer::serializeStartElementOfType( const AxisChar * pName,
         serialize( "<", pName, ">", NULL);
 }
 
-void SoapSerializer::serializeEndElementOfType( const AxisChar * pName)
+void SoapSerializer::
+serializeEndElementOfType( const AxisChar * pName)
 {
     serialize( "</", pName, ">", NULL);
 }
@@ -1280,12 +1298,14 @@ getHeaderBlock( const AxisChar * pcName,
     return returnValue;
 }
 
-IHeaderBlock * SoapSerializer::getFirstHeaderBlock()
+IHeaderBlock * SoapSerializer::
+getFirstHeaderBlock()
 {
     return m_pSoapEnvelope->m_pSoapHeader->getFirstHeaderBlock();
 }
 
-IHeaderBlock * SoapSerializer::getNextHeaderBlock()
+IHeaderBlock * SoapSerializer::
+getNextHeaderBlock()
 {
     return m_pSoapEnvelope->m_pSoapHeader->getNextHeaderBlock();
 }
@@ -1386,23 +1406,27 @@ addNamespaceToEnvelope( AxisChar * pachNamespaceURI,
     logExit()
 }
 
-void SoapSerializer::addNamespaceToNamespaceList( const AxisChar * pachNamespaceURI,
-                                                  const AxisChar * pachPrefix)
+void SoapSerializer::
+addNamespaceToNamespaceList( const AxisChar * pachNamespaceURI,
+                             const AxisChar * pachPrefix)
 {
     m_NsStack[pachNamespaceURI] = pachPrefix;
 }
 
-ISoapAttachment* SoapSerializer::createSoapAttachment()
+ISoapAttachment* SoapSerializer::
+createSoapAttachment()
 {
     return new SoapAttachment(m_pContentIdSet);
 }
 
-void SoapSerializer::setContentIdSet(ContentIdSet *pContentIdSet) 
+void SoapSerializer::
+setContentIdSet(ContentIdSet *pContentIdSet) 
 {
     m_pContentIdSet = pContentIdSet;
 }
 
-bool SoapSerializer::checkAttachmentAvailability()
+bool SoapSerializer::
+checkAttachmentAvailability()
 {
     map<AxisXMLString, ISoapAttachment*>::iterator itCurrAttach= m_SoapAttachments.begin();
 
@@ -1412,7 +1436,8 @@ bool SoapSerializer::checkAttachmentAvailability()
     return false;
 }
 
-void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
+void SoapSerializer::
+addAttachmentParameter(ISoapAttachment* att, const char* pName, IAttribute **attributes, int nAttributes)
 {
     if (NULL==att)
         att = static_cast<ISoapAttachment*>(new SoapAttachment(m_pContentIdSet));
@@ -1435,12 +1460,14 @@ void SoapSerializer::addAttachmentParameter(ISoapAttachment* att, const char* pN
     m_SoapAttachments[att->getAttachmentId()] = att;
 }
 
-IHeaderBlock * SoapSerializer::getCurrentHeaderBlock()
+IHeaderBlock * SoapSerializer::
+getCurrentHeaderBlock()
 {
     return m_pSoapEnvelope->m_pSoapHeader->getCurrentHeaderBlock();
 }
 
-AxisXMLString SoapSerializer::getNamespaceURL( string sNameSpace)
+AxisXMLString SoapSerializer::
+getNamespaceURL( string sNameSpace)
 {
     // Check that the namespace value is not empty.  If it is then return as
     // there is nothing to do!

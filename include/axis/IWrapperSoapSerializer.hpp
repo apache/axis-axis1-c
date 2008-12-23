@@ -65,10 +65,25 @@ public:
      * @param sLocalName local name of the method
      * @param sURI namespace URI of the method
      * @return status
+     * 
+     * @deprecated Use other flavor of createSoapMethod
      */
     virtual int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
                                           const AxisChar* sURI)=0;
 
+    /**
+     * Create new SOAP method, ie the first nested element within a SOAP Body.
+     * 
+     * @param sLocalName local name of the method
+     * @param sURI namespace URI of the method
+     * @param bIsWrapperStyle  whether the SOAP message to be generated is wrapper-style or not.
+     * @return status
+     * 
+     */
+    virtual int AXISCALL createSoapMethod(const AxisChar* sLocalName, 
+                                          const AxisChar* sURI,
+                                          bool  bIsWrapperStyle)=0;
+    
     /**
      * Create a new SOAP Fault within the SOAP Body.
      * 
