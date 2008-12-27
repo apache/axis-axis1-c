@@ -99,6 +99,9 @@ public:
     
     /** Return namespace prefix */
     AxisString getPrefix() { return m_strPrefix; }
+    
+    /** return URI */
+    AxisString getUri() { return m_strUri; }
 };
 
 AXIS_CPP_NAMESPACE_END
