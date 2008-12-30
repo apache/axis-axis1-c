@@ -185,12 +185,8 @@ serialize (SoapSerializer &pSZ)
             }
             else
             {
-                // In order to support doc/lit unwrapped, m_sName (qualified element name) is passed as a null 
-                // string in the stub code.  So we do not want to serialize null string in this case. 
-                //
                 // NOTE: ">" is not serialized to enable the type's serializer to add attributes.
-                if (!m_sName.empty())
-                    pSZ.serialize ("<", m_sName.c_str (), NULL); 
+                pSZ.serialize ("<", m_sName.c_str (), NULL); 
 
                 logDebugArg2("Calling serializer function %p for complex object %p", m_Value.pCplxObj->pSZFunct, m_Value.pCplxObj->pObject)
 
@@ -198,8 +194,7 @@ serialize (SoapSerializer &pSZ)
 
                 logDebugArg2("Returned from serializer function %p, status=%d", m_Value.pCplxObj->pSZFunct, stat)
 
-                if (!m_sName.empty())
-                    pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
+                pSZ.serialize ("</", m_sName.c_str (), ">\n", NULL);
             }
             break;
         case XSD_ANY:

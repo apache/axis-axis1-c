@@ -59,6 +59,8 @@ SoapSerializer()
     m_pNamespace = NULL;
     m_pContentIdSet = NULL;
     
+    reset();
+    
     logExit()
 }
 
@@ -284,20 +286,37 @@ addOutputCmplxParam( void * pObject,
 { 
     logEntryEngine("SoapSerializer::addOutputCmplxParam")
 
-    int    iSuccess = AXIS_SUCCESS;
+    int    iSuccess = AXIS_FAIL;
 
-    Param * pParam = new Param();
+    if ( m_pSoapEnvelope 
+    		&& (m_pSoapEnvelope->m_pSoapBody) 
+    		&& (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod))
+    {
+	    Param * pParam = new Param();
+	
+	    pParam->m_Value.pCplxObj            = new ComplexObjectHandler;
+	    pParam->m_Value.pCplxObj->pObject   = pObject;
+	    pParam->m_Value.pCplxObj->pSZFunct  = (AXIS_SERIALIZE_FUNCT) pSZFunct;
+	    pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
 
-    pParam->m_Value.pCplxObj = new ComplexObjectHandler;
-    pParam->m_Value.pCplxObj->pObject = pObject;
-    pParam->m_Value.pCplxObj->pSZFunct = (AXIS_SERIALIZE_FUNCT) pSZFunct;
-    pParam->m_Value.pCplxObj->pDelFunct = (AXIS_OBJECT_DELETE_FUNCT) pDelFunct;
-    if( m_pSoapEnvelope &&
-        (m_pSoapEnvelope->m_pSoapBody) &&
-        (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
-        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
-
-    pParam->setName( pName);
+	    // This check is to ensure backward compatibility...do not remove. It use to be we accepted
+	    // null string to indicate non-wrapper style, but this is no longer the case. So we need
+	    // to set it to a value.
+	    
+	    AxisString sName = pName;
+	    if (sName.empty())
+	    {
+	    	sName  = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getPrefix();
+	    	sName += ":";
+	    	sName += m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getMethodName();
+	    }
+	    
+	    pParam->setName( sName.c_str() );
+	    
+	    m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam );
+	    
+	    iSuccess = AXIS_SUCCESS;
+    }
     
     logExitWithReturnCode(iSuccess)
     
@@ -627,27 +646,37 @@ createSoapMethod( const AxisChar * sLocalName,
 {
     logEntryEngine("SoapSerializer::createSoapMethod")
 
-    if (NULL == m_pSoapEnvelope || NULL == m_pSoapEnvelope->m_pSoapBody)
-        return AXIS_FAIL;
-        
-    SoapMethod * pMethod = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
-    if (pMethod == NULL)
+    int iStatus = AXIS_FAIL;
+
+    if (m_pSoapEnvelope 
+    		&& m_pSoapEnvelope->m_pSoapBody)
     {
-        pMethod = new SoapMethod();
-        setSoapMethod( pMethod);
+	    SoapMethod * pMethod = m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod;
+	    if (pMethod == NULL)
+	    {
+	        pMethod = new SoapMethod();
+	        setSoapMethod( pMethod);
+	    }
+	    
+	    // Ensure everything is cleared out if using existing method object.
+	    pMethod->reset();
+	    
+	    pMethod->setWrapperStyle(bIsWrapperStyle);
+	    pMethod->setLocalName( sLocalName);
+	    pMethod->setPrefix( getNamespacePrefix(sURI) );
+	    pMethod->setURI( sURI);
+	    
+	    // Since we want the bean to define the namespace for non-wrapper style, we need to reset
+	    // the counter.  See SoapMethod::serialize() for further information.
+	    if (!bIsWrapperStyle)
+	        m_nCounter = 0;
+	    
+	    iStatus = AXIS_SUCCESS;
     }
-    
-    // Ensure everything is cleared out if using existing method object.
-    pMethod->reset();
-    
-    pMethod->setWrapperStyle(bIsWrapperStyle);
-    pMethod->setLocalName( sLocalName);
-    pMethod->setPrefix( getNamespacePrefix(sURI) );
-    pMethod->setURI( sURI);
 
-    logExitWithReturnCode(AXIS_SUCCESS)
+    logExitWithReturnCode(iStatus)
 
-    return AXIS_SUCCESS;
+    return iStatus;
 }
 
 int SoapSerializer::
@@ -937,31 +966,37 @@ int SoapSerializer::setOutputStreamForTesting(SOAPTransport* pStream)
  * Basic output parameter going to be serialized as an Element later
  */
 int SoapSerializer::
-addOutputParam( const AxisChar * pchName, void * pValue, XSDTYPE type)
+addOutputParam( const AxisChar * pchName,  // prefix and element name
+                void * pValue,             // value
+                XSDTYPE type)              // type
 {
     logEntryEngine("SoapSerializer::addOutputParam")
 
-    IAnySimpleType* xsdValue = AxisUtils::createSimpleTypeObject(pValue, type);
-    
-    Param * pParam = new Param();
-
     int iStatus = AXIS_FAIL;
     
-    if( pParam)
+    if ( m_pSoapEnvelope 
+    		&& (m_pSoapEnvelope->m_pSoapBody) 
+    		&& (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
     {
+        IAnySimpleType* xsdValue = AxisUtils::createSimpleTypeObject(pValue, type);
+
+    	Param * pParam = new Param();
+    	
         pParam->m_Type = type;
         pParam->m_sName = pchName;
         pParam->setValue(type, xsdValue);
         
-        if( m_pSoapEnvelope &&
-            (m_pSoapEnvelope->m_pSoapBody) &&
-            (m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod)) 
+        m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam );
+        
+        // if non-wrapper then we need to add namespace to envelope since it will not get added
+        // any other way.  non-wrapper support was added later so that is why we are in this mess.
+        if (!(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->isWrapperStyle()))
         {
-            m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam);
-            iStatus = AXIS_SUCCESS;
+            addNamespaceToEnvelope((AxisChar * )m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getUri().c_str(), 
+                                   (AxisChar * )m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getPrefix().c_str());
         }
-        else
-            delete pParam;
+            
+        iStatus = AXIS_SUCCESS;
     }
 
     logExitWithReturnCode(iStatus)
@@ -990,8 +1025,9 @@ serializeAsElement( const AxisChar * pName,
 
     return ret;
 }
-int SoapSerializer::serializeAsElement( const AxisChar * pName,
-                                        IAnySimpleType * pSimpleType)
+int SoapSerializer::
+serializeAsElement( const AxisChar * pName,
+                    IAnySimpleType * pSimpleType)
 {
     return serializeAsElement( pName, NULL, pSimpleType);
 }
@@ -1032,10 +1068,11 @@ serializeAsElement( const AxisChar * pName,
     return iStatus;
 } 
 
-int SoapSerializer::serializeAsAttribute( const AxisChar * pName,
-                                          const AxisChar * pNamespace,
-                                          void * pValue,
-                                          XSDTYPE type)
+int SoapSerializer::
+serializeAsAttribute( const AxisChar * pName,
+                      const AxisChar * pNamespace,
+                      void * pValue,
+                      XSDTYPE type)
 {
     IAnySimpleType* pSimpleType = AxisUtils::createSimpleTypeObject(pValue, type);
     
@@ -1558,7 +1595,7 @@ reset()
 {
     logEntryEngine("SoapSerializer::reset")
 
-    m_nCounter = 0; // reset namespace prifix counter 
+    m_nCounter = 0; // reset namespace prefix counter 
 
     if( m_pSoapEnvelope )
         m_pSoapEnvelope->reset();

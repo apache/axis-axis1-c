@@ -157,30 +157,33 @@ serialize(SoapSerializer& pSZ)
             }
             else
             {
-            	// We are doing non-wrapper style.  The call to Call::setOperation resulted in 
-            	// initial namespace being added to the envelope.  So we do not have to define
-            	// initial namespace, although we need to define it to the serializer so that
-            	// subsequent namespaces are indexed correctly.
+            	// We are doing non-wrapper style.  
             	
             	if (!m_OutputParams.empty())
-            	{
+            	{	
             		// Serialize parameters....
-            		
-	                // push the current NS to the NS stack
-	                pSZ.getNamespacePrefix(m_strUri.c_str());
 	                
-	                iStatus= serializeOutputParam(pSZ);
-	                
-	                // remove the current NS from the NS stack
+	                // remove the current NS from the NS stack - we want the bean to define the namespace.
+            		// We could have added initial namespace to envelope, but for complex types
+            		// it seemed best to declare namespace as part of root element of xml document.
 	                pSZ.removeNamespacePrefix(m_strUri.c_str());
 	                
+	                iStatus= serializeOutputParam(pSZ);
+	                	                
 	                if(iStatus==AXIS_FAIL)
 	                    break;
             	}
             	else if (!m_strLocalname.empty())
             	{
+                    // push the current NS to the NS stack
+            		const char *nsToUse=pSZ.getNamespacePrefix(m_strUri.c_str());
+            		
             		// Serialize an empty element request.
-                    pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(), "/>", NULL);
+                    pSZ.serialize("<", nsToUse, ":", m_strLocalname.c_str(),
+                         " xmlns:", nsToUse, "=\"", m_strUri.c_str(), "\" />", NULL);    
+                    
+                    // remove the current NS from the NS stack
+                    pSZ.removeNamespacePrefix(m_strUri.c_str());
             	}
             }
         }

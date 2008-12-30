@@ -18,9 +18,9 @@ SOAPAction: ""
 Content-Length: 376
 
 <?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://dom.w3c.org">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:Operation2Request><number1>2000</number1>
+<ns1:Operation2Request xmlns:ns1="http://dom.w3c.org"><number1>2000</number1>
 </ns1:Operation2Request>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
@@ -29,12 +29,12 @@ POST /axis/Operation HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 328
+Content-Length: 329
 
 <?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://dom.w3c.org">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:Operation3Request/></SOAP-ENV:Body>
+<ns1:Operation3Request xmlns:ns1="http://dom.w3c.org" /></SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 
 POST /axis/Operation HTTP/1.1
@@ -44,9 +44,9 @@ SOAPAction: ""
 Content-Length: 459
 
 <?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://dom.w3c.org">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:Operation4Request><record><field1>field4444401</field1>
+<ns1:Operation4Request xmlns:ns1="http://dom.w3c.org"><record><field1>field4444401</field1>
 <field2>field4444402</field2>
 <field3>field4444403</field3>
 </record></ns1:Operation4Request>
@@ -60,9 +60,9 @@ SOAPAction: ""
 Content-Length: 459
 
 <?xml version='1.0' encoding='utf-8' ?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns1="http://dom.w3c.org">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:Operation5Request><record><field1>field5555501</field1>
+<ns1:Operation5Request xmlns:ns1="http://dom.w3c.org"><record><field1>field5555501</field1>
 <field2>field5555502</field2>
 <field3>field5555503</field3>
 </record></ns1:Operation5Request>
