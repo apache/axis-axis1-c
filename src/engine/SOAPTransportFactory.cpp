@@ -129,7 +129,7 @@ getTransportObject(AXIS_PROTOCOL_TYPE eProtocol)
     if (pTpt)
     {
         pTpt->setProtocol(eProtocol);
-        if (AxisTrace::isTransportLoggingEnabled())
+        if (AxisTrace::isLoggingEnabled() && AxisTrace::isTransportLoggingEnabled())
             pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
     }
     

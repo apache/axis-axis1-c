@@ -132,7 +132,7 @@ LoadChannelLibrary( g_ChannelType eChannelType, const char * pcLibraryName)
                 sCreate( &pChannel);
                 m_pChannel[iLibCount] = pChannel;
                 
-                if (AxisTrace::isTransportLoggingEnabled())
+                if (AxisTrace::isLoggingEnabled() && AxisTrace::isTransportLoggingEnabled())
                     pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
             }
         }
@@ -268,7 +268,7 @@ createChannel(g_ChannelType type)
         m_ChannelLibrary[iLibCount]->m_Create(&pChannel);
         m_pChannel[iLibCount] = pChannel;
         
-        if (AxisTrace::isTransportLoggingEnabled())
+        if (AxisTrace::isLoggingEnabled() && AxisTrace::isTransportLoggingEnabled())
             pChannel->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
     }
     

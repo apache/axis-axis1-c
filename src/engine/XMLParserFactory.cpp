@@ -116,7 +116,7 @@ getParserObject()
     
     if (pTpt)
     {
-        if (AxisTrace::isParserLoggingEnabled())
+        if (AxisTrace::isLoggingEnabled() && AxisTrace::isParserLoggingEnabled())
             pTpt->enableTrace(AxisTrace::getLogFilePath().c_str(), AxisTrace::getLogFilter().c_str());
     }
     
