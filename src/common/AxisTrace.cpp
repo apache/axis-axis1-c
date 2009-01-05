@@ -440,6 +440,17 @@ writeTrace(string& s)
 // AxisTrace::writeTrace() Implementation
 //
 //******************************************************************************
+void AxisTrace::writeTrace (const char *str) 
+{ 
+	writeTrace(str, strlen(str)); 
+}
+
+
+//******************************************************************************
+//
+// AxisTrace::writeTrace() Implementation
+//
+//******************************************************************************
 void AxisTrace::
 writeTrace(const char* fmt,
            va_list vargs)

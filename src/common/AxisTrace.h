@@ -119,7 +119,7 @@ public:
     // Write trace data.  No trace record prefix is printed out (i.e. no timestamp, etc).
     static void writeTrace  (std::string& s);
     static void writeTrace  (const char *data, int dataLen, bool hexFormat=false);
-    static void writeTrace  (const char *str) { writeTrace(str, strlen(str)); }
+    static void writeTrace  (const char *str);
 
     // To determine when a log component is enabled.
     static bool isStubLoggingEnabled()      { return  m_stubLogLevelEnabled;      }
