@@ -122,7 +122,7 @@ public class ParmHeaderFileWriter extends ParamWriter
             if (null != restrictionBaseType )
             {  
                 langTypeName = CUtils.sanitizeString(restrictionBaseType);               
-                c_writer.write( "#include \"" + langTypeName + ".hpp\"\n\n");
+                c_writer.write( "#include \"" + langTypeName + ".h\"\n\n");
             }
             else
                 langTypeName = baseTypeName;
