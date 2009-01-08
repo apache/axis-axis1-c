@@ -92,15 +92,6 @@ public:
     static const AxisChar* basicTypeStr(XSDTYPE type);
 
 private:
-    enum
-    {
-        GREATOR_THAN_CHAR    =    '>',    /* Greator than character */
-        LESSER_THAN_CHAR    =    '<',    /* Less than character */
-        SINGLE_QUOTE_CHAR    =    '\'',    /* Single quotation character */
-        DOUBLE_QUOTE_CHAR    =    '\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =    '&'    /* Ampersand character */
-    };
-private:
     AxisString m_sSZ;
     /* Current Serialization Style */
     AXIS_BINDING_STYLE m_nStyle;
