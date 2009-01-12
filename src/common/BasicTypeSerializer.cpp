@@ -87,16 +87,19 @@ serializeAsElement (const AxisChar* pName,
     {
         m_sSZ += " xmlns:";
         m_sSZ += pPrefix;
-        m_sSZ += "=\"";
+        m_sSZ += "=";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
         m_sSZ += pNamespace;
-        m_sSZ += "\"";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
     }
 
     if (RPC_ENCODED == m_nStyle)
     {
-        m_sSZ += " xsi:type=\"xsd:";
+        m_sSZ += " xsi:type=";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
+        m_sSZ += "xsd:";
         m_sSZ += basicTypeStr (pSimpleType->getType());
-        m_sSZ += "\"";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
     }
     m_sSZ += ">";
     
@@ -117,11 +120,16 @@ serializeAsElement (const AxisChar* pName,
         {
             m_sSZ += " xmlns:";
             m_sSZ += pPrefix;
-            m_sSZ += "=\"";
+            m_sSZ += "=";
+            m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
             m_sSZ += pNamespace;
-            m_sSZ += "\"";
+            m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
         }
-        m_sSZ += " xsi:nil=\"true\">";
+        m_sSZ += " xsi:nil=";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
+        m_sSZ += "true";
+        m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
+        m_sSZ += ">";
     }
     else
         m_sSZ += pSimpleType->serialize();

@@ -128,7 +128,7 @@ Serialize(SoapSerializer& pSZ)
                     pSZ.serialize("<", pPrefix, ":", m_ItemName.c_str(), NULL); 
                     if (blnIsNewPrefix)
                     {
-                        pSZ.serialize(" xmlns:", pPrefix, "=\"", pNamespace, "\"", NULL);
+                        pSZ.serialize(" xmlns:", pPrefix, "=", PLATFORM_DOUBLE_QUOTE_S, pNamespace, PLATFORM_DOUBLE_QUOTE_S, NULL);
                     }
                 }
                 else

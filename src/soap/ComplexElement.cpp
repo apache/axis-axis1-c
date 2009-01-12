@@ -231,8 +231,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
             if ((NULL!=m_pachPrefix) && (strlen(m_pachPrefix)!=0) && 
                 (NULL!=m_pachURI) && (strlen(m_pachURI)!=0))
             {
-                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
-                    NULL);
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=", PLATFORM_DOUBLE_QUOTE_S, m_pachURI, PLATFORM_DOUBLE_QUOTE_S, NULL);
             }
             pSZ.serialize(">", NULL);
             iStatus= serializeChildren(pSZ);
@@ -317,8 +316,7 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                     ( (m_pachURI != NULL) && (strlen(m_pachURI) != 0)) && 
                     (blnIsNewNamespace))
             {
-                pSZ.serialize(" xmlns:", m_pachPrefix, "=\"", m_pachURI, "\"",
-                    NULL);
+                pSZ.serialize(" xmlns:", m_pachPrefix, "=", PLATFORM_DOUBLE_QUOTE_S, m_pachURI, PLATFORM_DOUBLE_QUOTE_S, NULL);
             }
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);

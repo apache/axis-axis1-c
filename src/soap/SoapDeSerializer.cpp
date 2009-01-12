@@ -2203,9 +2203,10 @@ getAnyObject ()
                     nsDecls += ":";
                     nsDecls += m_pNode->m_pchNameOrValue;
                 }
-                nsDecls += "=\"";
+                nsDecls += "=";
+                nsDecls += PLATFORM_DOUBLE_QUOTE_S;
                 nsDecls += m_pNode->m_pchNamespace;
-                nsDecls += "\"";
+                nsDecls += PLATFORM_DOUBLE_QUOTE_S;
             }
             else if (CHARACTER_ELEMENT != m_pNode->m_type)
             {
@@ -2330,9 +2331,10 @@ serializeTag (AxisString & xmlStr,
                     }
                     
                     xmlStr += node->m_pchAttributes[j];
-                    xmlStr += "=\"";
+                    xmlStr += "=";
+                    xmlStr += PLATFORM_DOUBLE_QUOTE_S;
                     xmlStr += node->m_pchAttributes[j + 2];
-                    xmlStr += "\"";
+                    xmlStr += PLATFORM_DOUBLE_QUOTE_S;
                 }
                 else
                     break;

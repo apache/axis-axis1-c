@@ -277,7 +277,7 @@ serialize(SoapSerializer& pSZ)
         pSZ.serialize(m_sPrefix.c_str(), ":", m_localname.c_str(), NULL);
         
         if (blnIsNewNamespace) 
-            pSZ.serialize(" xmlns:", m_sPrefix.c_str(), "=\"", m_uri.c_str(), "\"", NULL);
+            pSZ.serialize(" xmlns:", m_sPrefix.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_uri.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
 
         iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)

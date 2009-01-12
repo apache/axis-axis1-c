@@ -20,6 +20,7 @@
 
 AXIS_CPP_NAMESPACE_START
 
+
 IAnySimpleType::
 IAnySimpleType():m_Buf(NULL), m_isNil(true)
 {
@@ -97,7 +98,7 @@ replaceReservedCharacters(AxisString &value)
     if (value.empty ())
         return value;
 
-    unsigned long nPos = value.find_first_of (XML_ENTITY_REFERENCE_CHARS);
+    unsigned long nPos = value.find_first_of (PLATFORM_XML_ENTITY_REFERENCE_CHARS_S);
     if (AxisString::npos == nPos)
         return value;
 	
@@ -115,7 +116,7 @@ replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
     if (inValue.empty ())
         return;
 
-    unsigned long nPos = inValue.find_first_of (XML_ENTITY_REFERENCE_CHARS);
+    unsigned long nPos = inValue.find_first_of (PLATFORM_XML_ENTITY_REFERENCE_CHARS_S);
     if (AxisString::npos == nPos)
     {
     	outValue = inValue;
@@ -125,36 +126,40 @@ replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
     // Loop through character string, replacing any entity characters    
     unsigned long nOldIdx = 0;            
     while (AxisString::npos != nPos)
-    {                         
-        switch (inValue.at (nPos))
-        {
-            case LESSER_THAN_CHAR:     // Process < character
-                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-                outValue.append (ENCODED_LESSER_STR);
-                break;
-            case GREATER_THAN_CHAR:    // Process > character
-                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-                outValue.append (ENCODED_GREATER_STR);
-                break;
-            case AMPERSAND_CHAR:       // Process & character
-                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-                outValue.append (ENCODED_AMPERSAND_STR);
-                break;
-            case DOUBLE_QUOTE_CHAR:    // Process " character
-                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-                outValue.append (ENCODED_DBL_QUOTE_STR);
-                break;
-            case SINGLE_QUOTE_CHAR:    // Process ' character
-                outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-                outValue.append (ENCODED_SGL_QUOTE_STR);
-                break;
+    {
+    	char c = inValue.at (nPos);
+    	
+    	if (c == '<')
+    	{
+            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+            outValue.append (ENCODED_LESSER_STR);
+    	}
+    	else if (c == '>')
+    	{
+            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+            outValue.append (ENCODED_GREATER_STR);
+    	}
+    	else if (c == '&')
+    	{
+            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+            outValue.append (ENCODED_AMPERSAND_STR);
+    	}
+    	else if (c == PLATFORM_DOUBLE_QUOTE_C)
+    	{
+            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+            outValue.append (ENCODED_DBL_QUOTE_STR);
+    	}
+    	else if (c == '\'')
+    	{
+            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
+            outValue.append (ENCODED_SGL_QUOTE_STR);
         }
         
         // Get old position
         nOldIdx = ++nPos;
     
         // Find the next entity reference characters from previous found position
-        nPos = inValue.find_first_of (XML_ENTITY_REFERENCE_CHARS, nPos);
+        nPos = inValue.find_first_of (PLATFORM_XML_ENTITY_REFERENCE_CHARS_S, nPos);
     }
 
     // Apend the remaining data  

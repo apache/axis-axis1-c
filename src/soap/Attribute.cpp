@@ -281,7 +281,7 @@ int Attribute::serialize(SoapSerializer& pSZ) const
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
 
-        pSZ.serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
+        pSZ.serialize(m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
 
         intStatus= AXIS_SUCCESS;
     }
@@ -321,13 +321,13 @@ int Attribute::serialize(SoapSerializer& pSZ,
             if (blnIsNewNamespace)
             {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
-                pSZ.serialize("xmlns:", m_prefix.c_str(), "=\"", m_uri.c_str(), "\" ", NULL);
+                pSZ.serialize("xmlns:", m_prefix.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_uri.c_str(), PLATFORM_DOUBLE_QUOTE_S, " ", NULL);
             }
 
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
         }
 
-        pSZ.serialize(m_localname.c_str(), "=\"", m_value.c_str(), "\"", NULL);
+        pSZ.serialize(m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
 
         intStatus= AXIS_SUCCESS;
     }

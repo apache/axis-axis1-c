@@ -1202,16 +1202,11 @@ serializeStartElementOfType( const AxisChar * pName,
     {
         serialize( "<",
                    pName,
-                   " xsi:type=\"",
-                   pPrefix,
-                   ":",
-                   pName,
-                   "\" xmlns:",
-                   pPrefix,
-                   "=\"",
-                   pNamespace,
-                   "\">",
-                   NULL);
+                   " xsi:type=", 
+                   PLATFORM_DOUBLE_QUOTE_S, pPrefix, ":", pName, PLATFORM_DOUBLE_QUOTE_S,
+                   " xmlns:",
+                   pPrefix, "=", 
+                   PLATFORM_DOUBLE_QUOTE_S, pNamespace, PLATFORM_DOUBLE_QUOTE_S, ">", NULL);
     }
     else
         serialize( "<", pName, ">", NULL);

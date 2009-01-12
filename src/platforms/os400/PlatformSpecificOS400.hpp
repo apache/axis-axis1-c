@@ -73,7 +73,7 @@ extern char *os400_dlerror();
 
 // STRTOASC is to translate single byte 'native' character representation to ASCII
 // ASCTOSTR is to translate single byte ascii representation to 'native' character (EBCDIC)
-// CANNOT be used with constants
+// CANNOT be used with constants.  
 extern char*      strtoasc( char* );
 extern char*      asctostr( char* );
 #define PLATFORM_STRTOASC( x ) strtoasc( (char*)(x) )
@@ -84,6 +84,16 @@ extern const char EBCDICtoASCII[256];
 
 // Following returns a buffer that must be free'ed by caller. 
 extern char *toUTF8(char *b, int len);
+
+// Turkish double quote in EBCDIC is not invariant (i.e. the hexadecimal
+// value for double quote is different in turkish locale than when running
+// in english locale).  This, when using double quotes we must reference the 
+// following, which will be set to proper value on EBCDIC-based systems.
+
+extern char PLATFORM_DOUBLE_QUOTE_S[];
+extern char PLATFORM_DOUBLE_QUOTE_C;
+
+extern char PLATFORM_XML_ENTITY_REFERENCE_CHARS_S[];
 
 // =============================================================
 // Miscellaneous

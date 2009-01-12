@@ -109,6 +109,11 @@
 #define PLATFORM_STRTOASC( x ) ( x )
 #define PLATFORM_ASCTOSTR( x ) ( x )
 
+#define PLATFORM_DOUBLE_QUOTE_S                   "\""
+#define PLATFORM_DOUBLE_QUOTE_C                   '\"'
+
+#define PLATFORM_XML_ENTITY_REFERENCE_CHARS_S     "<>&\"\'"
+
 // =============================================================
 // Miscellaneous
 // =============================================================

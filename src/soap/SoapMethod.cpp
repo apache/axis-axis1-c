@@ -117,7 +117,7 @@ serialize(SoapSerializer& pSZ)
             {
                 pSZ.serialize("<", m_strPrefix.c_str(), ":", m_strLocalname.c_str(),
                     " xmlns:", m_strPrefix.c_str(),
-                    "=\"", m_strUri.c_str(), "\"", NULL);
+                    "=", PLATFORM_DOUBLE_QUOTE_S, m_strUri.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
     
                 list<AxisChar*> lstTmpNameSpaceStack;
     
@@ -180,7 +180,7 @@ serialize(SoapSerializer& pSZ)
             		
             		// Serialize an empty element request.
                     pSZ.serialize("<", nsToUse, ":", m_strLocalname.c_str(),
-                         " xmlns:", nsToUse, "=\"", m_strUri.c_str(), "\" />", NULL);    
+                         " xmlns:", nsToUse, "=", PLATFORM_DOUBLE_QUOTE_S, m_strUri.c_str(), PLATFORM_DOUBLE_QUOTE_S, " />", NULL);    
                     
                     // remove the current NS from the NS stack
                     pSZ.removeNamespacePrefix(m_strUri.c_str());

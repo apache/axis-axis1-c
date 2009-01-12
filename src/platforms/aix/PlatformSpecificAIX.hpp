@@ -73,6 +73,15 @@
 #define PLATFORM_STRTOASC( x ) ( x )
 #define PLATFORM_ASCTOSTR( x ) ( x )
 
+// Turkish double quote in EBCDIC is not invariant (i.e. the hexadecimal
+// value for double quote is different in turkish locale than when running
+// in english locale).  This, when using double quotes we must reference the 
+// following, which will be set to proper value on EBCDIC-based systems.
+#define PLATFORM_DOUBLE_QUOTE_S                   "\""
+#define PLATFORM_DOUBLE_QUOTE_C                   '\"'
+
+#define PLATFORM_XML_ENTITY_REFERENCE_CHARS_S     "<>&\"\'"
+
 // =============================================================
 // Miscellaneous
 // =============================================================

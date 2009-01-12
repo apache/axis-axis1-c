@@ -31,6 +31,65 @@
 #include <iconv.h>                      // iconv_t, iconv()
 #include <qtqiconv.h>                   // QtqCode_T, QtqIconvOpen()
 #include <errno.h>
+#include <qwcrtvca.h>                   // Retrieve job's ccsid API prototype 
+
+
+
+/**********************************************************************/
+/* Function:                                                          */
+/*   retrieveJobCcsid                                                 */
+/* Description:                                                       */
+/*   Retrieves the ccsid of the current job.                          */
+/*   If the current job's ccsid is 65535, the job's default ccsid is  */
+/*   returned.                                                        */
+/*   If the ccsid cannot be retrieved (error occurs), -1 is returned. */
+/* Return:                                                            */
+/*   int   status of call.  if 0, success; -1 failure.                */
+/**********************************************************************/
+
+#define RTV_CCSID_ATTR_LEN 512
+
+static int retrieveJobCcsid(int *ccsid, char *langID)
+{
+  char receiverVariable[RTV_CCSID_ATTR_LEN];
+  char format[8] = {'R', 'T', 'V', 'C', '0', '1', '0', '0'};
+  int numberOfAttributes = 3;
+  int attributeKeys[3] = {QWCA_KEY_CCSID, QWCA_KEY_DEFAULTCCSID,  QWCA_KEY_LANGID};
+  Qwc_RTVC_Attribute_Data_t *attribute;
+  int defaultCcsid;
+  char errorCode[8];
+  int i;
+  memset(errorCode, 0x00, sizeof(errorCode));
+
+#pragma exception_handler(RetrieveJobCcsidError,0,_C1_ALL,_C2_ALL,_CTLA_HANDLE)
+  QWCRTVCA(receiverVariable,RTV_CCSID_ATTR_LEN,format,numberOfAttributes,attributeKeys,&errorCode);
+#pragma disable_handler        
+  if (((Qwc_RTVC0100_t *)receiverVariable)->Number_Fields_Rtnd != 3)
+  {
+    /* Unable to retrieve the ccsid information */
+    return -1;
+  }
+  /* Retrieved ccsid, default CCSID and language ID */
+  attribute = (Qwc_RTVC_Attribute_Data_t *)(receiverVariable + sizeof(int));
+  for (i=0; i < 3; i++)
+    {
+      if (attribute->Key_Field == QWCA_KEY_CCSID)
+          *ccsid = *(int *)((char *)attribute + sizeof(Qwc_RTVC_Attribute_Data_t));
+      else if (attribute->Key_Field == QWCA_KEY_DEFAULTCCSID)
+          defaultCcsid = *(int *)((char *)attribute + sizeof(Qwc_RTVC_Attribute_Data_t));
+      else
+          strncpy(langID, ((char *)attribute + sizeof(Qwc_RTVC_Attribute_Data_t)), 3);
+      attribute = (Qwc_RTVC_Attribute_Data_t *)((char *)attribute + attribute->Length_Field_Info_Rtnd); 
+  }
+  if (*ccsid == 65535)
+      *ccsid = defaultCcsid;
+
+  return 0;
+
+  RetrieveJobCcsidError:
+    return -1;
+}
+
 
 typedef int HMODULE;
 
@@ -336,5 +395,35 @@ char *toUTF8(char *fromBuf, int fromBufLen)
 
    return toBuf;
 }
+
+char PLATFORM_DOUBLE_QUOTE_S[]               = "\"";
+char PLATFORM_DOUBLE_QUOTE_C                 = '\"';
+char PLATFORM_XML_ENTITY_REFERENCE_CHARS_S[] = "<>&\"\'";
+
+static int initializePlatform()
+{
+    char *language= "En_US";
+    char langID[3] = {'E' , 'N' , 'U'};
+    int jobCCSID = 37;
+    
+    int rc = retrieveJobCcsid(&jobCCSID, langID);
+    if (rc == 0)
+    {
+    	// double quote character is not invariant when running 
+    	// turkish ccsid (1026).  That is, the hexadecimal value
+    	// of double quote is different than when running in 
+    	// any other language.  So use correct double quote character.
+    	if (jobCCSID == 1026)
+    	{
+    		strcpy(PLATFORM_DOUBLE_QUOTE_S, "\xFC");
+    		PLATFORM_DOUBLE_QUOTE_C = '\xFC';
+    		strcpy(PLATFORM_XML_ENTITY_REFERENCE_CHARS_S, "<>&\xFC\'");
+    	}
+    }
+
+	return rc;
+}
+
+static int platformRc = initializePlatform();
 
 

@@ -86,7 +86,7 @@ int Namespace::serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceSt
     */
     lstTmpNameSpaceStack.push_back((AxisChar*)m_asURI.c_str());
 
-    pSZ.serialize(" xmlns:", m_asPrefix.c_str(), "=\"", m_asURI.c_str(), "\"", NULL);
+    pSZ.serialize(" xmlns:", m_asPrefix.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_asURI.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
 
     return AXIS_SUCCESS;
 }

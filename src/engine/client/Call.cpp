@@ -451,7 +451,7 @@ int Call::setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char
         
         if( tempvalue != NULL)
         {
-            sprintf( tempvalue, "\"%s\"", value);
+            sprintf( tempvalue, "%s%s%s", PLATFORM_DOUBLE_QUOTE_S, value, PLATFORM_DOUBLE_QUOTE_S);
             m_pTransport->setTransportProperty(type, tempvalue);
             delete [] tempvalue;
         }

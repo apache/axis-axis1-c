@@ -33,9 +33,6 @@
 
 AXIS_CPP_NAMESPACE_START
 
-/* Entity reference characters */
-const AxisChar XML_ENTITY_REFERENCE_CHARS[]    = "<>&\"\'";
-
 /* Encoded string for less than character */
 const AxisChar ENCODED_LESSER_STR[]            = "&lt;";    
 
@@ -152,18 +149,6 @@ protected:
      * @return Pattern object
      */
     Pattern* getPattern();
-
-    /**
-     * Reserved Characters
-     */
-    enum
-    {
-        GREATER_THAN_CHAR    =    '>',    /* Greater than character */
-        LESSER_THAN_CHAR    =    '<',    /* Less than character */
-        SINGLE_QUOTE_CHAR    =    '\'',    /* Single quotation character */
-        DOUBLE_QUOTE_CHAR    =    '\"',    /* Double quotation character */
-        AMPERSAND_CHAR        =    '&'    /* Ampersand character */
-    };
 
     AxisChar* m_Buf;
    
