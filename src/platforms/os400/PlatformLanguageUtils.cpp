@@ -72,7 +72,6 @@ toWchar(const char *charBuf, int charLen)
 
 	if (irc == (size_t)-1)
 	{
-		// TODO throw exception
 		delete [] outBuffer;
 		
 		logThrowExceptionNoExit("AxisEngineException: Error converting from character to wide-character.")
@@ -113,7 +112,6 @@ toChar(const wchar_t *wcharBuf, int wcharLen)
 
 	if (irc == (size_t)-1)
 	{
-		// TODO throw exception
 		delete [] outBuffer;
 		
 		logThrowExceptionNoExit("AxisEngineException: Error converting from wide-character to character.")
