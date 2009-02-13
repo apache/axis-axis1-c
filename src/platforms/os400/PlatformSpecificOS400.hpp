@@ -27,7 +27,7 @@
 #include <time.h>       // strftime(), localtime()      
 #include <sys/time.h>   // gettimeofday()
 #include <unistd.h>     // access()
-#include <string>      
+#include <string>  
 
 #define DIR_SEPARATOR   '/'
 #define DIR_SEPARATOR_S "/"
@@ -38,9 +38,9 @@
 
 #define PLATFORM_DEFAULT_DEPLOY_PATH ""
 
-#define PLATFORM_XMLPARSER_PATH      PLATFORM_DEFAULT_DEPLOY_PATH "libaxis_xmlparser.so"
-#define PLATFORM_TRANSPORTHTTP_PATH  PLATFORM_DEFAULT_DEPLOY_PATH "libhttp_transport.so"
-#define PLATFORM_CHANNEL_PATH        PLATFORM_DEFAULT_DEPLOY_PATH "libhttp_channel.so"
+#define PLATFORM_XMLPARSER_PATH      PLATFORM_DEFAULT_DEPLOY_PATH "/lib/libaxis_xmlparser.so"
+#define PLATFORM_TRANSPORTHTTP_PATH  PLATFORM_DEFAULT_DEPLOY_PATH "/lib/libhttp_transport.so"
+#define PLATFORM_CHANNEL_PATH        PLATFORM_DEFAULT_DEPLOY_PATH "/lib/libhttp_channel.so"
 #define PLATFORM_SSLCHANNEL_PATH     PLATFORM_DEFAULT_DEPLOY_PATH "Unknown"
 
 #define PLATFORM_LOG_PATH            ""
@@ -81,9 +81,6 @@ extern char*      asctostr( char* );
 
 // reference to ebcdic to ascii conversion table 
 extern const char EBCDICtoASCII[256];
-
-// Following returns a buffer that must be free'ed by caller. 
-extern char *toUTF8(char *b, int len);
 
 // Turkish double quote in EBCDIC is not invariant (i.e. the hexadecimal
 // value for double quote is different in turkish locale than when running
