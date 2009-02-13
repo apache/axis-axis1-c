@@ -274,6 +274,13 @@ logSetFunctionNameTransport(lFunctionName) \
   } \
 }
 
+#define logThrowExceptionNoExit(lException) \
+{ \
+  if (loggingEnabled) { \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, lException); \
+  } \
+}
+
 #define logThrowExceptionWithData(lException, lExceptionMessage) \
 { \
   if (loggingEnabled) { \
@@ -281,6 +288,14 @@ logSetFunctionNameTransport(lFunctionName) \
       AxisTrace::writeExit(logComponent, logFunctionName, NULL); \
   } \
 }
+
+#define logThrowExceptionWithDataNoExit(lException, lExceptionMessage) \
+{ \
+  if (loggingEnabled) { \
+      AxisTrace::writeTrace(logComponent, TRACE_TYPE_EXCEPT, logFunctionName, __LINE__, __FILE__, "%s: %s", lException, lExceptionMessage); \
+  } \
+}
+
 
 #define logRethrowException() \
 { \
