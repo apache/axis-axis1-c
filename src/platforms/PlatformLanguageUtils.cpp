@@ -47,8 +47,7 @@ toWchar(const char *charBuf, int charLen)
 	wchar_t *outBuffer = new wchar_t[charLen];
 	
 	// Now call wide-character function to convert string to wide-character.
-	mbstate_t mbstate = 0;
-	size_t nbrGenerated = mbsrtowcs(outBuffer, &charBuf, charLen, &mbstate);
+	size_t nbrGenerated = mbstowcs(outBuffer, charBuf, charLen);
 	
 	if (nbrGenerated == (size_t)-1)
 	{
@@ -81,8 +80,7 @@ toChar(const wchar_t *wcharBuf, int wcharLen)
 	char *outBuffer = new char[bufLen];
 	
 	// Now call wide-character function to convert wide-character to character string.
-	mbstate_t mbstate = 0;
-	size_t nbrGenerated = wcsrtombs(outBuffer, &wcharBuf, bufLen, &mbstate);
+	size_t nbrGenerated = wcstombs(outBuffer, wcharBuf, bufLen);
 	
 	if (nbrGenerated == (size_t)-1)
 	{
