@@ -18,6 +18,10 @@
 
 #include "IAnySimpleType.hpp"
 
+#include "../../platforms/PlatformLanguageUtils.hpp"       
+
+const wchar_t XML_ENTITY_REFERENCE_CHARS_WS[] = L"<>&\"\'";
+
 AXIS_CPP_NAMESPACE_START
 
 
@@ -116,57 +120,71 @@ replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
     if (inValue.empty ())
         return;
 
-    unsigned long nPos = inValue.find_first_of (PLATFORM_XML_ENTITY_REFERENCE_CHARS_S);
-    if (AxisString::npos == nPos)
+    // Must do character replacement as wide-character since for locales in which a character
+    // represents multiple bytes we might inadverently replace a character that really 
+    // is not a reserved character.  This is especially true for EBCDIC-based systems. 
+    wchar_t *wcs = PlatformLanguageUtils::toWchar(inValue.c_str(), inValue.length()+1);
+    wstring inValueW = wcs;
+    delete [] wcs;
+    
+    unsigned long nPos = inValueW.find_first_of (XML_ENTITY_REFERENCE_CHARS_WS);
+    if (wstring::npos == nPos)
     {
     	outValue = inValue;
         return;
     }
 
-    // Loop through character string, replacing any entity characters    
-    unsigned long nOldIdx = 0;            
-    while (AxisString::npos != nPos)
+    // Loop through character string, replacing any entity characters 
+    // TODO - can make more efficient, substr everytime is inefficient. 
+    unsigned long nOldIdx = 0;  
+    wstring outValueW = L"";
+    while (wstring::npos != nPos)
     {
-    	char c = inValue.at (nPos);
+    	wchar_t c = inValueW.at (nPos);
     	
-    	if (c == '<')
+    	if (c == L'<')
     	{
-            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-            outValue.append (ENCODED_LESSER_STR);
+            outValueW.append (inValueW.substr (nOldIdx, nPos - nOldIdx));
+            outValueW.append (L"&lt;");
     	}
-    	else if (c == '>')
+    	else if (c == L'>')
     	{
-            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-            outValue.append (ENCODED_GREATER_STR);
+            outValueW.append (inValueW.substr (nOldIdx, nPos - nOldIdx));
+            outValueW.append (L"&gt;");
     	}
-    	else if (c == '&')
+    	else if (c == L'&')
     	{
-            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-            outValue.append (ENCODED_AMPERSAND_STR);
+            outValueW.append (inValueW.substr (nOldIdx, nPos - nOldIdx));
+            outValueW.append (L"&amp;");
     	}
-    	else if (c == PLATFORM_DOUBLE_QUOTE_C)
+    	else if (c == L'"')
     	{
-            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-            outValue.append (ENCODED_DBL_QUOTE_STR);
+            outValueW.append (inValueW.substr (nOldIdx, nPos - nOldIdx));
+            outValueW.append (L"&quot;");
     	}
-    	else if (c == '\'')
+    	else if (c == L'\'')
     	{
-            outValue.append (inValue.substr (nOldIdx, nPos - nOldIdx));
-            outValue.append (ENCODED_SGL_QUOTE_STR);
+            outValueW.append (inValueW.substr (nOldIdx, nPos - nOldIdx));
+            outValueW.append (L"&apos;");
         }
         
         // Get old position
         nOldIdx = ++nPos;
     
         // Find the next entity reference characters from previous found position
-        nPos = inValue.find_first_of (PLATFORM_XML_ENTITY_REFERENCE_CHARS_S, nPos);
+        nPos = inValueW.find_first_of (XML_ENTITY_REFERENCE_CHARS_WS, nPos);
     }
 
-    // Apend the remaining data  
-    unsigned long nDataLen = inValue.length ();    // Get the length of the field value
+    // Append the remaining data  
+    unsigned long nDataLen = inValueW.length ();    // Get the length of the field value
     unsigned long nLen = nDataLen - nOldIdx;      // Get remaining number of characters   
     if (nLen > 0)
-        outValue += inValue.substr (nOldIdx, nLen); 
+        outValueW += inValueW.substr (nOldIdx, nLen); 
+    
+    // Now convert data back to character string and return.
+    char *temps = PlatformLanguageUtils::toChar((const wchar_t *)outValueW.c_str(), outValueW.length()+1);
+    outValue = temps;
+    delete [] temps;
     
     return;
 }

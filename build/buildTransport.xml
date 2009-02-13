@@ -46,6 +46,7 @@
                         <include name="soap/apr_base64.cpp" />
                         <include name="transport/${transport}/*.cpp" />
                         <include name="common/AxisTrace.cpp"/>
+                    	<include name="platforms/os400/PlatformLanguageUtils.cpp" if="os400"/>
                         <include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400" />
                         <include name="platforms/windows/PlatformSpecificWindows.cpp" if="windows" />
                     </fileset>

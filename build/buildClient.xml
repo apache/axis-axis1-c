@@ -40,7 +40,7 @@
 					<linker refid="LinuxLinker"/>
                     <linker refid="HP-UXLinker"/>            
 					<linker refid="VisualC++Linker"/>
-		                  <linker refid="OS400Linker"/>
+		            <linker refid="OS400Linker"/>
 					<!-- Files to be compiled -->
 					<fileset dir="${dir.src}">
 						<include name="common/*.cpp"/>
@@ -52,14 +52,11 @@
 						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
-						<include name="transport/axis/AxisTransportException.cpp"/>
+	                    <include name="platforms/PlatformLanguageUtils.cpp" unless="os400"/>
 						<include name="platforms/windows/*.cpp" if="windows"/>
 						<include name="platforms/unix/*.cpp" if="linux"/>
 						<include name="platforms/unix/*.cpp" if="solaris"/>
-						<include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
+						<include name="platforms/os400/*.cpp" if="os400"/>
 					</fileset>
 				</cc>
 			</then>
@@ -85,11 +82,8 @@
 						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
-						<include name="transport/axis/AxisTransportException.cpp"/>
+					    <include name="platforms/PlatformLanguageUtils.cpp"/>
 						<include name="platforms/unix/*.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
 					</fileset>
 				</cc>
 			</else>
