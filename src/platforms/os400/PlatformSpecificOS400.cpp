@@ -28,8 +28,6 @@
 #include <qp0lstdi.h>                   // Qp0lCvtPathToQSYSObjName()
 #include <unistd.h>                     // readlink()
 #include <except.h>
-#include <iconv.h>                      // iconv_t, iconv()
-#include <qtqiconv.h>                   // QtqCode_T, QtqIconvOpen()
 #include <errno.h>
 #include <qwcrtvca.h>                   // Retrieve job's ccsid API prototype 
 
@@ -346,55 +344,6 @@ char* asctobuf( char *b, int len )
    return b;
 }
 
-
-#define CCSID_JOB 0
-#define CCSID_UTF8 1208
-
-static iconv_t generateConverter
-(
- int fromCcsid,
- int toCcsid
- )
-{
-    iconv_t converterObject;
-    
-    QtqCode_T toCode, fromCode;
-    
-    memset(&toCode, 0x00, sizeof(QtqCode_T));
-    memset(&fromCode, 0x00, sizeof(QtqCode_T));
-
-    fromCode.CCSID = fromCcsid;
-    fromCode.shift_alternative = 1;
-    toCode.CCSID = toCcsid;
-    converterObject = QtqIconvOpen(&toCode, &fromCode);
-
-    return converterObject;
-}
-
-static iconv_t cvtrJobToUtf8 = generateConverter(CCSID_JOB, CCSID_UTF8);
-
-char *toUTF8(char *fromBuf, int fromBufLen)
-{
-   if (fromBufLen == 0 || fromBuf == NULL)
-      return strdup("");
-
-   size_t outBytesLeft = 4*fromBufLen;
-   char *toBuf = (char *)malloc(outBytesLeft);
-
-   int myToBufLen = outBytesLeft;
-   char *myToBuf = toBuf;
-
-   size_t irc = iconv(cvtrJobToUtf8,&fromBuf, (size_t *)&fromBufLen,&myToBuf, &outBytesLeft);
-   myToBufLen -= outBytesLeft;
-        
-   if (irc == (size_t)-1)
-   {
-         free(toBuf);
-         toBuf = NULL;
-   }
-
-   return toBuf;
-}
 
 char PLATFORM_DOUBLE_QUOTE_S[]               = "\"";
 char PLATFORM_DOUBLE_QUOTE_C                 = '\"';
