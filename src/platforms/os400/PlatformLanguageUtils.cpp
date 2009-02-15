@@ -56,30 +56,30 @@ static iconv_t cvtrJobToUCS2 = generateConverter(CCSID_JOB, CCSID_UCS2);
 wchar_t * PlatformLanguageUtils::
 toWchar(const char *charBuf, int charLen)
 {
-	logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
+    logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
 
-	if (charLen == 0 || charBuf == NULL)
-		return NULL;
+    if (charLen == 0 || charBuf == NULL)
+        return NULL;
 
-	size_t outBytesLeft = charLen*sizeof(wchar_t);
-	wchar_t *outBuffer = (wchar_t *) new wchar_t[charLen];
+    size_t outBytesLeft = charLen*sizeof(wchar_t);
+    wchar_t *outBuffer = (wchar_t *) new wchar_t[charLen];
 
-	int myToBufLen = outBytesLeft;
-	char *myToBuf = (char *)outBuffer;
+    int myToBufLen = outBytesLeft;
+    char *myToBuf = (char *)outBuffer;
 
-	size_t irc = iconv(cvtrJobToUCS2, (char **)&charBuf, (size_t *)&charLen, &myToBuf, &outBytesLeft);
-	myToBufLen -= outBytesLeft;
+    size_t irc = iconv(cvtrJobToUCS2, (char **)&charBuf, (size_t *)&charLen, &myToBuf, &outBytesLeft);
+    myToBufLen -= outBytesLeft;
 
-	if (irc == (size_t)-1)
-	{
-		delete [] outBuffer;
-		
-		logThrowExceptionNoExit("AxisEngineException: Error converting from character to wide-character.")
-		
-		throw AxisEngineException(-999, "Error converting from character to wide-character.");
-	}
+    if (irc == (size_t)-1)
+    {
+        delete [] outBuffer;
+        
+        logThrowExceptionNoExit("AxisEngineException: Error converting from character to wide-character.")
+        
+        throw AxisEngineException(-999, "Error converting from character to wide-character.");
+    }
 
-	return outBuffer;
+    return outBuffer;
 }
 
 //******************************************************************************
@@ -96,30 +96,31 @@ static iconv_t cvtrUCS2ToJob = generateConverter(CCSID_UCS2, CCSID_JOB);
 char * PlatformLanguageUtils:: 
 toChar(const wchar_t *wcharBuf, int wcharLen)
 {
-	logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
+    logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
 
-	if (wcharLen == 0 || wcharBuf == NULL)
-		return NULL;
+    if (wcharLen == 0 || wcharBuf == NULL)
+        return NULL;
 
-	size_t outBytesLeft = (wcharLen * MB_LEN_MAX);
-	char *outBuffer = (char *) new char[wcharLen * MB_LEN_MAX];
+    size_t outBytesLeft = (wcharLen * MB_LEN_MAX);
+    char *outBuffer = (char *) new char[wcharLen * MB_LEN_MAX];
 
-	int myToBufLen = outBytesLeft;
-	char *myToBuf = outBuffer;
+    int myToBufLen = outBytesLeft;
+    char *myToBuf = outBuffer;
 
-	size_t irc = iconv(cvtrUCS2ToJob, (char **)&wcharBuf, (size_t *)&wcharLen, &myToBuf, &outBytesLeft);
-	myToBufLen -= outBytesLeft;
+    int numberOfBytes = wcharLen * sizeof(wchar_t);
+    size_t irc = iconv(cvtrUCS2ToJob, (char **)&wcharBuf, (size_t *)&numberOfBytes, &myToBuf, &outBytesLeft);
+    myToBufLen -= outBytesLeft;
 
-	if (irc == (size_t)-1)
-	{
-		delete [] outBuffer;
-		
-		logThrowExceptionNoExit("AxisEngineException: Error converting from wide-character to character.")
+    if (irc == (size_t)-1)
+    {
+        delete [] outBuffer;
+        
+        logThrowExceptionNoExit("AxisEngineException: Error converting from wide-character to character.")
 
-		throw AxisEngineException(-999, "Error converting from wide-character to character.");
-	}
+        throw AxisEngineException(-999, "Error converting from wide-character to character.");
+    }
 
-	return outBuffer;
+    return outBuffer;
 }
 
 //******************************************************************************
@@ -148,8 +149,8 @@ toUTF8(const char *charBuf, int charLen)
         
    if (irc == (size_t)-1)
    {
-	   delete [] outBuffer;
-	   
+       delete [] outBuffer;
+       
        logThrowExceptionNoExit("AxisEngineException: Error converting to UTF-8.")
 
        throw AxisEngineException(-999, "Error converting to utf-8.");   

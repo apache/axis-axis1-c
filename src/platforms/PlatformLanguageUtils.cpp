@@ -37,28 +37,28 @@ AXIS_CPP_NAMESPACE_START
 wchar_t * PlatformLanguageUtils::
 toWchar(const char *charBuf, int charLen)
 {
-	logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
-	
-	if (charBuf == NULL || charLen == 0)
-		return NULL;
-	
-	// Allocate buffer.  Need to make sure buffer will fit wide-character
-	// representation of character string, including null-terminating character.
-	wchar_t *outBuffer = new wchar_t[charLen];
-	
-	// Now call wide-character function to convert string to wide-character.
-	size_t nbrGenerated = mbstowcs(outBuffer, charBuf, charLen);
-	
-	if (nbrGenerated == (size_t)-1)
-	{
-		delete [] outBuffer;
-		
-		logThrowExceptionNoExit("AxisEngineException: Error converting from character to wide-character.")
-		
-		throw AxisEngineException(-999, "Error converting from character to wide-character.");
-	}
-	
-	return outBuffer;
+    logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
+    
+    if (charBuf == NULL || charLen == 0)
+        return NULL;
+    
+    // Allocate buffer.  Need to make sure buffer will fit wide-character
+    // representation of character string, including null-terminating character.
+    wchar_t *outBuffer = new wchar_t[charLen];
+    
+    // Now call wide-character function to convert string to wide-character.
+    size_t nbrGenerated = mbstowcs(outBuffer, charBuf, charLen);
+    
+    if (nbrGenerated == (size_t)-1)
+    {
+        delete [] outBuffer;
+        
+        logThrowExceptionNoExit("AxisEngineException: Error converting from character to wide-character.")
+        
+        throw AxisEngineException(-999, "Error converting from character to wide-character.");
+    }
+    
+    return outBuffer;
 }
 
 //******************************************************************************
@@ -69,29 +69,29 @@ toWchar(const char *charBuf, int charLen)
 char * PlatformLanguageUtils:: 
 toChar(const wchar_t *wcharBuf, int wcharLen)
 {
-	logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
-	
-	if (wcharBuf == NULL || wcharLen == 0)
-		return NULL;
-	
-	// Allocate buffer.  Need to make sure buffer will fit character
-	// representation of wide-character string, including null-terminating character.
-	int bufLen = (wcharLen * MB_CUR_MAX);
-	char *outBuffer = new char[bufLen];
-	
-	// Now call wide-character function to convert wide-character to character string.
-	size_t nbrGenerated = wcstombs(outBuffer, wcharBuf, bufLen);
-	
-	if (nbrGenerated == (size_t)-1)
-	{
-		delete [] outBuffer;
-		
-		logThrowExceptionNoExit("AxisEngineException: Error converting from wide-character to character.")
+    logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
+    
+    if (wcharBuf == NULL || wcharLen == 0)
+        return NULL;
+    
+    // Allocate buffer.  Need to make sure buffer will fit character
+    // representation of wide-character string, including null-terminating character.
+    int bufLen = (wcharLen * MB_CUR_MAX);
+    char *outBuffer = new char[bufLen];
+    
+    // Now call wide-character function to convert wide-character to character string.
+    size_t nbrGenerated = wcstombs(outBuffer, wcharBuf, bufLen);
+    
+    if (nbrGenerated == (size_t)-1)
+    {
+        delete [] outBuffer;
+        
+        logThrowExceptionNoExit("AxisEngineException: Error converting from wide-character to character.")
 
-		throw AxisEngineException(-999, "Error converting from wide-character to character.");
-	}
-	
-	return outBuffer;
+        throw AxisEngineException(-999, "Error converting from wide-character to character.");
+    }
+    
+    return outBuffer;
 }
 
 //******************************************************************************
@@ -102,20 +102,20 @@ toChar(const wchar_t *wcharBuf, int wcharLen)
 char * PlatformLanguageUtils:: 
 toUTF8(const char *charBuf, int charLen)
 {
-	logSetFunctionNameEngine("PlatformLanguageUtils::toUTF8")
-	
-	if (charBuf == NULL || charLen == 0)
-		return NULL;
-	
-	// TODO
-	// I do not think there is a generic way to do this 
-	// that is acceptable by windows and unix platforms (maybe iconv?), so if someone
-	// wants to do this then they have to create plarform-specific copy of this file and
-	// put in proper directory and update the build/buildClient.xml file to pick the 
-	// platform file instead of the common file. See how os400 does it. 
-	logThrowExceptionNoExit("AxisEngineException: Error converting to UTF-8.")
+    logSetFunctionNameEngine("PlatformLanguageUtils::toUTF8")
+    
+    if (charBuf == NULL || charLen == 0)
+        return NULL;
+    
+    // TODO
+    // I do not think there is a generic way to do this 
+    // that is acceptable by windows and unix platforms (maybe iconv?), so if someone
+    // wants to do this then they have to create plarform-specific copy of this file and
+    // put in proper directory and update the build/buildClient.xml file to pick the 
+    // platform file instead of the common file. See how os400 does it. 
+    logThrowExceptionNoExit("AxisEngineException: Error converting to UTF-8.")
 
-	throw AxisEngineException(-999, "Error converting to utf-8.");
+    throw AxisEngineException(-999, "Error converting to utf-8.");
 }
 
 AXIS_CPP_NAMESPACE_END
