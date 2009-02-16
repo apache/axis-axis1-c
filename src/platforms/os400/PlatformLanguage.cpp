@@ -26,7 +26,7 @@
 #include <qtqiconv.h>                   // QtqCode_T, QtqIconvOpen()
 #include <errno.h>
 
-#include "../PlatformLanguageUtils.hpp"
+#include "../PlatformLanguage.hpp"
 
 #include "../../engine/AxisEngineException.h"
 #include "../../common/AxisTrace.h"
@@ -43,7 +43,29 @@ static iconv_t generateConverter(int fromCcsid, int toCcsid);
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toWchar() Implementation
+// PlatformLanguage::initialize() Implementation
+//
+//******************************************************************************
+void PlatformLanguage::
+initialize()
+{
+
+}
+
+//******************************************************************************
+//
+// PlatformLanguage::uninitialize() Implementation
+//
+//******************************************************************************
+void PlatformLanguage::
+uninitialize()
+{
+
+}
+
+//******************************************************************************
+//
+// PlatformLanguage::toWchar() Implementation
 //
 // Notes: 
 //   - Wide character is implemented as UCS-2 when compiled with LOCALETYPE(*LOCALEUCS2).
@@ -53,10 +75,10 @@ static iconv_t generateConverter(int fromCcsid, int toCcsid);
 //******************************************************************************
 static iconv_t cvtrJobToUCS2 = generateConverter(CCSID_JOB, CCSID_UCS2);
 
-wchar_t * PlatformLanguageUtils::
+wchar_t * PlatformLanguage::
 toWchar(const char *charBuf, int charLen)
 {
-    logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
+    logSetFunctionNameEngine("PlatformLanguage::toWchar")
 
     if (charLen == 0 || charBuf == NULL)
         return NULL;
@@ -84,7 +106,7 @@ toWchar(const char *charBuf, int charLen)
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toChar() Implementation
+// PlatformLanguage::toChar() Implementation
 //
 // Notes: 
 //   - Wide character is implemented as UCS-2 when compiled with LOCALETYPE(*LOCALEUCS2).
@@ -93,10 +115,10 @@ toWchar(const char *charBuf, int charLen)
 //
 //******************************************************************************
 static iconv_t cvtrUCS2ToJob = generateConverter(CCSID_UCS2, CCSID_JOB);
-char * PlatformLanguageUtils:: 
+char * PlatformLanguage:: 
 toChar(const wchar_t *wcharBuf, int wcharLen)
 {
-    logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
+    logSetFunctionNameEngine("PlatformLanguage::toChar")
 
     if (wcharLen == 0 || wcharBuf == NULL)
         return NULL;
@@ -125,15 +147,15 @@ toChar(const wchar_t *wcharBuf, int wcharLen)
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toUTF8() Implementation
+// PlatformLanguage::toUTF8() Implementation
 //
 //******************************************************************************
 static iconv_t cvtrJobToUtf8 = generateConverter(CCSID_JOB, CCSID_UTF8);
 
-char * PlatformLanguageUtils::
+char * PlatformLanguage::
 toUTF8(const char *charBuf, int charLen)
 {
-   logSetFunctionNameEngine("PlatformLanguageUtils::toUTF8")
+   logSetFunctionNameEngine("PlatformLanguage::toUTF8")
 
    if (charLen == 0 || charBuf == NULL)
       return strdup("");

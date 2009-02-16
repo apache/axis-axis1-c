@@ -52,7 +52,7 @@
 						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
-	                    <include name="platforms/PlatformLanguageUtils.cpp" unless="os400"/>
+	                    <include name="platforms/PlatformLanguage.cpp" unless="os400"/>
 						<include name="platforms/windows/*.cpp" if="windows"/>
 						<include name="platforms/unix/*.cpp" if="linux"/>
 						<include name="platforms/unix/*.cpp" if="solaris"/>
@@ -82,7 +82,7 @@
 						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
-					    <include name="platforms/PlatformLanguageUtils.cpp"/>
+					    <include name="platforms/PlatformLanguage.cpp"/>
 						<include name="platforms/unix/*.cpp"/>
 					</fileset>
 				</cc>

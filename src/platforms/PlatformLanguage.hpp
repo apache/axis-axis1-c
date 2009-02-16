@@ -16,8 +16,8 @@
  *
  */
 
-#if !defined(AXIS_AXISLANGUAGEUTILS_H__OF_AXIS_INCLUDED_)
-#define AXIS_AXISLANGUAGEUTILS_H__OF_AXIS_INCLUDED_
+#if !defined(AXIS_PLATFORMLANGUAGE_H__OF_AXIS_INCLUDED_)
+#define AXIS_PLATFORMLANGUAGE_H__OF_AXIS_INCLUDED_
 
 #include <axis/GDefine.hpp>
 #include <string>
@@ -29,12 +29,22 @@ using namespace std;
 AXIS_CPP_NAMESPACE_START
 
 /**
- * Contains utility methods in support of national languages. 
+ * Contains methods in support of national languages. 
  */
-class STORAGE_CLASS_INFO PlatformLanguageUtils
+class STORAGE_CLASS_INFO PlatformLanguage
 {
   public:
-
+	/**
+	  * Must be called once to initialize/allocate any internal objects that are needed. 
+	  * Can be called multiple times - subsequent calls are no-ops. 
+	  */ 
+	static void initialize();
+	
+	/**
+	  * Reclaims any allocated objects. Can be called multiple times.
+	  */ 
+	static void uninitialize();
+	  
     /**
      * Returns dynamially allocated buffer containing the wide character representation 
      * of the passed-in character string.  Caller owns the memory returned. 

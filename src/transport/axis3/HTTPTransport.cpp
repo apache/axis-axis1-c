@@ -25,7 +25,7 @@
 
 #include "HTTPTransport.hpp"
 
-#include "../../platforms/PlatformLanguageUtils.hpp"
+#include "../../platforms/PlatformLanguage.hpp"
 
 // for the basic auth encryption
 #include "../../soap/apr_base64.h"
@@ -309,11 +309,11 @@ flushOutput() throw (AxisException, HTTPTransportException)
         m_pActiveChannel->writeBytes(m_strBytesToSend.c_str(), m_strBytesToSend.length());
 #else
         // Ebcdic (OS/400) systems need to convert the data to UTF-8. 
-        utf8Buf = PlatformLanguageUtils::toUTF8((const char *)m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length()+1);
+        utf8Buf = PlatformLanguage::toUTF8((const char *)m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length()+1);
         m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
         delete utf8Buf;
         utf8Buf = NULL;
-        utf8Buf = PlatformLanguageUtils::toUTF8((const char *)m_strBytesToSend.c_str(), m_strBytesToSend.length()+1);
+        utf8Buf = PlatformLanguage::toUTF8((const char *)m_strBytesToSend.c_str(), m_strBytesToSend.length()+1);
         m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
         delete utf8Buf;
         utf8Buf = NULL;

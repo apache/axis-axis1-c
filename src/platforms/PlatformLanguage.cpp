@@ -21,7 +21,7 @@
 // !!! This include file must be first thing in file !!!
 #include "PlatformAutoSense.hpp"
 
-#include "PlatformLanguageUtils.hpp"
+#include "PlatformLanguage.hpp"
 
 #include "../engine/AxisEngineException.h"
 #include "../common/AxisTrace.h"
@@ -31,13 +31,35 @@ AXIS_CPP_NAMESPACE_START
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toWchar() Implementation
+// PlatformLanguage::initialize() Implementation
 //
 //******************************************************************************
-wchar_t * PlatformLanguageUtils::
+void PlatformLanguage::
+initialize()
+{
+
+}
+
+//******************************************************************************
+//
+// PlatformLanguage::uninitialize() Implementation
+//
+//******************************************************************************
+void PlatformLanguage::
+uninitialize()
+{
+
+}
+
+//******************************************************************************
+//
+// PlatformLanguage::toWchar() Implementation
+//
+//******************************************************************************
+wchar_t * PlatformLanguage::
 toWchar(const char *charBuf, int charLen)
 {
-    logSetFunctionNameEngine("PlatformLanguageUtils::toWchar")
+    logSetFunctionNameEngine("PlatformLanguage::toWchar")
     
     if (charBuf == NULL || charLen == 0)
         return NULL;
@@ -63,13 +85,13 @@ toWchar(const char *charBuf, int charLen)
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toChar() Implementation
+// PlatformLanguage::toChar() Implementation
 //
 //******************************************************************************
-char * PlatformLanguageUtils:: 
+char * PlatformLanguage:: 
 toChar(const wchar_t *wcharBuf, int wcharLen)
 {
-    logSetFunctionNameEngine("PlatformLanguageUtils::toChar")
+    logSetFunctionNameEngine("PlatformLanguage::toChar")
     
     if (wcharBuf == NULL || wcharLen == 0)
         return NULL;
@@ -96,13 +118,13 @@ toChar(const wchar_t *wcharBuf, int wcharLen)
 
 //******************************************************************************
 //
-// PlatformLanguageUtils::toUTF8() Implementation
+// PlatformLanguage::toUTF8() Implementation
 //
 //******************************************************************************
-char * PlatformLanguageUtils:: 
+char * PlatformLanguage:: 
 toUTF8(const char *charBuf, int charLen)
 {
-    logSetFunctionNameEngine("PlatformLanguageUtils::toUTF8")
+    logSetFunctionNameEngine("PlatformLanguage::toUTF8")
     
     if (charBuf == NULL || charLen == 0)
         return NULL;

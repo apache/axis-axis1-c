@@ -18,7 +18,7 @@
 #include "../platforms/PlatformAutoSense.hpp"
 
 #include "apr_base64.h"
-#include "../platforms/PlatformLanguageUtils.hpp"
+#include "../platforms/PlatformLanguage.hpp"
 
 #include "../common/AxisTrace.h"
 
@@ -158,7 +158,7 @@ APU_DECLARE(int) apr_base64_encode(char *encoded, const char *string)
     return apr_base64_encode_binary(encoded, (const unsigned char *) string, strlen(string));
 #else /* __OS400__ */
     // First convert to UTF-8, then encode data using apr_base64_encode_binary
-    char *utf8Buffer = (char *)axiscpp::PlatformLanguageUtils::toUTF8((const char *)string, strlen(string)+1);
+    char *utf8Buffer = (char *)axiscpp::PlatformLanguage::toUTF8((const char *)string, strlen(string)+1);
     int rc = apr_base64_encode_binary(encoded, (const unsigned char *)utf8Buffer, strlen(utf8Buffer));
     delete utf8Buffer;
     return rc;

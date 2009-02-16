@@ -18,7 +18,7 @@
 
 #include "IAnySimpleType.hpp"
 
-#include "../../platforms/PlatformLanguageUtils.hpp"       
+#include "../../platforms/PlatformLanguage.hpp"       
 
 const wchar_t XML_ENTITY_REFERENCE_CHARS_WS[] = L"<>&\"\'";
 
@@ -123,7 +123,7 @@ replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
     // Must do character replacement as wide-character since for locales in which a character
     // represents multiple bytes we might inadverently replace a character that really 
     // is not a reserved character.  This is especially true for EBCDIC-based systems. 
-    wchar_t *wcs = PlatformLanguageUtils::toWchar(inValue.c_str(), inValue.length()+1);
+    wchar_t *wcs = PlatformLanguage::toWchar(inValue.c_str(), inValue.length()+1);
     wstring inValueW = wcs;
     delete [] wcs;
     
@@ -182,7 +182,7 @@ replaceReservedCharacters(AxisString &inValue, AxisString &outValue)
         outValueW += inValueW.substr (nOldIdx, nLen); 
     
     // Now convert data back to character string and return.
-    char *temps = PlatformLanguageUtils::toChar((const wchar_t *)outValueW.c_str(), outValueW.length()+1);
+    char *temps = PlatformLanguage::toChar((const wchar_t *)outValueW.c_str(), outValueW.length()+1);
     outValue = temps;
     delete [] temps;
     
