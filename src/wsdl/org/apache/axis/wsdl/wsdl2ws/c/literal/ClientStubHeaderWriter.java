@@ -92,8 +92,15 @@ public class ClientStubHeaderWriter
                     c_writer.write("extern void ");
                 }
                 
-                //write return type
-                c_writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
+                // write operation prototype
+                // Operation name may conflict with a C type, so if it does, need to make unique.
+                String methodName = minfo.getMethodname();
+                int ii = 0;
+                while (wscontext.getTypemap().doesTypeExist(methodName))
+                {
+                    methodName = minfo.getMethodname() + ii++;
+                }
+                c_writer.write(methodName + "(AXISCHANDLE pStub");                
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();

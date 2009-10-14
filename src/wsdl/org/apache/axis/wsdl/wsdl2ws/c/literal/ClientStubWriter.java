@@ -66,7 +66,7 @@ public class ClientStubWriter
             isAllTreatedAsOutParams = true;
 
         Collection params = minfo.getInputParameterTypes();
-        String methodName = minfo.getMethodname();
+        
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
@@ -99,7 +99,7 @@ public class ClientStubWriter
         // Generate method prototype
         //=============================================================================        
         
-        CUtils.printMethodComment(c_writer, "This function wraps the service method " + methodName + ".");
+        CUtils.printMethodComment(c_writer, "This function wraps the service method " + minfo.getMethodname() + ".");
         
         //method signature
         String paramTypeName;
@@ -118,7 +118,16 @@ public class ClientStubWriter
         else 
             c_writer.write(outparamType + "*");
    
+        // Method name may conflict with a C type, so if it does, need to make method unique.
+        String methodName = minfo.getMethodname();
+        int ii = 0;
+        while (wscontext.getTypemap().doesTypeExist(methodName))
+        {
+            methodName = minfo.getMethodname() + ii++;
+        }
+
         c_writer.write(" " + methodName + "(AXISCHANDLE stub");
+        
         ArrayList paramsB = (ArrayList) params;
         ParameterInfo paramtype = null;
         if (0 < paramsB.size ())
