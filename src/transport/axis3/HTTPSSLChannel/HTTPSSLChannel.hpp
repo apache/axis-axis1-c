@@ -71,7 +71,7 @@ public:
 	const char *		getURL();
 	virtual void		setURL( const char * cpURL);
     virtual URL &		getURLObject();
-    bool				open() throw (HTTPTransportException&);
+    bool				open();
     bool				close();
     const std::string &	GetLastErrorMsg();
     int                 readBytes(char *buf, int bufLen);
@@ -95,6 +95,9 @@ protected:
 	bool				OpenSSL_Open();
 	int					OpenSSL_Close();
 	void				OpenSSL_SetSecureError( int iError);
+    bool                proxyConnect();
+    int                 writeProxyConnect();
+    int                 readProxyConnect(char* buf, int bufLen);
 
 private:
     URL				m_URL;				// URL

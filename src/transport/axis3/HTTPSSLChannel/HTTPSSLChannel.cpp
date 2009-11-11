@@ -143,7 +143,7 @@ getURLObject()
  */
 
 bool HTTPSSLChannel::
-open() throw (HTTPTransportException&)
+open()
 {
     bool    bSuccess = (bool) AXIS_FAIL;
 
@@ -273,6 +273,193 @@ writeBytes(const char *buf, int numBytes)
     }
 
     return nByteSent;
+}
+
+/**
+ * HTTPSSLChannel::writeProxyConnect()
+ *
+ * This method writes the CONNECT method unencrypted to the open channel.
+ *
+ * Based off the "CONNECT" method (http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9.9),
+ * part of "Hypertext Transfer Protocol -- HTTP/1.1" (http://www.w3.org/Protocols/rfc2616/rfc2616.html)
+ *
+ * "Tunneling SSL Through a WWW Proxy"
+ * by Ari Luotonen, December 14, 1995
+ * http://muffin.doit.org/docs/rfc/tunneling_ssl.html
+ *
+ * "Tunneling TCP based protocols through Web proxy servers"
+ * by Ari Luotonen, August 1998
+ * http://www.web-cache.com/Writings/Internet-Drafts/draft-luotonen-web-proxy-tunneling-01.txt
+ *
+ * SSL tunneling patch for CERN httpd
+ * http://www.w3.org/Daemon/User/Patch/SSL.patch
+ *
+ *
+ * @param buf Character pointer pointing to the array of character containing the message to be transmitted.
+ * @param numBytes The number of bytes in the message to be transmitted.
+ * @return The number of bytes sent.
+ */
+bool HTTPSSLChannel::
+proxyConnect()
+{
+    // return value, default to failure
+    bool bSuccess = (bool)AXIS_FAIL;
+
+    // request a CONNECT to the server
+    int nBytesSent = writeProxyConnect();
+    
+    // variables needed for recieving data
+    int iHTTPStatus = 100;
+    int iBytesReceived = 0;
+    int iBytesLeft = 0;
+    char rxBuffer[BUF_SIZE];
+    string strBytesReceived;
+    string strResponseHTTPHeaders;
+    
+    // loop while the response is valid
+    do
+    {
+        while (strBytesReceived.find(ASCII_S_HTTP) == std::string::npos 
+            || strBytesReceived.find(ASCII_S_CRLFCRLF) == std::string::npos)
+        {
+            iBytesReceived = readProxyConnect(rxBuffer, BUF_SIZE);
+    
+            if (iBytesReceived > 0)
+            {
+                strBytesReceived += rxBuffer;
+                iBytesLeft = strBytesReceived.length();
+            }
+            else
+            {
+                throw HTTPTransportException(SERVER_TRANSPORT_INPUT_STREAMING_ERROR,
+                                              "Socket connection has been closed.");
+            }
+        }
+    
+        // At this point the HTTP header has been found. Seperate the response headers
+        // from the payload (i.e. SOAP message). 
+        string::size_type iHTTPStart = strBytesReceived.find(ASCII_S_HTTP);
+        string::size_type iHTTPEnd   = strBytesReceived.find(ASCII_S_CRLFCRLF, iHTTPStart);
+    
+        strResponseHTTPHeaders = strBytesReceived.substr(iHTTPStart, iHTTPEnd + 4 - iHTTPStart);
+        
+        // Process the HTTP header
+        PLATFORM_ASCTOSTR(strBytesReceived.c_str());
+        string strHTTPStatus = strBytesReceived.substr(strlen("HTTP/1.x "), 3);
+        iHTTPStatus = atoi(strHTTPStatus.c_str());
+    }
+    while(iHTTPStatus == 100);
+    
+    // Now have a valid HTTP header that is not 100. Throw an exception if some unexpected error.
+    // Note that error 500 are for for SOAP faults.
+    if (iHTTPStatus != 500 && (iHTTPStatus < 200 || iHTTPStatus >= 300))
+    {
+        throw HTTPTransportException(SERVER_TRANSPORT_HTTP_EXCEPTION, "Server sent HTTP error: \n");
+    }
+    if (iHTTPStatus == 200)
+    {
+        bSuccess = (bool)AXIS_SUCCESS;
+    }
+    return bSuccess;
+}
+
+int HTTPSSLChannel::
+writeProxyConnect()
+{
+    // send buffer
+    char buf[1024];
+    
+    // server port, not proxy port
+    unsigned int uiPort = m_URL.getPort();
+
+    // the header should look liks this:
+    // CONNECT home1.netscape.com:443 HTTP/1.0
+    sprintf(buf, "CONNECT %s:%u HTTP/1.1\r\n\r\n", m_URL.getHostName(), uiPort);
+
+    // get the number of bytes, needed for send()
+    int numBytes = strlen(buf);
+
+    //
+    // SEND THE CONNECT
+    //
+    if (INVALID_SOCKET == m_Sock)
+    {
+        m_LastError = "No valid socket to perform write operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
+    }
+
+    int nByteSent = 0;
+
+    if ((nByteSent = send( m_Sock, buf, numBytes, 0)) == SOCKET_ERROR)
+    {
+        // This must be done first before closing channel in order to get actual error.
+        m_LastError = "Error sending data.";
+
+        // Close the channel and throw an exception.
+        CloseChannel();
+
+        throw HTTPTransportException( SERVER_TRANSPORT_OUTPUT_STREAMING_ERROR, m_LastError.c_str());
+    }
+    return nByteSent;
+}
+
+int HTTPSSLChannel::
+readProxyConnect(char* buf, int bufLen)
+{
+    //
+    // RECEIVE THE CONNECT
+    //
+    if (INVALID_SOCKET == m_Sock)
+    {
+        m_LastError = "Unable to perform read operation.";
+        throw HTTPTransportException( SERVER_TRANSPORT_INVALID_SOCKET, m_LastError.c_str());
+    }
+
+    int nByteRecv = 0;
+    int iBufSize = bufLen - 10;
+
+    // If timeout set then wait for maximum amount of time for data
+    if (m_lTimeoutSeconds)
+    {
+        int iTimeoutStatus = applyTimeout();
+
+        // Handle timeout outcome
+        if (iTimeoutStatus < 0)
+        {
+            throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, m_LastError.c_str());
+        }
+    
+        if (iTimeoutStatus == 0)
+        {
+            m_LastError = "Read operation timed-out while waiting for data.";
+            throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, m_LastError.c_str() );
+        }
+    }
+
+    // Either timeout was not set or data available before timeout; so read
+    nByteRecv = recv( m_Sock, buf, iBufSize, 0);
+    if (nByteRecv == SOCKET_ERROR)
+    {
+        // This must be done first before closing channel in order to get actual error.
+        m_LastError = "Error receiving data.";
+
+        // Close the channel and throw an exception.
+        CloseChannel();
+
+        if(!bNoExceptionOnForceClose)
+        {
+            throw HTTPTransportException( SERVER_TRANSPORT_INPUT_STREAMING_ERROR, m_LastError.c_str());
+        }
+    }
+    else if ( 0 == nByteRecv )
+    {
+        // read-side of socket is closed.
+    }
+    else if (nByteRecv)
+    {
+        buf[nByteRecv] = '\0';
+    }
+    return nByteRecv;
 }
 
 /**
@@ -568,6 +755,9 @@ OpenChannel()
     int one = 1;
 
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *)&one, sizeof(int));
+
+    if(m_bUseProxy)
+        proxyConnect();
 
     bSuccess = OpenSSL_Open();
 

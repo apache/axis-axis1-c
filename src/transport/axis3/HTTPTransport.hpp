@@ -60,13 +60,13 @@ class HTTPTransport:public SOAPTransport
     *                       e.g. http://localhost:8080/axis/services/echo
     */
     void                    setEndpointUri( const char * pszEndpointURI) throw (HTTPTransportException);
-    int                        openConnection();
+    int                     openConnection();
     void                    closeConnection(bool forceClose=true);
-    AXIS_TRANSPORT_STATUS    sendBytes( const char *, const void *);
-    AXIS_TRANSPORT_STATUS    getBytes( char *, int *) throw (AxisException, HTTPTransportException);
-    int                        setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
+    AXIS_TRANSPORT_STATUS   sendBytes( const char *, const void *);
+    AXIS_TRANSPORT_STATUS   getBytes( char *, int *) throw (AxisException, HTTPTransportException);
+    int                     setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE, const char *) throw (HTTPTransportException);
     const char *            getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE) throw (HTTPTransportException);
-    int                        setTransportProperty( const char *, const char *) throw (HTTPTransportException);
+    int                     setTransportProperty( const char *, const char *) throw (HTTPTransportException);
     const char *            getTransportProperty( const char * pcKey, bool response=true) throw (HTTPTransportException);
     void                    setSessionId( const char * pcSessionId);
     const char *            getSessionId();
@@ -84,9 +84,9 @@ class HTTPTransport:public SOAPTransport
      *
      * @return AXIS_SUCCESS if the set worked and the protocol is supported AXIS_FAIL otherwise
      */
-    int                        setProtocol( AXIS_PROTOCOL_TYPE eProtocol);
-    int                        getSubProtocol();
-    AXIS_TRANSPORT_STATUS    flushOutput() throw (AxisException, HTTPTransportException);
+    int                     setProtocol( AXIS_PROTOCOL_TYPE eProtocol);
+    int                     getSubProtocol();
+    AXIS_TRANSPORT_STATUS   flushOutput() throw (AxisException, HTTPTransportException);
     void                    setProxy( const char *pcProxyHost, unsigned int uiProxyPort);
     void                    setTimeout( long lSeconds);
     const char *            getHTTPProtocol();
@@ -103,9 +103,9 @@ class HTTPTransport:public SOAPTransport
     virtual void            setMaintainSession( bool bSession);
 
     void                    setAttachment( const char * pcAttachmentId, const char * pcAttachment) {};
-    ISoapAttachment *        getAttachment( const char * pcAttachmentId) { return NULL;};
+    ISoapAttachment *       getAttachment( const char * pcAttachmentId) { return NULL;};
     ISoapAttachment**       getAllAttachments(int *pAttchArraySize) { return NULL;}; 
-    char *                    getIncomingSOAPMimeHeaders() {return NULL;}
+    char *                  getIncomingSOAPMimeHeaders() {return NULL;}
     const char *            getLastChannelError();
     
     void enableTrace(const char* logFilePath, const char *filters);
@@ -115,7 +115,7 @@ class HTTPTransport:public SOAPTransport
     void                    processMimeHeader();
     void                    processMimeBody();
     void                    getAttachment( char* pStrAttachment, int* pIntSize, int intAttachmentId);
-    int                        FindTransportPropertyIndex( std::string);
+    int                     FindTransportPropertyIndex( std::string);
     void                    readHTTPHeader();
     void                    processHTTPHeader();
     int                     getNextDataPacket( const char * pcszExceptionMessage, char *bufferToUse=NULL, int *bufferLen=NULL);

@@ -134,7 +134,7 @@ getURLObject()
  */
 
 bool HTTPChannel::
-open() throw (HTTPTransportException&)
+open()
 {
     logEntryTransport("HTTPChannel::open")
 

@@ -32,6 +32,39 @@ using namespace std;
 
 AXIS_CPP_NAMESPACE_USE
 
+// =================================================================
+// In order to parse the HTTP protocol data on an ebcdic system, we
+// need to ensure that the various tokens we are looking for to distinguish
+// between the HTTP headers and payload are in ASCII.  So the following 
+// defines for carriage return-line feed, etc. are ensured to be in ascii
+// by using ascii hexadecimal representation of the tokens.
+// =================================================================
+
+// Ascii character defines                   
+#define ASCII_C_EQUAL         '\x3D'    // '='  
+#define ASCII_C_DASH          '\x2D'    // '-'  
+#define ASCII_C_LF            '\x0A'    // '\n'
+#define ASCII_C_CR            '\x0D'    // '\r' 
+#define ASCII_C_SPACE         '\x20'    // ' ' 
+#define ASCII_C_SEMI          '\x3B'    // ';' 
+
+#define ASCII_C_LOWERCASEA    '\x61'    // 'a'
+#define ASCII_C_LOWERCASEF    '\x66'    // 'f'
+#define ASCII_C_UPPERCASEA    '\x41'    // 'A'
+#define ASCII_C_UPPERCASEF    '\x46'    // 'F'
+
+#define ASCII_C_ZERO          '\x30'    // '0'
+#define ASCII_C_NINE          '\x39'    // '9'
+
+// Ascii string defines
+#define ASCII_S_LF             "\x0a"               // "\n"     
+#define ASCII_S_CRLF           "\x0d\x0a"           // "\r\n"     
+#define ASCII_S_CRLFCRLF       "\x0d\x0a\x0d\x0a"   // "\r\n\r\n"
+
+#define ASCII_S_HTTP           "\x48\x54\x54\x50"   // "HTTP"
+
+#define ASCII_S_LEFTPAREN      "\x28"               // "("
+
 enum g_ChannelType 
 {
     UnsecureChannel,
@@ -46,7 +79,7 @@ public:
     virtual const char*         getURL()=0;
     virtual void                setURL( const char* cpURL)=0;
     virtual URL &               getURLObject()=0;
-    virtual bool                open() throw (HTTPTransportException&)=0;
+    virtual bool                open()=0;
     virtual bool                close()=0;
     virtual const std::string&  GetLastErrorMsg()=0;
     virtual int                 readBytes(char *buf, int bufLen)=0;
