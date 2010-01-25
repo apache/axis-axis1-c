@@ -947,6 +947,17 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
 
     if (!isFault)
     {
+    	if (AXIS_SUCCESS == m_nStatus && (RPC_ENCODED != m_nStyle) && (m_pNode == NULL))
+    	{
+    		const char*name = peekNextElementName();
+    		if (0 != strcmp (pName, name))
+    		{
+                logExitWithPointer(NULL)
+
+                return NULL; 
+    		}
+    	}
+    	
         if (AXIS_SUCCESS != m_nStatus || (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle)))
         {
             logExitWithPointer(NULL)
@@ -1475,6 +1486,17 @@ getElement (const AxisChar * pName, const AxisChar * pNamespace,
         return;
     }
         
+	if ((RPC_ENCODED != m_nStyle) && (m_pNode == NULL))
+	{
+		const char*name = peekNextElementName();
+		if (0 != strcmp (pName, name))
+		{
+            logExit()
+
+            return; 
+		}
+	}
+    
     if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
     {
         logExit()

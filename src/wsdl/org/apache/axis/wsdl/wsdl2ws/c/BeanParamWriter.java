@@ -640,16 +640,6 @@ public class BeanParamWriter extends ParamCFileWriter
             {                
                 String soapTagName = (attribs[i].isAttribute() ? attribs[i].getParamNameAsSOAPString() : attribs[i].getElementNameAsSOAPString());
                 
-                // We only peek for elements, not element attributes!
-                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
-                {
-                    c_writer.write(tab1 + "peekedElementName = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
-                    c_writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
-                    c_writer.write(tab1 + "{\n");
-                    
-                    tab2 += "\t";
-                }
-                
                 Type type = attribs[i].getType();
                 boolean isPointerType = false;
                 if (type.isSimpleType())
@@ -701,39 +691,18 @@ public class BeanParamWriter extends ParamCFileWriter
                     
                     c_writer.write(tab2 + "}\n");  // end local scope                
                 }
-                
-                if (attribs[i].isOptional() && !attribs[i].isAttribute() && !handleAll && !handleChoice)
-                {
-                    c_writer.write("\t\t\t}\n");
-                    c_writer.write("\t\telse\n");
-                    c_writer.write("\t\t\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                }
             }
             else
             {
                 //if complex type
                 String soapTagName = attribs[i].getParamNameAsSOAPString();
-                
-                if (attribs[i].isOptional() && !handleAll && !handleChoice)
-                {
-                    c_writer.write(tab1 + "peekedElementName = axiscSoapDeSerializerPeekNextElementName(pDZ);\n");
-                    c_writer.write(tab1 + "if (strcmp(peekedElementName, \"" + soapTagName + "\") == 0)\n");
-                    
-                    tab2 += "\t";
-                }
 
                 c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() 
                         + " = ("  + attribs[i].getTypeName()
                         + "*)axiscSoapDeSerializerGetCmplxObject(pDZ,(void*)Axis_DeSerialize_" + attribs[i].getTypeName()
                         + ", (void*)Axis_Create_" + attribs[i].getTypeName() 
                         + ", (void*)Axis_Delete_" + attribs[i].getTypeName() 
-                        + ", \"" + soapTagName + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
-                
-                if (attribs[i].isOptional()  && !handleAll && !handleChoice)
-                {
-                    c_writer.write(tab1 + "else\n");
-                    c_writer.write(tab1 + "\tparam->" + attribs[i].getParamNameAsMember() + " = NULL;\n");
-                }      
+                        + ", \"" + soapTagName + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");   
             }
 
             if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
