@@ -443,6 +443,26 @@ public class ParmHeaderFileWriter extends ParamWriter
                     + type.getName().getNamespaceURI() + "\";\n");
             c_writer.write("static const char Axis_TypeName_" + c_classname
                     + "[] = \"" + type.getName().getLocalPart() + "\";\n\n");
+            
+            // Define struct to avoid compilation issues (cycle in includes).
+            // This is a must for complex wsdl files.
+            typeSet = new HashSet();
+            for (int i = 0; i < attribs.length; i++)
+            {
+                if (!attribs[i].isArray() && 
+                        !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
+                        && !attribs[i].isAnyElement())
+                {
+                    typeSet.add(attribs[i].getTypeName());
+                } 
+            }
+            
+            itr = typeSet.iterator();
+            while (itr.hasNext())
+            {
+                String t = itr.next().toString();
+                c_writer.write("typedef struct " + t + "Tag " + t + ";\n");
+            }
         }
         catch (IOException e)
         {
