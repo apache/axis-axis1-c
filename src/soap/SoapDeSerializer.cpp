@@ -2211,12 +2211,21 @@ getAnyObject ()
             else
                 bContinue = false;
             
-            // Increment counter if entering new tag, Decrement counter if exiting tag
-            if (START_ELEMENT == m_pNode->m_type && START_END_ELEMENT != m_pNode->m_type2)
-                tagCount++;
-            else if (END_ELEMENT == m_pNode->m_type)
-                tagCount--;
-    
+            // if empty element we need to do a parser get to consume the end-element node.
+            if (START_END_ELEMENT == m_pNode->m_type2)
+            {
+                if (END_ELEMENT == m_pNode->m_type)
+                    m_pNode = m_pParser->anyNext ();
+            }
+            else
+            {
+                // Increment counter if entering new tag, Decrement counter if exiting tag
+                if (START_ELEMENT == m_pNode->m_type)
+                    tagCount++;
+                else if (END_ELEMENT == m_pNode->m_type)
+                    tagCount--;
+            }
+
             if (START_PREFIX == m_pNode->m_type)
             {
                 nsDecls += " xmlns";
@@ -2242,10 +2251,16 @@ getAnyObject ()
                 xmlStr += outValue;
             }
         
-            if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))    /* copying the First level element into the list */
+            /* copy the First level element into the list */
+            if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))
             {
                 lstXML.push_back (xmlStr);
                 xmlStr = "";
+
+                // If the anyType element is empty element, we need to consume END_ELEMENT.
+                if (START_END_ELEMENT == m_pNode->m_type2 && START_ELEMENT == m_pNode->m_type)
+                    m_pNode = m_pParser->anyNext ();
+
                 m_pNode = NULL;
                 break;
             }
