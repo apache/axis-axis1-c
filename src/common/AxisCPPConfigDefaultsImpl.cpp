@@ -70,7 +70,7 @@ void AxisCPPConfigDefaultsImpl::apply ()
 
       pszValue = getClientWSDDFile();
       if(pszValue)
-          g_pConfig->setValue(0,AXCONF_WSDDFILEPATH, pszValue);
+          g_pConfig->setValue(0,AXCONF_CLIENTWSDDFILEPATH, pszValue);
 
       pszValue = getXMLParserLibrary();
       if(pszValue)
