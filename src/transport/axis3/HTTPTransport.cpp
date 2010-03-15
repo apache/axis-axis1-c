@@ -257,38 +257,48 @@ flushOutput() throw (AxisException, HTTPTransportException)
 {
     logEntryTransport("HTTPTransport::flushOutput")
 
-    char *utf8Buf = NULL; // buffer for ebcdic/utf8 conversions.
-
-    // In preperation for sending the message, set Content-Length HTTP header.
+    char *utf8BufHeader  = NULL; // buffer for HTTP header when converting to utf8.
+    char *utf8BufPayload = NULL; // buffer for HTTP payload when converting to utf8.
     char buff[24];
-    sprintf( buff, "%d", m_strBytesToSend.length ());
-    this->setTransportProperty ("Content-Length", buff);
 
-    // The header is now complete.  The message header and message can now be transmitted.
+    // Send HTTP headers and body
     try
     {
-        // Generate HTTP header string
-        generateHTTPHeaders ();
-                
-        // Send HTTP headers and body
 #ifndef __OS400__
+        // Generate HTTP header string - need to set content-length before generating headers.
+        sprintf( buff, "%d", m_strBytesToSend.length ());
+        this->setTransportProperty ("Content-Length", buff);
+        generateHTTPHeaders ();
+
         m_pActiveChannel->writeBytes(m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length());
         m_pActiveChannel->writeBytes(m_strBytesToSend.c_str(), m_strBytesToSend.length());
 #else
-        // Ebcdic (OS/400) systems need to convert the data to UTF-8. 
-        utf8Buf = PlatformLanguage::toUTF8((const char *)m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length()+1);
-        m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
-        delete utf8Buf;
-        utf8Buf = NULL;
-        utf8Buf = PlatformLanguage::toUTF8((const char *)m_strBytesToSend.c_str(), m_strBytesToSend.length()+1);
-        m_pActiveChannel->writeBytes(utf8Buf, strlen(utf8Buf));
-        delete utf8Buf;
-        utf8Buf = NULL;
+        // Generate HTTP header string - need to set content-length before generating headers.
+        // We need to convert payload to UTF-8 first to get accurate length of payload.
+        utf8BufPayload    = PlatformLanguage::toUTF8((const char *)m_strBytesToSend.c_str(), m_strBytesToSend.length()+1);
+        int payLoadLength = strlen(utf8BufPayload);
+
+        sprintf( buff, "%d", payLoadLength);
+        this->setTransportProperty ("Content-Length", buff);
+        generateHTTPHeaders ();
+
+        // Convert HTTP header to UTF-8. (Really should be US-ASCII, but it is compatible with UTF-8.)
+        utf8BufHeader = PlatformLanguage::toUTF8((const char *)m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length()+1);
+
+        // Write out the HTTP header followed by the HTTP payload.
+        m_pActiveChannel->writeBytes(utf8BufHeader, strlen(utf8BufHeader));
+        delete utf8BufHeader;
+        utf8BufHeader = NULL;
+
+        m_pActiveChannel->writeBytes(utf8BufPayload, payLoadLength);
+        delete utf8BufPayload;
+        utf8BufPayload = NULL;
 #endif
     }
     catch(...)
     {
-        delete utf8Buf;
+        delete utf8BufHeader;
+        delete utf8BufPayload;
         m_strBytesToSend = "";
         m_strHeaderBytesToSend = "";
         
