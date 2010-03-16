@@ -115,10 +115,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     ParameterInfo returnParam =
                         (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
                     String outParamTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
-                    if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
+                    if ((CUtils.isArrayType(outParamTypeName)) 
                             || (CUtils.isSimpleType(outParamTypeName)
-                            && (returnParam.isNillable() || returnParam.isOptional())
-                            && !(CUtils.isPointerType(outParamTypeName))))
+                                && (returnParam.isNillable() || returnParam.isOptional())
+                                && !(CUtils.isPointerType(outParamTypeName))))
                         c_writer.write("extern " + outParamTypeName + " * ");
                     else
                         c_writer.write("extern " + outParamTypeName + " ");
@@ -143,10 +143,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     .getClassNameFromParamInfoConsideringArrays(
                             fparam,
                             wscontext);
-                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
-                            ||(CUtils.isSimpleType(paramTypeName)
-                            && fparam.isNillable()
-                            && !(CUtils.isPointerType(paramTypeName))))
+                    if ((CUtils.isArrayType(paramTypeName))
+                            || (CUtils.isSimpleType(paramTypeName)
+                                && fparam.isNillable()
+                                && !(CUtils.isPointerType(paramTypeName))))
                     {
                         c_writer.write(
                                 paramTypeName

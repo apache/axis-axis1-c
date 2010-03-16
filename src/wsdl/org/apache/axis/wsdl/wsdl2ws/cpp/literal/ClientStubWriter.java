@@ -102,7 +102,7 @@ public class ClientStubWriter
                 else
                 {
                     returntypeissimple = CUtils.isSimpleType (outparamType);
-                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
+                    returntypeisarray = CUtils.isArrayType(outparamType);
                 }
             
                 returntypeisarray |= retType.isArray();
@@ -158,7 +158,7 @@ public class ClientStubWriter
                     if (CUtils.isSimpleType (paramTypeName))
                         paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                    typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
+                    typeisarray = CUtils.isArrayType(paramTypeName);
                     if (!typeisarray)
                         paramTypeName = type.getLanguageSpecificName ();
 
@@ -208,7 +208,7 @@ public class ClientStubWriter
                         if (CUtils.isSimpleType (paramTypeName))
                             paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                        typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
+                        typeisarray = CUtils.isArrayType(paramTypeName);
                         if (!typeisarray)
                             paramTypeName = type.getLanguageSpecificName ();       
                     }
@@ -429,7 +429,7 @@ public class ClientStubWriter
                     if (CUtils.isSimpleType (paramTypeName))
                         paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
                     
-                    typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
+                    typeisarray = CUtils.isArrayType(paramTypeName);
                     if (!typeisarray)
                         paramTypeName = type.getLanguageSpecificName ();
                 }
@@ -626,7 +626,7 @@ public class ClientStubWriter
                     else
                     {
                         currentParaType = CUtils.getClassNameFromParamInfoConsideringArrays(currentType, wscontext);
-                        typeisarray = (currentParaType.lastIndexOf("_Array") > 0);
+                        typeisarray = CUtils.isArrayType(currentParaType);
                     }
                     
                     typeisarray |= type.isArray ();
@@ -660,6 +660,7 @@ public class ClientStubWriter
                         qname = type.getName ();
                     
                     String containedType = null;
+                    String containedTypeArrayName = null;
                     
                     if (CUtils.isSimpleType (qname))
                     {
@@ -680,11 +681,13 @@ public class ClientStubWriter
                     }
                     else
                     {
-                        containedType = qname.getLocalPart ();
+                        containedType          = qname.getLocalPart ();
+                        containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+
                         c_writer.write("\n\t\t\t\tif (OutValue" + i + " != NULL)\n" );
                         c_writer.write("\t\t\t\t{\n");
                         c_writer.write("\t\t\t\t\tif (" + currentParamName + " == NULL)\n");
-                        c_writer.write("\t\t\t\t\t\t" + currentParamName + " = new " + containedType + "_Array();\n");
+                        c_writer.write("\t\t\t\t\t\t" + currentParamName + " = new " + containedTypeArrayName + "();\n");
                         c_writer.write("\t\t\t\t\telse\n");
                         c_writer.write("\t\t\t\t\t\t(" + currentParamName + ")->clear();\n");
                         c_writer.write("\t\t\t\t\tm_pCall->getCmplxArray(" + currentParamName 
@@ -697,8 +700,8 @@ public class ClientStubWriter
                         c_writer.write("\t\t\t\telse\n");
                         c_writer.write("\t\t\t\t{\n");
                         c_writer.write("\t\t\t\t\t// Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed.\n");
-                        c_writer.write("\t\t\t\t\t" + containedType + "_Array * pTemp" + i 
-                                + " = new " + containedType + "_Array();\n");
+                        c_writer.write("\t\t\t\t\t" + containedTypeArrayName + " * pTemp" + i 
+                                + " = new " + containedTypeArrayName + "();\n");
                         c_writer.write("\t\t\t\t\tm_pCall->getCmplxArray(pTemp" + i 
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
@@ -811,7 +814,10 @@ public class ClientStubWriter
                 qname = CUtils.getArrayType (retType).getName ();
             else
                 qname = retType.getName ();
+            
             String containedType = null;
+            String containedTypeArrayName = null;
+
             if (CUtils.isSimpleType (qname))
             {
                 containedType = CUtils.getSimpleType (qname);
@@ -824,7 +830,9 @@ public class ClientStubWriter
             else
             {
                 containedType = qname.getLocalPart ();
-                c_writer.write("\t\t\t\tRetArray = (" + containedType + "_Array *) m_pCall->getCmplxArray(RetArray, (void*) Axis_DeSerialize_"
+                containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+
+                c_writer.write("\t\t\t\tRetArray = (" + containedTypeArrayName + " *) m_pCall->getCmplxArray(RetArray, (void*) Axis_DeSerialize_"
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType

@@ -176,9 +176,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 //for simple types    
                 if (param.isArray())
                 {
-                    String containedType = CUtils.getSimpleType(type.getName());
+                    String containedType      = CUtils.getSimpleType(type.getName());
+                    String containedTypeArray = CUtils.getArrayNameForType(containedType);
                     
-                    c_writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
+                    c_writer.write("\n\t" + containedTypeArray + " * v" + i +" = new " + containedTypeArray + "();\n");
                     c_writer.write("\t"
                             + "Axis_Array * RetArray" + i + " = pIWSDZ->getBasicArray("
                             + CUtils.getXSDEnumeratorForType(containedType)
@@ -256,7 +257,9 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                 if (CUtils.isSimpleType(qname))
                 {
                     containedType = CUtils.getSimpleType(qname);
-                    c_writer.write("\n\t" + outparamType + "_Array * v" + i +" = new " + outparamType + "_Array();\n");
+                    String containedTypeArray = CUtils.getArrayNameForType(outparamType);
+
+                    c_writer.write("\n\t" + containedTypeArray + " * v" + i +" = new " + containedTypeArray + "();\n");
                     c_writer.write("\t"
                         + "Axis_Array * RetArray" + i + " = pIWSDZ->getBasicArray("
                         + CUtils.getXSDEnumeratorForType(containedType)
@@ -331,7 +334,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             /* Invoke the service when return type not void */
             returnParamName = returntype.getElementNameAsSOAPString();
             c_writer.write("\t\t" + outparamType);
-            if ((outparamType.lastIndexOf ("_Array") > 0)
+            if ((CUtils.isArrayType(outparamType))
                     ||(!returntypeisarray 
                             && (!returntypeissimple
                                     || (returntypeissimple 

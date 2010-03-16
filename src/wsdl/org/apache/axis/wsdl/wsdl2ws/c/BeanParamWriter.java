@@ -604,7 +604,8 @@ public class BeanParamWriter extends ParamCFileWriter
             else if (attribs[i].isArray())
             {
                 arrayCount++;
-                
+                String containedTypeArrayName = null;
+
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                 {
                     String baseTypeName = null;
@@ -612,6 +613,8 @@ public class BeanParamWriter extends ParamCFileWriter
                         baseTypeName = CUtils.getSimpleType(attribs[i].getType().getBaseType());
                     else
                         baseTypeName = attribs[i].getTypeName();
+                    
+                    containedTypeArrayName = CUtils.getArrayNameForType(baseTypeName);
 
                     c_writer.write(tab2 + "if (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     c_writer.write(tab2 + "{\n");
@@ -621,7 +624,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\n");
                  
                     c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() 
-                            + " = (" + baseTypeName + "_Array *)" 
+                            + " = (" + containedTypeArrayName + " *)" 
                             + "axiscSoapDeSerializerGetBasicArray(pDZ, " 
                             + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPString() + "\",0);\n");
@@ -807,7 +810,8 @@ public class BeanParamWriter extends ParamCFileWriter
             if (attribs[i].isArray() && !attribs[i].isAnyElement())
             {
                 writeNewline = true;
-                
+                String containedTypeArrayName;
+
                 // If simple type array we call the axiscAxisNew() API; otherwise, we 
                 // invoke the dynamically generated Axis_Create_xxxx() function. 
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
@@ -819,16 +823,20 @@ public class BeanParamWriter extends ParamCFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
+                    containedTypeArrayName = CUtils.getArrayNameForType(baseTypeName);
+                    
                     c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() 
-                            + " = (" + baseTypeName + "_Array *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                            + " = (" + containedTypeArrayName + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
                     
                     c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
                             + CUtils.getXSDEnumeratorForType(baseTypeName) + ";\n");
                 }
                 else
                 {
-                        c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + " = "
-                                + "Axis_Create_" + attribs[i].getTypeName() + "_Array(0);\n");
+                    containedTypeArrayName = CUtils.getArrayNameForType(attribs[i].getTypeName());
+
+                    c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + " = "
+                            + "Axis_Create_" + containedTypeArrayName + "(0);\n");
                 }     
             }
         }
@@ -923,15 +931,16 @@ public class BeanParamWriter extends ParamCFileWriter
                 c_writer.write("\t\t\taxiscAxisDelete(param->" + fieldName + ", XSDC_ANY);\n");               
             }
             else
-            {
-                String deleteFunctionSuffix = "";
-                if (attribs[i].isArray())
-                    deleteFunctionSuffix = "_Array";
-                
+            {                
                 c_writer.write("\t\tif (param->" + attribs[i].getParamNameAsMember() + ")\n");
-                c_writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName() + deleteFunctionSuffix 
+                
+                if (attribs[i].isArray())
+                    c_writer.write("\t\t\tAxis_Delete_" 
+                            + CUtils.getArrayNameForType(attribs[i].getTypeName())  
                             + "(param->" + attribs[i].getParamNameAsMember() + ", 0);\n");  
-                    
+                else
+                    c_writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName() 
+                            + "(param->" + attribs[i].getParamNameAsMember() + ", 0);\n");     
             }
         }
         

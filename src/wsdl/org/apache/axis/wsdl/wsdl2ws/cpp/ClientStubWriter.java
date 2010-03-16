@@ -216,7 +216,7 @@ public class ClientStubWriter extends CPPClassWriter
                 else
                 {
                     returntypeissimple = CUtils.isSimpleType (outparamType);
-                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
+                    returntypeisarray = CUtils.isArrayType(outparamType);
                 }
             
                 returntypeisarray |= retType.isArray();
@@ -506,7 +506,10 @@ public class ClientStubWriter extends CPPClassWriter
                 if (typeisarray)
                 {
                     QName qname = CUtils.getArrayType(type).getName();
+                    
                     String containedType = null;
+                    String containedTypeArrayName = null;
+
                     if (CUtils.isSimpleType(qname))
                     {
                         containedType = CUtils.getSimpleType(qname);
@@ -525,11 +528,13 @@ public class ClientStubWriter extends CPPClassWriter
                     }
                     else
                     {
-                        containedType = qname.getLocalPart();
+                        containedType          = qname.getLocalPart();
+                        containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+
                         c_writer.write("\n\t\t\tif( OutValue" + i + " != NULL)\n" );
                         c_writer.write("\t\t\t{\n");
                         c_writer.write("\t\t\t\tif( " + currentParamName + " == NULL)\n");
-                        c_writer.write("\t\t\t\t\t" + currentParamName + " = new " + containedType + "_Array();\n");
+                        c_writer.write("\t\t\t\t\t" + currentParamName + " = new " + containedTypeArrayName + "();\n");
                         c_writer.write("\t\t\t\telse\n");
                         c_writer.write("\t\t\t\t\t(" + currentParamName + ")->clear();\n");
                         c_writer.write("\t\t\t\tm_pCall->getCmplxArray( " + currentParamName 
@@ -542,8 +547,8 @@ public class ClientStubWriter extends CPPClassWriter
                         c_writer.write("\t\t\telse\n");
                         c_writer.write("\t\t\t{\n");
                         c_writer.write("\t\t\t\t// Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed.\n");
-                        c_writer.write("\t\t\t\t" + containedType + "_Array * pTemp" + i 
-                                + " = new " + containedType + "_Array();\n");
+                        c_writer.write("\t\t\t\t" + containedTypeArrayName + " * pTemp" + i 
+                                + " = new " + containedTypeArrayName + "();\n");
                         c_writer.write("\t\t\t\tm_pCall->getCmplxArray( pTemp" + i 
                               + ",(void *) Axis_DeSerialize_" + containedType
                               + ",(void *) Axis_Create_" + containedType
@@ -637,7 +642,10 @@ public class ClientStubWriter extends CPPClassWriter
         else if (returntypeisarray)
         {
             QName qname = CUtils.getArrayType(retType).getName();
+            
             String containedType = null;
+            String containedTypeArrayName = null;
+            
             if (CUtils.isSimpleType(qname))
             {
                 containedType = CUtils.getSimpleType(qname);
@@ -649,9 +657,11 @@ public class ClientStubWriter extends CPPClassWriter
             }
             else
             {
-                containedType = qname.getLocalPart();
-                c_writer.write("\t\t\t\tRetArray = (" + containedType 
-                        + "_Array *) m_pCall->getCmplxArray( RetArray,(void *) Axis_DeSerialize_"
+                containedType          = qname.getLocalPart();
+                containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+
+                c_writer.write("\t\t\t\tRetArray = (" + containedTypeArrayName 
+                        + " *) m_pCall->getCmplxArray( RetArray,(void *) Axis_DeSerialize_"
                         + containedType);
                 c_writer.write(",(void *) Axis_Create_" + containedType
                         + ",(void *) Axis_Delete_" + containedType

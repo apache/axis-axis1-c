@@ -83,7 +83,7 @@ public class ClientStubWriter
                 else
                 {
                     returntypeissimple = CUtils.isSimpleType (outparamType);
-                    returntypeisarray = (outparamType.lastIndexOf ("_Array") > 0);
+                    returntypeisarray  = CUtils.isArrayType(outparamType);
                 }
             
                 returntypeisarray |= retType.isArray();
@@ -127,7 +127,6 @@ public class ClientStubWriter
         }
 
         c_writer.write(" " + methodName + "(AXISCHANDLE stub");
-        
         ArrayList paramsB = (ArrayList) params;
         ParameterInfo paramtype = null;
         if (0 < paramsB.size ())
@@ -150,7 +149,7 @@ public class ClientStubWriter
                     if (CUtils.isSimpleType (paramTypeName))
                         paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                    typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
+                    typeisarray = CUtils.isArrayType(paramTypeName);
                     if (!typeisarray)
                         paramTypeName = type.getLanguageSpecificName ();
 
@@ -200,7 +199,7 @@ public class ClientStubWriter
                         if (CUtils.isSimpleType (paramTypeName))
                             paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(paramtype, wscontext);
 
-                        typeisarray = (paramTypeName.lastIndexOf ("_Array") > 0);
+                        typeisarray = CUtils.isArrayType(paramTypeName);
                         if (!typeisarray)
                             paramTypeName = type.getLanguageSpecificName ();       
                     }
@@ -407,10 +406,8 @@ public class ClientStubWriter
         //=============================================================================        
         
         boolean commentIssued=false;
-        String tab2;
         for (int i = 0; i < paramsB.size(); i++)
         {
-            tab2 = "\t";
             ParameterInfo param = (ParameterInfo) paramsB.get(i);
 
             // Ignore attributes
@@ -437,7 +434,7 @@ public class ClientStubWriter
                     if (CUtils.isSimpleType(paramTypeName))
                         paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(param,wscontext);
                     
-                    typeisarray = (paramTypeName.lastIndexOf("_Array") > 0);
+                    typeisarray = CUtils.isArrayType(paramTypeName);
                     if (!typeisarray)
                         paramTypeName = type.getLanguageSpecificName();
                 }
@@ -635,7 +632,7 @@ public class ClientStubWriter
                     else
                     {
                         currentParaType = CUtils.getClassNameFromParamInfoConsideringArrays(currentType, wscontext);
-                        typeisarray = (currentParaType.lastIndexOf("_Array") > 0);
+                        typeisarray = CUtils.isArrayType(currentParaType);
                     }
                     
                     typeisarray |= type.isArray ();
@@ -669,6 +666,7 @@ public class ClientStubWriter
                         qname = type.getName ();
                     
                     String containedType = null;
+                    String containedTypeArrayName = null;
 
                     if (CUtils.isSimpleType(qname))
                     {
@@ -681,13 +679,15 @@ public class ClientStubWriter
                     }
                     else
                     {
-                        containedType = qname.getLocalPart ();
+                        containedType          = qname.getLocalPart ();
+                        containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+                        
                         c_writer.write("\n\t\t\tif (OutValue" + i + " != NULL)\n" );
                         c_writer.write("\t\t{\n");
                         
                         c_writer.write("\t\t\t\tif (" + currentParamName + " != NULL)\n");
-                        c_writer.write("\t\t\t\t\t" + currentParamName + " = Axis_Delete_" + containedType + "_Array(" + currentParamName + ",0);\n");
-                        c_writer.write("\t\t\t\t" + currentParamName + " = Axis_Create_" + containedType + "_Array(0);\n");
+                        c_writer.write("\t\t\t\t\t" + currentParamName + " = Axis_Delete_" + containedTypeArrayName + "(" + currentParamName + ",0);\n");
+                        c_writer.write("\t\t\t\t" + currentParamName + " = Axis_Create_" + containedTypeArrayName + "(0);\n");
                         
                         c_writer.write("\t\t\t\taxiscCallGetCmplxArray(call, (Axisc_Array *)" + currentParamName 
                               + ", (void*) Axis_DeSerialize_" + containedType
@@ -701,15 +701,15 @@ public class ClientStubWriter
                         c_writer.write("\t\t\t{\n");
                         
                         c_writer.write("\t\t\t\t/* Unable to return value, but will deserialize to ensure subsequent elements can be correctly processed. */\n");
-                        c_writer.write("\t\t\t\t" + containedType + "_Array * pTemp" + i 
-                              + " = Axis_Create_" + containedType + "_Array(0);\n");
+                        c_writer.write("\t\t\t\t" + containedTypeArrayName + " * pTemp" + i 
+                              + " = Axis_Create_" + containedTypeArrayName + "(0);\n");
                         c_writer.write("\t\t\t\taxiscCallGetCmplxArray(call, (Axisc_Array *)pTemp" + i 
                               + ", (void*) Axis_DeSerialize_" + containedType
                               + ", (void*) Axis_Create_" + containedType
                               + ", (void*) Axis_Delete_" + containedType
                               + ", \"" + currentType.getElementNameAsSOAPString () 
                               + "\", Axis_URI_" + containedType + ");\n");
-                        c_writer.write("\t\t\t\tAxis_Delete_" + containedType + "_Array(pTemp" + i + ", 0);\n");
+                        c_writer.write("\t\t\t\tAxis_Delete_" + containedTypeArrayName + "(pTemp" + i + ", 0);\n");
                         c_writer.write("\t\t\t}\n");                        
                     }
                 }
@@ -829,19 +829,26 @@ public class ClientStubWriter
                 qname = CUtils.getArrayType (retType).getName ();
             else
                 qname = retType.getName ();
+            
             String containedType = null;
+            String containedTypeArrayName = null;
+
             if (CUtils.isSimpleType (qname))
             {
-                containedType = CUtils.getSimpleType (qname);
-                c_writer.write ("\t\t\tRetArray =(" + containedType + "_Array *) axiscCallGetBasicArray(call, " 
+                containedType          = CUtils.getSimpleType (qname);
+                containedTypeArrayName = CUtils.getArrayNameforSimpleType(qname, containedType);
+
+                c_writer.write ("\t\t\tRetArray =(" + containedTypeArrayName + " *) axiscCallGetBasicArray(call, " 
                         + CUtils.getXSDEnumeratorForType (containedType) 
                         + ", \"" + returntype.getParamNameAsSOAPString () + "\", 0);\n");
             }
             else
             {
-                containedType = qname.getLocalPart ();
-                c_writer.write("\t\t\tRetArray = (" + containedType 
-                        + "_Array *) axiscCallGetCmplxArray(call, (Axisc_Array *)RetArray, (void*) Axis_DeSerialize_"
+                containedType          = qname.getLocalPart ();
+                containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
+
+                c_writer.write("\t\t\tRetArray = (" + containedTypeArrayName 
+                        + " *) axiscCallGetCmplxArray(call, (Axisc_Array *)RetArray, (void*) Axis_DeSerialize_"
                         + containedType 
                         + ", (void*) Axis_Create_" + containedType
                           + ", (void*) Axis_Delete_" + containedType

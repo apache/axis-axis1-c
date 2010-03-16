@@ -72,10 +72,10 @@ public class ClientStubHeaderWriter
                     ParameterInfo returnParam =
                         (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
                     String outParamTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
-                    if ((outParamTypeName.lastIndexOf ("_Array") > 0) 
+                    if ((CUtils.isArrayType(outParamTypeName)) 
                             || (CUtils.isSimpleType(outParamTypeName)
-                            && (returnParam.isNillable() || returnParam.isOptional())
-                            && !(CUtils.isPointerType(outParamTypeName))))
+                                    && (returnParam.isNillable() || returnParam.isOptional())
+                                    && !(CUtils.isPointerType(outParamTypeName))))
                         c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " * ");
                     else
                         c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " ");
@@ -108,7 +108,7 @@ public class ClientStubHeaderWriter
                     
                     if (nparam.getType().isAttachment())
                         c_writer.write("ISoapAttachment *Value" + j);
-                    else if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                    else if ((CUtils.isArrayType(paramTypeName))
                                 || (CUtils.isSimpleType(baseTypeName)
                                         && (nparam.isNillable() || nparam.isOptional())
                                         && !(CUtils.isPointerType(baseTypeName))))
@@ -201,10 +201,10 @@ public class ClientStubHeaderWriter
                 
                 if (atype.getBaseType() != null)
                     if (atype.getBaseType().getLocalPart().equals("string"))
-                        removeSet.add(atype.getLanguageSpecificName() + "_Array");
+                        removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));
                 
                 if (atype.isRestriction())
-                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");
+                    removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));
 
                 typeSet.add(atype.getLanguageSpecificName());
             }

@@ -136,10 +136,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                         String returnTypeName = returntype.getLangName();
                         String returnType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
                         
-                        if ((returnType.lastIndexOf ("_Array") > 0)
+                        if ((CUtils.isArrayType(returnType))
                                 || (CUtils.isSimpleType(returnTypeName)
-    							&& (returntype.isNillable() || returntype.isOptional())
-    							&& !(CUtils.isPointerType(returnTypeName))))
+    							    && (returntype.isNillable() || returntype.isOptional())
+    							    && !(CUtils.isPointerType(returnTypeName))))
                         {
                         	c_writer.write(
     	                            "\t\t"
@@ -178,9 +178,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     	c_writer.write("ISoapAttachment *Value" + 0);
                     }
                     
-                    else if ((paramType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
-                    		&& (fparam.isNillable() || fparam.isOptional())
-							&& !(CUtils.isPointerType(paramTypeName))))
+                    else if ((CUtils.isArrayType(paramType))
+                            || (CUtils.isSimpleType(paramTypeName)
+                    		    && (fparam.isNillable() || fparam.isOptional())
+							    && !(CUtils.isPointerType(paramTypeName))))
                     {
                     	c_writer.write(
                     			paramType
@@ -210,9 +211,10 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     	c_writer.write(", ISoapAttachment *Value" + j);
                     }
                                         
-                    else if ((typeName.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
-                    		&& (nparam.isNillable()|| nparam.isOptional())
-							&& !(CUtils.isPointerType(paramTypeName))))
+                    else if ((CUtils.isArrayType(typeName))
+                            || (CUtils.isSimpleType(paramTypeName)
+                                    && (nparam.isNillable()|| nparam.isOptional())
+                                    && !(CUtils.isPointerType(paramTypeName))))
                     {
                     	c_writer.write(
     	                        ","
@@ -298,7 +300,7 @@ public class ServiceHeaderWriter extends HeaderFileWriter
                     typeSet.add(typeName);
                    
                 if (atype.isRestriction())
-                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");
+                    removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));
             }
             
             Iterator ritr = removeSet.iterator();

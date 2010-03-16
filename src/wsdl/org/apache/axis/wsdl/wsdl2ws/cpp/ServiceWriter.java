@@ -156,9 +156,10 @@ public class ServiceWriter extends CPPClassWriter
                                 .next();
                         String returnTypeName = returntype.getLangName();
                         String returnType = CUtils.getClassNameFromParamInfoConsideringArrays(returntype,wscontext);
-                        if ((returnType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(returntype.getLangName())
-                        		&& (returntype.isNillable()|| returntype.isOptional())
-								&& !(CUtils.isPointerType(returnTypeName))))
+                        if ((CUtils.isArrayType(returnType))
+                                || (CUtils.isSimpleType(returntype.getLangName())
+                                        && (returntype.isNillable()|| returntype.isOptional())
+                                        && !(CUtils.isPointerType(returnTypeName))))
                         {
                         	c_writer.write(
                         			returnType
@@ -194,9 +195,10 @@ public class ServiceWriter extends CPPClassWriter
                     	c_writer.write("ISoapAttachment *Value" + 0);
                     }
                     
-                    else if ((fparamType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(fparamTypeName)
-							&& (fparam.isNillable()|| fparam.isOptional())
-							&& !(CUtils.isPointerType(fparamTypeName))))
+                    else if ((CUtils.isArrayType(fparamType))
+                            || (CUtils.isSimpleType(fparamTypeName)
+                                    && (fparam.isNillable()|| fparam.isOptional())
+                                    && !(CUtils.isPointerType(fparamTypeName))))
                     {
                     	c_writer.write(
                     			fparamType
@@ -222,9 +224,10 @@ public class ServiceWriter extends CPPClassWriter
                     	c_writer.write(", ISoapAttachment *Value" + j);
                     }
                                         
-                    else if ((paramType.lastIndexOf ("_Array") > 0)||(CUtils.isSimpleType(paramTypeName)
-                    		&& (nparam.isNillable()|| nparam.isOptional())
-							&& !(CUtils.isPointerType(paramTypeName))))
+                    else if ((CUtils.isArrayType(paramType))
+                            || (CUtils.isSimpleType(paramTypeName)
+                                    && (nparam.isNillable()|| nparam.isOptional())
+                                    && !(CUtils.isPointerType(paramTypeName))))
                     {
                     	c_writer.write(
     	                        ","

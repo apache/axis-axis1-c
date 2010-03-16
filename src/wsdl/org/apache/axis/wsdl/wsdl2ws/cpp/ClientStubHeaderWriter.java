@@ -122,10 +122,10 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     ParameterInfo returnParam =
                         (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
                     String outParamTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(returnParam, wscontext);
-                    if ((outParamTypeName.lastIndexOf ("_Array") > 0)
-                            ||(CUtils.isSimpleType(outParamTypeName)
-                            && (returnParam.isNillable() || returnParam.isOptional())
-                            && !(CUtils.isPointerType(outParamTypeName))))
+                    if ((CUtils.isArrayType(outParamTypeName))
+                            || (CUtils.isSimpleType(outParamTypeName)
+                                && (returnParam.isNillable() || returnParam.isOptional())
+                                && !(CUtils.isPointerType(outParamTypeName))))
                         c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " * ");
                     else
                         c_writer.write("\tSTORAGE_CLASS_INFO " + outParamTypeName + " ");
@@ -145,7 +145,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 {
                     ParameterInfo nparam = (ParameterInfo) params.next();
                     String paramTypeName = CUtils.getClassNameFromParamInfoConsideringArrays(nparam, wscontext);
-                    if ((paramTypeName.lastIndexOf ("_Array") > 0)
+                    if ((CUtils.isArrayType(paramTypeName))
                             || (CUtils.isSimpleType(paramTypeName)
                                     && (nparam.isNillable() || nparam.isOptional())
                                     && !(CUtils.isPointerType(paramTypeName))))
@@ -212,7 +212,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                     typeSet.add(typeName);
           
                 if (atype.isRestriction())
-                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");                
+                    removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));                
             }
             
             Iterator ritr = removeSet.iterator();

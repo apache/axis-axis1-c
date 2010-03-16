@@ -103,6 +103,17 @@ public class CUtils
     // Used to find out whether a simple type is a pointer type.
     private static HashSet c_pointerBasedTypes = null;
     
+    // Used to determine if string type represents an array...previously we use to
+    // do something like outParamTypeName.lastIndexOf ("_Array") all over the place
+    // but this does not work if type defined in WSDL already has _Array in the name.
+    private static HashSet c_arrayTypes = new HashSet();
+    
+    // Used to determine if QName maps to an array.
+    private static Hashtable c_arrayTypeMapper = new Hashtable();
+    
+    // Used to determine if QName maps to an array.
+    private static Hashtable c_arrayTypeMapper2 = new Hashtable();
+
     // Language
     private static String  c_language = WrapperConstants.LANGUAGE_CPP;
     
@@ -956,6 +967,63 @@ public class CUtils
     }
     
     /**
+     * Adds a type to the collection of array types.
+     * 
+     * @param s
+     */
+    public static void addArrayType(QName qn, QName qn_array)
+    {
+        c_arrayTypes.add(qn_array.getLocalPart());
+        c_arrayTypeMapper.put(qn, qn_array);
+        c_arrayTypeMapper2.put(qn.getLocalPart(), qn_array.getLocalPart());
+    }
+    
+    /**
+     * Method to determine if type is an array type. 
+     * 
+     * @param name
+     * @return
+     */
+    public static boolean isArrayType(String name)
+    {
+        if (name == null)
+            return false;
+        
+        if ((name.startsWith("xsd__") || name.startsWith("xsdc__")) && name.endsWith("_Array"))
+            return true;
+        else
+            return c_arrayTypes.contains(name);
+    }
+    
+    /**
+     * Method to determine if type is an array type. 
+     * 
+     * @param name
+     * @return
+     */
+    public static QName getArrayQNameForType(QName qname)
+    {   
+        return (QName)c_arrayTypeMapper.get(qname);
+    }
+    
+    /**
+     * Method to get array name for base name. 
+     * 
+     * @param name
+     * @return
+     */
+    public static String getArrayNameForType(String b)
+    {   
+        String arrayName = (String)c_arrayTypeMapper2.get(b);
+        if (arrayName == null)
+        {
+            arrayName = b + "_Array";
+            c_arrayTypes.add(arrayName);
+        }
+        return arrayName;
+    }
+    
+    /**
      * Generates array name for complex type.
      * 
      * @param qname
@@ -970,7 +1038,15 @@ public class CUtils
         if (!c_qnameToPrimitiveTypeMapper.containsKey(qname) 
                 && !c_schemaDefinedQNameToSimpleTypeMapper.containsKey(qname))
         {
-            arrayName = qname.getLocalPart() + "_Array";
+            QName arrayQName = getArrayQNameForType(qname);
+            if (arrayQName != null) 
+                arrayName = arrayQName.getLocalPart();
+            else
+            {
+                arrayName = qname.getLocalPart() + "_Array";
+                c_arrayTypes.add(arrayName);
+            }
+            
             if (TypeMap.isAnonymousType(qname))
                 arrayName = CUtils.sanitizeString(arrayName);
         }
@@ -984,9 +1060,20 @@ public class CUtils
      * @param stype
      * @return
      */
-    public static String getArrayNameforSimpleType(String stype)
+    public static String getArrayNameforSimpleType(QName qn, String stype)
     {
-            return stype + "_Array";
+        String arrayName = null;
+        
+        QName arrayQName = getArrayQNameForType(qn);
+        if (arrayQName != null) 
+            arrayName = arrayQName.getLocalPart();
+        else
+        {
+            arrayName = stype + "_Array";
+            c_arrayTypes.add(arrayName);
+        }
+       
+        return arrayName;        
     }   
     
     /**
@@ -1242,17 +1329,15 @@ public class CUtils
         }
         else if (!CUtils.isPrimitiveType(param.getSchemaName()))
         { 
-            //array or complex types
+            //arrays or complex types
             if (null != type && type.isArray())
             {
-                String arrayName = CUtils.getArrayNameForComplexType(getArrayType(type).getName());
-                if (null == arrayName)
-                { 
-                    //simple type array
-                    /* Does the program flow ever come to this place ? if so in which situation ? - Susantha 20/10/2004 */
-                    arrayName =
-                        CUtils.getArrayNameforSimpleType(CUtils.getSimpleType(getArrayType(type).getName()));
-                }
+                QName qn = getArrayType(type).getName();
+
+                String arrayName = CUtils.getArrayNameForComplexType(qn);
+                if (null == arrayName) 
+                    arrayName = CUtils.getArrayNameforSimpleType(qn, CUtils.getSimpleType(qn));
+
                 return arrayName;
             }
             else
@@ -1272,7 +1357,7 @@ public class CUtils
                 </s:complexType>
             </s:element>
              */
-            return CUtils.getArrayNameforSimpleType(CUtils.getSimpleType(type.getName()));
+            return CUtils.getArrayNameforSimpleType(type.getName(), CUtils.getSimpleType(type.getName()));
         }
         else
             return param.getLangName();

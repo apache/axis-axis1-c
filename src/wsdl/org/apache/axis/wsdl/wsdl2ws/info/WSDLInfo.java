@@ -112,6 +112,7 @@ public class WSDLInfo
     // Maps service definition to set of ports that use RPC binding style 
     ArrayList c_bindings = new ArrayList();
     
+    private static int typeCounter = 1;
     
     /**
      * Constructor.
@@ -623,13 +624,38 @@ public class WSDLInfo
             typedata = c_typeMap.getType(newqn);
             if (typedata != null)
             {
-                if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
-                    System.out.println("Type not created, already exists: " + type.getQName());
-                
-                return typedata;
+                if (typedata.isArray())
+                {
+                    if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
+                        System.out.println("Type not created, already exists: " + type.getQName());
+                    
+                    return typedata;
+                }
+                else
+                {
+                    // There is a type with the _Array suffix in WSDL that was already processed.
+                    // If an array type was not already created, create one with different name.
+                    QName arrayQName = CUtils.getArrayQNameForType(qn);
+                    if (arrayQName == null)
+                    {
+                        newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()  + "_Array" + typeCounter);
+                        ++typeCounter;
+                        
+                        if (c_verbose)
+                            System.out.println("Type clash, change type name to : " + newqn);
+                    }
+                    else
+                    {
+                        if (c_verbose)
+                            System.out.println("Type not created, already exists: " + type.getQName());
+                        
+                        return c_typeMap.getType(arrayQName);
+                    }
+                }
             }            
             
             typedata = new Type(newqn, newqn.getLocalPart());
+            CUtils.addArrayType(qn, newqn);
             
             if (type.getRefType().getRefType() != null)
                 typedata.setElementType(type.getRefType().getRefType().getQName().getLocalPart());
@@ -642,8 +668,11 @@ public class WSDLInfo
             typedata = c_typeMap.getType(type.getQName());
             if (typedata != null)
             {
-                if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
-                    System.out.println("Type not created, already exists: " + type.getQName());
+                if (!typedata.isArray())
+                {                
+                    if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
+                        System.out.println("Type not created, already exists: " + type.getQName());
+                }
                 
                 return typedata;
             }
@@ -697,10 +726,11 @@ public class WSDLInfo
         }
         else if (type instanceof CollectionType)
         {
+            typedata.setArray(true);
+
             newSecondaryType = createTypeInfo(type.getRefType().getQName());
             typedata.addRelatedType(newSecondaryType);
             typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, type.getQName()));
-            typedata.setArray(true);
         }
         else
         {
@@ -708,17 +738,19 @@ public class WSDLInfo
             QName arrayType = CSchemaUtils.getArrayComponentQName(node,new IntHolder(0),c_symbolTable);
             if (arrayType != null)
             {
+                typedata.setArray(true);
+
                 newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
-                typedata.setArray(true);
             }
             else if ((arrayType = CSchemaUtils.getCollectionComponentQName(node)) != null)
             {
+                typedata.setArray(true);
+
                 newSecondaryType = createTypeInfo(arrayType);
                 typedata.addRelatedType(newSecondaryType);
                 typedata.setTypeNameForElementName(new CElementDecl(newSecondaryType, new QName("item")));
-                typedata.setArray(true);
             }
             //Note in a array the parameter type is stored as under the name item all the time  
             else

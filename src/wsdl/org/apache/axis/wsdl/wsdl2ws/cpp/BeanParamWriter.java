@@ -830,7 +830,8 @@ public class BeanParamWriter extends ParamCPPFileWriter
             else if (attribs[i].isArray())
             {
                 arrayCount++;
-                
+                String containedTypeArrayName = null;
+
                 if (attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                 {
                     String baseTypeName = null;
@@ -839,20 +840,24 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     else
                         baseTypeName = attribs[i].getTypeName();
                     
+                    containedTypeArrayName = CUtils.getArrayNameForType(attribs[i].getTypeName());
+                    
                     c_writer.write(tab2 + "Axis_Array * array" + arrayCount + " = pIWSDZ->getBasicArray("
                             + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \""
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
                     c_writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + attribs[i].getTypeName() + "_Array();\n");
+                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + containedTypeArrayName + "();\n");
                     c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
                     c_writer.write(tab2 + "Axis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
                 {
                     arrayType = attribs[i].getTypeName();
+                    containedTypeArrayName = CUtils.getArrayNameForType(arrayType);
+                    
                     c_writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + arrayType + "_Array();\n");
+                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + containedTypeArrayName + "();\n");
                     c_writer.write(tab2 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_" + arrayType
                             + ", (void*)Axis_Create_" + arrayType 
@@ -1124,7 +1129,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {    
                     c_writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     c_writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
-                            + attribs[i].getTypeName() + "_Array(*original." 
+                            + CUtils.getArrayNameForType(attribs[i].getTypeName()) + "(*original." 
                             + attribs[i].getParamNameAsMember() + ");\n");
                 }
                 else

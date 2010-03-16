@@ -150,13 +150,15 @@ public class ParmHeaderFileWriter extends ParamWriter
                     break;
             }
             
-            c_writer.write("typedef ");
+            c_writer.write("typedef " + langTypeName + " " + c_classname + ";\n");
+            c_writer.write("typedef " 
+                    + CUtils.getArrayNameForType(langTypeName) + " " 
+                    + CUtils.getArrayNameForType(c_classname) + ";\n");
+
             if (CUtils.isPointerType(baseTypeName) 
                     || "xsdc__base64Binary".equals(baseTypeName) 
                     || "xsdc__hexBinary".equals(baseTypeName))
             {
-                c_writer.write(langTypeName + " " + c_classname + ";\n");
-                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
                 c_writer.write("\n");
                 
                 for (int i = 1; i < restrictionData.size(); i++)
@@ -185,9 +187,6 @@ public class ParmHeaderFileWriter extends ParamWriter
             } 
             else if ("int".equals(baseType.getLocalPart()))
             {
-                c_writer.write(langTypeName + " " + c_classname + ";\n");
-                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
-            
                 if (restrictionData.size() > 1)
                 {
                     //there are enumerations or min/maxInclusive
@@ -226,9 +225,6 @@ public class ParmHeaderFileWriter extends ParamWriter
             } 
             else
             {
-                c_writer.write(langTypeName + " " + c_classname + ";\n");
-                c_writer.write("typedef " + langTypeName + "_Array " + c_classname + "_Array;\n");
-                
                 for (int i = 1; i < restrictionData.size(); i++)
                 {
                     QName value = (QName) restrictionData.elementAt(i);
@@ -404,7 +400,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 else if (!attribs[i].isSimpleType() && !attribs[i].isAnyElement())
                 {
                     if ((attribs[i].isArray()) && !theType.isSimpleType())
-                        typeSet.add(basicType + "_Array");
+                        typeSet.add(CUtils.getArrayNameForType(basicType));
     
                     typeSet.add(basicType);
                 }

@@ -413,8 +413,10 @@ public class WrapWriter extends CPPClassWriter
                     if (CUtils.isSimpleType(qname))
                     {
                         containedType = CUtils.getSimpleType(qname);
+                        String containedTypeArray = CUtils.getArrayNameForType(containedType);
                         
-                        c_writer.write("\n\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
+                        c_writer.write("\n\t" + containedTypeArray + " * v" + i +" = new " 
+                                + containedTypeArray + "();\n");
                         c_writer.write(
                             "\t"
                                 + "Axis_Array * RetArray"
@@ -430,7 +432,8 @@ public class WrapWriter extends CPPClassWriter
                     else
                     {
                         containedType = qname.getLocalPart();
-                        c_writer.write("\t" + containedType + "_Array * v" + i +" = new " + containedType + "_Array();\n");
+                        String containedTypeArray = CUtils.getArrayNameForType(containedType);
+                        c_writer.write("\t" + containedTypeArray + " * v" + i +" = new " + containedTypeArray + "();\n");
                         c_writer.write(
                             "\t"
                                 + "pIWSDZ->getCmplxArray(v" + i + ", (void*)Axis_DeSerialize_"
@@ -497,8 +500,8 @@ public class WrapWriter extends CPPClassWriter
         	/* Invoke the service when return type not void */
         	c_writer.write("\t\t" + outparamTypeName);
   
-        	if ((outparamTypeName.lastIndexOf ("_Array") > 0)
-        		||(returntypeissimple
+        	if ((CUtils.isArrayType(outparamTypeName))
+        		|| (returntypeissimple
         			&& returntype.isNillable()
         			&&!(CUtils.isPointerType(outparamTypeName))))
         	{

@@ -104,7 +104,7 @@ public class ServiceHeaderWriter
                 typeSet.add(atype.getLanguageSpecificName());
                 
                 if (atype.isRestriction())
-                    removeSet.add(atype.getLanguageSpecificName()  + "_Array");                
+                    removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));                
             }
             
             Iterator ritr = removeSet.iterator();

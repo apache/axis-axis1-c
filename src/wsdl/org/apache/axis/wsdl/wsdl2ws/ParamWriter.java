@@ -207,7 +207,7 @@ public abstract class ParamWriter extends BasicFileWriter
         if (attrib.isArray())
         {
             if (attrib.isSimpleType())
-                return CUtils.getArrayNameforSimpleType(attrib.getTypeName());
+                return CUtils.getArrayNameForType(attrib.getTypeName());
             else
                 return CUtils.getArrayNameForComplexType(attrib.getSchemaName());
         }
