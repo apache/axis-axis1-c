@@ -638,11 +638,26 @@ public class WSDLInfo
                     QName arrayQName = CUtils.getArrayQNameForType(qn);
                     if (arrayQName == null)
                     {
-                        newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()  + "_Array" + typeCounter);
-                        ++typeCounter;
+                        do 
+                        {
+                            newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()  + "_Array" + typeCounter);
+                            ++typeCounter;
+                            typedata = c_typeMap.getType(newqn);
+                        }
+                        while (typedata != null && !typedata.isArray());
                         
-                        if (c_verbose)
-                            System.out.println("Type clash, change type name to : " + newqn);
+                        if (typedata == null)
+                        {
+                            if (c_verbose)
+                                System.out.println("Type clash, change type name to : " + newqn);
+                        }
+                        else 
+                        {
+                            if (c_verbose && !CUtils.isPrimitiveType(type.getQName()))
+                                System.out.println("Type not created, already exists: " + type.getQName());
+                            
+                            return typedata;                            
+                        }
                     }
                     else
                     {
