@@ -112,6 +112,7 @@ public class WSDLInfo
     // Maps service definition to set of ports that use RPC binding style 
     ArrayList c_bindings = new ArrayList();
     
+    private static boolean useCounter = false;
     private static int typeCounter = 1;
     
     /**
@@ -178,10 +179,26 @@ public class WSDLInfo
         }
         
         // Iterate through the symbol table, generating user-defined types and
-        // storing the types in a hash table.        
+        // storing the types in a hash table.  We need to do this twice.  We need
+        // to first go through the types and ensure there is no type with a suffix of 
+        // _Array, which is used by this code to generate arrays.  If there is, we need to
+        // generate array types with a modified suffix, such as _Array + number.
         c_typeMap = new TypeMap();
         if (c_symbolTable !=  null)
         {
+            it = c_symbolTable.getTypeIndex().values().iterator();
+            
+            while (it.hasNext())
+            {
+                TypeEntry type = (TypeEntry) it.next();
+                Node node = type.getNode();
+                if (node != null)
+                {
+                    if (type.getQName().getLocalPart().endsWith("_Array"))
+                        useCounter = true;
+                }
+            }
+            
             it = c_symbolTable.getTypeIndex().values().iterator();
             while (it.hasNext())
             {
@@ -619,7 +636,16 @@ public class WSDLInfo
             if (CUtils.isPrimitiveType(qn))
                 return null;
             
-            QName newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
+            QName newqn;
+            if (useCounter)
+            {
+                newqn = CUtils.getArrayQNameForType(qn);
+                if (newqn == null)
+                    newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array" + typeCounter++);      
+            }
+            else
+                newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
+            
             // type is a inbuilt type or a already created type?
             typedata = c_typeMap.getType(newqn);
             if (typedata != null)
@@ -640,8 +666,7 @@ public class WSDLInfo
                     {
                         do 
                         {
-                            newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()  + "_Array" + typeCounter);
-                            ++typeCounter;
+                            newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart()  + "_Array" + typeCounter++);
                             typedata = c_typeMap.getType(newqn);
                         }
                         while (typedata != null && !typedata.isArray());
