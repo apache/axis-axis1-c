@@ -24,6 +24,7 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.IOException;
 
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -37,6 +38,8 @@ import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class BeanParamWriter extends ParamCFileWriter
 {
+    boolean infoMessageIssued = false;
+    
     public BeanParamWriter(WebServiceContext wscontext, Type type)
         throws WrapperFault
     {
@@ -85,8 +88,11 @@ public class BeanParamWriter extends ParamCFileWriter
         }        
         else if (attribs.length == 0)
         {
-            System.out.println("Possible error in class " + c_classname
-                    + ": class with no attributes or elements...........");
+            if (!infoMessageIssued && WSDL2Ws.c_verbose)
+            {
+                infoMessageIssued = true;
+                System.out.println("INFO: Structure " + c_classname + " has no attributes or elements.");
+            }
         }        
     }
     
@@ -455,9 +461,11 @@ public class BeanParamWriter extends ParamCFileWriter
         }
         else if (attribs.length == 0)
         {
-            System.out.println("Possible error in class " + c_classname
-                    + ": class with no attributes or elements............");
-            
+            if (!infoMessageIssued && WSDL2Ws.c_verbose)
+            {
+                infoMessageIssued = true;
+                System.out.println("INFO: Structure " + c_classname + " has no attributes or elements.");
+            }            
         }
     }    
     
