@@ -803,9 +803,13 @@ public class BeanParamWriter extends ParamCFileWriter
         c_writer.write("\t}\n");
         c_writer.write("\telse\n"); 
         c_writer.write("\t{\n");        
-        
-        c_writer.write("\t\t" + c_classname + "* pTemp = (" + c_classname + " *)malloc(sizeof(" + c_classname + "));\n");
-        c_writer.write("\t\tmemset(pTemp, 0, sizeof(" + c_classname + "));\n");
+        if (attribs.length == 0)
+            c_writer.write("\t\t" + c_classname + "* pTemp = (" + c_classname + " *)NULL;\n");
+        else
+        {
+            c_writer.write("\t\t" + c_classname + "* pTemp = (" + c_classname + " *)malloc(sizeof(" + c_classname + "));\n");
+            c_writer.write("\t\tmemset(pTemp, 0, sizeof(" + c_classname + "));\n");
+        }
         c_writer.write("\n");
         
         boolean writeNewline = false;

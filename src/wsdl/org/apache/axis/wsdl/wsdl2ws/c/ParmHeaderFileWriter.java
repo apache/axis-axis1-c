@@ -72,9 +72,18 @@ public class ParmHeaderFileWriter extends ParamWriter
                 c_writer.write("/* ********************************************************************* */\n");
                 c_writer.write("\n");                
                 
-                c_writer.write("typedef struct " + c_classname + "Tag {\n");
-                writeAttributes();
-                c_writer.write("} " + c_classname + ";\n\n");
+                // If no attributes or elements just do forward reference.
+                if (attribs.length == 0)
+                {
+                    c_writer.write("/* Forward reference - type with no elements or arributes */\n");
+                    c_writer.write("typedef struct " + c_classname + "Tag " + c_classname + ";\n\n");
+                }
+                else
+                {
+                    c_writer.write("typedef struct " + c_classname + "Tag {\n");
+                    writeAttributes();
+                    c_writer.write("} " + c_classname + ";\n\n");
+                }
                 
                 writeFunctionPrototypes();
                 c_writer.write("\n#ifdef __cplusplus\n }\n#endif\n");
