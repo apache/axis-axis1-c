@@ -159,7 +159,9 @@ getNextNode(bool ifNotSet, bool characterMode, bool throwExcOnError)
             }
             catch (AxisException &e)
             {
-                // Exception processing will be handled in subsequent code
+            	m_nStatus = AXIS_FAIL;
+                if (throwExcOnError)
+                    throw e;
             }
             
             // If no node obtained, either there is no more data to read (at this time
