@@ -207,10 +207,10 @@ parse(bool ignoreWhitespace, bool peekIt)
         m_sErrorString = e.what();
         m_iErrorCode = SERVER_PARSE_TRANSPORT_FAILED;
         m_iStatus = AXIS_FAIL;
-        
-        logThrowExceptionWithData("AxisParseException", m_sErrorString.c_str())
 
-        throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());        
+        logRethrowException()
+        
+        throw e;
     }    
     catch(...) 
     {
