@@ -382,12 +382,18 @@ typedef enum
          * AxiscConfigException:configuration defaults have already been set
          */
 /*74*/    CONFIG_DEFAULTS_ALREADY_SET,
+
+    /**
+     * HTTPTransportException: Redirect received
+     */
+/*75*/   SERVER_TRANSPORT_REDIRECT_RECEIVED,
+
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 
      * internaly in the code. Developers should not use this as a fault 
      * code.
      */
-/*75*/    FAULT_LAST 
+/*76*/    FAULT_LAST
 } AXISC_AXISC_EXCEPTIONS;
 
 /**

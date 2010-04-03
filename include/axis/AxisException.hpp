@@ -71,13 +71,13 @@ typedef enum
      *    it's fault code is CLIENT
      *SERVER at the beginning means when this interpreted as a soap fault
      *    it's fault code is SERVER
-     *SOAP that comes next to CLIENT/SERVER means this is a soap releated
+     *SOAP that comes next to CLIENT/SERVER means this is a soap related
      *    exception
      *ENGINE that comes next to CLIENT/SERVER means this is a axisc++ engine
      *    related exception
-     *WSDD that comes next to CLIENT/SERVER means this is a wsdd releated
+     *WSDD that comes next to CLIENT/SERVER means this is a wsdd related
      *    exception
-     *TRANSPORT that comes next to CLIENT/SERVER means this is a transport releated
+     *TRANSPORT that comes next to CLIENT/SERVER means this is a transport related
      *    exception
      *CONFIG that comes next to CLIENT/SERVER means this is a axisc++ configuration
      *    related exception
@@ -388,18 +388,24 @@ typedef enum
 /*73*/    AXISC_READ_CONF_EXCEPTION,
 
     /* CONFIG faults */
-    /*Following exceptions are releated to configuration faults
+    /*Following exceptions are related to configuration faults
      */
         /**
          * AxisConfigException:configuration defaults have already been set
          */
 /*74*/    CONFIG_DEFAULTS_ALREADY_SET,
+
+    /**
+     * HTTPTransportException: Redirect received
+     */
+/*75*/   SERVER_TRANSPORT_REDIRECT_RECEIVED,
+
     /*
      * This FAULT_LAST is not used as a fault code, but instead is used 
      * internaly in the code. Developers should not use this as a fault 
      * code.
      */
-/*75*/    FAULT_LAST 
+/*76*/    FAULT_LAST
 } AXISC_EXCEPTIONS;
 
 /**

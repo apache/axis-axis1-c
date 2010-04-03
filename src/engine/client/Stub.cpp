@@ -561,7 +561,7 @@ Stub::checkForExtraneousElements ()
       logEntryEngine("Stub::checkForExtraneousElements")
 
     IWrapperSoapDeSerializer *pDeSerializer = m_pCall->getSOAPDeSerializer();
-    if (pDeSerializer)
+    if (pDeSerializer && m_pTransport->isThereResponseData())
     {
         const char *peekedElementName = pDeSerializer->peekNextElementName();
         if (0x00 != *peekedElementName)

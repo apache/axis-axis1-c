@@ -195,7 +195,22 @@ typedef enum
     /**
      * Content type
      */
-    CONTENT_TYPE
+    CONTENT_TYPE,
+
+    /**
+     * Whether redirect should be handled implicitly. Values can be "true" or "false".
+     * The default is false. Redirects will only be implicitly be handled if going from
+     * http:// to http:// or https:// to https://.
+     */
+    ENABLE_AUTOMATIC_REDIRECT,
+
+    /**
+     * Maximum number of automatic redirects to follow.  Property should be a numeric string.
+     * Default is 1. If "0" is specified, it will be as if ENABLE_AUTOMATIC_REDIRECT is set to
+     * false.
+     */
+    MAX_AUTOMATIC_REDIRECT
+
 } AXIS_TRANSPORT_INFORMATION_TYPE;
 
 #define SOAPACTIONHEADER "SOAPAction"

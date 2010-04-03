@@ -863,6 +863,39 @@ void axiscStubCheckForExtraneousElements(AXISCHANDLE stub)
     }
 }
 
+/**
+ * =============
+ * Following is not in stub C++ class but is here to make things easier for C users.
+ * =============
+ */
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetTransportAutoRedirect(AXISCHANDLE stub, AxiscBool handleRedirect, int maxCount)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        Call *c  = s->getCallStubC();
+
+        char *propValue = handleRedirect ? "true" : "false";
+        c->setTransportProperty(ENABLE_AUTOMATIC_REDIRECT, (const char*)propValue);
+
+        char buf[100];
+        sprintf(buf, "%d", maxCount);
+        c->setTransportProperty(MAX_AUTOMATIC_REDIRECT, (const char*)buf);
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
 }
 
 

@@ -56,6 +56,7 @@ m_bMaintainSession (false)
     m_pReleaseBufferCallback = 0;
     m_eProtocolType = APTHTTP1_1;
     m_strBytesToSend = "";
+    m_strBytesToSendRedirect = "";
     m_strHeaderBytesToSend = "";
     m_bChannelSecure = false;
     m_pNormalChannel = 0;
@@ -72,6 +73,12 @@ m_bMaintainSession (false)
 #else
     m_lChannelTimeout = 0;
 #endif
+    m_strResponseLocationURI = "";
+    m_bPerformAutoRedirect = false;
+    m_iMaximumAutoRedirects = 1;
+    m_strMaximumAutoRedirects = "1";
+    m_iNbrOfRedirectAttempts = 0;
+    m_bHasReadBeenDone = false;
     m_pNormalChannel = m_pChannelFactory->createChannel(UnsecureChannel);
     m_pSecureChannel = m_pChannelFactory->createChannel(SecureChannel);
 
@@ -96,6 +103,31 @@ HTTPTransport::
 }
 
 void HTTPTransport::
+resetOutputStateMachine()
+{
+    logEntryTransport("HTTPTransport::resetOutputStateMachine")
+
+    // Empty the bytes to send string. Note that the payload is saved in the case
+    // we need to handle redirect.
+    if (m_bPerformAutoRedirect && m_iMaximumAutoRedirects > 0 && m_strBytesToSend.length() > 0)
+        m_strBytesToSendRedirect = m_strBytesToSend;
+
+    m_strBytesToSend = "";
+    m_strHeaderBytesToSend = "";
+
+    // Also empty the response headers as there aren't any yet until the response comes back !
+    m_vResponseHTTPHeaders.clear();
+    // TODO: Possible memory leak here - does the clear op clean out the memory too?
+
+    // Empty other variables set from response received
+    m_strResponseHTTPStatusMessage = "";
+    m_strResponseContentType = "";
+    m_strResponseLocationURI = "";
+
+    logExit()
+}
+
+void HTTPTransport::
 resetInputStateMachine()
 {
     logEntryTransport("HTTPTransport::resetInputStateMachine")
@@ -114,7 +146,7 @@ resetInputStateMachine()
 
 /*
  * HTTPTransport::setEndpointUri( EndpointURI) sets the URI for the message.
- * Everytime the endpoint changes then currently connected channel is closed
+ * Every time the endpoint changes then currently connected channel is closed
  * and a new channel connection is opened.
  *
  * @param   EndpointURI - char * to a null terminated string that holds the
@@ -257,26 +289,39 @@ flushOutput() throw (AxisException, HTTPTransportException)
 {
     logEntryTransport("HTTPTransport::flushOutput")
 
+    // since we are writing...we need to reset flag indicating a read has been done.
+    m_bHasReadBeenDone = false;
+
     char *utf8BufHeader  = NULL; // buffer for HTTP header when converting to utf8.
     char *utf8BufPayload = NULL; // buffer for HTTP payload when converting to utf8.
     char buff[24];
+
+    // Handle re-sending payload in case of redirect.
+    int payLoadLength   = m_strBytesToSend.length();
+    const char *payLoad = m_strBytesToSend.c_str();
+
+    if (payLoadLength == 0 && m_bPerformAutoRedirect && m_iMaximumAutoRedirects > 0)
+    {
+        payLoadLength   = m_strBytesToSendRedirect.length();
+        payLoad         = m_strBytesToSendRedirect.c_str();
+    }
 
     // Send HTTP headers and body
     try
     {
 #ifndef __OS400__
         // Generate HTTP header string - need to set content-length before generating headers.
-        sprintf( buff, "%d", m_strBytesToSend.length ());
+        sprintf( buff, "%d", payLoadLength);
         this->setTransportProperty ("Content-Length", buff);
         generateHTTPHeaders ();
 
         m_pActiveChannel->writeBytes(m_strHeaderBytesToSend.c_str(), m_strHeaderBytesToSend.length());
-        m_pActiveChannel->writeBytes(m_strBytesToSend.c_str(), m_strBytesToSend.length());
+        m_pActiveChannel->writeBytes(payLoad, payLoadLength);
 #else
         // Generate HTTP header string - need to set content-length before generating headers.
         // We need to convert payload to UTF-8 first to get accurate length of payload.
-        utf8BufPayload    = PlatformLanguage::toUTF8((const char *)m_strBytesToSend.c_str(), m_strBytesToSend.length()+1);
-        int payLoadLength = strlen(utf8BufPayload);
+        utf8BufPayload    = PlatformLanguage::toUTF8(payLoad, payLoadLength+1);
+        payLoadLength = strlen(utf8BufPayload);
 
         sprintf( buff, "%d", payLoadLength);
         this->setTransportProperty ("Content-Length", buff);
@@ -299,21 +344,15 @@ flushOutput() throw (AxisException, HTTPTransportException)
     {
         delete utf8BufHeader;
         delete utf8BufPayload;
-        m_strBytesToSend = "";
-        m_strHeaderBytesToSend = "";
+
+        resetOutputStateMachine();
         
         logRethrowException()
         
         throw;
     }
 
-    // Empty the bytes to send string.
-    m_strBytesToSend = "";
-    m_strHeaderBytesToSend = "";
-
-    // Also empty the response headers as there aren't any yet until the response comes back !
-    m_vResponseHTTPHeaders.clear();
-    // TODO: Possible memory leak here - does the clear op clean out the memory too?
+    resetOutputStateMachine();
 
     logExit()
     
@@ -501,6 +540,13 @@ sendBytes( const char *pcSendBuffer, const void *pBufferId)
 {
     m_strBytesToSend += std::string (pcSendBuffer);
 
+    // Since we are sending new data, ensure nothing in redirect buffer.
+    if (m_strBytesToSendRedirect.length() > 0)
+    {
+        m_iNbrOfRedirectAttempts = 0;
+        m_strBytesToSendRedirect = "";
+    }
+
     return TRANSPORT_IN_PROGRESS;
 }
 
@@ -511,7 +557,8 @@ isThereResponseData()
 
     // We do not want to consume any SOAP data, just find out if there is any data.
     int bufLen = 0;
-    getBytes(NULL, &bufLen);
+    if (!m_bHasReadBeenDone)
+        getBytes(NULL, &bufLen);
     bool returnValue = (m_GetBytesState != eWaitingForHTTPHeader || m_iBytesLeft != 0);
     
     logExitWithBoolean(returnValue)
@@ -922,6 +969,30 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
             break;
         }
 
+        case ENABLE_AUTOMATIC_REDIRECT:
+        {
+            if (value && strcmp(value, "true") == 0)
+                m_bPerformAutoRedirect = true;
+            else
+                m_bPerformAutoRedirect = false;
+            break;
+        }
+
+        case MAX_AUTOMATIC_REDIRECT:
+        {
+            if (value)
+                m_iMaximumAutoRedirects = atoi(value);
+
+            if (m_iMaximumAutoRedirects < 1)
+                m_iMaximumAutoRedirects = 0;
+
+            char buffer[100];
+            sprintf(buffer, "%d", m_iMaximumAutoRedirects);
+            m_strMaximumAutoRedirects = (const char *)buffer;
+
+            break;
+        }
+
         default:
         {
             break;
@@ -1049,6 +1120,18 @@ getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTranspor
         case CHANNEL_HTTP_DLL_NAME:
         case CONTENT_TYPE:
         {
+            break;
+        }
+
+        case ENABLE_AUTOMATIC_REDIRECT:
+        {
+            pszPropValue = m_bPerformAutoRedirect ? "true" : "false";
+            break;
+        }
+
+        case MAX_AUTOMATIC_REDIRECT:
+        {
+            pszPropValue = m_strMaximumAutoRedirects.c_str();
             break;
         }
     }
@@ -1327,6 +1410,8 @@ processHTTPHeader()
         // Store as key-value pairs 
         string key   = strHeaderLine.substr( 0, iSeperator);
         string value = strHeaderLine.substr( iSeperator + 1, strHeaderLine.length() - iSeperator - 2);
+        trim(value);
+        trim(key);
         m_vResponseHTTPHeaders.push_back( std::make_pair( key, value));
 
         // Content length set? Chunked overrides Content-length. It should be noted
@@ -1337,30 +1422,34 @@ processHTTPHeader()
                 m_iContentLength = atoi(value.c_str());
                 m_GetBytesState = eSOAPMessageHasContentLength;
             }
-            
+
+        // Redirect?
+        if (key == "Location")
+            m_strResponseLocationURI = value;
+
         // Is chunked? 
-        if (key == "Transfer-Encoding" && value == " chunked")
+        if (key == "Transfer-Encoding" && value == "chunked")
             m_GetBytesState = eSOAPMessageIsChunked;
 
         // Now handle whether we are going to close connection after processing 
         // request. If HTTP/1.0 we have to always close the connection by default; otherwise,
-        // we assume persistant connection by default.
+        // we assume persistent connection by default.
         if( m_eProtocolType == APTHTTP1_0)
             m_bReopenConnection = true;
 
         // We need to close the connection and open a new one if we have 'Connection: close'
-        if( key == "Connection" && (value == " close" || value == " Close"))
+        if( key == "Connection" && (value == "close" || value == "Close"))
         {
             m_bReopenConnection = true;
             m_pActiveChannel->closeQuietly( true);
         }
 
         // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
-        if (key == "Proxy-Connection" && (value == " close" || value == " Close"))
+        if (key == "Proxy-Connection" && (value == "close" || value == "Close"))
             m_bReopenConnection = true;
 
         // For both HTTP/1.0 and HTTP/1.1, We need to keep the connection if we have 'Connection: Keep-Alive'
-        if( key == "Connection" && value == " Keep-Alive")
+        if( key == "Connection" && value == "Keep-Alive")
             m_bReopenConnection = false;
 
         // Look for cookies
@@ -1371,31 +1460,31 @@ processHTTPHeader()
         /* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml; start="<content id>" */
         if( key == "Content-Type")
         {
-            m_strContentType = value;
+            m_strResponseContentType = value;
 
-            string::size_type   ulMimePos = m_strContentType.find( ";");
+            string::size_type   ulMimePos = m_strResponseContentType.find( ";");
             std::string      strTypePart;
 
             if( ulMimePos != std::string::npos)
-                strTypePart = m_strContentType.substr( 1, ulMimePos - 1);
+                strTypePart = m_strResponseContentType.substr( 1, ulMimePos - 1);
 
             if( "Multipart/Related" == strTypePart)
             {
                 m_bMimeTrue = true;
-                m_strContentType = m_strContentType.substr( ulMimePos + 1, m_strContentType.length());
+                m_strResponseContentType = m_strResponseContentType.substr( ulMimePos + 1, m_strResponseContentType.length());
 
-                ulMimePos = m_strContentType.find( "boundary=");
-                m_strMimeBoundary = m_strContentType.substr( ulMimePos);
+                ulMimePos = m_strResponseContentType.find( "boundary=");
+                m_strMimeBoundary = m_strResponseContentType.substr( ulMimePos);
                 ulMimePos = m_strMimeBoundary.find( ";");
                 m_strMimeBoundary = m_strMimeBoundary.substr( 9, ulMimePos - 9);
 
-                ulMimePos = m_strContentType.find( "type=");
-                m_strMimeType = m_strContentType.substr( ulMimePos);
+                ulMimePos = m_strResponseContentType.find( "type=");
+                m_strMimeType = m_strResponseContentType.substr( ulMimePos);
                 ulMimePos = m_strMimeType.find( ";");
                 m_strMimeType = m_strMimeType.substr( 5, ulMimePos - 5);
 
-                ulMimePos = m_strContentType.find( "start=");
-                m_strMimeStart = m_strContentType.substr( ulMimePos);
+                ulMimePos = m_strResponseContentType.find( "start=");
+                m_strMimeStart = m_strResponseContentType.substr( ulMimePos);
                 ulMimePos = m_strMimeStart.find( ";");
                 m_strMimeStart = m_strMimeStart.substr( 6, ulMimePos - 6);
             }
@@ -1774,6 +1863,8 @@ readHTTPHeader()
        
     resetInputStateMachine();
     
+    m_bHasReadBeenDone = true;
+
     do
     {
         while (m_strReceived.find( ASCII_S_HTTP) == std::string::npos 
@@ -1814,11 +1905,32 @@ readHTTPHeader()
     }
     while( m_iResponseHTTPStatusCode == 100); 
     
-    // Now have a valid HTTP header that is not 100. Throw an exception if some unexpected error.
-    // Note that error 500 are for for SOAP faults.
-    if ( m_iResponseHTTPStatusCode != 500 
-            && (m_iResponseHTTPStatusCode < 200 || m_iResponseHTTPStatusCode >= 300))
+    // Now have a valid HTTP header that is not 100. Interrogate status code.
+    const char *contentType = m_strResponseContentType.c_str();
+    if (m_iResponseHTTPStatusCode > 199 && m_iResponseHTTPStatusCode < 300)
     {
+        // SOAP return is OK - so fall through
+    }
+    else if ((contentType != NULL) && (strncmp(contentType, "text/html", 9) != 0)
+            && ((m_iResponseHTTPStatusCode > 499) && (m_iResponseHTTPStatusCode < 600)))
+    {
+        // SOAP Fault should be in here - so fall through
+    }
+    else if ((m_strResponseLocationURI.length() != 0)
+            && ((m_iResponseHTTPStatusCode == 301)
+                    || (m_iResponseHTTPStatusCode == 302)
+                    || (m_iResponseHTTPStatusCode == 307)))
+    {
+        // Redirect (HTTP: 301/302/307)
+        handleRedirect();
+    }
+    else
+    {
+        m_iNbrOfRedirectAttempts = 0;
+        m_strBytesToSendRedirect = "";
+
+        // Unknown return code - so wrap up the content into a SOAP fault TODO
+
         m_strResponseHTTPStatusMessage = std::string( "Server sent HTTP error: '") +
           m_strResponseHTTPStatusMessage +  std::string("'\n");
 
@@ -1830,6 +1942,9 @@ readHTTPHeader()
         throw HTTPTransportException( SERVER_TRANSPORT_HTTP_EXCEPTION, m_strResponseHTTPStatusMessage.c_str());
     }  
     
+    m_iNbrOfRedirectAttempts = 0;
+    m_strBytesToSendRedirect = "";
+
     logExit()
 }
 
@@ -1987,4 +2102,49 @@ enableTrace(const char* logFilePath, const char *filters)
     
     if (m_pSecureChannel)
         m_pSecureChannel->enableTrace(logFilePath, filters);
+}
+
+void HTTPTransport::
+handleRedirect()
+{
+    logEntryTransport("HTTPTransport::handleRedirect")
+
+    // close old connection
+    closeConnection(true);
+
+    // Setup exception data with redirect location.
+    m_strResponseHTTPStatusMessage = std::string( "Redirect: ") +  m_strResponseLocationURI +  std::string("'\n");
+
+    m_GetBytesState = eWaitingForHTTPHeader;
+
+    // See if we can process redirect seamlessly.
+    // We only do so if we are going from http -> http or https -> https.
+    const char *location = m_strResponseLocationURI.c_str();
+    bool throwException = true;
+    if (location
+            && m_bPerformAutoRedirect
+            && m_iNbrOfRedirectAttempts < m_iMaximumAutoRedirects
+            && ((m_bChannelSecure && strncmp("https:", location, 6) == 0)
+                   || (!m_bChannelSecure && strncmp("http:", location, 5) == 0)))
+    {
+        throwException = false;
+        m_iNbrOfRedirectAttempts++;
+        setEndpointUri(location);
+        openConnection();
+        flushOutput();
+        readHTTPHeader();
+    }
+
+    if (throwException)
+    {
+        m_iNbrOfRedirectAttempts = 0;
+        m_strBytesToSendRedirect = "";
+
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_REDIRECT_RECEIVED",
+                                  m_strResponseHTTPStatusMessage.c_str())
+
+        throw HTTPTransportException( SERVER_TRANSPORT_REDIRECT_RECEIVED, m_strResponseHTTPStatusMessage.c_str());
+    }
+
+    logExit()
 }

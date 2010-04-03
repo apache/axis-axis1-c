@@ -184,7 +184,12 @@ initialize()
         /*70*/    {"AXISC", "Service thrown exception", "", ""},
         /*71*/    {"AXISC", "Unknown element exception", "", ""},
         /*72*/    {"AXISC", "Node value mismatch exception", "", ""},
-        /*73*/    {"AXISC", "Configuration read exception", "", ""}
+        /*73*/    {"AXISC", "Configuration read exception", "", ""},
+
+        /*74*/    {"AXISC", "Configuration defaults already set", "", ""},
+
+        /*75*/    {"Server", "Redirect received", "", ""}
+
         };
         s_parrSoapFaultStruct = s_arrLocalFaultStruct;
         m_bInit = true;

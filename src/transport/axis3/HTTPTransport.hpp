@@ -125,6 +125,8 @@ class HTTPTransport:public SOAPTransport
     int                     getChunkSize(string::size_type pos=0);
     
     void                    resetInputStateMachine();
+    void                    resetOutputStateMachine();
+    void                    handleRedirect();
     
     unsigned int            m_iChunkedDataLeftToConsume;
     unsigned int            m_iNextChunkedDataSize;
@@ -168,7 +170,7 @@ class HTTPTransport:public SOAPTransport
   /**
     * Keeps track of if we need to reopen connection.
     * Set true by setEndpointUri.
-    * Set false when a socket connection is established with the enpoint and 
+    * Set false when a socket connection is established with the endpoint and 
     * when there is no need renew (that is close and open again) an existing connection.
     */
     bool m_bReopenConnection;
@@ -286,7 +288,7 @@ class HTTPTransport:public SOAPTransport
   /** 
     * Content-Type holder
     */
-    std::string m_strContentType;
+    std::string m_strResponseContentType;
 
   /**
     * Mime Boundary value
@@ -326,6 +328,15 @@ class HTTPTransport:public SOAPTransport
     * New getBytes variables
     */
     EGETBYTESSTATE    m_GetBytesState;
+
+	bool m_bHasReadBeenDone;
+
+	std::string m_strMaximumAutoRedirects;
+    int  m_iNbrOfRedirectAttempts;
+    bool m_bPerformAutoRedirect;
+    int  m_iMaximumAutoRedirects;
+    std::string m_strBytesToSendRedirect;
+    std::string m_strResponseLocationURI;
 };
 
 #endif

@@ -550,6 +550,25 @@ void axiscStubSetSOAPHeaders(AXISCHANDLE stub);
 AXISC_STORAGE_CLASS_INFO
 void axiscStubCheckForExtraneousElements(AXISCHANDLE stub);
 
+/**
+ * =============
+ * Following is not in stub C++ class but is here to make things easier for C users.
+ * =============
+ */
+
+/**
+ * Indicates whether transport is to automatically handle http redirects.
+ * By default, redirects are not handled by the transport.  If enabled,
+ * auto-redirect will only occur when going from http to http or https to https.
+ *
+ * @param handleRedirect false=no auto-redirect. true=handle redirect automatically.
+ * @param maxCount how many redirects to follow.  Default is 1.  A value less than 1
+ *                 is the same as setting handleRedirect to false.
+ *
+ * @return 0=success; non-zero is failure.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetTransportAutoRedirect(AXISCHANDLE stub, AxiscBool handleRedirect, int maxCount);
 
 #ifdef __cplusplus
  }

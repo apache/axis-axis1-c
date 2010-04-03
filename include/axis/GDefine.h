@@ -173,7 +173,21 @@ typedef enum
     /**
      * Content type
      */
-    AXISC_CONTENT_TYPE
+    AXISC_CONTENT_TYPE,
+
+    /**
+     * Whether redirect should be handled implicitly. Values can be "true" or "false".
+     * The default is true. Redirects will only be implicitly be handled if going from
+     * http:// to http:// or https:// to https://.
+     */
+    AXISC_ENABLE_AUTOMATIC_REDIRECT,
+
+    /**
+     * Maximum number of automatic redirects to follow.  Property should be a numeric string.
+     * Default is 1. If "0" is specified, it will be as if AXISC_ENABLE_AUTOMATIC_REDIRECT is set to
+     * false.
+     */
+    AXISC_MAX_AUTOMATIC_REDIRECT
 } AXISC_TRANSPORT_INFORMATION_TYPE;
 
 #define AXISC_SOAPACTIONHEADER "SOAPAction"
