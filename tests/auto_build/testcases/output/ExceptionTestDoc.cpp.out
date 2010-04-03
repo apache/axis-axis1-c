@@ -1,9 +1,7 @@
 Result is:2
-AxisParseException: Error when getting the byte stream from the transport.
 HTTPTransportException: HTTP transport error.
 Server sent HTTP error: 'Not Found'
 
-AxisParseException: Error when getting the byte stream from the transport.
 HTTPTransportException: HTTP transport error.
 Server sent HTTP error: 'Not Found'
 
