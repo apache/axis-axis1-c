@@ -8,9 +8,9 @@ Properties that were received
 Server=WebSphere Application Server/5.1
 Content-Type=text/xml; charset=utf-8
 Content-Language=en-GB
-Set-Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz; Path=/ 
-Set-Cookie=LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp; Path=/ 
-Set-Cookie=JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1; Path=/ 
+Set-Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz; Path=/
+Set-Cookie=LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp; Path=/
+Set-Cookie=JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1; Path=/
 Transfer-Encoding=chunked
 ----------------------------------------------------------
 Storing the cookies so I can give them to the next web service
