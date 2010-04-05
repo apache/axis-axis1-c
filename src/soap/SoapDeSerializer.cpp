@@ -2323,16 +2323,11 @@ serializeTag (AxisString & xmlStr,
     if (START_ELEMENT == node->m_type)
     {
         xmlStr += "<";
-        /* why dont parser set null if there is no
-         * namespace. Expat set null but not xerces.
-         * TODO : will have to remove following strcmp's once Xerces is 
-         * corrected
-         */
-        if (node->m_pchNamespace && (strcmp (node->m_pchNamespace, "") != 0))
+        if (node->m_pchNamespace && (*(node->m_pchNamespace) != 0x00))
         {
             pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
 
-            if (pchPrefix && (strcmp (pchPrefix, "") != 0))
+            if (pchPrefix && *pchPrefix != 0x00)
             {
                 xmlStr += pchPrefix;
                 xmlStr += ":";
@@ -2387,7 +2382,7 @@ serializeTag (AxisString & xmlStr,
     }
     else if (END_ELEMENT == node->m_type)
     {
-        xmlStr += "</";
+        AxisString prefixTag = "";
 
         if (node->m_pchNamespace && (*(node->m_pchNamespace) != 0x00))
         {
@@ -2395,59 +2390,40 @@ serializeTag (AxisString & xmlStr,
 
             if (pchPrefix && (*pchPrefix != 0x00))
             {
-                xmlStr += pchPrefix;
-                xmlStr += ":";
+                prefixTag += pchPrefix;
+                prefixTag += ":";
             }
             else
             {
                 // This code is required because the namespace for the closing tag may have
                 // been deleted before it can be checked (m_pParser->getPrefix4NS).  If it has
                 // been deleted, then the code needs to look at the opening tag and use that
-                // namespace for the closing tag.
+                // namespace prefix for the closing tag.
                 // This is because:-
                 // [2511] m_pNode = m_pParser->anyNext() calls
                 //   XercesHandler::endPrefixMapping() and this deletes the namespace before it
-                //                                     can be looked up by m_pParser->getPrefix4NS!
-                // Check if NameOrValue is the same as the tag name at the beginning of the XML
-                // string.  If it is, check if it has a namespace.  If it has, then add the
-                // same namespace to the XML string.  This test needs to be done because the
-                // namespace is being deleted before it can be checked.
-                //
-                // There has got to be a better way of doing this, but it was not obvious at
-                // the time!
-                const char *pszXML = xmlStr.c_str();
-                char *      pNSEnd = (char *)strchr( pszXML, ':');
-                char *      pTagEnd = (char *)strchr( pszXML, '>');
+                // can be looked up by m_pParser->getPrefix4NS!
 
-                if( pNSEnd && (pNSEnd < pTagEnd))
+                string elementWithColon = ":";
+                elementWithColon += node->m_pchNameOrValue;
+
+                string::size_type nsEnd    = xmlStr.rfind(elementWithColon);
+                string::size_type tagStart = xmlStr.find_last_of('<');
+                string::size_type tagEnd   = xmlStr.find_last_of('>');
+
+                if (nsEnd != std::string::npos
+                       && tagStart != std::string::npos
+                       && tagEnd != std::string::npos
+                       && (nsEnd > tagStart)
+                       && (nsEnd < tagEnd))
                 {
-                    int      iNSStart = 1;
-                    int      iNSEnd = (int) (strchr( pszXML, ':') - pszXML) - iNSStart;
-                    string   sNamespace = xmlStr.substr( iNSStart, iNSEnd);
-                    int      iTagEnd = 0;
-                    char *   pSpace = (char *)strchr( pszXML, ' ');
-                    char *   pBrace = (char *)strchr( pszXML, '>');
-
-                    if( pSpace == NULL)
-                        iTagEnd = pSpace - pszXML;
-                    else if( pBrace == NULL)
-                        iTagEnd = pBrace - pszXML;
-                    else if( pBrace < pSpace)
-                        iTagEnd = pBrace - pszXML;
-                    else if( pSpace <= pBrace)
-                        iTagEnd = pSpace - pszXML;
-
-                    string    sTag = xmlStr.substr( iNSEnd + iNSStart + 1, iTagEnd - (iNSEnd + iNSStart + 1));
-
-                    if( !sTag.compare( node->m_pchNameOrValue))
-                    {
-                        xmlStr += sNamespace;
-                        xmlStr += ":";
-                    }
+                    prefixTag = xmlStr.substr( tagStart + 1, nsEnd - tagStart);
                 }
             }
         }
 
+        xmlStr += "</";
+        xmlStr += prefixTag;
         xmlStr += node->m_pchNameOrValue;
         if (START_END_ELEMENT == node->m_type2)
             xmlStr += "/>";
