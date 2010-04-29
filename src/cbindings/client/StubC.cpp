@@ -848,7 +848,8 @@ void axiscStubCheckForExtraneousElements(AXISCHANDLE stub)
     
     try
     {
-        s->checkForExtraneousElementsStubC(); 
+        if (!(s->doNotPerformClientRequest))
+            s->checkForExtraneousElementsStubC();
     }
     catch ( AxisException& e  )
     {
