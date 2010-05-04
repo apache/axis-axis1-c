@@ -2216,7 +2216,15 @@ getAnyObject (const AxisChar* pName, const AxisChar* pNamespace)
     bool bElementFound = false;
 
     AxisString xmlStr = "";
+
+    // There may have been namespace declarations that were previously processed....get it from
+    // the node and reset the node variable.
     AxisString nsDecls = "";
+    if (m_pNode)
+    {
+        nsDecls = ((AnyElement*)m_pNode)->m_strXMLNSDeclsForAnyObject.c_str();
+        ((AnyElement*)m_pNode)->m_strXMLNSDeclsForAnyObject.clear();
+    }
 
     stack <AxisString> nsPrefixStack;
 
@@ -2235,6 +2243,9 @@ getAnyObject (const AxisChar* pName, const AxisChar* pNamespace)
         {
             if (0 != strcmp (pName, m_pNode->m_pchNameOrValue))
             {
+                // Need to save namespace string just in case it is needed later.
+                ((AnyElement*)m_pNode)->m_strXMLNSDeclsForAnyObject = nsDecls.c_str();
+
                 logExitWithPointer(NULL)
 
                 return (AnyType *)NULL;

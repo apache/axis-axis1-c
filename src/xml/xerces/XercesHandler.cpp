@@ -235,6 +235,8 @@ freeElement()
         }
         else
         {
+            m_pCurrElement->m_strXMLNSDeclsForAnyObject.clear();
+
             // free all inner strings
             if (m_pCurrElement->m_pchNameOrValue)
             {

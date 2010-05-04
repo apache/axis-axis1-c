@@ -50,8 +50,16 @@ using namespace std;
  * @enum XML_NODE_TYPE
  * Enumeration that defines the SAX events that the AnyElement may contain
  */
-typedef enum { START_ELEMENT=0, CHARACTER_ELEMENT, END_ELEMENT, 
-    START_PREFIX, END_PREFIX, START_END_ELEMENT, UNKNOWN} XML_NODE_TYPE;
+typedef enum
+{
+    START_ELEMENT=0,
+    CHARACTER_ELEMENT,
+    END_ELEMENT,
+    START_PREFIX,
+    END_PREFIX,
+    START_END_ELEMENT,
+    UNKNOWN
+} XML_NODE_TYPE;
 
 /**
  * @struct AnyElement
@@ -97,6 +105,14 @@ typedef struct
      * NULL it is understood as the end of attributes.
      */
     const char* m_pchAttributes[MAX_NO_OF_ATTRIBUTES*3]; 
+
+    /**
+     * This is the namespace declarations for an element that has yet been processed but for which
+     * the namespace declarations have been consumed (which is the reason for this variable). See
+     * SoapDeserializer::getAnyObject().
+     */
+    std::string m_strXMLNSDeclsForAnyObject;
+
 } AnyElement;
 
 /*
@@ -133,4 +149,3 @@ class AnyElemntUtils
 };
 
 #endif
-
