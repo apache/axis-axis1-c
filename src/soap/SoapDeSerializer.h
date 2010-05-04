@@ -18,6 +18,8 @@
 #if !defined(_SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_)
 #define _SOAPDESERIALIZER_H____OF_AXIS_INCLUDED_
 
+#include <stack>
+
 #include <axis/IHandlerSoapDeSerializer.hpp>
 #include "HeaderBlock.h"
 #include "../xml/XMLParser.h"
@@ -305,7 +307,7 @@ public:
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
     int AXISCALL getStatus(){return m_nStatus;};
     AnyType* AXISCALL getAnyObject();
-    void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls);
+    void serializeTag(AxisString& xmlStr, const AnyElement* node, AxisString& nsDecls, std::stack<AxisString> & nsPrefixStack);
     void getChardataAs(void** pValue, XSDTYPE type);
 
     /**
@@ -346,6 +348,7 @@ private:
     int skipNode(bool verifyIfEndNode=false, bool throwExcOnError=true);
     int getNextNode(bool ifNotSet=false, bool characterMode=false, bool throwExcOnError=true); 
     void throwParserException();
+    AnyType * getAnyObject (const AxisChar* pName, const AxisChar* pNamespace);
 };
 
 AXIS_CPP_NAMESPACE_END

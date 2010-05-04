@@ -1930,13 +1930,7 @@ getElementAsAnyType(const AxisChar* pName, const AxisChar* pNamespace)
     if (AXIS_SUCCESS != m_nStatus)
         return ret;
         
-    if (AXIS_FAIL == getNextNode(RPC_ENCODED != m_nStyle))
-        return ret;
-
-    if (RPC_ENCODED != m_nStyle && (0 != strcmp (pName, m_pNode->m_pchNameOrValue)))
-       return ret;
-    
-    AnyType *any = getAnyObject();
+    AnyType *any = getAnyObject(pName, pNamespace);
     if (NULL != any)
     {
         if (any->_size != 0)
@@ -2182,125 +2176,154 @@ flushInputStream ()
 AnyType * SoapDeSerializer::
 getAnyObject ()
 {
+    return getAnyObject(NULL, NULL);
+}
+
+
+AnyType * SoapDeSerializer::
+getAnyObject (const AxisChar* pName, const AxisChar* pNamespace)
+{
     logEntryEngine("SoapDeSerializer::getAnyObject")
+
+    // If pname is passed, then we need to move the parser pointer for RPC.
+    if (pName != NULL && RPC_ENCODED == m_nStyle)
+    {
+        m_pNode = m_pParser->anyNext();
+        if (m_pNode == NULL)
+        {
+            logExitWithPointer(NULL)
+
+            return (AnyType *)NULL;
+        }
+    }
 
     // Parser will throw an exception on a parser exception, that is ok...
     if (!m_pNode)
+    {
         m_pNode = m_pParser->anyNext();
-    
-    AnyType *pAny = NULL;
-    
-    if (m_pNode)
-    {    
-        int tagCount = 0;
-        int lstSize = 0;
-        bool bContinue = false;
-    
-        AxisString xmlStr = "";
-        AxisString nsDecls = "";
-    
-        list < AxisString > lstXML;
-    
-        AxisString inValue = "";
-        AxisString outValue = "";
-    
-        while ((END_ELEMENT != m_pNode->m_type) || (tagCount >= 0) || bContinue)
+
+        if (m_pNode == NULL)
         {
-            // Continue if processing start prefix,
-            // as we haven't yet found the true start of the tag
-            if (START_PREFIX == m_pNode->m_type)
-                bContinue = true;
-            else
-                bContinue = false;
-            
-            // if empty element we need to do a parser get to consume the end-element node.
-            if (START_END_ELEMENT == m_pNode->m_type2)
+            logExitWithPointer(NULL)
+
+            return (AnyType *)NULL;
+        }
+    }
+
+    int tagCount = 0;
+    int lstSize = 0;
+    bool bContinue = true;
+    bool bElementFound = false;
+
+    AxisString xmlStr = "";
+    AxisString nsDecls = "";
+
+    stack <AxisString> nsPrefixStack;
+
+    AxisString inValue = "";
+    AxisString outValue = "";
+
+    // Loop and get an XML element node and its sub-elements.
+    // Note the a schema element will not be counted as an element but will be included as part
+    // of the data returned.
+    while (m_pNode && ((END_ELEMENT != m_pNode->m_type) || (tagCount > 0) || bContinue))
+    {
+        // Root element needs to be what is expected for doc/literal.
+        if (pName != NULL
+                && RPC_ENCODED != m_nStyle
+                && START_ELEMENT == m_pNode->m_type)
+        {
+            if (0 != strcmp (pName, m_pNode->m_pchNameOrValue))
             {
-                if (END_ELEMENT == m_pNode->m_type)
-                    m_pNode = m_pParser->anyNext ();
-            }
-            else
-            {
-                // Increment counter if entering new tag, Decrement counter if exiting tag
-                if (START_ELEMENT == m_pNode->m_type)
-                    tagCount++;
-                else if (END_ELEMENT == m_pNode->m_type)
-                    tagCount--;
+                logExitWithPointer(NULL)
+
+                return (AnyType *)NULL;
             }
 
-            if (START_PREFIX == m_pNode->m_type)
-            {
-                nsDecls += " xmlns";
-                if (m_pNode->m_pchNameOrValue && (*(m_pNode->m_pchNameOrValue) != 0x00))
-                {
-                    nsDecls += ":";
-                    nsDecls += m_pNode->m_pchNameOrValue;
-                }
-                nsDecls += "=";
-                nsDecls += PLATFORM_DOUBLE_QUOTE_S;
-                nsDecls += m_pNode->m_pchNamespace;
-                nsDecls += PLATFORM_DOUBLE_QUOTE_S;
-            }
-            else if (CHARACTER_ELEMENT != m_pNode->m_type)
-            {
-                serializeTag (xmlStr, m_pNode, nsDecls);
-                nsDecls = "";
-            }
-            else
-            {
-                inValue = m_pNode->m_pchNameOrValue;
-                IAnySimpleType::replaceReservedCharacters(inValue, outValue);
-                xmlStr += outValue;
-            }
-        
-            /* copy the First level element into the list */
-            if ( !bContinue && tagCount == 0 && (!xmlStr.empty ()))
-            {
-                lstXML.push_back (xmlStr);
-                xmlStr = "";
+            // We do not need to do the check anymore
+            pName = NULL;
+        }
 
-                // If the anyType element is empty element, we need to consume END_ELEMENT.
-                if (START_END_ELEMENT == m_pNode->m_type2 && START_ELEMENT == m_pNode->m_type)
-                    m_pNode = m_pParser->anyNext ();
+        // Continue if processing start prefix as we haven't yet found the true start of the tag
+        bContinue = false;
+        if (START_PREFIX == m_pNode->m_type)
+            bContinue = true;
 
-                m_pNode = NULL;
-                break;
+        // if empty element we need to do a parser get to consume the end-element node.
+        // Note that start/end elements are not included in tagCount processing since the node
+        // is processed completely on first pass since it contains no sub-elements.
+        if (START_END_ELEMENT == m_pNode->m_type2)
+        {
+            if (END_ELEMENT == m_pNode->m_type)
+            {
+                m_pNode = m_pParser->anyNext ();
+                continue;
             }
-        
+        }
+        else
+        {
+            // Increment counter if entering new tag, Decrement counter if exiting tag
+            if (START_ELEMENT == m_pNode->m_type)
+                tagCount++;
+            else if (END_ELEMENT == m_pNode->m_type)
+                tagCount--;
+        }
+
+        if (START_PREFIX == m_pNode->m_type)
+        {
+            nsDecls += " xmlns";
+            if (m_pNode->m_pchNameOrValue && (*(m_pNode->m_pchNameOrValue) != 0x00))
+            {
+                nsDecls += ":";
+                nsDecls += m_pNode->m_pchNameOrValue;
+            }
+            nsDecls += "=";
+            nsDecls += PLATFORM_DOUBLE_QUOTE_S;
+            nsDecls += m_pNode->m_pchNamespace;
+            nsDecls += PLATFORM_DOUBLE_QUOTE_S;
+        }
+        else if (CHARACTER_ELEMENT != m_pNode->m_type)
+        {
+            bElementFound = true;
+            serializeTag (xmlStr, m_pNode, nsDecls, nsPrefixStack);
+            nsDecls = "";
+        }
+        else
+        {
+            inValue = m_pNode->m_pchNameOrValue;
+            IAnySimpleType::replaceReservedCharacters(inValue, outValue);
+            xmlStr += outValue;
+        }
+
+        // If element obtained...break out. Otherwise, get next node.
+        if (bElementFound && !bContinue && tagCount == 0 && (!xmlStr.empty ()))
+        {
+            // If the anyType element is empty element, we need to consume END_ELEMENT.
+            if (START_END_ELEMENT == m_pNode->m_type2 && START_ELEMENT == m_pNode->m_type)
+                m_pNode = m_pParser->anyNext ();
+
+            m_pNode = NULL;
+        }
+        else
             m_pNode = m_pParser->anyNext ();
-        
-            if (!m_pNode) // there is something wrong in the XSD Any XML stream
-            {          
-                // Store whatever we have by now and break
-                if (!xmlStr.empty ())
-                {
-                    lstXML.push_back (xmlStr);
-                    xmlStr = "";
-                }
-                break;
-            }
-        }
-    
-        pAny = new AnyType ();
-        pAny->_array = 0;
-        pAny->_size = 0;
-        
-        lstSize = lstXML.size ();
-        
-        if (lstSize > 0)
-        {
-            pAny->_array = new char *[lstSize];
-    
-            list < AxisString >::iterator i;    /* Iterator for traversing the list */
-        
-            for (i = lstXML.begin (); i != lstXML.end (); i++)
-            {
-                const char *s = (*i).c_str ();
-                pAny->_array[pAny->_size] = new char[strlen (s) + 1];
-                strcpy (pAny->_array[pAny->_size], s);
-                pAny->_size++;
-            }
-        }
+    }
+
+    // Generate the axis type where we store anyType XML objects.
+    AnyType *pAny = new AnyType ();
+    pAny->_array = 0;
+    pAny->_size = 0;
+
+    if (!xmlStr.empty ())
+    {
+        pAny->_array = new char *[1];
+
+        const char *s = xmlStr.c_str ();
+        logDebugArg1("\nAnyType array element\n%s\n", s)
+
+        pAny->_array[0] = new char[xmlStr.size() + 1];
+        strcpy (pAny->_array[0], s);
+
+        pAny->_size  = 1;
     }
 
     logExitWithPointer(pAny)
@@ -2308,31 +2331,36 @@ getAnyObject ()
     return pAny;
 }
 
-
 void SoapDeSerializer::
 serializeTag (AxisString & xmlStr, 
               const AnyElement * node,
-              AxisString & nsDecls)
+              AxisString & nsDecls,
+              std::stack<AxisString> & nsPrefixStack)
 {
-    /*
-       Note that if this is an end tag and since m_pchNameOrValue doesn't give
-       the "/" sign. So we have to add that sign as well in to the end tag
-     */
     const XML_Ch *pchPrefix = 0;
+
+    AxisString nsPrefix = "";
 
     if (START_ELEMENT == node->m_type)
     {
         xmlStr += "<";
+
         if (node->m_pchNamespace && (*(node->m_pchNamespace) != 0x00))
         {
             pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
 
             if (pchPrefix && *pchPrefix != 0x00)
             {
+                nsPrefix = pchPrefix;
+
                 xmlStr += pchPrefix;
                 xmlStr += ":";
             }
         }
+
+        // We do not need to save namespace prefix if start/end element.
+        if (START_END_ELEMENT != node->m_type2)
+            nsPrefixStack.push(nsPrefix);
     
         xmlStr += node->m_pchNameOrValue;
 
@@ -2376,7 +2404,7 @@ serializeTag (AxisString & xmlStr,
         }
 
         if (START_END_ELEMENT == node->m_type2)
-            xmlStr += "/>";
+            xmlStr += " />";
         else
             xmlStr += ">";
     }
@@ -2384,41 +2412,15 @@ serializeTag (AxisString & xmlStr,
     {
         AxisString prefixTag = "";
 
-        if (node->m_pchNamespace && (*(node->m_pchNamespace) != 0x00))
+        if (!nsPrefixStack.empty())
         {
-            pchPrefix = m_pParser->getPrefix4NS (node->m_pchNamespace);
+            nsPrefix = nsPrefixStack.top();
+            nsPrefixStack.pop();
 
-            if (pchPrefix && (*pchPrefix != 0x00))
+            if (!nsPrefix.empty())
             {
-                prefixTag += pchPrefix;
+                prefixTag += nsPrefix;
                 prefixTag += ":";
-            }
-            else
-            {
-                // This code is required because the namespace for the closing tag may have
-                // been deleted before it can be checked (m_pParser->getPrefix4NS).  If it has
-                // been deleted, then the code needs to look at the opening tag and use that
-                // namespace prefix for the closing tag.
-                // This is because:-
-                // [2511] m_pNode = m_pParser->anyNext() calls
-                //   XercesHandler::endPrefixMapping() and this deletes the namespace before it
-                // can be looked up by m_pParser->getPrefix4NS!
-
-                string elementWithColon = ":";
-                elementWithColon += node->m_pchNameOrValue;
-
-                string::size_type nsEnd    = xmlStr.rfind(elementWithColon);
-                string::size_type tagStart = xmlStr.find_last_of('<');
-                string::size_type tagEnd   = xmlStr.find_last_of('>');
-
-                if (nsEnd != std::string::npos
-                       && tagStart != std::string::npos
-                       && tagEnd != std::string::npos
-                       && (nsEnd > tagStart)
-                       && (nsEnd < tagEnd))
-                {
-                    prefixTag = xmlStr.substr( tagStart + 1, nsEnd - tagStart);
-                }
             }
         }
 
@@ -2426,7 +2428,7 @@ serializeTag (AxisString & xmlStr,
         xmlStr += prefixTag;
         xmlStr += node->m_pchNameOrValue;
         if (START_END_ELEMENT == node->m_type2)
-            xmlStr += "/>";
+            xmlStr += " />";
         else
             xmlStr += ">";
     }

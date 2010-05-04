@@ -786,8 +786,17 @@ public class CSchemaUtils extends SchemaUtils
 
         // The type qname is used to locate the TypeEntry, which is then
         // used to retrieve the proper java name of the type.
-        QName nodeType = Utils.getTypeQName(elementNode, forElement, false);
+        QName nodeType = Utils.getTypeQName(elementNode, forElement, false);        
         TypeEntry type = symbolTable.getTypeEntry(nodeType, forElement.value);
+        
+        // We want to treat schema references same way we treat anyType. 
+        if (type == null 
+                && nodeType.getLocalPart().equals("schema") 
+                && nodeType.getNamespaceURI().equals("http://www.w3.org/2001/XMLSchema"))
+        {
+            forElement.value = false;
+            type = symbolTable.getTypeEntry(nodeType, forElement.value);
+        }
         
         //The boolean field 'qualified' is set to true 
         //if the element is namespace qualified.

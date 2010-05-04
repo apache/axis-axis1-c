@@ -117,6 +117,8 @@ public class Type
     // is any element?  This is true for xsd:any.
     private boolean c_isAnyElement = false;
 
+    // is schema reference? This is true for something like <element ref="s:schema">
+    private boolean c_isSchemaReference = false;
 
     /**
      * Constructor.
@@ -160,8 +162,9 @@ public class Type
         }
         
         // See if this type represents an xsd:any element or an xsd:anyType type.
-        c_isAnyType    = CUtils.isAnyType(name);
-        c_isAnyElement = CUtils.isAnyElement(name);
+        c_isAnyType         = CUtils.isAnyType(name);
+        c_isAnyElement      = CUtils.isAnyElement(name);
+        c_isSchemaReference = CUtils.isSchemaReference(name);
 
         if (name.getNamespaceURI().equals(WrapperConstants.APACHE_XMLSOAP_NAMESPACE) && 
             (name.getLocalPart().equals("DataHandler") ||
@@ -549,6 +552,14 @@ public class Type
         return isUnwrappedInputType;
     }
 
+    /**
+     * @return the c_isSchemaReference
+     */
+    public boolean isSchemaRefernce()
+    {
+        return c_isSchemaReference;
+    }
+    
     /**
      * @return the c_isAnyType
      */

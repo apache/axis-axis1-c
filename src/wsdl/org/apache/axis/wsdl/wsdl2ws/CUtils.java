@@ -52,6 +52,7 @@ public class CUtils
     public static final String CLASS_LOADER_APPENDER = "Service";
     public static final QName xsdAnyElementQName = new QName("http://ws.apache.org/axisc/types","AnyType");
     public static final QName xsdAnyTypeQName = new QName(WrapperConstants.SCHEMA_NAMESPACE,"anyType");
+    public static final QName xsdSchemaQName  = new QName(WrapperConstants.SCHEMA_NAMESPACE,"schema");
 
     // File suffix for C++ Class files
     private static final String CPP_CLASS_SUFFIX = ".cpp";
@@ -221,6 +222,8 @@ public class CUtils
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),                "xsd__NOTATION");
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyType"),                "xsd__anyType");
         
+        c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "schema"),                 "xsd__anyType");
+        
         // TODO revisit attachment support.
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "Image"),       "ISoapAttachment");
         c_qnameToPrimitiveTypeMapperCPP.put(new QName(WrapperConstants.APACHE_XMLSOAP_NAMESPACE, "PlainText"),  "ISoapAttachment");
@@ -276,6 +279,8 @@ public class CUtils
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyURI"),                "xsdc__anyURI");
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "NOTATION"),            "xsdc__NOTATION");
         c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "anyType"),                "xsdc__anyType");
+        c_qnameToPrimitiveTypeMapperC.put(new QName(WrapperConstants.SCHEMA_NAMESPACE, "schema"),                 "xsdc__anyType");
+
 
         /* TODO:
          *   Should be removed when the following issue will be fixed :
@@ -840,6 +845,17 @@ public class CUtils
     }
     
     /**
+     * Method to determine if QName represents a schema.
+     * 
+     * @param name
+     * @return
+     */
+    public static boolean isSchemaReference(QName name)
+    {
+            return name.equals(xsdSchemaQName);
+    }
+    
+    /**
      * Method to determine if QName represents an xsd:anyType.
      * 
      * @param name
@@ -847,7 +863,8 @@ public class CUtils
      */
     public static boolean isAnyType(QName name)
     {
-            return name.equals(xsdAnyTypeQName);
+        // Note we treat schema reference as xsd:anyType.
+            return (name.equals(xsdAnyTypeQName) || isSchemaReference(name));
     }
     
     /**
