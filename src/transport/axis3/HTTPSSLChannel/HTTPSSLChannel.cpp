@@ -16,6 +16,8 @@
 // !!! Must be first thing in file !!!
 #include "../../../platforms/PlatformAutoSense.hpp"
 
+#include <ctype.h>
+
 #include "HTTPSSLChannel.hpp"
 
 #include "../../../common/AxisTrace.h"
@@ -706,16 +708,15 @@ OpenChannel()
     svAddr.sin_family = AF_INET;
     svAddr.sin_port = htons( port);
 
-    // Probably this is the host-name of the server we are connecting to...
-    if( (pHostEntry = gethostbyname( host)))
-    {
-        svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
-    }
-    else
-    {
-        // No this is the IP address
+    // Host names must start with a character (RFC1035)...so if it starts with a number, let us first
+    // assume it is dotted decimal format...and if it fails, we will then assume it is a host name.
+    // We do this so that we avoid long DNS timeouts if we use gethostbyname() first.
+    svAddr.sin_addr.s_addr = -1;
+    if (isdigit(host[0]))
         svAddr.sin_addr.s_addr = inet_addr( host);
-    }
+
+    if ((svAddr.sin_addr.s_addr == -1) && (pHostEntry = gethostbyname( host)))
+        svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
 
     // Attempt to connect to the remote server.
     if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
