@@ -73,7 +73,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 c_writer.write("\n");                
                 
                 // If no attributes or elements just do forward reference.
-                if (attribs.length == 0)
+                if (attribs.length == 0 && extensionBaseAttrib == null)
                 {
                     c_writer.write("/* Forward reference - type with no elements or arributes */\n");
                     c_writer.write("typedef struct " + c_classname + "Tag " + c_classname + ";\n\n");

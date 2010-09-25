@@ -803,7 +803,7 @@ public class BeanParamWriter extends ParamCFileWriter
         c_writer.write("\t}\n");
         c_writer.write("\telse\n"); 
         c_writer.write("\t{\n");        
-        if (attribs.length == 0)
+        if (attribs.length == 0 && extensionBaseAttrib == null)
             c_writer.write("\t\t" + c_classname + "* pTemp = (" + c_classname + " *)NULL;\n");
         else
         {
