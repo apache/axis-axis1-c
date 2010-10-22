@@ -124,12 +124,7 @@ public class WSDL2Ws
             
             if (e.getMessage() != null)
                 System.out.println("\nCode generation failed. Please see errors above.\n");
-            
-            return;
         }
-        
-        // Indicate code generation complete and show where stored.
-        System.out.println("\nCode generation completed. Generated files in directory\n'" + c_cmdLineArgs.getOutputDirectory() + "'.");
     }    
     
     /**
@@ -298,6 +293,9 @@ public class WSDL2Ws
         
         // Generate code
         wsg.generate();
+        
+        // Indicate code generation complete and show where stored.
+        System.out.println("\nCode generation completed. Generated files in directory\n'" + c_cmdLineArgs.getOutputDirectory() + "'.");
     }    
     
     // The following 3 exposeXXX methods attempts to expose anonymous types so that 
