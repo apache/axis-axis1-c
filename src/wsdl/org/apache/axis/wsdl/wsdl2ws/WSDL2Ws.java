@@ -110,9 +110,10 @@ public class WSDL2Ws
     public static void main(String[] args) throws Exception
     {
         // Kick off code generation
+        WSDL2Ws gen = null;
         try
         {
-            WSDL2Ws gen = new WSDL2Ws(args);
+            gen = new WSDL2Ws(args);
             gen.generateWrappers();
         }
         catch (Exception e)
@@ -124,7 +125,13 @@ public class WSDL2Ws
             
             if (e.getMessage() != null)
                 System.out.println("\nCode generation failed. Please see errors above.\n");
+            
+            return;
         }
+        
+        // Indicate code generation complete and show where stored.
+        System.out.println("\nCode generation completed. Generated files in directory\n'" 
+                + gen.getCmdLineArgs().getOutputDirectory() + "'.");
     }    
     
     /**
@@ -293,9 +300,6 @@ public class WSDL2Ws
         
         // Generate code
         wsg.generate();
-        
-        // Indicate code generation complete and show where stored.
-        System.out.println("\nCode generation completed. Generated files in directory\n'" + c_cmdLineArgs.getOutputDirectory() + "'.");
     }    
     
     // The following 3 exposeXXX methods attempts to expose anonymous types so that 
@@ -561,5 +565,15 @@ public class WSDL2Ws
             wsContext.getTypemap().removeType(oldName);
             wsContext.getTypemap().addType(newTypeName, innerClassType);
         }
+    }
+    
+    /**
+     * Return command line arguments. 
+     * 
+     * @return c_cmdLineArgs
+     */
+    private CLArgParser getCmdLineArgs()
+    {
+        return c_cmdLineArgs;
     }
 }
