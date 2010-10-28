@@ -84,6 +84,7 @@ public class BeanParamWriter extends ParamCFileWriter
             else
             {
                 // TODO
+                throw new WrapperFault("Error : Complex content extensions is not supported. ");
             }
         }        
         else if (attribs.length == 0)
@@ -457,6 +458,7 @@ public class BeanParamWriter extends ParamCFileWriter
             else
             {
                 // TODO
+                throw new WrapperFault("Error : Complex content extensions is not supported. ");
             }
         }
         else if (attribs.length == 0)
