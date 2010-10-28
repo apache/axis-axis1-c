@@ -248,7 +248,7 @@ public class WSDL2Ws
             if (servicePorts.isEmpty())
                 servicePorts = c_wsdlInfo.getPortsSOAP11RPC(service);
             if (servicePorts.isEmpty())
-                throw new WrapperFault("A port with a supported binding was not found.");
+                throw new WrapperFault("A port with a supported binding was not found. Ensure SOAP 1.1 XML namespace is used. ");
     
             port            = (Port)servicePorts.get(0);
             bindingEntry    = c_symbolTable.getBindingEntry(port.getBinding().getQName());
