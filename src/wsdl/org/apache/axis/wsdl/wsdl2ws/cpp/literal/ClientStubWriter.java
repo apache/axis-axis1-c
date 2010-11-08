@@ -340,8 +340,7 @@ public class ClientStubWriter
             c_writer.write (";\n");
         c_writer.write ("\n");
         
-        c_writer.write ("\t\tif (NULL==m_pCall->getTransportProperty(\"SOAPAction\",false))\n");
-        c_writer.write ("\t\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""
+        c_writer.write ("\t\tm_pCall->setTransportProperty(SOAPACTION_HEADER , \""
                + minfo.getSoapAction () + "\");\n");
         c_writer.write("\n");
         

@@ -1010,6 +1010,8 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
 /* HTTPTransport::setTransportProperty( Key, Value) Is an overloaded public
  * method used to set a HTTP transport or SSL implementation property.
  *
+ * Any existing transport property will be replaced with the new value.
+ *
  * @param const char* Key is a NULL terminated character string containing
  * the type of information to be stored in either the HTTP Header or SSL
  * implementation settings.
@@ -1029,10 +1031,15 @@ setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTranspo
 
         bool b_KeyFound = false;
     
-        // Check for well known headers that we add on in every iteration
-        if (strcmp( pcKey, "SOAPAction") == 0 
-                || strcmp( pcKey, "Content-Length") == 0
-                || strcmp( pcKey, "Connection") == 0)
+        // Cookies are handled elsewhere.  For other properties, we first check to
+        // see if there is a matching (i.e. duplicate property) already set.  If one
+        // exists, we replace the value.
+        if(strcmp(pcKey, "Cookie")==0)
+        {
+            iSuccess = addCookie(pcValue);
+            b_KeyFound = true;
+        }
+        else
         {
             std::string strKeyToFind = std::string( pcKey);
     
@@ -1045,15 +1052,12 @@ setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTranspo
                     break;
                 }
         }
-        else if(strcmp(pcKey, "Cookie")==0)
-        {
-            iSuccess = addCookie(pcValue);
-            b_KeyFound = true;
-        }
         
+        // If the property was not handled, then add it to the list of transport properties.
         if( !b_KeyFound)
             m_vHTTPHeaders.push_back( std::make_pair( (string) pcKey, (string) pcValue));
     }
+
     
     logExitWithReturnCode(iSuccess)
 

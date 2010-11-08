@@ -347,8 +347,7 @@ public class ClientStubWriter
             c_writer.write(";\n");
         c_writer.write("\n");
         
-        c_writer.write("\tif (NULL==axiscCallGetTransportProperty(call,\"SOAPAction\",0))\n");
-        c_writer.write("\t\taxiscCallSetTransportProperty(call,AXISC_SOAPACTION_HEADER , \""
+        c_writer.write("\taxiscCallSetTransportProperty(call,AXISC_SOAPACTION_HEADER , \""
                 + minfo.getSoapAction() + "\");\n");
         c_writer.write("\n");
         
