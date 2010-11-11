@@ -62,9 +62,9 @@ main(int argc, char *argv[])
 
     //set HTTP headers
     ws.setTransportProperty("Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
-    ws.setTransportProperty("Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
-    ws.setTransportProperty("Accept-Language", "lang2");
-    ws.setTransportProperty("Accept-Language", "lang2");
+    ws.setTransportProperty("Accept-Language1", " da, en-gb;q=0.8, en;q=0.7");
+    ws.setTransportProperty("Accept-Language2", "lang2");
+    ws.setTransportProperty("Accept-Language3", "lang3");
 
     cout << "invoking echoString..." << endl;
     //testing echoString

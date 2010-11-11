@@ -61,8 +61,8 @@ main(int argc, char *argv[])
 
     //set HTTP headers
     axiscStubSetTransportProperty(ws,"Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
-    axiscStubSetTransportProperty(ws,"Accept-Language", "lang2");
-    axiscStubSetTransportProperty(ws,"Accept-Language", "lang3");
+    axiscStubSetTransportProperty(ws,"Accept-Language2", "lang2");
+    axiscStubSetTransportProperty(ws,"Accept-Language3", "lang3");
 
     printf( "invoking echoString...\n" );
 

@@ -64,8 +64,8 @@ main(int argc, char *argv[])
 
     //set HTTP headers
     ws.setTransportProperty("Accept-Language", " da, en-gb;q=0.8, en;q=0.7");
-    ws.setTransportProperty("Accept-Language", "lang2");
-    ws.setTransportProperty("Accept-Language", "lang3");
+    ws.setTransportProperty("Accept-Language2", "lang2");
+    ws.setTransportProperty("Accept-Language3", "lang3");
     ws.setTransportProperty("Date", "Sat, 26 Jun 2004 13:32:19 GMT");
 
     cout << "invoking echoString..." << endl;

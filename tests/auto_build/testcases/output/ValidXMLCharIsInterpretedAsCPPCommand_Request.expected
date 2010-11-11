@@ -23,7 +23,7 @@ Content-Length: 802
 POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
-SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
+SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#Test1WithComplexResponse"
 Content-Length: 840
 
 <?xml version='1.0' encoding='utf-8' ?>
