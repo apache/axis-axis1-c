@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
                 xsd__string_Array * arrayIn =new xsd__string_Array();
                 xsd__string *array = new xsd__string[5];                
-        array[0] = "a"; 
+                array[0] = "a";
                 array[1] = "b";
                 array[2] = "c";
                 array[3] = "d";
@@ -39,11 +39,7 @@ int main(int argc, char *argv[])
                         cout << "Value1->StringValue->m_Array[" << i << "] = " << *(Value1->StringValue->get(outputSize)[i]) << endl;
 
                   // Clear up input array        
-        for (int deleteIndex = 0 ; deleteIndex < 5 ; deleteIndex++ )
-        {
-            delete [] array[deleteIndex];
-        }
-        delete [] array;
+                delete [] array;
                 delete arrayIn;
 
 
