@@ -629,7 +629,12 @@ public class WSDLInfo
             if (null == type.getRefType())
                 throw new WrapperFault("Array type found without a Ref type");
             
+            // Handle array that references an element
             QName qn = type.getRefType().getQName();
+            // TODO
+//            if (type.getRefType().getRefType() != null)
+//                qn = type.getRefType().getRefType().getQName();
+           
             if (null == qn)
                 throw new WrapperFault("Array type found without a Ref type");
             
@@ -1388,7 +1393,7 @@ public class WSDLInfo
                 type.setIsUnwrappedOutputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
                 
-                if (!elementNames.hasNext() && (type.isSimpleType() || type.isPrimitiveType()))
+                if (element != null)
                     pinfo.setElementName(element.getQName());
                 else
                     pinfo.setElementName(type.getName());
@@ -1556,7 +1561,7 @@ public class WSDLInfo
                 type.setIsUnwrappedInputType(true);
                 pinfo.setParamName(elementName, c_typeMap);
                 
-                if (!elementNames.hasNext() && (type.isSimpleType() || type.isPrimitiveType()))
+                if (element != null)
                     pinfo.setElementName(element.getQName());
                 else
                     pinfo.setElementName(type.getName());

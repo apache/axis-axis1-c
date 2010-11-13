@@ -34,7 +34,7 @@ public class MethodInfo
     private Parameters operationParameters;
     private ArrayList inputParameters;
     private ArrayList outputParameters;
-    private String soapAction = null;
+    private String soapAction = "";
     private QName inputMessage;
     private QName outputMessage;
     private ArrayList faultType;
@@ -94,6 +94,9 @@ public class MethodInfo
 
     public void setSoapAction(String string)
     {
+        if (string == null)
+            string = "";
+        
         soapAction = string;
     }
 
