@@ -1191,24 +1191,19 @@ public class WSDLInfo
             //setting the faults
             addFaultInfo(op.getFaults(), minfo);
             
-            //add each parameter to parameter list
+            // process input and response messages 
             if ("document".equals(bindingEntry.getBindingStyle().getName()))
             {
                 if (userRequestedWSDLWrappingStyle && !minfo.isEligibleForWrapped())
                     System.out.println("INFORMATIONAL: Operation '" + op.getName() + "' is not eligible for wrapper-style, generating non-wrapper style.");
-                addDocumentStyleInputMessageToMethodInfo(op, minfo);
+               
+                addDocumentStyleInputMessageToMethodInfo(bindingEntry, op, minfo);
+                addDocumentStyleOutputMessageToMethodInfo(bindingEntry, op, minfo);
             }
             else
-                addRPCStyleInputMessageToMethodInfo(op, minfo);
-
-            //get the return type
-            if (op.getOutput() != null)
             {
-                Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
-                if (returnlist.hasNext() && "document".equals(bindingEntry.getBindingStyle().getName()))
-                    addDocumentStyleOutputMessageToMethodInfo(minfo, (Part) returnlist.next());
-                else
-                    addRPCStyleOutputMessageToMethodInfo(op, minfo);
+                addRPCStyleInputMessageToMethodInfo(bindingEntry, op, minfo);
+                addRPCStyleOutputMessageToMethodInfo(bindingEntry, op, minfo);
             }
             
             //add operation to operation List
@@ -1251,8 +1246,11 @@ public class WSDLInfo
      * @param minfo MethodInfo object into which output message and it's elements are to be added
      * @throws WrapperFault
      */
-    private void addRPCStyleOutputMessageToMethodInfo(Operation op, MethodInfo minfo) throws WrapperFault
+    private void addRPCStyleOutputMessageToMethodInfo(BindingEntry bindingEntry, Operation op, MethodInfo minfo) throws WrapperFault
     {
+        if (op.getOutput() == null)
+            return;
+        
         ParameterInfo pinfo;
         Iterator returnlist;
 
@@ -1278,7 +1276,8 @@ public class WSDLInfo
             { 
                 //RPC style messages can have multiple parts
                 Part p = (Part) returnlist.next();
-                if (op.getParameterOrdering().contains(p.getName()))
+                if (op.getParameterOrdering().contains(p.getName()) 
+                        || (bindingEntry.isOutHeaderPart(op.getName(), p.getName())))
                     continue;
                 pinfo = createParameterInfo(p);
                 if (null != pinfo)
@@ -1292,6 +1291,8 @@ public class WSDLInfo
             { 
                 //RPC style messages can have multiple parts
                 Part p = ((Part) returnlist.next());
+                if (bindingEntry.isOutHeaderPart(op.getName(), p.getName()))
+                    continue;
                 pinfo = createParameterInfo(p);
                 if (null != pinfo)
                     minfo.addOutputParameter(pinfo);
@@ -1304,8 +1305,29 @@ public class WSDLInfo
      * @param part
      * @throws WrapperFault
      */
-    private void addDocumentStyleOutputMessageToMethodInfo(MethodInfo minfo, Part part) throws WrapperFault
+    private void addDocumentStyleOutputMessageToMethodInfo(BindingEntry bindingEntry, Operation op, MethodInfo minfo) throws WrapperFault
     {
+        if (op.getOutput() == null)
+            return;
+
+        Part part = null;
+
+        // For now, skip over soap header parts
+        Iterator returnlist = op.getOutput().getMessage().getParts().values().iterator();
+        while (returnlist.hasNext())
+        {
+            part = (Part) returnlist.next();
+            if (bindingEntry.isOutHeaderPart(op.getName(), part.getName()))
+                part = null;
+            else 
+                break;
+        }        
+        
+        // If no output parameter, simply return.
+        if (part == null)
+            return;
+
+        
         QName qname;
         QName minfoqname;
         TypeEntry elementTypeEntry;
@@ -1419,7 +1441,7 @@ public class WSDLInfo
      * @param minfo
      * @throws WrapperFault
      */
-    private void addRPCStyleInputMessageToMethodInfo(Operation op, MethodInfo minfo)
+    private void addRPCStyleInputMessageToMethodInfo(BindingEntry bindingEntry, Operation op, MethodInfo minfo)
         throws WrapperFault
     {
         ParameterInfo pinfo;
@@ -1434,7 +1456,8 @@ public class WSDLInfo
                                    .getMessage()
                                    .getParts()
                                    .get((String) op.getParameterOrdering().get(ix)));
-                if (p == null)
+                if (p == null
+                        || bindingEntry.isInHeaderPart(op.getName(), p.getName()))
                     continue;
 
                 pinfo = createParameterInfo(p);
@@ -1449,6 +1472,9 @@ public class WSDLInfo
             { 
                 //RPC style messages can have multiple parts
                 Part p = (Part) paramlist.next();
+                if (bindingEntry.isInHeaderPart(op.getName(), p.getName()))
+                    continue;
+
                 pinfo = createParameterInfo(p);
                 if (null != pinfo)
                     minfo.addInputParameter(pinfo);
@@ -1461,16 +1487,26 @@ public class WSDLInfo
      * @param minfo
      * @throws WrapperFault
      */
-    private void addDocumentStyleInputMessageToMethodInfo(Operation op, MethodInfo minfo)
+    private void addDocumentStyleInputMessageToMethodInfo(BindingEntry bindingEntry, Operation op, MethodInfo minfo)
         throws WrapperFault
     {   
-        // If no input parameters, simply return.
+        Part part = null;
+        
+        // For now, skip over soap header parts.
         Iterator paramlist = op.getInput().getMessage().getParts().values().iterator();
-        if(!paramlist.hasNext())
-            return;
+        while (paramlist.hasNext())
+        {
+            part = (Part) paramlist.next();
+            if (bindingEntry.isInHeaderPart(op.getName(), part.getName()))
+                part = null;
+            else
+                break;
+        }        
         
-        Part part = (Part) paramlist.next();
-        
+        // If no input parameter, simply return.
+        if (part == null)
+            return;       
+            
         QName minfoqname;
         QName qname;
         
