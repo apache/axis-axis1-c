@@ -1237,9 +1237,18 @@ void Call::processSoapFault(AxisException *e,
     AXIS_EXCEPTION_HANDLER_FUNCT excFp = (AXIS_EXCEPTION_HANDLER_FUNCT)exceptionHandlerFp;
     ISoapFault* pSoapFault             = NULL;
     
-    if (AXISC_NODE_VALUE_MISMATCH_EXCEPTION == e->getExceptionCode() 
-            && m_pSoapFaultNamespace != NULL)
-        pSoapFault = (ISoapFault*) this->checkFault("Fault", m_pSoapFaultNamespace);
+    if (AXISC_NODE_VALUE_MISMATCH_EXCEPTION == e->getExceptionCode())
+    {
+        try
+        {
+            pSoapFault = (ISoapFault*) this->checkFault("Fault", m_pSoapFaultNamespace);
+        }
+        catch (AxisException& e1)
+        {
+            // Just fall through since we are already dealing with some exception.
+            pSoapFault = NULL;
+        }
+    }
 
     if(pSoapFault)
     {
@@ -1285,7 +1294,30 @@ void Call::processSoapFault(AxisException *e,
             }
         }
         
-        excFp(e->getExceptionCode(), e->what(), pSoapFault, pFaultDetail);
+        // Generate an appropriate error message
+        std::string faultExcMsg = "AxisSoapException: SOAP fault occurred: \n";
+        faultExcMsg += "faultcode  : ";
+        faultExcMsg += pSoapFault->getFaultcode();
+        faultExcMsg += "\n";
+        faultExcMsg += "faultstring: ";
+        faultExcMsg += pSoapFault->getFaultstring();
+        faultExcMsg += "\n";
+        faultExcMsg += "faultactor : ";
+        faultExcMsg += pSoapFault->getFaultactor();
+        faultExcMsg += "\n";
+
+        // Ensure error code is set correctly for certain fault codes
+        const AxisChar* faultCode = pSoapFault->getFaultcode();
+        int faultExcCode = e->getExceptionCode();
+        if (faultCode)
+        {
+            if (strcmp(faultCode, "VersionMismatch") == 0)
+                faultExcCode = SOAP_VERSION_MISMATCH;
+            else if (strcmp(faultCode, "MustUnderstand") == 0)
+                faultExcCode = SOAP_MUST_UNDERSTAND;
+        }
+
+        excFp(faultExcCode, faultExcMsg.c_str(), pSoapFault, pFaultDetail);
         
         if (faultIsDefined)
         {
