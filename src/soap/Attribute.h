@@ -56,10 +56,8 @@ public:
     int serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack, const AxisChar *uri=NULL);
 
     Attribute(list<Attribute*> attribute);    
-    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
-        const AxisChar* uri, const AxisChar* value);
-    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
-        const AxisChar* value);
+    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
+    Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, const AxisChar* value);
     Attribute(list<Attribute*> attribute, const Attribute& rCopy);
     Attribute* clone(); 
     virtual ~Attribute();
@@ -76,10 +74,10 @@ public:
 
 private:    
     bool isSerializable() const;
-    AxisString m_localname;
-    AxisString m_prefix;
-    AxisString m_uri;
-    AxisString m_value;
+    AxisString          m_localname;
+    AxisString          m_prefix;
+    AxisString          m_uri;
+    AxisString          m_value;
 	list<const char*>	m_PrefixList;
 	list<Namespace*>    m_namespaceDecls;
 };

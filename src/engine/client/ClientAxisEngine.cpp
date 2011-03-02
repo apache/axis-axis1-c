@@ -257,6 +257,7 @@ invoke (MessageData* pMsg, bool noResponse)
 
         level++; // AE_TRH
 
+        // setOutputStream() kicks off serialization step....
         if (AXIS_SUCCESS != (Status = m_pSZ->setOutputStream (m_pSoap)))
             break;
         

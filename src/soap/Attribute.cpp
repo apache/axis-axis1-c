@@ -39,9 +39,10 @@
 
 AXIS_CPP_NAMESPACE_START
 
-Attribute::Attribute( list<Attribute*> attribute)
+Attribute::
+Attribute(list<Attribute*> attribute)
 {
-    if( (void *) &attribute != NULL && !attribute.empty())
+    if (!attribute.empty())
     {
         list<Attribute*>::iterator itAttributeList = attribute.begin();
 
@@ -54,43 +55,38 @@ Attribute::Attribute( list<Attribute*> attribute)
     }
 }
 
-Attribute::~Attribute()
+Attribute::
+~Attribute()
 {
     m_PrefixList.clear();
 }
 
-int Attribute::setLocalName(const AxisChar* localname)
+int Attribute::
+setLocalName(const AxisChar* localname)
 {
-    if(NULL==localname)
-    {
+    if (NULL==localname)
         localname="";
-    }
 
     m_localname= localname;
     return AXIS_SUCCESS;
 }
 
-int Attribute::setPrefix(const AxisChar* prefix)
+int Attribute::
+setPrefix(const AxisChar* prefix)
 {
     if( NULL == prefix)
-    {
         prefix = "";
-    }
 
-    if( (void *) &m_PrefixList != NULL && !m_PrefixList.empty())
+    if (!m_PrefixList.empty())
     {
         list<const char*>::iterator itPrefixList = m_PrefixList.begin();
 
         while( itPrefixList != m_PrefixList.end())
         {
             if( !strcmp( (*itPrefixList), prefix))
-            {
                 return AXIS_FAIL;
-            }
             else
-            {
                 itPrefixList++;
-            }
         }
     }
 
@@ -99,75 +95,64 @@ int Attribute::setPrefix(const AxisChar* prefix)
     return AXIS_SUCCESS;
 }
 
-int Attribute::setURI(const AxisChar* uri)
+int Attribute::
+setURI(const AxisChar* uri)
 {
-    if(NULL==uri)
-    {
+    if (NULL==uri)
         uri="";
-    }
-    
-    /**
-     * sets the prefix according to the URI
-     */
     
     if(m_prefix != "")
     {
-
-        
         bool bPrefixFound = false;
         list<Namespace*>::iterator    itCurrNamespaceDecl = m_namespaceDecls.begin();
 
         while( itCurrNamespaceDecl != m_namespaceDecls.end() && !bPrefixFound)
         {
-            if( !(bPrefixFound = !strcmp( (*itCurrNamespaceDecl)->getURI(), uri)))
-            {
+            if ( !(bPrefixFound = !strcmp( (*itCurrNamespaceDecl)->getURI(), uri)))
                 itCurrNamespaceDecl++;
-            }
         }    
 
-        
         if( bPrefixFound)
-        {
             setPrefix((*itCurrNamespaceDecl)->getPrefix());
-
-        }
         else
-        {
             setPrefix(NULL);
-        }
     }
         
     m_uri= uri;
     return AXIS_SUCCESS;
 }
 
-int Attribute::setValue(const AxisChar* value)
+int Attribute::
+setValue(const AxisChar* value)
 {
-    if(NULL==value)
-    {
+    if (NULL==value)
         value="";
-    }
+
     m_value= value;
     return AXIS_SUCCESS;
 }
 
 
-const AxisChar* Attribute::getLocalName()
+const AxisChar* Attribute::
+getLocalName()
 {
     return m_localname.c_str();
 }
 
-const AxisChar* Attribute::getPrefix()
+const AxisChar* Attribute::
+getPrefix()
 {
     return m_prefix.c_str();
 }
 
-const AxisChar* Attribute::getURI()
+const AxisChar* Attribute::
+getURI()
 {
     return m_uri.c_str();
 }
 
-const AxisChar* Attribute::getValue()
+const AxisChar* Attribute::
+getValue()
 {
     return m_value.c_str();
 }
@@ -175,8 +160,12 @@ const AxisChar* Attribute::getValue()
 
 
 
-Attribute::Attribute(list<Attribute*> attribute, const AxisChar* localname, const AxisChar* prefix, 
-                     const AxisChar* uri, const AxisChar* value)
+Attribute::
+Attribute(list<Attribute*> attribute,
+          const AxisChar* localname,
+          const AxisChar* prefix,
+          const AxisChar* uri,
+          const AxisChar* value)
 {
     m_localname= localname;
     m_prefix= prefix;
@@ -204,8 +193,11 @@ Attribute::Attribute(list<Attribute*> attribute, const AxisChar* localname, cons
     }
 }
 
-Attribute::Attribute(list<Attribute*> attribute, const AxisChar *localname, const AxisChar *prefix, 
-                     const AxisChar *value)
+Attribute::
+Attribute(list<Attribute*> attribute,
+          const AxisChar *localname,
+          const AxisChar *prefix,
+          const AxisChar *value)
 {
     m_localname= localname;
     m_prefix= prefix;
@@ -222,53 +214,47 @@ Attribute::Attribute(list<Attribute*> attribute, const AxisChar *localname, cons
         while( itAttributeList != attribute.end())
         {
             m_PrefixList.push_back( (*itAttributeList)->getPrefix());
-
             itAttributeList++;
         }
     }
 
     if( prefix != NULL && strlen( prefix) > 0)
-    {
         m_PrefixList.push_back( prefix);
-    }
 }
 
-Attribute::Attribute(list<Attribute*> attribute, const Attribute& rCopy)
+Attribute::
+Attribute(list<Attribute*> attribute,
+          const Attribute& rCopy)
 {
-    //in case sting is changed to char* use new[] and strcpy here
     this->m_localname= rCopy.m_localname; 
     this->m_prefix= rCopy.m_prefix;
     this->m_uri= rCopy.m_uri;
     this->m_value= rCopy.m_value;
 
-    if( (void *) &attribute != NULL && !attribute.empty())
+    if (!attribute.empty())
     {
         list<Attribute*>::iterator itAttributeList = attribute.begin();
 
         while( itAttributeList != attribute.end())
         {
             m_PrefixList.push_back( (*itAttributeList)->getPrefix());
-
             itAttributeList++;
         }
     }
 
     if( rCopy.m_prefix.length() > 0)
-    {
         m_PrefixList.push_back( rCopy.m_prefix.c_str());
-    }
 }
 
-Attribute* Attribute::clone()
+Attribute* Attribute::
+clone()
 {
     return new Attribute(*this);
 }
 
 
-/*
- *
- */
-int Attribute::serialize(SoapSerializer& pSZ) const
+int Attribute::
+serialize(SoapSerializer& pSZ) const
 {    
     int intStatus= AXIS_FAIL;
 
@@ -276,10 +262,8 @@ int Attribute::serialize(SoapSerializer& pSZ) const
     {        
         pSZ.serialize(" ", NULL);
 
-        if(!m_prefix.empty())
-        {            
+        if (!m_prefix.empty())
             pSZ.serialize(m_prefix.c_str(), ":", NULL);
-        }
 
         pSZ.serialize(m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
 
@@ -289,35 +273,32 @@ int Attribute::serialize(SoapSerializer& pSZ) const
     return intStatus;    
 }
 
-int Attribute::serialize(SoapSerializer& pSZ, 
-                         list<AxisChar*>& lstTmpNameSpaceStack,
-                         const AxisChar *uri)
+int Attribute::
+serialize(SoapSerializer& pSZ,
+          list<AxisChar*>& lstTmpNameSpaceStack,
+          const AxisChar *uri)
 {    
     int intStatus= AXIS_FAIL;
 
-    if (isSerializable() && (!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
+    if (isSerializable()
+            && (!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
     {        
         pSZ.serialize(" ", NULL);
 
         /*
-         * User has provided the prefix. So we just have to serialilze. We will
+         *  If User has provided the prefix we just have to serialize. We will
          *  not worry to declare the namespace at all. Because it is the users
-         *  responsibiltiy to add his/her namespace declaration seperately.
-         */
-        if(!m_prefix.empty() || NULL!=uri)
-        {            
-            pSZ.serialize(m_prefix.c_str(), ":", NULL);
-        }
-        /*
-         * User hasn't provided the prefix. So we have to do the following.
+         *  responsibility to add namespace declaration separately.
+         *  However, if user hasn't provided the prefix. So we have to do the following.
          *  - get the prefix from the Serializer
          *  - if this is a new namespace, then also declare the namespace.
          */
+        if(!m_prefix.empty() || NULL!=uri)
+            pSZ.serialize(m_prefix.c_str(), ":", NULL);
         else if (!m_uri.empty())
         {
             bool blnIsNewNamespace = false;
-            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), 
-                blnIsNewNamespace);
+            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
             if (blnIsNewNamespace)
             {
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
@@ -335,14 +316,13 @@ int Attribute::serialize(SoapSerializer& pSZ,
     return intStatus;    
 }
 
-bool Attribute::isSerializable() const
+bool Attribute::
+isSerializable() const
 {
     bool bStatus= true;
 
     if(m_localname.empty())
-    {
         bStatus= false;
-    }
 
     return bStatus;
 }

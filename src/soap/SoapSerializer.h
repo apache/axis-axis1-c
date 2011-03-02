@@ -103,8 +103,7 @@ public:
      * a out parameter to indicate whether this is a new namespace or not.
      * @return The corrosponding prefix.
      */
-    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace,
-        bool& blnIsNewPrefix);
+    const AxisChar* AXISCALL getNamespacePrefix(const AxisChar* pNamespace,  bool& blnIsNewPrefix);
     void AXISCALL removeNamespacePrefix(const AxisChar* pNamespace);
     int setSoapVersion(SOAP_VERSION);
     int init();
