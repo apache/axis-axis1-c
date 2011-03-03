@@ -1746,6 +1746,15 @@ void * axiscCallCheckFault(AXISCHANDLE call, const AxiscChar * pName,
 AXISC_STORAGE_CLASS_INFO
 int axiscCallGetStatus(AXISCHANDLE call);
 
+
+/**
+ * Method to retrieve the current SOAP Serializer object.
+ *
+ * @return A pointer to the currently loaded SOAP serialiser.
+ */
+AXISC_STORAGE_CLASS_INFO
+AXISCHANDLE axiscCallGetSOAPSerializer(AXISCHANDLE call);
+
 /**
  * Deserialize character data, ie the data typically enclosed by an XML tag
  * 
