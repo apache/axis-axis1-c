@@ -3391,6 +3391,26 @@ int axiscCallGetStatus(AXISCHANDLE call)
     return -1;
 }
 
+AXISC_STORAGE_CLASS_INFO
+AXISCHANDLE axiscCallGetSOAPSerializer(AXISCHANDLE call)
+{
+    Call *c = (Call*)call;
+
+    try
+    {
+        return (AXISCHANDLE)(c->getSOAPSerializer());
+    }
+    catch ( AxisException& e  )
+    {
+        processException(c, e);
+    }
+    catch ( ... )
+    {
+        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+    }
+
+    return NULL;
+}
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscCallSetProxy(AXISCHANDLE call, 
