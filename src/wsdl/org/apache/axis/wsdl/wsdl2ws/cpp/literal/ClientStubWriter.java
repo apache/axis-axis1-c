@@ -322,7 +322,10 @@ public class ClientStubWriter
             }
         }
         
-        c_writer.write ("\tconst char* pcCmplxFaultName = NULL;\n\n");
+        c_writer.write ("\tconst char* pcCmplxFaultName = NULL;\n");
+        c_writer.write ("\tbool blnIsNewPrefix;\n");
+        c_writer.write ("\tconst AxisChar *pcNSPrefix;\n");
+        c_writer.write ("\tIWrapperSoapSerializer * pSZ;\n\n");
         
         //=============================================================================
         // Generate try block and method logic
@@ -412,6 +415,8 @@ public class ClientStubWriter
             {
                 commentIssued = true;
                 CUtils.printBlockComment(c_writer, "Process parameters.");
+                
+                c_writer.write ("\t\tpSZ = (IWrapperSoapSerializer *)m_pCall->getSOAPSerializer();\n\n");
             }
             else
                 c_writer.write ("\n");
@@ -462,11 +467,12 @@ public class ClientStubWriter
                 }
                 else
                 {
-                    int stringLength = 8 + 1 + parameterName.length () + 1;
-                    c_writer.write (tab2 + "\t\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
-                    c_writer.write (tab2 + "\t\tsprintf( cPrefixAndParamName" + i +
-                              ", \"%s:" + parameterName +
-                              "\", m_pCall->getNamespacePrefix(\"" +  namespace + "\"));\n");
+                    int stringLength = 8 + 1 + parameterName.length () + 1;    
+                    c_writer.write(tab2 + "\t\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
+                    c_writer.write(tab2 + "\t\tpcNSPrefix = pSZ->getNamespacePrefix(\"" + namespace + "\", blnIsNewPrefix);\n");
+                    c_writer.write(tab2 + "\t\tif (blnIsNewPrefix)\n");
+                    c_writer.write(tab2 + "\t\t\tm_pCall->setSOAPMethodAttribute(pcNSPrefix, \"xmlns\",\"" + namespace + "\");\n");
+                    c_writer.write(tab2 + "\t\tsprintf( cPrefixAndParamName" + i + ", \"%s:" + parameterName + "\", pcNSPrefix);\n");
                 }
     
                 if (param.getType().isAttachment())

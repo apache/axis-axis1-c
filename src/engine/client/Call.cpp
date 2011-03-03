@@ -1160,7 +1160,7 @@ void Call::setSOAPMethodAttribute( const AxisChar * pLocalname,
     else
         pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
 
-    m_pIWSSZ->setSOAPMethodAttribute( ((Attribute *) pAttribute)->clone());
+    m_pIWSSZ->setSOAPMethodAttribute((Attribute *) pAttribute);
 }
 
 void Call::clearSOAPMethodAttributes()

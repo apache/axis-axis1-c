@@ -280,37 +280,45 @@ serialize(SoapSerializer& pSZ,
 {    
     int intStatus= AXIS_FAIL;
 
-    if (isSerializable()
-            && (!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
-    {        
+    if (isSerializable())
+    {
         pSZ.serialize(" ", NULL);
 
-        /*
-         *  If User has provided the prefix we just have to serialize. We will
-         *  not worry to declare the namespace at all. Because it is the users
-         *  responsibility to add namespace declaration separately.
-         *  However, if user hasn't provided the prefix. So we have to do the following.
-         *  - get the prefix from the Serializer
-         *  - if this is a new namespace, then also declare the namespace.
-         */
-        if(!m_prefix.empty() || NULL!=uri)
-            pSZ.serialize(m_prefix.c_str(), ":", NULL);
-        else if (!m_uri.empty())
+        if (m_prefix.compare("xmlns") == 0)
         {
-            bool blnIsNewNamespace = false;
-            m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
-            if (blnIsNewNamespace)
+            // Namespace declaration...
+            pSZ.serialize("xmlns:", m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
+            intStatus= AXIS_SUCCESS;
+        }
+        else if ((!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
+        {
+            /*
+             *  If User has provided the prefix we just have to serialize. We will
+             *  not worry to declare the namespace at all. Because it is the users
+             *  responsibility to add namespace declaration separately.
+             *  However, if user hasn't provided the prefix. So we have to do the following.
+             *  - get the prefix from the Serializer
+             *  - if this is a new namespace, then also declare the namespace.
+             */
+            if(!m_prefix.empty() || NULL!=uri)
+                pSZ.serialize(m_prefix.c_str(), ":", NULL);
+            else if (!m_uri.empty())
             {
-                lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
-                pSZ.serialize("xmlns:", m_prefix.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_uri.c_str(), PLATFORM_DOUBLE_QUOTE_S, " ", NULL);
+                bool blnIsNewNamespace = false;
+                m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
+                if (blnIsNewNamespace)
+                {
+                    lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+                    pSZ.serialize("xmlns:", m_prefix.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_uri.c_str(), PLATFORM_DOUBLE_QUOTE_S, " ", NULL);
+                }
+
+                pSZ.serialize(m_prefix.c_str(), ":", NULL);
             }
 
-            pSZ.serialize(m_prefix.c_str(), ":", NULL);
+            pSZ.serialize(m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
+
+            intStatus= AXIS_SUCCESS;
         }
-
-        pSZ.serialize(m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
-
-        intStatus= AXIS_SUCCESS;
     }
 
     return intStatus;    

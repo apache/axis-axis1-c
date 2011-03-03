@@ -278,7 +278,10 @@ public class ClientStubWriter
         // Generate global variables 
         //=============================================================================   
         
-        c_writer.write("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
+        c_writer.write ("\tAxiscBool blnIsNewPrefix;\n");
+        c_writer.write ("\tconst AxiscChar *pcNSPrefix;\n");
+        c_writer.write ("\tAXISCHANDLE pSZ;\n");
+        c_writer.write ("\tAXISCHANDLE call = axiscStubGetCall(stub);\n");
         
         if (returntype != null)
         {
@@ -417,6 +420,7 @@ public class ClientStubWriter
             {
                 commentIssued = true;
                 CUtils.printBlockComment(c_writer, "Process parameters.");
+                c_writer.write ("\tpSZ = axiscCallGetSOAPSerializer(call);\n\n");
             }
             else
                 c_writer.write ("\n");
@@ -467,9 +471,11 @@ public class ClientStubWriter
                 {
                     int stringLength = 8 + 1 + parameterName.length () + 1;
                     c_writer.write ("\t\tchar cPrefixAndParamName" + i + "[" + stringLength + "];\n");
-                    c_writer.write ("\t\tsprintf( cPrefixAndParamName" + i +
-                              ", \"%s:" + parameterName +
-                              "\", axiscCallGetNamespacePrefix(call,\"" +  namespace + "\"));\n");
+                    
+                    c_writer.write("\t\tpcNSPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ, \"" + namespace + "\", &blnIsNewPrefix);\n");
+                    c_writer.write("\t\tif (blnIsNewPrefix)\n");
+                    c_writer.write("\t\t\taxiscCallSetSOAPMethodAttribute(call, pcNSPrefix, \"xmlns\", NULL, \"" + namespace + "\");\n");
+                    c_writer.write("\t\tsprintf( cPrefixAndParamName" + i + ", \"%s:" + parameterName + "\", pcNSPrefix);\n");
                 }
     
                 if (param.getType().isAttachment())

@@ -160,7 +160,8 @@ public class ClientStubWriter extends CPPClassWriter
                 c_writer.write("#include \"" + c_classname + CUtils.getHeaderFileExtension() + "\"\n\n");
 
             c_writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
-            c_writer.write ("#include <axis/Axis.hpp>\n\n");
+            c_writer.write ("#include <axis/Axis.hpp>\n");
+            c_writer.write ("#include <axis/IWrapperSoapSerializer.hpp>\n\n");
         } 
         catch (IOException e)
         {

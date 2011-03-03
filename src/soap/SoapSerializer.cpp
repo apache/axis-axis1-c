@@ -1590,7 +1590,9 @@ reset()
 {
     logEntryEngine("SoapSerializer::reset")
 
-    m_nCounter = 0; // reset namespace prefix counter 
+    // reset namespace prefix counter and stack
+    m_nCounter = 0;
+    m_NsStack.clear();
 
     if( m_pSoapEnvelope )
         m_pSoapEnvelope->reset();
