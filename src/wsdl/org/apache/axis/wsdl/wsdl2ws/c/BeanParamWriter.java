@@ -24,6 +24,8 @@ package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.IOException;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
@@ -128,8 +130,10 @@ public class BeanParamWriter extends ParamCFileWriter
         // it is used as a nillable parameter so this may not be the appropriate place
         // to put this, or we need to find a way to determine if nillable.
         //=============================================================================        
-        
-        c_writer.write("\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n\n");
+
+        c_writer.write("\tAxiscBool blnIsNewPrefix = xsdc_boolean_false;\n");
+        c_writer.write("\tAxiscBool blnIsNewSubElemPrefix = xsdc_boolean_false;\n");
+        c_writer.write("\tconst AxiscChar* sPrefix;\n\n");
 
         CUtils.printBlockComment(c_writer, "If null input, serialize as nil element.");
         
@@ -326,7 +330,13 @@ public class BeanParamWriter extends ParamCFileWriter
             else
             {
                 //if complex type
-                String elm = attribs[i].getParamNameAsSOAPString();
+                namespace = type.getName().getNamespaceURI();
+                
+                String elm        = attribs[i].getParamNameAsSOAPString();
+                QName elementName = attribs[i].getElementName();
+                if (elementName != null)
+                   namespace = elementName.getNamespaceURI();
+                
                 if (attribs[i].isReference())
                     elm = attribs[i].getTypeName();
                 
@@ -341,20 +351,19 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (attribs[i].getNsQualified())
                 {
-                    c_writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
-                                    + type.getName().getNamespaceURI()
-                                    + "\", NULL), \":\", \"" + elm + "\", 0);\n");
-                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName()
-                            + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
-                    c_writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"</\", axiscSoapSerializerGetNamespacePrefix(pSZ, \""
-                                    + type.getName().getNamespaceURI()
-                                    + "\", NULL), \":\", \"" + elm + "\", \">\", 0);\n");
+                    c_writer.write("\tsPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ, \"" + namespace + "\", &blnIsNewSubElemPrefix);\n");
+                    c_writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"<\", sPrefix, \":\", \"" + elm + "\", 0);\n");
+                    c_writer.write(tab + "\tif (blnIsNewSubElemPrefix)\n");
+                    c_writer.write(tab + "\t\taxiscSoapSerializerSerialize(pSZ,\" xmlns:\", sPrefix, \"=\\\"\", \"" + namespace + "\", \"\\\"\", 0);\n");
+                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName() + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
+                    c_writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"</\", sPrefix, \":\", \"" + elm + "\", \">\", 0);\n");
+                    c_writer.write(tab + "\tif (blnIsNewSubElemPrefix)\n");
+                    c_writer.write(tab + "\t\taxiscSoapSerializerRemoveNamespacePrefix(pSZ, \""  + namespace + "\");\n");
                 }
                 else
                 {
                     c_writer.write("\taxiscSoapSerializerSerialize(pSZ, \"<" + elm + "\", 0);\n");
-                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName()
-                            + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
+                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName() + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ, 0);\n");
                     c_writer.write(tab + "\taxiscSoapSerializerSerialize(pSZ, \"</" + elm + "\", \">\", 0);\n");
                 }
                 
@@ -397,7 +406,7 @@ public class BeanParamWriter extends ParamCFileWriter
         
         // For doc/literal objects
         c_writer.write("\tif (!bArray)\n\t{\n");
-        c_writer.write("\t\tconst AxiscChar* sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_" + c_classname + ", &blnIsNewPrefix);\n");
+        c_writer.write("\t\tsPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ,Axis_URI_" + c_classname + ", &blnIsNewPrefix);\n");
         c_writer.write("\t\tif (blnIsNewPrefix)\n");
         c_writer.write("\t\t\taxiscSoapSerializerSerialize(pSZ,\" xmlns:\", sPrefix, \"=\\\"\", " 
                         + "Axis_URI_" + c_classname + ", \"\\\"\", NULL);\n");
@@ -414,7 +423,7 @@ public class BeanParamWriter extends ParamCFileWriter
         c_writer.write( "\t\taxiscSoapSerializerSerialize(pSZ, \"<\", Axis_TypeName_" + c_classname + ", \">\", NULL);\n");
         c_writer.write( "\telse\n");
         c_writer.write( "\t{\n");
-        c_writer.write( "\t\tconst AxiscChar * sPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ, Axis_URI_" 
+        c_writer.write( "\t\tsPrefix = axiscSoapSerializerGetNamespacePrefix(pSZ, Axis_URI_" 
                 + c_classname + ", &blnIsNewPrefix);\n\n");
         c_writer.write( "\t\t// If there are objects that require a local namespace, then define it here.\n");
         c_writer.write( "\t\t// NB: This namespace will go out of scope when the closing tag is reached.\n");

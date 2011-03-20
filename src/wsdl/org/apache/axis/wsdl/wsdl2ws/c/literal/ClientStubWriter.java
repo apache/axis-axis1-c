@@ -688,10 +688,10 @@ public class ClientStubWriter
                         containedTypeArrayName = CUtils.getArrayNameForComplexType(qname);
                         
                         c_writer.write("\n\t\t\tif (OutValue" + i + " != NULL)\n" );
-                        c_writer.write("\t\t{\n");
+                        c_writer.write("\t\t\t{\n");
                         
                         c_writer.write("\t\t\t\tif (" + currentParamName + " != NULL)\n");
-                        c_writer.write("\t\t\t\t\t" + currentParamName + " = Axis_Delete_" + containedTypeArrayName + "(" + currentParamName + ",0);\n");
+                        c_writer.write("\t\t\t\t\t" + "Axis_Delete_" + containedTypeArrayName + "(" + currentParamName + ",0);\n");
                         c_writer.write("\t\t\t\t" + currentParamName + " = Axis_Create_" + containedTypeArrayName + "(0);\n");
                         
                         c_writer.write("\t\t\t\taxiscCallGetCmplxArray(call, (Axisc_Array *)" + currentParamName 

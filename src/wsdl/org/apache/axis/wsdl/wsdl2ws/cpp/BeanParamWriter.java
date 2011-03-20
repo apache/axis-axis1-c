@@ -542,7 +542,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
             else
             {
                 //if complex type
+                namespace = type.getName().getNamespaceURI();
+                
                 String elm = attribs[i].getParamNameAsSOAPString();
+                QName elementName = attribs[i].getElementName();
+                if (elementName != null)
+                   namespace = elementName.getNamespaceURI();
+
                 if (attribs[i].isReference())
                     elm = attribs[i].getTypeName();
                 
@@ -557,14 +563,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if (attribs[i].getNsQualified())
                 {
-                    c_writer.write("\tpSZ->serialize(\"<\", pSZ->getNamespacePrefix(\""
-                                    + type.getName().getNamespaceURI()
-                                    + "\"), \":\", \"" + elm + "\", 0);\n");
-                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName()
-                            + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ);\n");
-                    c_writer.write(tab + "\tpSZ->serialize(\"</\", pSZ->getNamespacePrefix(\""
-                                    + type.getName().getNamespaceURI()
-                                    + "\"), \":\", \"" + elm + "\", \">\", 0);\n");
+                    c_writer.write("\tsPrefix = pSZ->getNamespacePrefix(\"" + namespace + "\", blnIsNewSubElemPrefix);\n");
+                    c_writer.write(tab + "\tpSZ->serialize(\"<\", sPrefix, \":\", \"" + elm + "\", 0);\n");
+                    c_writer.write(tab + "\tif (blnIsNewSubElemPrefix)\n");
+                    c_writer.write(tab + "\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\", \"" + namespace + "\", \"\\\"\", 0);\n");
+                    c_writer.write(tab + "\tAxis_Serialize_" + attribs[i].getTypeName() + "(param->" + attribs[i].getParamNameAsMember() + ", pSZ);\n");
+                    c_writer.write(tab + "\tpSZ->serialize(\"</\", sPrefix, \":\", \"" + elm + "\", \">\", 0);\n");
+                    c_writer.write(tab + "\tif (blnIsNewSubElemPrefix)\n");
+                    c_writer.write(tab + "\t\tpSZ->removeNamespacePrefix(\""  + namespace + "\");\n");
                 }
                 else
                 {
@@ -612,9 +618,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
         CUtils.printBlockComment(c_writer, "Serialize top-most element, possibly defining new namespace.");        
         
         // For doc/literal objects
+        c_writer.write("\tbool blnIsNewSubElemPrefix = false;\n");
         c_writer.write("\tbool blnIsNewPrefix = false;\n");
+        c_writer.write("\tconst AxisChar* sPrefix;\n");
         c_writer.write("\tif (!bArray)\n\t{\n");
-        c_writer.write("\t\tconst AxisChar* sPrefix = pSZ->getNamespacePrefix(Axis_URI_" + c_classname + ", blnIsNewPrefix);\n");
+        c_writer.write("\t\tsPrefix = pSZ->getNamespacePrefix(Axis_URI_" + c_classname + ", blnIsNewPrefix);\n");
         c_writer.write("\t\tif (blnIsNewPrefix)\n");
         c_writer.write("\t\t\tpSZ->serialize(\" xmlns:\", sPrefix, \"=\\\"\", "
                         + "Axis_URI_" + c_classname + ", \"\\\"\", NULL);\n");
@@ -627,12 +635,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
     private void writeRPCArrayPortionOfSerializeGlobalMethod() throws IOException
     {
         // For rpc/encoded objects
+        c_writer.write("\tbool blnIsNewSubElemPrefix = false;\n");
         c_writer.write("\tbool blnIsNewPrefix = false;\n");
+        c_writer.write("\tconst AxisChar* sPrefix;\n");
         c_writer.write( "\tif( bArray)\n");
         c_writer.write( "\t\tpSZ->serialize( \"<\", Axis_TypeName_" + c_classname + ", \">\", NULL);\n");
         c_writer.write( "\telse\n");
         c_writer.write( "\t{\n");
-        c_writer.write( "\t\tconst AxisChar * sPrefix = pSZ->getNamespacePrefix( Axis_URI_" 
+        c_writer.write( "\t\tsPrefix = pSZ->getNamespacePrefix( Axis_URI_" 
                 + c_classname + ", blnIsNewPrefix);\n\n");
         c_writer.write( "\t\t// If there are objects that require a local namespace, then define it here.\n");
         c_writer.write( "\t\t// NB: This namespace will go out of scope when the closing tag is reached.\n");
