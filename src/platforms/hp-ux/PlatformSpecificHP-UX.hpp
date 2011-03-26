@@ -81,6 +81,11 @@
 
 #define PLATFORM_XML_ENTITY_REFERENCE_CHARS_S     "<>&\"\'"
 
+// Case-insensitive string compares
+#include <strings.h>    // for strcasecmp()
+
+#define PLATFORM_STRCASECMP strcasecmp
+
 // =============================================================
 // Miscellaneous
 // =============================================================

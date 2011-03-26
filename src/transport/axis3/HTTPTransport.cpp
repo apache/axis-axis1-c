@@ -398,7 +398,7 @@ generateHTTPHeaders()
     // The Content-Type must be set, but it may already be set.
     bool foundCT = false;
     for (unsigned int j = 0; j < m_vHTTPHeaders.size (); j++)
-        if (0==strcmp(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str()))
+        if (0==PLATFORM_STRCASECMP(AXIS_CONTENT_TYPE,m_vHTTPHeaders[j].first.c_str()))
             foundCT = true;
 
     if (!foundCT)
@@ -431,15 +431,15 @@ generateHTTPHeaders()
     // Set other HTTP headers but not cookies as they are put in afterwards.
     for (unsigned int i = 0; i < m_vHTTPHeaders.size (); i++)
     {
-        if( strcmp(m_vHTTPHeaders[i].first.c_str(), "Cookie")!=0)
+        if( PLATFORM_STRCASECMP(m_vHTTPHeaders[i].first.c_str(), "Cookie")!=0)
         {
             m_strHeaderBytesToSend += m_vHTTPHeaders[i].first;
             m_strHeaderBytesToSend += ": ";
             m_strHeaderBytesToSend += m_vHTTPHeaders[i].second;
             m_strHeaderBytesToSend += "\r\n";
             
-            if (0==strcmp("Connection",m_vHTTPHeaders[i].first.c_str())
-                    && 0==strcmp("close", m_vHTTPHeaders[i].second.c_str()))
+            if (0==PLATFORM_STRCASECMP("Connection",m_vHTTPHeaders[i].first.c_str())
+                    && 0==PLATFORM_STRCASECMP("close", m_vHTTPHeaders[i].second.c_str()))
                 m_bReopenConnection = true;
         }
     }
@@ -472,7 +472,7 @@ generateHTTPHeaders()
         bool b_keyFound=false;
         for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
         {
-            if (m_vHTTPHeaders[i].first == (string)"Cookie")
+            if (PLATFORM_STRCASECMP(m_vHTTPHeaders[i].first.c_str(), "Cookie") == 0)
             {
                 m_vHTTPHeaders[i].second = (string) cookieHeader;
                 b_keyFound = true;
@@ -937,7 +937,7 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
 
         case TRANSPORT_PROPERTIES:
         {
-            if (value && strcmp(value, "Connection: close") == 0)
+            if (value && (PLATFORM_STRCASECMP(value, "Connection: close") == 0))
                 setTransportProperty("Connection", "close");
             else if( m_pActiveChannel != NULL)
                 m_pActiveChannel->setTransportProperty( type, value);
@@ -971,7 +971,7 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
 
         case ENABLE_AUTOMATIC_REDIRECT:
         {
-            if (value && strcmp(value, "true") == 0)
+            if (value && (PLATFORM_STRCASECMP(value, "true") == 0))
                 m_bPerformAutoRedirect = true;
             else
                 m_bPerformAutoRedirect = false;
@@ -1034,17 +1034,15 @@ setTransportProperty( const char *pcKey, const char *pcValue) throw (HTTPTranspo
         // Cookies are handled elsewhere.  For other properties, we first check to
         // see if there is a matching (i.e. duplicate property) already set.  If one
         // exists, we replace the value.
-        if(strcmp(pcKey, "Cookie")==0)
+        if(PLATFORM_STRCASECMP(pcKey, "Cookie")==0)
         {
             iSuccess = addCookie(pcValue);
             b_KeyFound = true;
         }
         else
         {
-            std::string strKeyToFind = std::string( pcKey);
-    
             for (unsigned int i = 0; i < m_vHTTPHeaders.size(); i++)
-                if (m_vHTTPHeaders[i].first == strKeyToFind)
+                if (PLATFORM_STRCASECMP(m_vHTTPHeaders[i].first.c_str(), pcKey) == 0)
                 {
                     m_vHTTPHeaders[i].second = (string) pcValue;
                     b_KeyFound = true;
@@ -1420,7 +1418,7 @@ processHTTPHeader()
 
         // Content length set? Chunked overrides Content-length. It should be noted
         // that on successful one-way requests Content-Length would be set to zero.
-        if (key == "Content-Length")
+        if (PLATFORM_STRCASECMP(key.c_str(), "Content-Length") == 0)
             if (m_GetBytesState != eSOAPMessageIsChunked)
             {
                 m_iContentLength = atoi(value.c_str());
@@ -1428,11 +1426,12 @@ processHTTPHeader()
             }
 
         // Redirect?
-        if (key == "Location")
+        if (PLATFORM_STRCASECMP(key.c_str(), "Location") == 0)
             m_strResponseLocationURI = value;
 
         // Is chunked? 
-        if (key == "Transfer-Encoding" && value == "chunked")
+        if ((PLATFORM_STRCASECMP(key.c_str(), "Transfer-Encoding") == 0)
+                && (PLATFORM_STRCASECMP(value.c_str(), "chunked") == 0))
             m_GetBytesState = eSOAPMessageIsChunked;
 
         // Now handle whether we are going to close connection after processing 
@@ -1442,27 +1441,30 @@ processHTTPHeader()
             m_bReopenConnection = true;
 
         // We need to close the connection and open a new one if we have 'Connection: close'
-        if( key == "Connection" && (value == "close" || value == "Close"))
+        if ((PLATFORM_STRCASECMP(key.c_str(), "Connection") == 0)
+                && (PLATFORM_STRCASECMP(value.c_str(), "close") == 0))
         {
             m_bReopenConnection = true;
             m_pActiveChannel->closeQuietly( true);
         }
 
         // We need to close the connection and open a new one if we have 'Proxy-Connection: close'
-        if (key == "Proxy-Connection" && (value == "close" || value == "Close"))
+        if ((PLATFORM_STRCASECMP(key.c_str(), "Proxy-Connection") == 0)
+                && (PLATFORM_STRCASECMP(value.c_str(), "close") == 0))
             m_bReopenConnection = true;
 
         // For both HTTP/1.0 and HTTP/1.1, We need to keep the connection if we have 'Connection: Keep-Alive'
-        if( key == "Connection" && value == "Keep-Alive")
+        if ((PLATFORM_STRCASECMP(key.c_str(), "Connection") == 0)
+                && (PLATFORM_STRCASECMP(value.c_str(), "Keep-Alive") == 0))
             m_bReopenConnection = false;
 
         // Look for cookies
-        if( m_bMaintainSession )
-            if( key == "Set-Cookie")
+        if ( m_bMaintainSession )
+            if (PLATFORM_STRCASECMP(key.c_str(), "Set-Cookie") == 0)
                 addCookie(value);
 
         /* If Content-Type: Multipart/Related; boundary=<MIME_boundary>; type=text/xml; start="<content id>" */
-        if( key == "Content-Type")
+        if (PLATFORM_STRCASECMP(key.c_str(), "Content-Type") == 0)
         {
             m_strResponseContentType = value;
 
@@ -1472,7 +1474,7 @@ processHTTPHeader()
             if( ulMimePos != std::string::npos)
                 strTypePart = m_strResponseContentType.substr( 1, ulMimePos - 1);
 
-            if( "Multipart/Related" == strTypePart)
+            if ( "Multipart/Related" == strTypePart)
             {
                 m_bMimeTrue = true;
                 m_strResponseContentType = m_strResponseContentType.substr( ulMimePos + 1, m_strResponseContentType.length());
@@ -1665,7 +1667,9 @@ getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportExc
     
     const char *returnValue = NULL;
 
-    std::string strKeyToFind = std::string( pcKey);
+    if (pcKey == NULL)
+        return NULL;
+
     std::vector < std::pair < std::string, std::string > > *hdrs=NULL;
     
     if (response)
@@ -1674,7 +1678,7 @@ getTransportProperty( const char * pcKey, bool response) throw (HTTPTransportExc
         hdrs = &m_vHTTPHeaders;
 
     for( unsigned int i = 0; i < hdrs->size(); i++)
-        if( (*hdrs)[i].first == strKeyToFind)
+        if (PLATFORM_STRCASECMP((*hdrs)[i].first.c_str(), pcKey) == 0)
         {
             returnValue = (*hdrs)[i].second.c_str();
             break;
@@ -1791,19 +1795,22 @@ deleteCurrentTransportProperty(bool response)
 void HTTPTransport::
 deleteTransportProperty (char *pcKey, unsigned int uiOccurance)
 {
+    if (pcKey == NULL)
+        return;
+
     vector < std::pair < std::string,
     std::string > >::iterator currentHeader = m_vHTTPHeaders.begin();
     unsigned int uiCount = 1;
     bool found=false;
     while( currentHeader != m_vHTTPHeaders.end() && uiCount <= uiOccurance)
     {
-        if( strcmp( pcKey, (*currentHeader).first.c_str()) == 0)
+        if (PLATFORM_STRCASECMP(pcKey, (*currentHeader).first.c_str()) == 0)
         {
             if( uiCount == uiOccurance)
             {
                 m_vHTTPHeaders.erase( currentHeader);
                 // if this is the special case of cookies then delete them all
-                if(strcmp(pcKey, "Cookie")==0)
+                if (PLATFORM_STRCASECMP(pcKey, "Cookie")==0)
                     removeAllCookies();
                 found=true;
                 break;

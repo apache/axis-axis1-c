@@ -22,6 +22,7 @@
 #include <stdio.h>      
 #include <stdlib.h>      
 #include <string.h>      
+#include <strings.h>    // for strcasecmp()
 #include <errno.h>
 #include <stdarg.h>
 #include <time.h>       // strftime(), localtime()      
@@ -78,6 +79,9 @@ extern char*      strtoasc( char* );
 extern char*      asctostr( char* );
 #define PLATFORM_STRTOASC( x ) strtoasc( (char*)(x) )
 #define PLATFORM_ASCTOSTR( x ) asctostr( (char*)(x) )
+
+// Case-insensitive string compares
+#define PLATFORM_STRCASECMP strcasecmp
 
 // reference to ebcdic to ascii conversion table 
 extern const char EBCDICtoASCII[256];

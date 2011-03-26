@@ -60,6 +60,7 @@
 #include <windows.h>
 #include <string>
 #include <sys/timeb.h>
+#include <string.h>
 
 #define DIR_SEPARATOR   '\\'
 #define DIR_SEPARATOR_S "\\"
@@ -113,6 +114,9 @@
 #define PLATFORM_DOUBLE_QUOTE_C                   '\"'
 
 #define PLATFORM_XML_ENTITY_REFERENCE_CHARS_S     "<>&\"\'"
+
+// Case-insensitive string compares
+#define PLATFORM_STRCASECMP _stricmp
 
 // =============================================================
 // Miscellaneous
