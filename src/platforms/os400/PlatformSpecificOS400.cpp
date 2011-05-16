@@ -30,7 +30,7 @@
 #include <except.h>
 #include <errno.h>
 #include <qwcrtvca.h>                   // Retrieve job's ccsid API prototype 
-
+#include <locale.h>
 
 
 /**********************************************************************/
@@ -348,6 +348,8 @@ char* asctobuf( char *b, int len )
 char PLATFORM_DOUBLE_QUOTE_S[]               = "\"";
 char PLATFORM_DOUBLE_QUOTE_C                 = '\"';
 char PLATFORM_XML_ENTITY_REFERENCE_CHARS_S[] = "<>&\"\'";
+char PLATFORM_PROCESS_DECIMAL_POINT_C        = '.';
+
 
 static int initializePlatform()
 {
@@ -369,6 +371,11 @@ static int initializePlatform()
     		strcpy(PLATFORM_XML_ENTITY_REFERENCE_CHARS_S, "<>&\xFC\'");
     	}
     }
+
+    struct lconv * processLocale = localeconv();
+
+    if (processLocale != NULL)
+       PLATFORM_PROCESS_DECIMAL_POINT_C = *(processLocale->decimal_point);
 
 	return rc;
 }

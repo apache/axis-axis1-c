@@ -142,7 +142,22 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
  
     AxisChar serializedValue[80];
     AxisSprintf (serializedValue, 80, "%.10g", *value);
-	
+
+    // When sending decimal, double, or float, the decimal point character must be a period.
+    if (PLATFORM_PROCESS_DECIMAL_POINT_C != '.')
+    {
+        char *p = serializedValue;
+        while (*p)
+        {
+            if (*p == PLATFORM_PROCESS_DECIMAL_POINT_C)
+            {
+                *p = '.';
+                break;
+            }
+            p++;
+        }
+    }
+
 	IAnySimpleType::serialize(serializedValue);
     return m_Buf;
 }
@@ -150,9 +165,32 @@ AxisChar* Double::serialize(const xsd__double* value) throw (AxisSoapException)
 xsd__double* Double::deserializeDouble(const AxisChar* valueAsChar) throw (AxisSoapException)
 {
 	AxisChar* end;
+    bool decimalPointChanged = false;
    
+    // When sending decimal, double, or float, the decimal point character must be a period.
+    // However, strtod is locale-sensitive, so that for it to function properly the decimal point
+    // must be set to whatever the locale decimal point is.
+    AxisChar *p = NULL;
+    if (valueAsChar != NULL && PLATFORM_PROCESS_DECIMAL_POINT_C != '.')
+    {
+        p = (AxisChar *)valueAsChar;
+        while (*p)
+        {
+            if (*p == '.')
+            {
+                decimalPointChanged = true;
+                *p = PLATFORM_PROCESS_DECIMAL_POINT_C;
+                break;
+            }
+            p++;
+        }
+    }
+
 	xsd__double * value = new xsd__double;
 	*value = strtod (valueAsChar, &end);
+
+    if (decimalPointChanged)
+        *p = '.';
 	
 	return value;
 }

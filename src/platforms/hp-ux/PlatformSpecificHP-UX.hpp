@@ -79,6 +79,12 @@
 #define PLATFORM_DOUBLE_QUOTE_S                   "\""
 #define PLATFORM_DOUBLE_QUOTE_C                   '\"'
 
+// Some C functions are locale-sensitive. On IBM i strtod() is locale-sensitive,
+// such that if running in french locale the strtod() function expects
+// the decimal point to be a comma.  If the same holds true with
+// other platforms then you will need to set this define appropriately.
+#define PLATFORM_PROCESS_DECIMAL_POINT_C          '.'
+
 #define PLATFORM_XML_ENTITY_REFERENCE_CHARS_S     "<>&\"\'"
 
 // Case-insensitive string compares

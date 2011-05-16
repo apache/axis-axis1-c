@@ -94,6 +94,12 @@ extern const char EBCDICtoASCII[256];
 extern char PLATFORM_DOUBLE_QUOTE_S[];
 extern char PLATFORM_DOUBLE_QUOTE_C;
 
+// Some C functions are locale-sensitive. On IBM i strtod() is locale-sensitive,
+// such that if running in french locale the strtod() function expects
+// the decimal point to be a comma.  If the same holds true with
+// other platforms then you will need to set this define appropriately.
+extern char PLATFORM_PROCESS_DECIMAL_POINT_C;
+
 extern char PLATFORM_XML_ENTITY_REFERENCE_CHARS_S[];
 
 // =============================================================
