@@ -334,37 +334,34 @@ int main( int argc, char * argv[])
 
                         xsd__dateTime   ed_temp = ws.echoDate( time);
                         
-                        // A simple memcmp of ed_temp and time will not work because
-                        // it does not take into account timezone, so we need to 
-                        // compare results of asctime()
-                        char ExpectedTime[1024];
-                        char ReturnedTime[1024];
-                        
-                        char *  pExpectedTime = asctime( &time );
-                        int      iETLength = (pExpectedTime != NULL) ? (int) strlen(pExpectedTime) : 0;
-                        if (iETLength > 0)
-                                strcpy(ExpectedTime, pExpectedTime);
-                        
-                        char *  pReturnedTime = asctime( &ed_temp );
-                        int             iRTLength = (pReturnedTime != NULL) ? (int) strlen(pReturnedTime) : 0;
-                        if( iRTLength > 0)
-                                strcpy(ReturnedTime, pReturnedTime);
+                        adjustTimeStruct(&ed_temp);
 
-                        if( iETLength > 0 && 
-                                iRTLength > 0 &&
-                                strcmp(ExpectedTime, ReturnedTime) == 0)
+                        if( memcmp(&time, &ed_temp, sizeof(struct tm)) == 0)
                         {
                                 cout << "successful" << endl;
                         }
                         else
                         {
-                                if( iETLength == 0)
-                                        strcpy(ExpectedTime,"NULL");
+                            char ExpectedTime[1024];
+                            char ReturnedTime[1024];
 
-                                if( iRTLength == 0)
-                                        strcpy(ReturnedTime,"NULL");
-        
-                                cout << "Failed.  The expected time (" << ExpectedTime << ") was not the same as the returned time (" << ReturnedTime << ")." << endl;
+                            char *  pExpectedTime = asctime( &time );
+                            int      iETLength = (pExpectedTime != NULL) ? (int) strlen(pExpectedTime) : 0;
+                            if (iETLength > 0)
+                                    strcpy(ExpectedTime, pExpectedTime);
+
+                            char *  pReturnedTime = asctime( &ed_temp );
+                            int             iRTLength = (pReturnedTime != NULL) ? (int) strlen(pReturnedTime) : 0;
+                            if( iRTLength > 0)
+                                    strcpy(ReturnedTime, pReturnedTime);
+
+                            if( iETLength == 0)
+                                    strcpy(ExpectedTime,"NULL");
+
+                            if( iRTLength == 0)
+                                    strcpy(ReturnedTime,"NULL");
+
+                            cout << "Failed.  The expected time (" << ExpectedTime << ") was not the same as the returned time (" << ReturnedTime << ")." << endl;
                         }
 
         //testing echo hex binary

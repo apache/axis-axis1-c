@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include <iostream>
 
+#include "CommonClientTestCode.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
 
         // Test non-nillable element
         result = ws->asNonNillableElement(input);
-        strftime(returnString, 50, "%H:%M:%S", &result);
+        strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct(&result));
         cout << "non-nillable element=" << returnString << endl;
 
         // Test nillable element, with a value
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
         nillableResult = ws->asNillableElement(nillableInput);
         if (nillableResult)
         {
-            strftime(returnString, 50, "%H:%M:%S", nillableResult);
+            strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct(nillableResult));
             cout << "nillable element=" << returnString << endl;
             delete nillableResult;
         }
@@ -79,7 +80,7 @@ int main(int argc, char* argv[])
         nillableResult = ws->asNillableElement(NULL);
         if (nillableResult)
         {
-            strftime(returnString, 50, "%H:%M:%S", nillableResult);
+            strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct(nillableResult));
             cout << "nil element=" << returnString << endl;
             delete nillableResult;
         }
@@ -91,7 +92,7 @@ int main(int argc, char* argv[])
         requiredAttributeInput.setrequiredAttribute(input);
         RequiredAttributeElement* requiredAttributeResult = ws->asRequiredAttribute(&requiredAttributeInput);
         result = requiredAttributeResult->getrequiredAttribute();
-        strftime(returnString, 50, "%H:%M:%S", &result);
+        strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct(&result));
         cout << "required attribute=" << returnString << endl;
         delete requiredAttributeResult;
 
@@ -142,7 +143,7 @@ int main(int argc, char* argv[])
         cout << "array of " << outputSize << " elements" << endl;
         for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%H:%M:%S", output[i]);
+            strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct((struct tm *)output[i]));
             cout << "  element[" << i << "]=" << returnString << endl;
         }
         
@@ -160,7 +161,7 @@ int main(int argc, char* argv[])
         complexTypeInput.setcomplexTypeElement(input);
         SimpleComplexType* complexTypeResult = ws->asComplexType(&complexTypeInput);
         result = complexTypeResult->getcomplexTypeElement();
-        strftime(returnString, 50, "%H:%M:%S", &result);
+        strftime(returnString, 50, "%H:%M:%S", adjustTimeStruct(&result));
         cout << "within complex type=" << returnString << endl;
         delete complexTypeResult;
 

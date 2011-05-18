@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
                 cout << "date=" << dateTime << endl;
 
                 dateTimeResult = ws->setGetDateTimeType(testDate);
-                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &dateTimeResult);
+                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", adjustTimeStruct(&dateTimeResult));
                 cout << "dateTime=" << dateTime << endl;
 
 //  This is being commented out due to issue on some servers

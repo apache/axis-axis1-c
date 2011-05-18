@@ -1,6 +1,11 @@
 #ifndef __COMMONHEADERFILE
 #define __COMMONHEADERFILE
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
 // Prototype
 bool parse_args(int *argc, char *argv[], char **endpoint);
 void shift_args_up(int i, int *argc, char *argv[]);
@@ -229,5 +234,68 @@ void shift_args_up(int i, int *argc, char *argv[]) {
         argv[j]=argv[k];
     *argc-=2;
 }
+
+// Following functions adjust the tm structure by taking in consideration
+// daylight saving time...so that when we spit out the results it will
+// match what is expected (which is not with daylight saving time)
+
+bool isDSTInEffect()
+{
+    time_t currentTime;
+    struct tm *ts;
+
+    (void)time(&currentTime);
+    ts = localtime(&currentTime);
+
+    if (ts->tm_isdst > 0)
+        return true;
+
+    return false;
+}
+
+struct tm * adjustTimeStruct(struct tm *t)
+{
+
+
+    if (0)
+    {
+      printf("tm_hour:  %d\n",t->tm_hour);
+      printf("tm_min:  %d\n",t->tm_min);
+      printf("tm_sec:  %d\n",t->tm_sec);
+      printf("tm_mon:  %d\n",t->tm_mon);
+      printf("tm_mday:  %d\n",t->tm_mday);
+      printf("tm_year:  %d\n",t->tm_year);
+      printf("tm_yday:  %d\n",t->tm_yday);
+      printf("tm_wday:  %d\n",t->tm_wday);
+      printf("tm_isdst:  %d\n",t->tm_isdst);
+    }
+
+    if (isDSTInEffect())
+    {
+        --(t->tm_hour);
+
+       if (t->tm_hour < 0)
+            mktime (t);
+    }
+
+    if (0)
+    {
+     printf("===After\n");
+
+     printf("tm_hour:  %d\n",t->tm_hour);
+     printf("tm_min:  %d\n",t->tm_min);
+     printf("tm_sec:  %d\n",t->tm_sec);
+     printf("tm_mon:  %d\n",t->tm_mon);
+     printf("tm_mday:  %d\n",t->tm_mday);
+     printf("tm_year:  %d\n",t->tm_year);
+     printf("tm_yday:  %d\n",t->tm_yday);
+     printf("tm_wday:  %d\n",t->tm_wday);
+     printf("tm_isdst:  %d\n",t->tm_isdst);
+    }
+
+    return t;
+}
+
+
 
 #endif

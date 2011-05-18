@@ -212,7 +212,8 @@ int main( int argc, char * argv[])
                         cout << " IntegerType " << outArray[i]->IntegerType << endl;
                         cout << " DoubleType " << outArray[i]->DoubleType << endl;
                         cout << " BooleanType " << outArray[i]->BooleanType << endl;
-                        strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
+
+                        strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", adjustTimeStruct(&outArray[i]->DateTimeType));
                         cout << " DateTimeType " << dateTime << endl;
                         strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
                         cout << " DateType " << dateTime << endl;

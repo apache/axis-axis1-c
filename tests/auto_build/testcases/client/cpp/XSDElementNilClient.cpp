@@ -230,7 +230,7 @@ int main(int argc, char* argv[])
                         cout << "date nil=NULL" << endl;
 
                 dateTimeResult = ws->setGetDateTimeType(&testDate);
-                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", dateTimeResult);
+                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", adjustTimeStruct(dateTimeResult));
                 cout << "dateTime=" << dateTime << endl;
                 dateTimeResult = ws->setGetDateTimeType(NULL);
                 if(dateTimeResult) {
