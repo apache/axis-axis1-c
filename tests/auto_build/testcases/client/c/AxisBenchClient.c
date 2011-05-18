@@ -170,7 +170,7 @@ int main(int argc, char* argv[])
                 printf( " IntegerType %lld\n", outArray[i]->IntegerType );
                 printf( " DoubleType %g\n", outArray[i]->DoubleType );
                 printf( " BooleanType %d\n", outArray[i]->BooleanType );
-                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", &outArray[i]->DateTimeType);
+                strftime(dateTime, 50, "%a %b %d %H:%M:%S %Y", adjustTimeStruct(&outArray[i]->DateTimeType));
                 printf( " DateTimeType %s\n", dateTime );
                 strftime(dateTime, 50, "%a %b %d %Y", &outArray[i]->DateType);
                 printf( " DateType %s\n", dateTime );
