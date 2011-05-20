@@ -152,6 +152,23 @@ char * asciiToStringOfLength( char * pString, int iLength)
 // daylight saving time...so that when we spit out the results it will
 // match what is expected (which is not with daylight saving time)
 
+void dumpTimeStruct(struct tm *t, char *hdr)
+{
+    if (0)
+    {
+      printf(hdr);
+      printf("tm_hour:  %d\n",t->tm_hour);
+      printf("tm_min:  %d\n",t->tm_min);
+      printf("tm_sec:  %d\n",t->tm_sec);
+      printf("tm_mon:  %d\n",t->tm_mon);
+      printf("tm_mday:  %d\n",t->tm_mday);
+      printf("tm_year:  %d\n",t->tm_year);
+      printf("tm_yday:  %d\n",t->tm_yday);
+      printf("tm_wday:  %d\n",t->tm_wday);
+      printf("tm_isdst:  %d\n",t->tm_isdst);
+    }
+}
+
 C_BOOL isDSTInEffect()
 {
     time_t currentTime;
@@ -168,42 +185,21 @@ C_BOOL isDSTInEffect()
 
 struct tm * adjustTimeStruct(struct tm *t)
 {
+    time_t timeInSecs;
+    struct tm *temp;
 
-    if (0)
-    {
-      printf("tm_hour:  %d\n",t->tm_hour);
-      printf("tm_min:  %d\n",t->tm_min);
-      printf("tm_sec:  %d\n",t->tm_sec);
-      printf("tm_mon:  %d\n",t->tm_mon);
-      printf("tm_mday:  %d\n",t->tm_mday);
-      printf("tm_year:  %d\n",t->tm_year);
-      printf("tm_yday:  %d\n",t->tm_yday);
-      printf("tm_wday:  %d\n",t->tm_wday);
-      printf("tm_isdst:  %d\n",t->tm_isdst);
-    }
+    dumpTimeStruct(t, "before\n");
 
     if (isDSTInEffect())
-    {
-        --(t->tm_hour);
+        t->tm_isdst = 1;
 
-       if (t->tm_hour < 0)
-            mktime (t);
-    }
+    timeInSecs= mktime (t);
 
-    if (0)
-    {
-     printf("===After\n");
+    temp = gmtime(&timeInSecs);
 
-     printf("tm_hour:  %d\n",t->tm_hour);
-     printf("tm_min:  %d\n",t->tm_min);
-     printf("tm_sec:  %d\n",t->tm_sec);
-     printf("tm_mon:  %d\n",t->tm_mon);
-     printf("tm_mday:  %d\n",t->tm_mday);
-     printf("tm_year:  %d\n",t->tm_year);
-     printf("tm_yday:  %d\n",t->tm_yday);
-     printf("tm_wday:  %d\n",t->tm_wday);
-     printf("tm_isdst:  %d\n",t->tm_isdst);
-    }
+    *t = *temp;
+
+    dumpTimeStruct(t, "after\n");
 
     return t;
 }
