@@ -291,5 +291,26 @@ struct tm * adjustTimeStruct(struct tm *t)
     return t;
 }
 
+struct tm * adjustTimeStruct2(struct tm *t)
+{
+    time_t timeInSecs;
+    struct tm *temp;
+
+    dumpTimeStruct(t, "before\n");
+
+    if (isDSTInEffect())
+        t->tm_isdst = 1;
+
+    timeInSecs= mktime (t);
+
+    temp = localtime(&timeInSecs);
+
+    *t = *temp;
+
+    dumpTimeStruct(t, "after\n");
+
+    return t;
+}
+
 
 #endif

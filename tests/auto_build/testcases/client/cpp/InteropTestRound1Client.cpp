@@ -334,7 +334,7 @@ int main( int argc, char * argv[])
 
                         xsd__dateTime   ed_temp = ws.echoDate( time);
                         
-                        adjustTimeStruct(&ed_temp);
+                        adjustTimeStruct2(&ed_temp);
 
                         if( memcmp(&time, &ed_temp, sizeof(struct tm)) == 0)
                         {
