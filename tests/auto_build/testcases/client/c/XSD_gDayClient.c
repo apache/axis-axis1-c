@@ -49,14 +49,14 @@ int main(int argc, char* argv[])
 
     // Test non-nillable element
     result = asNonNillableElement(ws, input);
-    strftime(returnString, 50, "%d", &result);
+    strftime(returnString, 50, "%d", adjustTimeStruct3(&result));
     printf( "non-nillable element=%s\n" , returnString );
 
     // Test nillable element, with a value
     nillableResult = asNillableElement(ws, &input);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%d", nillableResult);
+        strftime(returnString, 50, "%d", adjustTimeStruct3(nillableResult));
         printf( "nillable element=%s\n" , returnString );
         axiscAxisDelete(nillableResult, XSDC_GDAY);
     }
@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     nillableResult = asNillableElement(ws, NULL);
     if (nillableResult)
     {
-        strftime(returnString, 50, "%d", nillableResult);
+        strftime(returnString, 50, "%d", adjustTimeStruct3(nillableResult));
         printf( "nil element=%s\n" , returnString );
         axiscAxisDelete(nillableResult, XSDC_GDAY);
     }
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
         requiredAttributeInput.requiredAttribute = input;
         requiredAttributeResult = asRequiredAttribute(ws, &requiredAttributeInput);
         result = requiredAttributeResult->requiredAttribute;
-        strftime(returnString, 50, "%d", &result);
+        strftime(returnString, 50, "%d", adjustTimeStruct3(&result));
         printf( "required attribute=%s\n" , returnString );
         Axis_Delete_RequiredAttributeElement(requiredAttributeResult, 0);
     }
@@ -144,7 +144,7 @@ int main(int argc, char* argv[])
 
         for (i = 0; i < outputSize ; i++)
         {
-            strftime(returnString, 50, "%d", output[i]);
+            strftime(returnString, 50, "%d", adjustTimeStruct3((struct tm *)output[i]));
             printf( "  element[%d]=%s\n" , i, returnString );
         }
         axiscAxisDelete(arrayResult, XSDC_ARRAY);
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
         complexTypeInput.complexTypeElement = input;
         complexTypeResult = asComplexType(ws, &complexTypeInput);
         result = complexTypeResult->complexTypeElement;
-        strftime(returnString, 50, "%d", &result);
+        strftime(returnString, 50, "%d", adjustTimeStruct3(&result));
         printf( "within complex type=%s\n" , returnString );
         Axis_Delete_SimpleComplexType(complexTypeResult, 0);
     }

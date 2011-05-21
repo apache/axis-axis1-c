@@ -312,5 +312,39 @@ struct tm * adjustTimeStruct2(struct tm *t)
     return t;
 }
 
+struct tm *adjustTimeStruct3(struct tm *t)
+{
+    // Hack....seems that DST affects month/day
+    time_t timeInSecs;
+    struct tm *temp;
 
+    dumpTimeStruct(t, "before\n");
+
+    if (isDSTInEffect())
+    {
+        ++(t->tm_mday);
+        ++(t->tm_mon);
+    }
+
+
+    dumpTimeStruct(t, "after\n");
+
+    return t;
+}
+
+struct tm *adjustTimeStruct4(struct tm *t)
+{
+    // Hack....seems that DST affects month/day
+    time_t timeInSecs;
+    struct tm *temp;
+
+    dumpTimeStruct(t, "before\n");
+
+    if (isDSTInEffect())
+        ++(t->tm_mday);
+
+    dumpTimeStruct(t, "after\n");
+
+    return t;
+}
 #endif
