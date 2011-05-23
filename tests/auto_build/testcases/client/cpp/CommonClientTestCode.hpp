@@ -264,6 +264,13 @@ bool isDSTInEffect()
     (void)time(&currentTime);
     ts = localtime(&currentTime);
 
+    if (ts->tm_isdst < 0)
+    {
+        char *dstEnvVar = getenv("AXISTEST_DST");
+        if (dstEnvVar && strcmp(dstEnvVar, "1") == 0)
+            ts->tm_isdst = 1;
+    }
+
     if (ts->tm_isdst > 0)
         return true;
 
