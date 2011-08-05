@@ -136,9 +136,7 @@ createAttribute(const AxisChar *localname,  const AxisChar *prefix, const AxisCh
 {
     Attribute* pAttribute = new Attribute(m_attributes, localname, prefix, value);
     
-    // User namespace declarations must be put to the front; otherwise, serialization breaks.
     m_attributes.push_back(pAttribute);
-
     return (IAttribute*)pAttribute;
 }
 
