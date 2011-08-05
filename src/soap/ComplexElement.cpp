@@ -15,20 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
@@ -42,7 +28,9 @@
 
 AXIS_CPP_NAMESPACE_START
 
-ComplexElement::ComplexElement():m_pParent(NULL)
+ComplexElement::
+ComplexElement()
+:m_pParent(NULL)
 {
     m_pachPrefix = NULL;
     m_pachLocalName = NULL;
@@ -52,8 +40,9 @@ ComplexElement::ComplexElement():m_pParent(NULL)
     iNoOfChildren = 0;
 }
 
-ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
-                               AxisChar *pachUri): m_pParent(NULL)
+ComplexElement::
+ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix, AxisChar *pachUri)
+: m_pParent(NULL)
 {
     m_pachLocalName = new AxisChar[strlen(pachLocalName)+1];
     strcpy(m_pachLocalName, pachLocalName);
@@ -66,7 +55,8 @@ ComplexElement::ComplexElement(AxisChar *pachLocalName, AxisChar *pachPrefix,
     iNoOfChildren = 0;
 }
 
-ComplexElement::ComplexElement(const ComplexElement& rCopy)
+ComplexElement::
+ComplexElement(const ComplexElement& rCopy)
 :BasicNode(rCopy), m_pachPrefix(NULL), m_pachLocalName(NULL), m_pachURI(NULL), m_pParent(NULL)
 {
     this->iNoOfChildren = rCopy.iNoOfChildren;
@@ -79,18 +69,21 @@ ComplexElement::ComplexElement(const ComplexElement& rCopy)
         itCurrBasicNode++;        
     } 
     
-    if(rCopy.m_pachPrefix) {
-          this->m_pachPrefix = new char[strlen(rCopy.m_pachPrefix)+1];
+    if(rCopy.m_pachPrefix)
+    {
+        this->m_pachPrefix = new char[strlen(rCopy.m_pachPrefix)+1];
         strcpy(this->m_pachPrefix,rCopy.m_pachPrefix);
     }
 
-    if(rCopy.m_pachLocalName) {
-          this->m_pachLocalName = new char[strlen(rCopy.m_pachLocalName)+1];
+    if(rCopy.m_pachLocalName)
+    {
+        this->m_pachLocalName = new char[strlen(rCopy.m_pachLocalName)+1];
         strcpy(this->m_pachLocalName,rCopy.m_pachLocalName);
     }
 
-    if(rCopy.m_pachURI) {
-          this->m_pachURI = new char[strlen(rCopy.m_pachURI)+1];
+    if(rCopy.m_pachURI)
+    {
+        this->m_pachURI = new char[strlen(rCopy.m_pachURI)+1];
         strcpy(this->m_pachURI,rCopy.m_pachURI);
     }
 
@@ -98,31 +91,28 @@ ComplexElement::ComplexElement(const ComplexElement& rCopy)
     this->iNoOfChildren = rCopy.iNoOfChildren;
 }
 
-BasicNode* ComplexElement::clone()
+BasicNode* ComplexElement::
+clone()
 {
     return new ComplexElement(*this);
 }
 
 
-ComplexElement::~ComplexElement()
+ComplexElement::
+~ComplexElement()
 {
-    if (NULL != m_pachPrefix)
-        delete [] m_pachPrefix;
+    delete [] m_pachPrefix;
     m_pachPrefix = NULL;
 
-    if (NULL != m_pachLocalName)
-        delete [] m_pachLocalName;
+    delete [] m_pachLocalName;
     m_pachLocalName = NULL;
 
-    if (NULL != m_pachURI)
-        delete [] m_pachURI;
+    delete [] m_pachURI;
     m_pachURI = NULL;
 
     m_pParent = NULL;
 
-    /* 
-     *Clear the Attributes 
-     */
+    /* Clear the Attributes */
     list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
     while(itCurrAttribute != m_attributes.end())
     {
@@ -141,20 +131,19 @@ ComplexElement::~ComplexElement()
     m_children.clear();
 }
 
-IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
-        const AxisChar *prefix,
-        const AxisChar *value)
+IAttribute* ComplexElement::
+createAttribute(const AxisChar *localname,  const AxisChar *prefix, const AxisChar *value)
 {
     Attribute* pAttribute = new Attribute(m_attributes, localname, prefix, value);
-    m_attributes.push_back(pAttribute);
     
+    // User namespace declarations must be put to the front; otherwise, serialization breaks.
+    m_attributes.push_back(pAttribute);
+
     return (IAttribute*)pAttribute;
 }
 
-IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
-        const AxisChar *prefix,
-        const AxisChar *uri,
-        const AxisChar *value)
+IAttribute* ComplexElement::
+createAttribute(const AxisChar *localname, const AxisChar *prefix, const AxisChar *uri, const AxisChar *value)
 {
     Attribute* pAttribute = new Attribute(m_attributes, localname, prefix, uri, value);
     m_attributes.push_back(pAttribute);
@@ -162,8 +151,8 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
     return (IAttribute*)pAttribute;
 }
 
-IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
-        const AxisChar *value)
+IAttribute* ComplexElement::
+createAttribute(const AxisChar *localname, const AxisChar *value)
 {
     Attribute* pAttribute = new Attribute(m_attributes, localname, "", value);
     m_attributes.push_back(pAttribute);
@@ -172,7 +161,8 @@ IAttribute* ComplexElement::createAttribute(const AxisChar *localname,
 }
 
 
-int ComplexElement::setPrefix(const AxisChar* pachPrefix)
+int ComplexElement::
+setPrefix(const AxisChar* pachPrefix)
 {
     if (NULL==pachPrefix)
         return AXIS_FAIL;
@@ -184,7 +174,8 @@ int ComplexElement::setPrefix(const AxisChar* pachPrefix)
     return AXIS_SUCCESS;
 }
 
-int ComplexElement::setLocalName(const AxisChar* pachLocalName)
+int ComplexElement::
+setLocalName(const AxisChar* pachLocalName)
 {
     if (NULL==pachLocalName)
         return AXIS_FAIL;
@@ -196,7 +187,8 @@ int ComplexElement::setLocalName(const AxisChar* pachLocalName)
     return AXIS_SUCCESS;
 }
 
-int ComplexElement::addChild(BasicNode *pBasicNode)
+int ComplexElement::
+addChild(BasicNode *pBasicNode)
 {
     if (pBasicNode)
     {
@@ -215,7 +207,8 @@ int ComplexElement::addChild(BasicNode *pBasicNode)
     }
 }
 
-int ComplexElement::serialize(SoapSerializer& pSZ)
+int ComplexElement::
+serialize(SoapSerializer& pSZ)
 {
     int iStatus= AXIS_SUCCESS;
     do
@@ -255,8 +248,8 @@ int ComplexElement::serialize(SoapSerializer& pSZ)
     return iStatus;
 }
 
-int ComplexElement::serialize(SoapSerializer& pSZ,
-                              list<AxisChar*>& lstTmpNameSpaceStack)
+int ComplexElement::
+serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
     int iStatus= AXIS_SUCCESS;
     do
@@ -304,9 +297,8 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                 strcpy(m_pachPrefix , pachTmp);
 
                 if (blnIsNewNamespace)
-                {
                     lstTmpNameSpaceStack.push_back(m_pachURI);
-                }
+
                 pSZ.serialize(m_pachPrefix, ":", NULL);
             }
 
@@ -319,43 +311,36 @@ int ComplexElement::serialize(SoapSerializer& pSZ,
                 pSZ.serialize(" xmlns:", m_pachPrefix, "=", PLATFORM_DOUBLE_QUOTE_S, m_pachURI, PLATFORM_DOUBLE_QUOTE_S, NULL);
             }
 
-        iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
-           if(iStatus==AXIS_FAIL)
-        {
-        break;
-        }
+            iStatus= attrSerialize(pSZ, lstTmpNameSpaceStack);
+            if(iStatus==AXIS_FAIL)
+               break;
 
-               iStatus= serializeNamespaceDecl(pSZ);
-         if(iStatus==AXIS_FAIL)
-        {
-        break;
-        }
+            iStatus= serializeNamespaceDecl(pSZ);
+            if(iStatus==AXIS_FAIL)
+                break;
 
             pSZ.serialize(">", NULL);
 
             iStatus= serializeChildren(pSZ, lstTmpNameSpaceStack);
             if(iStatus==AXIS_FAIL)
-            {
                 break;
-            }
+
             pSZ.serialize("</", NULL);
             if((m_pachPrefix!=NULL) && (strlen(m_pachPrefix) != 0))
-            {
                 pSZ.serialize(m_pachPrefix, ":", NULL);
-            }
+
             pSZ.serialize(m_pachLocalName, ">", NULL);
             iStatus= AXIS_SUCCESS;
         } 
         else
-        {
             iStatus= AXIS_FAIL;
-        }
     } while(0);    
+
     return iStatus;
 }
 
-int ComplexElement::attrSerialize(SoapSerializer& pSZ,
-        list<AxisChar*>& lstTmpNameSpaceStack)
+int ComplexElement::
+attrSerialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
     int iStatus= AXIS_SUCCESS;
     
@@ -365,29 +350,29 @@ int ComplexElement::attrSerialize(SoapSerializer& pSZ,
     {
         iStatus= (*itCurrAttribute)->serialize(pSZ, lstTmpNameSpaceStack);
         if(iStatus==AXIS_FAIL)
-        {
-        break;
-    }
+            break;
         itCurrAttribute++;
     }
 
     return iStatus;
 }
 
-int ComplexElement::serializeNamespaceDecl(SoapSerializer &pSZ)
+int ComplexElement::
+serializeNamespaceDecl(SoapSerializer &pSZ)
 {
     list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
 
     while(itCurrNamespaceDecl != m_namespaceDecls.end())
     {
-    (*itCurrNamespaceDecl)->serialize(pSZ);
+        (*itCurrNamespaceDecl)->serialize(pSZ);
         itCurrNamespaceDecl++;
     }
 
     return AXIS_SUCCESS;
 }
 
-bool ComplexElement::isSerializable()
+bool ComplexElement::
+isSerializable()
 {
     bool bStatus= true;
 
@@ -403,7 +388,8 @@ bool ComplexElement::isSerializable()
     return bStatus;
 }
 
-int ComplexElement::setURI(const AxisChar* pachURI)
+int ComplexElement::
+setURI(const AxisChar* pachURI)
 {
     if (NULL!=m_pachURI)
         delete [] m_pachURI;
@@ -412,18 +398,19 @@ int ComplexElement::setURI(const AxisChar* pachURI)
     return AXIS_SUCCESS;
 }
 
-void ComplexElement::setParent(ComplexElement *parent)
+void ComplexElement::
+setParent(ComplexElement *parent)
 {
     m_pParent = parent;
 }
 
-int ComplexElement::serializeChildren(SoapSerializer& pSZ)
+int ComplexElement::
+serializeChildren(SoapSerializer& pSZ)
 {
     list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
     while(itCurrBasicNode != m_children.end())
     {
-        
         (*itCurrBasicNode)->serialize(pSZ);
         
         itCurrBasicNode++;        
@@ -432,17 +419,15 @@ int ComplexElement::serializeChildren(SoapSerializer& pSZ)
     return AXIS_SUCCESS;
 }
 
-int ComplexElement::serializeChildren(SoapSerializer& pSZ,
-                                      list<AxisChar*>& lstTmpNameSpaceStack)
+int ComplexElement::
+serializeChildren(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack)
 {
     list<BasicNode*>::iterator itCurrBasicNode= m_children.begin();
 
     while(itCurrBasicNode != m_children.end())
     {
         if ((*itCurrBasicNode)->getNodeType() == ELEMENT_NODE)
-        {
             (*itCurrBasicNode)->serialize(pSZ, lstTmpNameSpaceStack);    
-        }
         else
         {
             /* for CHARACTER_NODE */
@@ -454,89 +439,85 @@ int ComplexElement::serializeChildren(SoapSerializer& pSZ,
     return AXIS_SUCCESS;
 }
 
-NODE_TYPE ComplexElement::getNodeType() const
+NODE_TYPE ComplexElement::
+getNodeType() const
 {
     return m_iNodeType;
 }
 
-BasicNode* ComplexElement::getFirstChild()
+BasicNode* ComplexElement::
+getFirstChild()
 {
     list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
 
     if (itCurrChild != m_children.end())
-    {        
         return (*itCurrChild);
-    }    
 
     return NULL;
 }
 
-BasicNode* ComplexElement::getLastChild()
+BasicNode* ComplexElement::
+getLastChild()
 {
     list<BasicNode*>::reverse_iterator ritCurrChild= m_children.rbegin();
 
     if (ritCurrChild != m_children.rend())
-    {        
         return (*ritCurrChild);
-    }    
 
     return NULL;
 }
 
-BasicNode* ComplexElement::getChild(int iChildPosition)
+BasicNode* ComplexElement::
+getChild(int iChildPosition)
 {
     if (iChildPosition > iNoOfChildren)
-    {
         return NULL;
-    }
-    else
+
+    list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
+
+    // The following is done since the previous line iterates one step forward
+    iChildPosition--;
+
+    // Takes the iterator to the requested position
+    for (int i=0; i<iChildPosition; i++)
     {
-        list<BasicNode*>::const_iterator itCurrChild= m_children.begin();
-        /* The following is done since the previous line already takes the 
-         * iterator one step forward
-         */
-        iChildPosition--;
-
-        /* Takes the iterator to the relavent positon */
-        for (int i=0; i<iChildPosition; i++)
-        {
-            itCurrChild++;
-        }
-
-        if (itCurrChild != m_children.end())
-        {
-            return *itCurrChild;
-        }
-        else
-        {
-            return NULL;
-        }
+        itCurrChild++;
     }
+
+    if (itCurrChild != m_children.end())
+        return *itCurrChild;
+
+    return NULL;
 }
 
-int ComplexElement::getNoOfChildren()
+int ComplexElement::
+getNoOfChildren()
 {
     return iNoOfChildren;
 }
-//<<<<<<< ComplexElement.cpp
 
-const AxisChar* ComplexElement::getLocalName() {
+const AxisChar* ComplexElement::
+getLocalName()
+{
     return m_pachLocalName; 
 }
 
-const AxisChar* ComplexElement::getURI() {
+const AxisChar* ComplexElement::
+getURI()
+{
     if ((m_pachURI == NULL || strlen(m_pachURI) == 0) && m_pParent != NULL)
-    {
         return m_pParent->getURI();
-    }
+
     return m_pachURI;
 }
 
-const AxisChar* ComplexElement::getPrefix() {
+const AxisChar* ComplexElement::
+getPrefix() {
     return m_pachPrefix;
 }
 
-IAttribute* ComplexElement::getFirstAttribute()
+IAttribute* ComplexElement::
+getFirstAttribute()
 {
     m_viCurrentAttribute = m_attributes.begin();
     if ( m_viCurrentAttribute == m_attributes.end())
@@ -545,28 +526,24 @@ IAttribute* ComplexElement::getFirstAttribute()
         return ((IAttribute*)*m_viCurrentAttribute);                                                                                                                                                                           
 }
                                                                                                                                                                             
-IAttribute* ComplexElement::getLastAttribute()
+IAttribute* ComplexElement::
+getLastAttribute()
 {
-    /*To do : check the logic
-    */
-/*    m_viCurrentAttribute = m_attributes.end();
-    if ( m_viCurrentAttribute == m_attributes.end())
-        return NULL;
-    else
-        return ((IAttribute*)*m_viCurrentAttribute);
-*/
-
     list <Attribute*>::reverse_iterator iAttributeReverseIte = m_attributes.rbegin();
-    if (iAttributeReverseIte == m_attributes.rend()) {
+    if (iAttributeReverseIte == m_attributes.rend())
+    {
          m_viCurrentAttribute = m_attributes.end();
-    return NULL;
-    } else {
-    m_viCurrentAttribute = m_attributes.end();
-      return ((IAttribute*)*iAttributeReverseIte);
+         return NULL;
+    }
+    else
+    {
+        m_viCurrentAttribute = m_attributes.end();
+        return ((IAttribute*)*iAttributeReverseIte);
     }
 }
                                                                                                                                                                             
-IAttribute* ComplexElement::getNextAttribute()
+IAttribute* ComplexElement::
+getNextAttribute()
 {
     //already at the end?
     if (m_viCurrentAttribute == m_attributes.end())
@@ -579,7 +556,8 @@ IAttribute* ComplexElement::getNextAttribute()
         return ((IAttribute*)*m_viCurrentAttribute);
 }
 
-IAttribute* ComplexElement::getCurrentAttribute()
+IAttribute* ComplexElement::
+getCurrentAttribute()
 {
     //already at the end?
     if ( m_viCurrentAttribute == m_attributes.end())
@@ -588,9 +566,8 @@ IAttribute* ComplexElement::getCurrentAttribute()
         return ((IAttribute*)*m_viCurrentAttribute);
 }
 
-IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
-                                         AxisChar* pachURI,
-                                         AxisChar* pachLocalname)
+IAttribute* ComplexElement::
+getAttribute(AxisChar* pachPrefix, AxisChar* pachURI, AxisChar* pachLocalname)
 {
     // Create local enumeration for valid parameters.
     typedef enum
@@ -609,19 +586,13 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
     // the test remains valid, add the enumerated equivalent of the parameter
     // to the list of valid parameters.
     if( (pachURI != NULL) && (strlen( pachURI) > 0))
-    {
         iValidParams += eParamHasURI;
-    }
 
     if( (pachPrefix != NULL) && (strlen( pachPrefix) > 0))
-    {
         iValidParams += eParamHasPrefix;
-    }
 
     if( (pachLocalname != NULL) && (strlen( pachLocalname) > 0))
-    {
         iValidParams += eParamHasLocalName;
-    }
 
     // Get the pointer to the start of the attribute list.
     list<Attribute*>::iterator it_m_attributes = m_attributes.begin();
@@ -631,112 +602,88 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
     // NB: Currently, the first match is returned in all cases.
     switch( iValidParams)
     {
-    // Parameter list contains a valid URI
-    case eParamHasURI:
+        // Parameter list contains a valid URI
+        case eParamHasURI:
         {
             while( it_m_attributes != m_attributes.end())
             {
                 if( !strcmp( (*it_m_attributes)->getURI(), pachURI))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid Prefix
-    case eParamHasPrefix:
+        // Parameter list contains a valid Prefix
+        case eParamHasPrefix:
         {
             while( it_m_attributes != m_attributes.end())
             {
                 if( !strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid URI and Prefix
-    case eParamHasURI + eParamHasPrefix:
+        // Parameter list contains a valid URI and Prefix
+        case eParamHasURI + eParamHasPrefix:
         {
             while( it_m_attributes != m_attributes.end())
             {
-                if( !strcmp( (*it_m_attributes)->getURI(), pachURI) &&
+                if (!strcmp( (*it_m_attributes)->getURI(), pachURI) &&
                     !strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid LocalName
+        // Parameter list contains a valid LocalName
         case eParamHasLocalName:
         {
             while( it_m_attributes != m_attributes.end())
             {
                 if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid LocalName and URI
+        // Parameter list contains a valid LocalName and URI
         case eParamHasLocalName + eParamHasURI:
         {
             while( it_m_attributes != m_attributes.end())
             {
                 if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
                     !strcmp( (*it_m_attributes)->getURI(), pachURI))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid LocalName and Prefix
+        // Parameter list contains a valid LocalName and Prefix
         case eParamHasLocalName + eParamHasPrefix:
         {
             while( it_m_attributes != m_attributes.end())
             {
                 if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
                     !strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains a valid LocalName, URI and Prefix
+        // Parameter list contains a valid LocalName, URI and Prefix
         case eParamHasLocalName + eParamHasPrefix + eParamHasURI:
         {
             while( it_m_attributes != m_attributes.end())
@@ -744,18 +691,14 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
                 if( !strcmp( (*it_m_attributes)->getLocalName(), pachLocalname) &&
                     !strcmp( (*it_m_attributes)->getURI(), pachURI) &&
                     !strcmp( (*it_m_attributes)->getPrefix(), pachPrefix))
-                {
                     return (IAttribute*) (*it_m_attributes);
-                }
                 else
-                {
                     it_m_attributes++;
-                }
             }
             break;
         }
 
-    // Parameter list contains no valid parameters
+        // Parameter list contains no valid parameters
         default:
         {
             break;
@@ -764,6 +707,5 @@ IAttribute* ComplexElement::getAttribute(AxisChar* pachPrefix,
 
     return NULL;
 }
-//=======
 
-AXIS_CPP_NAMESPACE_END//>>>>>>> 1.18.12.1
+AXIS_CPP_NAMESPACE_END
