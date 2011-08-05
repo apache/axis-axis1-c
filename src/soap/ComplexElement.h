@@ -32,9 +32,7 @@ using namespace std;
  * @class ComplexElement
  * @brief interface for the ComplexElement class.
  *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
-*/
+ */
 
 class ComplexElement : public BasicNode
 {
@@ -53,8 +51,7 @@ public:
       * 
       * If not found returns NULL.
       */
-    IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,
-        AxisChar* pachLocalname);
+    IAttribute* getAttribute(AxisChar* pachPrefix, AxisChar* pachURI,  AxisChar* pachLocalname);
                                                                                                                                                                             
     /**
       * Returns the first Attribute of this node. NOTE: When traversing the 
@@ -83,38 +80,38 @@ public:
     IAttribute* getCurrentAttribute();
 
     /** 
-      * Creates an Attribute and adds it to this Complex Element. 
-      * 
-      * @param localname The local name of the attribute. 
-      * @param prefix The prefix of the attribute. 
-      * @param uri The namespace uri of the attribute. 
-      * @param value The value of the attribute. 
-      * 
-      * @return A pointer to the created Attribute will be returned. 
-      */ 
+   � * Creates an Attribute and adds it to this Complex Element.
+    �*
+     * @param localname The local name of the attribute.
+   � * @param prefix The prefix of the attribute.
+   � * @param uri The namespace uri of the attribute.
+   � * @param value The value of the attribute.
+   � *
+   � * @return A pointer to the created Attribute will be returned.
+   � */
     IAttribute* createAttribute(const AxisChar* localname,
         const AxisChar* prefix, const AxisChar* uri, const AxisChar* value);
 
     /** 
-      * Creates an Attribute and adds it to this Complex Element. 
-      * 
-      * @param localname The local name of the attribute. 
-      * @param prefix The prefix of the attribute. 
-      * @param value The value of the attribute. 
-      * 
-      * @return A pointer to the created Attribute will be returned. 
-      */ 
+   � * Creates an Attribute and adds it to this Complex Element.
+   � *
+   � * @param localname The local name of the attribute.
+   � * @param prefix The prefix of the attribute.
+   � * @param value The value of the attribute.
+   � *
+   � * @return A pointer to the created Attribute will be returned.
+   � */
     IAttribute* createAttribute(const AxisChar* localname,
             const AxisChar* prefix, const AxisChar* value);
 
     /**
-      * Creates an Attribute and adds it to this Complex Element.
-      *
-      * @param localname The local name of the attribute.
-      * @param value The value of the attribute.
-      *
-      * @return A pointer to the created Attribute will be returned.
-      */
+   � * Creates an Attribute and adds it to this Complex Element.
+   � *
+   � * @param localname The local name of the attribute.
+   � * @param value The value of the attribute.
+   � *
+   � * @return A pointer to the created Attribute will be returned.
+   � */
     IAttribute* createAttribute(const AxisChar* localname,
             const AxisChar* value);
 
@@ -261,9 +258,6 @@ private:
     bool isSerializable();
     std::list<BasicNode*> m_children;
     std::list<Attribute*> m_namespaceDecls;
-     /**
-      * Used to store the Attributes
-      */
     std::list<Attribute*> m_attributes;
     AxisChar* m_pachPrefix;
     AxisChar* m_pachLocalName;
