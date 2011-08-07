@@ -15,20 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
@@ -188,9 +174,7 @@ Attribute(list<Attribute*> attribute,
     }
 
     if( prefix != NULL && strlen( prefix) > 0)
-    {
         m_PrefixList.push_back( prefix);
-    }
 }
 
 Attribute::
@@ -223,8 +207,7 @@ Attribute(list<Attribute*> attribute,
 }
 
 Attribute::
-Attribute(list<Attribute*> attribute,
-          const Attribute& rCopy)
+Attribute(list<Attribute*> attribute,  const Attribute& rCopy)
 {
     this->m_localname= rCopy.m_localname; 
     this->m_prefix= rCopy.m_prefix;
@@ -274,9 +257,7 @@ serialize(SoapSerializer& pSZ) const
 }
 
 int Attribute::
-serialize(SoapSerializer& pSZ,
-          list<AxisChar*>& lstTmpNameSpaceStack,
-          const AxisChar *uri)
+serialize(SoapSerializer& pSZ, list<AxisChar*>& lstTmpNameSpaceStack, const AxisChar *uri)
 {    
     int intStatus= AXIS_FAIL;
 
@@ -284,25 +265,36 @@ serialize(SoapSerializer& pSZ,
     {
         pSZ.serialize(" ", NULL);
 
+        // There should be no determination if a prefix exists or not, simply because a user
+        // can choose to add the namespace declaration to a node after the attribute has been
+        // added to the node.
         if (m_prefix.compare("xmlns") == 0)
         {
-            // Namespace declaration...
+            // Namespace declaration...this code could be eliminated since next if-check takes
+            // care of this, but it was thought it would be good to show that the prefix
+            // can really be a namespace declaration.
+
             pSZ.serialize("xmlns:", m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
+
             intStatus= AXIS_SUCCESS;
         }
-        else if ((!pSZ.getNamespaceURL( m_prefix).empty() || NULL!=uri))
+        else if (!m_prefix.empty())
         {
-            /*
-             *  If User has provided the prefix we just have to serialize. We will
-             *  not worry to declare the namespace at all. Because it is the users
-             *  responsibility to add namespace declaration separately.
-             *  However, if user hasn't provided the prefix. So we have to do the following.
-             *  - get the prefix from the Serializer
-             *  - if this is a new namespace, then also declare the namespace.
-             */
-            if(!m_prefix.empty() || NULL!=uri)
-                pSZ.serialize(m_prefix.c_str(), ":", NULL);
-            else if (!m_uri.empty())
+            //  If User has provided the prefix we just have to serialize. We will
+            //  not worry to declare the namespace at all. Because it is the user's
+            //  responsibility to add namespace declaration separately.
+
+            pSZ.serialize(m_prefix.c_str(), ":", m_localname.c_str(), "=", PLATFORM_DOUBLE_QUOTE_S, m_value.c_str(), PLATFORM_DOUBLE_QUOTE_S, NULL);
+
+            intStatus= AXIS_SUCCESS;
+        }
+        else
+        {
+            // User hasn't provided the prefix. So if there is a URI, do the following.
+            //  - get the prefix from the Serializer
+            //  - if this is a new namespace, then also declare the namespace.
+
+            if (!m_uri.empty())
             {
                 bool blnIsNewNamespace = false;
                 m_prefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);

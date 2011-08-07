@@ -13,11 +13,6 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
- 
-/*
- * @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
- * @author Samisa Abeysinghe (samisa.abeysinghe@gmail.com)
- */
 
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
@@ -275,6 +270,7 @@ reset()
     
     if (m_pSoapBody)
     {
+        m_pSoapBody->clear();
         SoapMethod * soapMethod = m_pSoapBody->getSoapMethod();
         if ( soapMethod )
             soapMethod->clearOutParams(); 

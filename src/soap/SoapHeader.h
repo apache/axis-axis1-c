@@ -18,10 +18,22 @@
 #if !defined(_SOAPHEADER_H____OF_AXIS_INCLUDED_)
 #define _SOAPHEADER_H____OF_AXIS_INCLUDED_
 
+#include "Attribute.h"
+#include "HeaderBlock.h"
+#include <list>
+using namespace std;
+
+typedef enum
+{
+    HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL
+} HEADER_LEVELS;
+
+AXIS_CPP_NAMESPACE_START
+class Attribute;
+
 /**
  * @class SoapHeader
- * @brief    The Header element information item according to SOAP 
- *           1.2 specification
+ * @brief    The Header element information item according to SOAP 1.2 specification
  * 
  * The Header element information item according to SOAP 1.2 specification.
  * The Header element information item has:
@@ -32,25 +44,9 @@
  *  4) Zero or more namespace qualified element information items 
  *     in its [children] property.
  *
- * Each child element information item of the SOAP Header is called 
- * a SOAP header block.
+ * Each child element information item of the SOAP Header is called a SOAP header block.
  *
- *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */ 
-
-#include "Attribute.h"
-#include "HeaderBlock.h"
-#include <list>
-using namespace std;
-
-typedef enum 
-{ 
-    HEADER_LEVEL=0, HEADER_BLOCK_LEVEL, HEADER_BLOCK_INSIDE_LEVEL
-} HEADER_LEVELS;
-
-AXIS_CPP_NAMESPACE_START
-class Attribute;
 
 class SoapHeader
 {
@@ -77,8 +73,7 @@ public:
       * the requested Header Block is found, also it will be removed from the
       * list of Header Blocks of this Soap Header, before returning a pointer.
       */
-    IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
-        const AxisChar* pNamespace, bool bRemoveOrNot);
+    IHeaderBlock* getHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace, bool bRemoveOrNot);
  
      /**
       * Returns the first header block
@@ -105,7 +100,7 @@ public:
     IHeaderBlock* getHeaderBlock(bool bRemoveOrNot);
 
     /**
-      * Sets the namespace declaration of the Soap Header.
+      * Sets the namespace declaration of the Soap Header.  Object will be owned by the class.
       *
       * @param pAttribute The Attribute pointer which points to a valid 
       * namespace declartion Attribute.
@@ -115,7 +110,7 @@ public:
     int addNamespaceDecl(Attribute* pAttribute);
 
     /**
-      * Adds a Attribute to this Soap Header.
+      * Adds a Attribute to this Soap Header. Object will be owned by the class.
       *
       * @param attr The Attribute to be added.
       * @return AXIS_SUCCESS to indicate successfull operation. Return
@@ -123,23 +118,23 @@ public:
       */
     int addAttribute(Attribute* pAttribute);
     
+    /**
+     * Serialize the SOAP header.
+     */
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
     
     /**
-      * Adds a Header Block to this Soap Header.
+      * Adds a Header Block to this Soap Header. Note that the object is still owned
+      * by the caller and will not be deleted by this class.
       *
       * @param headerBlock The Header Block to be added.
       */
     void addHeaderBlock(IHeaderBlock* headerBlock);
 
     /**
-      * Deletes a header block.
-      *
-      * 
+      * Removes a header block from the header block list.
       */
-
-    int deleteHeaderBlock(const AxisChar *pName,
-                          const AxisChar *pNamespace);
+    int deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace);
 
     /**
       * The Constructor.
@@ -151,7 +146,28 @@ public:
       */
     virtual ~SoapHeader();
 
+    /**
+     * Clears all previously set information by calling clearHeaderBlocks(),
+     * clearAttributes(), and clearNamespaceDecls().
+     */
     void clear();
+
+    /**
+     * Clears header blocks. Note that the header blocks are not deleted, just cleared from
+     * the instance.
+     */
+    void clearHeaderBlocks();
+
+    /**
+     * Clears any attributes by actually deleting the objects representing the attributes.
+     */
+    void clearAttributes();
+
+    /**
+     * Clears any namespace declarations by deleting the objects representing the namespace
+     * declarations.
+     */
+    void clearNamespaceDecls();
 };
 AXIS_CPP_NAMESPACE_END
 #endif 

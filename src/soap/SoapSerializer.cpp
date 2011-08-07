@@ -15,13 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- *
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
@@ -1600,4 +1593,120 @@ reset()
     logExit()
 }
 
+
+void SoapSerializer::
+addNamespaceToSOAPHeader(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
+{
+    logEntryEngine("SoapSerializer::addNamespaceToSOAPHeader")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapHeader)
+    {
+        std::list<Attribute*> attributeList;
+        Attribute * pAttribute = new Attribute( attributeList, pachPrefix, "xmlns", pachNamespaceURI);
+        
+        m_pSoapEnvelope->m_pSoapHeader->addNamespaceDecl(pAttribute);
+    }
+
+    logExit()
+}
+
+void SoapSerializer::
+addAttributeToSOAPHeader(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    logEntryEngine("SoapSerializer::addAttributeToSOAPHeader")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapHeader)
+    {
+        std::list<Attribute*> attributeList;
+        Attribute * pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
+        
+        m_pSoapEnvelope->m_pSoapHeader->addAttribute(pAttribute);
+    }
+
+    logExit()
+}
+
+void SoapSerializer::
+clearSOAPHeaderAttributes()
+{
+    logEntryEngine("SoapSerializer::clearSOAPHeaderAttributes")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapHeader)
+        m_pSoapEnvelope->m_pSoapHeader->clearAttributes();
+
+    logExit()
+}
+
+void SoapSerializer::
+clearSOAPHeaderNamespaces()
+{
+    logEntryEngine("SoapSerializer::clearSOAPHeaderNamespaces")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapHeader)
+        m_pSoapEnvelope->m_pSoapHeader->clearNamespaceDecls();
+
+    logExit()
+}
+
+void SoapSerializer::
+addNamespaceToSOAPBody(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
+{
+    logEntryEngine("SoapSerializer::addNamespaceToSOAPBody")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapBody)
+    {
+        std::list<Attribute*> attributeList;
+        Attribute * pAttribute = new Attribute( attributeList, pachPrefix, "xmlns", pachNamespaceURI);
+
+        m_pSoapEnvelope->m_pSoapBody->addNamespaceDecl(pAttribute);
+    }
+
+    logExit()
+}
+
+void SoapSerializer::
+addAttributeToSOAPBody(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    logEntryEngine("SoapSerializer::addAttributeToSOAPBody")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapBody)
+    {
+        std::list<Attribute*> attributeList;
+        Attribute * pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
+        
+        m_pSoapEnvelope->m_pSoapBody->addAttribute(pAttribute);
+    }
+
+    logExit()
+}
+
+void SoapSerializer::
+clearSOAPBodyAttributes()
+{
+    logEntryEngine("SoapSerializer::clearSOAPBodyAttributes")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapBody)
+        m_pSoapEnvelope->m_pSoapBody->clearAttributes();
+
+    logExit()
+}
+
+void SoapSerializer::
+clearSOAPBodyNamespaces()
+{
+    logEntryEngine("SoapSerializer::clearSOAPBodyNamespaces")
+
+    if (m_pSoapEnvelope
+            && m_pSoapEnvelope->m_pSoapBody)
+        m_pSoapEnvelope->m_pSoapBody->clearNamespaceDecls();
+
+    logExit()
+}
 AXIS_CPP_NAMESPACE_END

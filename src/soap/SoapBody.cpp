@@ -48,6 +48,8 @@ SoapBody::
     delete m_pSoapMethod;
     delete m_pSoapFault;
     
+    clear();
+    
     logExit()
 }
 
@@ -83,6 +85,8 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
             ":", gs_SoapEnvVersionsStruct[eSoapVersion].pchWords[SKW_BODY],
             NULL);
+
+        iStatus= serializeNamespaceDecl(pSZ);
         iStatus= serializeAttributes(pSZ);
         if(iStatus==AXIS_FAIL)
             break;
@@ -159,6 +163,88 @@ serializeAttributes(SoapSerializer& pSZ)
     logExitWithReturnCode(iStatus)
 
     return iStatus;
+}
+
+
+int SoapBody::
+addNamespaceDecl(Attribute *pAttribute)
+{
+    logEntryEngine("SoapBody::addNamespaceDecl")
+
+    int iStatus = AXIS_FAIL;
+
+    if (pAttribute)
+    {
+        m_namespaceDecls.push_back(pAttribute);
+        iStatus = AXIS_SUCCESS;
+    }
+
+    logExitWithReturnCode(iStatus)
+
+    return iStatus;
+}
+
+
+int SoapBody::
+serializeNamespaceDecl(SoapSerializer& pSZ)
+{
+    logEntryEngine("SoapBody::serializeNamespaceDecl")
+
+    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+
+    while(itCurrNamespaceDecl != m_namespaceDecls.end())
+    {
+        (*itCurrNamespaceDecl)->serialize(pSZ);
+        itCurrNamespaceDecl++;
+    }
+
+    logExitWithReturnCode(AXIS_SUCCESS)
+
+    return AXIS_SUCCESS;
+}
+
+
+void SoapBody::
+clearAttributes()
+{
+    logEntryEngine("SoapBody::clearAttributes")
+
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    while(itCurrAttribute != m_attributes.end())
+    {
+        delete *itCurrAttribute;
+        itCurrAttribute++;
+    }
+    m_attributes.clear();
+
+    logExit()
+}
+
+void SoapBody::
+clearNamespaceDecls()
+{
+    logEntryEngine("SoapBody::clearNamespaceDecls")
+
+    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+    while(itCurrNamespaceDecl != m_namespaceDecls.end())
+    {
+        delete *itCurrNamespaceDecl;
+        itCurrNamespaceDecl++;
+    }
+    m_namespaceDecls.clear();
+
+    logExit()
+}
+
+void SoapBody::
+clear()
+{
+    logEntryEngine("SoapBody::clear")
+
+    clearAttributes();
+    clearNamespaceDecls();
+
+    logExit()
 }
 
 AXIS_CPP_NAMESPACE_END

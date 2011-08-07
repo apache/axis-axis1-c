@@ -57,8 +57,6 @@ class Attribute;
  *            - encodingStyle attribute information item
  *  SOAP defines one particular direct child of the SOAP body, the SOAP fault, which is used for reporting
  *  errors
- *
- *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk)
  */
 
 class SoapBody  
@@ -67,20 +65,69 @@ friend class SoapSerializer;
 
 private:
     int serializeAttributes(SoapSerializer& pSZ);
+    int serializeNamespaceDecl(SoapSerializer& pSZ);
+
     list<Attribute*> m_attributes;
+    list<Attribute*> m_namespaceDecls;
     SoapMethod *m_pSoapMethod;
     SoapFault *m_pSoapFault;
 
 public:    
 
+    /**
+     * Add attribute to the SOAP body.
+     *
+     * @param attr The Attribute pointer which points to an attribute.
+     */
     void addAttribute(Attribute* attr);
+
+    /**
+      * Sets the namespace declaration of the Soap body.  Object will be owned by the class.
+      *
+      * @param pAttribute The Attribute pointer which points to a valid namespace declaration Attribute.
+      * @return AXIS_SUCCESS to indicate successfull operation. Return AXIS_FAIL to indicate unsuccessfull operation.
+      */
+    int addNamespaceDecl(Attribute* pAttribute);
+
+    /**
+     * Serialize SOAP body.
+     */
     int serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion);
+
     void setSoapFault(SoapFault* pSoapFault);
     void setSoapMethod(SoapMethod* ptrSoapMethod);
+
+    /**
+     * Constructor.
+     */
     SoapBody();
+
+    /**
+     * Destructor.
+     */
     virtual ~SoapBody();
     
+    /**
+     * Returns SoapMethod.
+     */
     SoapMethod *getSoapMethod() { return m_pSoapMethod; }
+
+    /**
+     * Clears all previously set information by calling 
+     * clearAttributes() and clearNamespaceDecls().
+     */
+    void clear();
+
+    /**
+     * Clears any attributes by actually deleting the objects representing the attributes.
+     */
+    void clearAttributes();
+
+    /**
+     * Clears any namespace declarations by deleting the objects representing the namespace
+     * declarations.
+     */
+    void clearNamespaceDecls();
 };
 
 AXIS_CPP_NAMESPACE_END

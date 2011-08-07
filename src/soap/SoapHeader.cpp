@@ -15,10 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
@@ -48,21 +44,7 @@ SoapHeader::
 {
     logEntryEngine("SoapHeader::~SoapHeader")
 
-    // Header blocks are not deleted here any more. Its the responsibility of
-    // either a handler or stub etc to delete any header block created by them
-    // Here we will just clear the list of header block pointers
-    m_headerBlocks.clear();
-
-    // deletion of attributes 
-    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
-
-    while(itCurrAttribute != m_attributes.end())
-    {        
-        delete *itCurrAttribute;
-        itCurrAttribute++;
-    }
-
-    m_attributes.clear();
+    clear();
     
     logExit()
 }
@@ -89,7 +71,7 @@ serialize(SoapSerializer& pSZ, SOAP_VERSION eSoapVersion)
 
     do
     {
-        if (0 == m_headerBlocks.size()) 
+        if (0 == m_headerBlocks.size() && 0 == m_namespaceDecls.size() && 0 == m_attributes.size())
             break;
         
         pSZ.serialize("<", gs_SoapEnvVersionsStruct[eSoapVersion].pchPrefix,
@@ -343,25 +325,62 @@ deleteHeaderBlock(const AxisChar *pName, const AxisChar *pNamespace)
 }
 
 void SoapHeader::
-clear()
+clearHeaderBlocks()
 {
-    logEntryEngine("SoapHeader::clear")
+    logEntryEngine("SoapHeader::clearHeaderBlocks")
 
     // Header blocks are not deleted here. Its the responsibility of
-    // either a handler or stub etc to delete any header block created by them
-    // Here we will just clear the list of header block pointers
+    // either a handler or stub etc to delete any header block created by them.
+    // Here we will just clear the list of header block pointers.
+    // The thought was that header blocks take some effort to create and thus
+    // why should user recreate every time a request is issued.
     m_headerBlocks.clear();
 
-    // deletion of attributes 
-    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
+    logExit()
+}
 
+void SoapHeader::
+clearAttributes()
+{
+    logEntryEngine("SoapHeader::clearAttributes")
+
+    // Deletion of attributes - strange, i know, that we delete attributes but not header blocks...
+    // I guess the thought is that attributes are easy to recreate.
+    list<Attribute*>::iterator itCurrAttribute= m_attributes.begin();
     while(itCurrAttribute != m_attributes.end())
     {
         delete *itCurrAttribute;
         itCurrAttribute++;
     }
-
     m_attributes.clear();
+
+    logExit()
+}
+
+void SoapHeader::
+clearNamespaceDecls()
+{
+    logEntryEngine("SoapHeader::clearNamespaceDecls")
+
+    list<Attribute*>::iterator itCurrNamespaceDecl= m_namespaceDecls.begin();
+    while(itCurrNamespaceDecl != m_namespaceDecls.end())
+    {
+        delete *itCurrNamespaceDecl;
+        itCurrNamespaceDecl++;
+    }
+    m_namespaceDecls.clear();
+
+    logExit()
+}
+
+void SoapHeader::
+clear()
+{
+    logEntryEngine("SoapHeader::clear")
+
+    clearHeaderBlocks();
+    clearAttributes();
+    clearNamespaceDecls();
     
     logExit()
 }

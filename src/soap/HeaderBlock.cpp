@@ -15,19 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- * This software consists of voluntary contributions made by many
- * individuals on behalf of the Apache Software Foundation.  For more
- * information on the Apache Software Foundation, please see
- * <http://www.apache.org/>.
- *
- *
- *
- *
- * @author Roshan Weerasuriya (roshanw@jkcsworld.com, roshan@opensource.lk)
- *
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
 
@@ -246,6 +233,7 @@ serialize(SoapSerializer& pSZ)
 
     list<AxisChar*> lstTmpNameSpaceStack;
     bool blnIsNewNamespace = false;
+    bool bResetPrefix = false;
 
     do
     {
@@ -257,18 +245,19 @@ serialize(SoapSerializer& pSZ)
             m_sPrefix = pSZ.getNamespacePrefix(m_uri.c_str(), blnIsNewNamespace);
             if (blnIsNewNamespace)
                 lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
+            bResetPrefix = true;
         } 
         else 
         {
             //  new namespace and will be declared as a namespace declaration.
             blnIsNewNamespace = true;
-            /* Adding to the Serializers namespace list b'cas the child 
+            /* Adding to the Serializer namespace list because the child
             elements of this HeaderBlock might use this namespace, so that they
-            can get the correct corrosponding prefix from the Serializer.
+            can get the correct corresponding prefix from the Serializer.
              */
             pSZ.addNamespaceToNamespaceList(m_uri.c_str(), m_sPrefix.c_str());
-            /* Adding this namespace to the temprory namespace list b'cas we
-            have to remove this namespce from the Serializer at the end of this
+            /* Adding this namespace to the temporary namespace list because we
+            have to remove this namespace from the Serializer at the end of this
             HeaderBlock serialization.
             */
             lstTmpNameSpaceStack.push_back((AxisChar*)m_uri.c_str());
@@ -306,7 +295,8 @@ serialize(SoapSerializer& pSZ)
     } 
     while(0);
     
-    m_sPrefix = "";
+    if (bResetPrefix)
+       m_sPrefix = "";
     
     logExitWithReturnCode(iStatus)
 

@@ -46,11 +46,6 @@ class SoapAttachmentReference;
 /**
  *  @class SoapSerializer
  *  @brief interface for the SoapSerializer class.
- *
- *
- *
- *  @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
- *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
 
 class SoapSerializer : public IHandlerSoapSerializer
@@ -188,12 +183,9 @@ public:
     int setSOAPMethodAttribute(Attribute* pAttribute);
     void clearSOAPMethodAttributes();
     SoapMethod* getSOAPMethod();
-    IHeaderBlock* createHeaderBlock(const AxisChar *pachLocalName,
-        const AxisChar *pachUri);
-    /* to add a header block to the Serializer. Probably by a handler */
+    IHeaderBlock* createHeaderBlock(const AxisChar *pachLocalName,  const AxisChar *pachUri);
     int AXISCALL addHeaderBlock(IHeaderBlock* pBlk);
-    int AXISCALL addOutputParam(const AxisChar* pchName, 
-        void* pValue, XSDTYPE type);
+    int AXISCALL addOutputParam(const AxisChar* pchName, void* pValue, XSDTYPE type);
     int AXISCALL serializeAsElement(const AxisChar* pchName, 
                                     void* pValue,
                                     XSDTYPE type);
@@ -215,8 +207,7 @@ public:
                                       IAnySimpleType* pSimpleType);
     void AXISCALL serializeVargs(const char * pFirst, va_list vList);
     void AXISCALL serialize(const char* pFirst, ...);
-    void setStyle(AXIS_BINDING_STYLE nStyle)
-    { m_nStyle = nStyle; m_BTSZ.setStyle(nStyle);};
+    void setStyle(AXIS_BINDING_STYLE nStyle) { m_nStyle = nStyle; m_BTSZ.setStyle(nStyle);};
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};
     int AXISCALL setBodyAsHexBinary(xsd__hexBinary body);
     int AXISCALL setBodyAsBase64Binary(xsd__base64Binary body);
@@ -228,10 +219,51 @@ public:
     int deleteHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace);    
 
   /**
-    * This methos will clear up all the current out params in preperation of a 
+    * This method will clear up all the current out parameters in preparation of a
     * new method call
     */
     void reset();
+
+    /**
+     * Add namespace to SOAP header. 
+     */
+    void addNamespaceToSOAPHeader(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
+
+    /**
+     * Clear SOAP header namespaces.  
+     */
+    void clearSOAPHeaderNamespaces();
+
+    /**
+     * Add attribute to SOAP header.  
+     */
+    void addAttributeToSOAPHeader(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+
+    /**
+     * Clear SOAP header attributes.  
+     */
+    void clearSOAPHeaderAttributes();
+
+    /**
+     * Add namespace to SOAP body.  
+     */
+    void addNamespaceToSOAPBody(const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix);
+
+    /**
+     * Clear SOAP body namespaces.  
+     */
+    void clearSOAPBodyNamespaces();
+
+    /**
+     * Add attribute to SOAP body.  
+     */
+    void addAttributeToSOAPBody(const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue);
+
+    /**
+     * Clear SOAP body attributes.  
+     */
+    void clearSOAPBodyAttributes();
+
 };
 
 AXIS_CPP_NAMESPACE_END
