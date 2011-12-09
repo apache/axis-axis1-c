@@ -1011,47 +1011,47 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
 
         return NULL;  
     }
-        
+
     // Call the Axis-generated routine that will deserialize complex object,
     // including any attributes.
     
-    logDebugArg1("Calling object create function %p", pCreFunct)
+    logDebugArg1("Calling object create function for %s", pName)
     
     void *pObject = ((AXIS_OBJECT_CREATE_FUNCT) pCreFunct) (0);
     
-    logDebugArg2("Returned from object create function %p, returned object %p", pCreFunct, pObject)
+    logDebugArg2("Returned from object create function for %s, returned object %p", pName, pObject)
 
     if (pObject && pDZFunct)
     {
         try 
         {        
-            logDebugArg1("Calling object deserializer function %p", pDZFunct)
+            logDebugArg1("Calling object deserializer function for %s", pName)
             
             m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
             
-            logDebugArg2("Returned from object deserializer function %p, status=%d", pDZFunct, m_nStatus)
+            logDebugArg2("Returned from object deserializer function for %s, status=%d", pName, m_nStatus)
 
         
             if (AXIS_SUCCESS == m_nStatus)
                 skipNode();
             else
             {
-                logDebugArg2("Calling object delete function %p for object %p", pDelFunct, pObject)
+                logDebugArg2("Calling object delete function for %s for object %p", pName, pObject)
                 
                 ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
                 
-                logDebugArg1("Returned from object delete function %p", pDelFunct)
+                logDebugArg1("Returned from object delete function for %s", pName)
             
                 pObject = NULL;
             }
         }
         catch ( ... )
         {
-            logDebugArg2("Calling object delete function %p for object %p", pDelFunct, pObject)
+            logDebugArg2("Calling object delete function for %s for object %p", pName, pObject)
             
             ((AXIS_OBJECT_DELETE_FUNCT) pDelFunct) (pObject, 0);
             
-            logDebugArg1("Returned from object delete function %p", pDelFunct)
+            logDebugArg1("Returned from object delete function for %s", pName)
 
             logRethrowException()
 

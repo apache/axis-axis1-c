@@ -107,7 +107,7 @@ parse(bool ignoreWhitespace, bool peekIt)
             m_bFirstParsed = true;
             if (!m_bCanParseMore)
             {
-                logExitWithPointer(NULL)
+                logExitWithMessage("No more data to parse.")
 
                 return (const AnyElement*)NULL;
             }
@@ -171,10 +171,40 @@ parse(bool ignoreWhitespace, bool peekIt)
             // Set peek flag if we are doing a peek
             if (peekIt)
                 m_bPeeked = true;
+
+            if (loggingEnabled)
+            {
+                char *type = NULL;
+                const char *elemName = "NULL";
+                if (elem->m_type == START_ELEMENT && elem->m_type2 == START_END_ELEMENT)
+                    type = "START_END_ELEMENT";
+                else if (elem->m_type == START_ELEMENT )
+                {
+                    elemName = elem->m_pchNameOrValue;
+                    type = "START_ELEMENT";
+                }
+                else if (elem->m_type == END_ELEMENT )
+                {
+                    elemName = elem->m_pchNameOrValue;
+                    type = "END_ELEMENT";
+                }
+                else if (elem->m_type == CHARACTER_ELEMENT )
+                    type = "CHARACTER_ELEMENT";
+
+                if (type)
+                {
+                    logDebugArg2("Element type %s, element is=%s", type, elemName)
+                }
+
+            }
+        }
+        else
+        {
+            logDebug("No element to return.")
         }
         
         // Return element
-        logExitWithPointer(elem)
+        logExit()
 
         return (const AnyElement*)elem;
     } 
@@ -223,7 +253,7 @@ parse(bool ignoreWhitespace, bool peekIt)
         throw AxisParseException(m_iErrorCode, m_sErrorString.c_str());         
     }
     
-    logExitWithPointer(NULL)
+    logExit()
 
     return (const AnyElement*)NULL;
 }
@@ -235,7 +265,7 @@ next(bool isCharData)
 
     const AnyElement* returnValue = parse(isCharData ? false : true);
     
-    logExitWithPointer(returnValue)
+    logExit()
 
     return returnValue;
 }
@@ -285,7 +315,7 @@ anyNext()
     // Reset prefix mapping
     m_Xhandler.setGetPrefixMappings(false);
     
-    logExitWithPointer(elem)
+    logExit()
 
     return elem;
 }
