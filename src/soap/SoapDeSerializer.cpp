@@ -74,6 +74,8 @@ SoapDeSerializer ()
     m_nStatus = AXIS_SUCCESS;
     m_nSoapVersion = VERSION_LAST;
     
+    m_doNotSkip = false;
+
     logExit()
 }
 
@@ -1024,7 +1026,9 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
     if (pObject && pDZFunct)
     {
         try 
-        {        
+        {
+            m_doNotSkip = false;
+
             logDebugArg1("Calling object deserializer function for %s", pName)
             
             m_nStatus =    ((AXIS_DESERIALIZE_FUNCT) pDZFunct) (pObject, this);
@@ -1033,7 +1037,10 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
 
         
             if (AXIS_SUCCESS == m_nStatus)
-                skipNode();
+            {
+                if (!m_doNotSkip)
+                  skipNode();
+            }
             else
             {
                 logDebugArg2("Calling object delete function for %s for object %p", pName, pObject)
@@ -2459,6 +2466,11 @@ getChardataAs (void **pValue, XSDTYPE type)
             pSimpleType->deserialize(m_pNode->m_pchNameOrValue);
             *pValue = pSimpleType->getValue();
             delete pSimpleType;
+        }
+        else if (END_ELEMENT == m_pNode->m_type)
+        {
+            m_doNotSkip = true;
+            m_pNode = NULL;
         }
     }
     

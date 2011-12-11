@@ -63,6 +63,8 @@ private:
     
     string m_strMethodNameToInvoke;
 
+    bool m_doNotSkip;
+
 private:
     int AXISCALL getArraySize();
 public:
