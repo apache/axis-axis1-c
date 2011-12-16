@@ -47,7 +47,8 @@
 						<include name="platforms/windows/*.cpp" if="windows"/>
 						<include name="platforms/unix/*.cpp" if="linux"/>
 						<include name="platforms/unix/*.cpp" if="solaris"/>
-						<include name="platforms/os400/PlatformSpecificOS400.cpp" if="os400"/>
+						<include name="platforms/PlatformLanguage.cpp" unless="os400"/>
+                        <include name="platforms/os400/*.cpp" if="os400"/>
 						<!-- The following files need to be excluded @Adrian - query these! -->
 						<exclude name="common/Packet.cpp"/>
 						<exclude name="common/AxisSocketUtils.cpp"/>
