@@ -49,9 +49,6 @@
 						<include name="platforms/unix/*.cpp" if="solaris"/>
 						<include name="platforms/PlatformLanguage.cpp" unless="os400"/>
                         <include name="platforms/os400/*.cpp" if="os400"/>
-						<!-- The following files need to be excluded @Adrian - query these! -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
 					</fileset>
 				</cc>
 			</then>
@@ -74,12 +71,8 @@
 						<include name="soap/xsd/constraints/*.cpp"/>
 						<include name="wsdd/*.cpp"/>
 						<include name="xml/*.cpp"/>
-						<include name="transport/axis/AxisTransportException.cpp"/>
 						<include name="platforms/unix/*.cpp"/>
                         <include name="platforms/PlatformLanguage.cpp"/>
-						<!-- The following files need to be excluded -->
-						<exclude name="common/Packet.cpp"/>
-						<exclude name="common/AxisSocketUtils.cpp"/>
 					</fileset>
 				</cc>
 			</else>
