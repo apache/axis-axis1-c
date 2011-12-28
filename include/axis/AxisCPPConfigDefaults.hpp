@@ -49,7 +49,7 @@
  *    - the value of AXISCPP_DEPLOY
  * 
  *   The get/set methods don't have any effect on the ACTUAL defaults. They
- *   are mearly a bundle of values which are set on the ACTUAL defaults when
+ *   are simply a bundle of values which are set on the ACTUAL defaults when
  *   the apply() method is issued.
  * 
  *   It consists of...
@@ -118,7 +118,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return location of the client log file.
          */
-        char* getClientLog();
+        const char* getClientLog();
         
         /**
          * Get the location of the client WSDD file.  This is the programmatic equivalent of
@@ -128,7 +128,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return location of the client WSDD file.
          */
-        char* getClientWSDDFile();
+        const char* getClientWSDDFile();
         
         /**
          * Get the value for the XML Parser library name.  This is the programmatic equivalent of
@@ -136,7 +136,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return name of the XML Parser library.
          */
-        char* getXMLParserLibrary();
+        const char* getXMLParserLibrary();
 
         /**
          * Get the value for the HTTP transport library name.  This is the programmatic equivalent of
@@ -146,7 +146,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return name of the HTTP Transport library.
          */
-        char* getHTTPTransportLibrary();
+        const char* getHTTPTransportLibrary();
 
         /**
          * Get the value for the HTTP channel library name.  This is the programmatic equivalent of
@@ -156,7 +156,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return name of the HTTP Channel library.
          */
-        char* getHTTPChannelLibrary();
+        const char* getHTTPChannelLibrary();
 
         /**
          * Get the value for the HTTP SSL channel library name.  This is the programmatic equivalent of
@@ -166,7 +166,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return name of the HTTP SSL Channel library.
          */
-        char* getHTTPSSLChannelLibrary(); 
+        const char* getHTTPSSLChannelLibrary();
 
         /**
          * Get the value for NodeName.  This is the programmatic equivalent of
@@ -176,7 +176,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return nodeName to be set.
          */
-        char* getNodeName();
+        const char* getNodeName();
 
         /**
          * Get the value for ListenPort.  This is the programmatic equivalent of
@@ -186,7 +186,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return listenPort to be set.
          */
-        char* getListenPort();
+        const char* getListenPort();
 
         /**
          * Get the value for SecureInfo.  This is the programmatic equivalent of
@@ -196,7 +196,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return secureInfo to be set.
          */
-        char* getSecureInfo();
+        const char* getSecureInfo();
         
         /**
          * Get the location of AxisHome.  This is the programmatic equivalent of
@@ -204,7 +204,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @return location of AxisHome.
          */
-        char* getAxisHome();
+        const char* getAxisHome();
 
         /**
          * Set the location of the client log file.  This is the programmatic equivalent of
@@ -217,7 +217,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param location of the client log file.
          */
-        void setClientLog(char* location);
+        void setClientLog(const char* location);
 
         /**
          * Set the location of the client WSDD file.  This is the programmatic equivalent of
@@ -230,7 +230,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param location of the client WSDD file.
          */
-        void setClientWSDDFile(char* location);
+        void setClientWSDDFile(const char* location);
 
         /**
          * Set the value for the XML Parser library name.  This is the programmatic equivalent of
@@ -241,7 +241,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param name of the XML Parser library.
          */
-        void setXMLParserLibrary(char* name);
+        void setXMLParserLibrary(const char* name);
         
         /**
          * Set the value for the HTTP transport library name.  This is the programmatic equivalent of
@@ -254,7 +254,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param name of the HTTP Transport library.
          */
-        void setHTTPTransportLibrary(char* name);
+        void setHTTPTransportLibrary(const char* name);
 
         /**
          * Set the value for the HTTP channel library name.  This is the programmatic equivalent of
@@ -267,7 +267,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param name of the HTTP Channel library.
          */
-        void setHTTPChannelLibrary(char* name);
+        void setHTTPChannelLibrary(const char* name);
         
         /**
          * Set the value for the HTTP SSL channel library name.  This is the programmatic equivalent of
@@ -280,7 +280,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param name of the HTTP SSL Channel library.
          */
-        void setHTTPSSLChannelLibrary(char* name);
+        void setHTTPSSLChannelLibrary(const char* name);
 
         /**
          * Set the value for NodeName.  This is the programmatic equivalent of
@@ -293,7 +293,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param nodeName to be set.
          */
-        void setNodeName(char* nodeName);
+        void setNodeName(const char* nodeName);
         
         /**
          * Set the value for ListenPort.  This is the programmatic equivalent of
@@ -306,7 +306,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param listenPort to be set.
          */
-        void setListenPort(char* listenPort);
+        void setListenPort(const char* listenPort);
         
         /**
          * Set the value for SecureInfo.  This is the programmatic equivalent of
@@ -319,7 +319,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param secureInfo to be set.
          */
-        void setSecureInfo(char* secureInfo);
+        void setSecureInfo(const char* secureInfo);
         
         /**
          * Set the location of AxisHome.  This is the programmatic equivalent of
@@ -330,7 +330,7 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaults
          * 
          * @param location of axis home.
          */
-        void setAxisHome(char* location);
+        void setAxisHome(const char* location);
 
         /**
          * Apply the set configuration values.

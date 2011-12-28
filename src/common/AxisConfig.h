@@ -103,7 +103,7 @@ class AxisConfig
      */
 
     char* getAxisConfProperty(g_axconfig property);
-    void setValue(int valuelength, g_axconfig valueindex, char* value);
+    void setValue(int valuelength, g_axconfig valueindex, const char* value);
     
     /** 
      * Return values in properties file as a string.

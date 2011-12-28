@@ -92,7 +92,7 @@ AxisConfig( AxisConfig * pOrgAxisConfig)
     m_pcKeyArray[AXCONF_LISTENPORT]     = AXCONF_LISTENPORT_TAGNAME;
     m_pcKeyArray[AXCONF_SECUREINFO]     = AXCONF_SECUREINFO_TAGNAME;
 
-    char *    pszDefaultValues[] = {
+    const char *    pszDefaultValues[] = {
             "",                           // (AXCONF_WSDDFILEPATH) Server WSDD File Path
             PLATFORM_LOG_PATH,            // (AXCONF_LOGPATH) Server log path
             PLATFORM_CLIENTLOG_PATH,      // (AXCONF_CLIENTLOGPATH) Client log path
@@ -213,7 +213,7 @@ readConfFile ()
 }
 
 void AxisConfig::
-setValue (int valuelength, g_axconfig valueindex, char *value)
+setValue (int valuelength, g_axconfig valueindex, const char *value)
 {
     // m_pcValueArray is a string and the string class will copy the value, so 
     // no need to copy the value into our own storage here.

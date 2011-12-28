@@ -113,7 +113,7 @@ void axiscConfigDefaultsDestroy(AXISCHANDLE axisCPPConfigDefaults);
  * @return location of the client log file.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetClientLog(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetClientLog(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the location of the client WSDD file.  This is the programmatic equivalent of
@@ -124,7 +124,7 @@ char * axiscConfigDefaultsGetClientLog(AXISCHANDLE axisCPPConfigDefaults);
  * @return location of the client WSDD file.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for the XML Parser library name.  This is the programmatic equivalent of
@@ -133,7 +133,7 @@ char * axiscConfigDefaultsGetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults);
  * @return name of the XML Parser library.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for the HTTP transport library name.  This is the programmatic equivalent of
@@ -144,7 +144,7 @@ char * axiscConfigDefaultsGetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults)
  * @return name of the HTTP Transport library.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for the HTTP channel library name.  This is the programmatic equivalent of
@@ -155,7 +155,7 @@ char * axiscConfigDefaultsGetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefau
  * @return name of the HTTP Channel library.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for the HTTP SSL channel library name.  This is the programmatic equivalent of
@@ -166,7 +166,7 @@ char * axiscConfigDefaultsGetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefault
  * @return name of the HTTP SSL Channel library.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for NodeName.  This is the programmatic equivalent of
@@ -177,7 +177,7 @@ char * axiscConfigDefaultsGetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefa
  * @return nodeName to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetNodeName(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetNodeName(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for ListenPort.  This is the programmatic equivalent of
@@ -188,7 +188,7 @@ char * axiscConfigDefaultsGetNodeName(AXISCHANDLE axisCPPConfigDefaults);
  * @return listenPort to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetListenPort(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetListenPort(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the value for SecureInfo.  This is the programmatic equivalent of
@@ -199,7 +199,7 @@ char * axiscConfigDefaultsGetListenPort(AXISCHANDLE axisCPPConfigDefaults);
  * @return secureInfo to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetSecureInfo(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetSecureInfo(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Get the location of AxisHome.  This is the programmatic equivalent of
@@ -208,7 +208,7 @@ char * axiscConfigDefaultsGetSecureInfo(AXISCHANDLE axisCPPConfigDefaults);
  * @return location of AxisHome.
  */
 AXISC_STORAGE_CLASS_INFO
-char * axiscConfigDefaultsGetAxisHome(AXISCHANDLE axisCPPConfigDefaults);
+const char * axiscConfigDefaultsGetAxisHome(AXISCHANDLE axisCPPConfigDefaults);
 
 /**
  * Set the location of the client log file.  This is the programmatic equivalent of
@@ -222,7 +222,7 @@ char * axiscConfigDefaultsGetAxisHome(AXISCHANDLE axisCPPConfigDefaults);
  * @param location of the client log file.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetClientLog(AXISCHANDLE axisCPPConfigDefaults, char * location);
+void axiscConfigDefaultsSetClientLog(AXISCHANDLE axisCPPConfigDefaults, const char * location);
 
 /**
  * Set the location of the client WSDD file.  This is the programmatic equivalent of
@@ -236,7 +236,7 @@ void axiscConfigDefaultsSetClientLog(AXISCHANDLE axisCPPConfigDefaults, char * l
  * @param location of the client WSDD file.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults, char * location);
+void axiscConfigDefaultsSetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults, const char * location);
 
 /**
  * Set the value for the XML Parser library name.  This is the programmatic equivalent of
@@ -248,7 +248,7 @@ void axiscConfigDefaultsSetClientWSDDFile(AXISCHANDLE axisCPPConfigDefaults, cha
  * @param name of the XML Parser library.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults, char * name);
+void axiscConfigDefaultsSetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults, const char * name);
 
 /**
  * Set the value for the HTTP transport library name.  This is the programmatic equivalent of
@@ -262,7 +262,7 @@ void axiscConfigDefaultsSetXMLParserLibrary(AXISCHANDLE axisCPPConfigDefaults, c
  * @param name of the HTTP Transport library.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefaults, char * name);
+void axiscConfigDefaultsSetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefaults, const char * name);
 
 /**
  * Set the value for the HTTP channel library name.  This is the programmatic equivalent of
@@ -276,7 +276,7 @@ void axiscConfigDefaultsSetHTTPTransportLibrary(AXISCHANDLE axisCPPConfigDefault
  * @param name of the HTTP Channel library.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefaults, char * name);
+void axiscConfigDefaultsSetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefaults, const char * name);
 
 /**
  * Set the value for the HTTP SSL channel library name.  This is the programmatic equivalent of
@@ -290,7 +290,7 @@ void axiscConfigDefaultsSetHTTPChannelLibrary(AXISCHANDLE axisCPPConfigDefaults,
  * @param name of the HTTP SSL Channel library.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefaults, char * name);
+void axiscConfigDefaultsSetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefaults, const char * name);
 
 /**
  * Set the value for NodeName.  This is the programmatic equivalent of
@@ -304,7 +304,7 @@ void axiscConfigDefaultsSetHTTPSSLChannelLibrary(AXISCHANDLE axisCPPConfigDefaul
  * @param nodeName to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetNodeName(AXISCHANDLE axisCPPConfigDefaults, char * nodeName);
+void axiscConfigDefaultsSetNodeName(AXISCHANDLE axisCPPConfigDefaults, const char * nodeName);
 
 /**
  * Set the value for ListenPort.  This is the programmatic equivalent of
@@ -318,7 +318,7 @@ void axiscConfigDefaultsSetNodeName(AXISCHANDLE axisCPPConfigDefaults, char * no
  * @param listenPort to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetListenPort(AXISCHANDLE axisCPPConfigDefaults, char * listenPort);
+void axiscConfigDefaultsSetListenPort(AXISCHANDLE axisCPPConfigDefaults, const char * listenPort);
 
 /**
  * Set the value for SecureInfo.  This is the programmatic equivalent of
@@ -332,7 +332,7 @@ void axiscConfigDefaultsSetListenPort(AXISCHANDLE axisCPPConfigDefaults, char * 
  * @param secureInfo to be set.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetSecureInfo(AXISCHANDLE axisCPPConfigDefaults, char * secureInfo);
+void axiscConfigDefaultsSetSecureInfo(AXISCHANDLE axisCPPConfigDefaults, const char * secureInfo);
 
 /**
  * Set the location of AxisHome.  This is the programmatic equivalent of
@@ -344,7 +344,7 @@ void axiscConfigDefaultsSetSecureInfo(AXISCHANDLE axisCPPConfigDefaults, char * 
  * @param location of axis home.
  */
 AXISC_STORAGE_CLASS_INFO
-void axiscConfigDefaultsSetAxisHome(AXISCHANDLE axisCPPConfigDefaults, char * location);
+void axiscConfigDefaultsSetAxisHome(AXISCHANDLE axisCPPConfigDefaults, const char * location);
 
 /**
  * Apply the set configuration values.

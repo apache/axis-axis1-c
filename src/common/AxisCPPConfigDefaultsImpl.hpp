@@ -45,27 +45,27 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaultsImpl
     AxisCPPConfigDefaultsImpl();
     ~AxisCPPConfigDefaultsImpl();
  
-      char* getClientLog();
-      char* getClientWSDDFile();
-      char* getXMLParserLibrary();
-      char* getHTTPTransportLibrary();
-      char* getHTTPChannelLibrary();
-      char* getHTTPSSLChannelLibrary();
-      char* getNodeName();
-      char* getListenPort();
-      char* getSecureInfo();
-      char* getAxisHome();
+      const char* getClientLog();
+      const char* getClientWSDDFile();
+      const char* getXMLParserLibrary();
+      const char* getHTTPTransportLibrary();
+      const char* getHTTPChannelLibrary();
+      const char* getHTTPSSLChannelLibrary();
+      const char* getNodeName();
+      const char* getListenPort();
+      const char* getSecureInfo();
+      const char* getAxisHome();
         
-      void setClientLog(char*);
-      void setClientWSDDFile(char*);
-      void setXMLParserLibrary(char*);
-      void setHTTPTransportLibrary(char*);
-      void setHTTPChannelLibrary(char*);
-      void setHTTPSSLChannelLibrary(char*);
-      void setNodeName(char*);
-      void setListenPort(char*);
-      void setSecureInfo(char*);
-      void setAxisHome(char*);
+      void setClientLog(const char*);
+      void setClientWSDDFile(const char*);
+      void setXMLParserLibrary(const char*);
+      void setHTTPTransportLibrary(const char*);
+      void setHTTPChannelLibrary(const char*);
+      void setHTTPSSLChannelLibrary(const char*);
+      void setNodeName(const char*);
+      void setListenPort(const char*);
+      void setSecureInfo(const char*);
+      void setAxisHome(const char*);
 
       void apply();
 
@@ -86,4 +86,5 @@ class STORAGE_CLASS_INFO AxisCPPConfigDefaultsImpl
 AXIS_CPP_NAMESPACE_END
 
 #endif
+
 

@@ -50,91 +50,89 @@ void AxisCPPConfigDefaults::apply ()
 {
     m_pImpl->apply();
 }
-void AxisCPPConfigDefaults::setClientLog (char *value)
+void AxisCPPConfigDefaults::setClientLog (const char *value)
 {
     m_pImpl->setClientLog(value);
 }
-void AxisCPPConfigDefaults::setClientWSDDFile (char *value)
+void AxisCPPConfigDefaults::setClientWSDDFile (const char *value)
 {
     m_pImpl->setClientWSDDFile(value);
 }
-void AxisCPPConfigDefaults::setXMLParserLibrary (char *value)
+void AxisCPPConfigDefaults::setXMLParserLibrary (const char *value)
 {
     m_pImpl->setXMLParserLibrary(value);
 }
-void AxisCPPConfigDefaults::setHTTPTransportLibrary (char *value)
+void AxisCPPConfigDefaults::setHTTPTransportLibrary (const char *value)
 {
     m_pImpl->setHTTPTransportLibrary(value);
 }
-void AxisCPPConfigDefaults::setHTTPChannelLibrary (char *value)
+void AxisCPPConfigDefaults::setHTTPChannelLibrary (const char *value)
 {
     m_pImpl->setHTTPChannelLibrary(value);
 }
-void AxisCPPConfigDefaults::setHTTPSSLChannelLibrary (char *value)
+void AxisCPPConfigDefaults::setHTTPSSLChannelLibrary (const char *value)
 {
     m_pImpl->setHTTPSSLChannelLibrary(value);
 }
-void AxisCPPConfigDefaults::setNodeName (char *value)
+void AxisCPPConfigDefaults::setNodeName (const char *value)
 {
     m_pImpl->setNodeName(value);
 }
-void AxisCPPConfigDefaults::setListenPort (char *value)
+void AxisCPPConfigDefaults::setListenPort (const char *value)
 {
     m_pImpl->setListenPort(value);
 }
-void AxisCPPConfigDefaults::setSecureInfo (char *value)
+void AxisCPPConfigDefaults::setSecureInfo (const char *value)
 {
     m_pImpl->setSecureInfo(value);
 }
-void AxisCPPConfigDefaults::setAxisHome (char *value)
+void AxisCPPConfigDefaults::setAxisHome (const char *value)
 {
     m_pImpl->setAxisHome(value);
 }
 
 
 
-char* AxisCPPConfigDefaults::getClientLog ()
+const char* AxisCPPConfigDefaults::getClientLog ()
 {
-    return(char*)m_pImpl->getClientLog();
+    return m_pImpl->getClientLog();
 }
-char* AxisCPPConfigDefaults::getClientWSDDFile ()
+const char* AxisCPPConfigDefaults::getClientWSDDFile ()
 {
-    return(char*)m_pImpl->getClientWSDDFile();
+    return m_pImpl->getClientWSDDFile();
 }
-char* AxisCPPConfigDefaults::getXMLParserLibrary ()
+const char* AxisCPPConfigDefaults::getXMLParserLibrary ()
 {
-    return(char*)m_pImpl->getXMLParserLibrary();
+    return m_pImpl->getXMLParserLibrary();
 }
-char* AxisCPPConfigDefaults::getHTTPTransportLibrary ()
+const char* AxisCPPConfigDefaults::getHTTPTransportLibrary ()
 {
-    return(char*)m_pImpl->getHTTPTransportLibrary();
+    return m_pImpl->getHTTPTransportLibrary();
 }
-char* AxisCPPConfigDefaults::getHTTPChannelLibrary ()
+const char* AxisCPPConfigDefaults::getHTTPChannelLibrary ()
 {
-    return(char*)m_pImpl->getHTTPChannelLibrary();
+    return m_pImpl->getHTTPChannelLibrary();
 }
-char* AxisCPPConfigDefaults::getHTTPSSLChannelLibrary ()
+const char* AxisCPPConfigDefaults::getHTTPSSLChannelLibrary ()
 {
-    return(char*)m_pImpl->getHTTPSSLChannelLibrary();
+    return m_pImpl->getHTTPSSLChannelLibrary();
 }
-char* AxisCPPConfigDefaults::getNodeName ()
+const char* AxisCPPConfigDefaults::getNodeName ()
 {
-    return(char*)m_pImpl->getNodeName();
+    return m_pImpl->getNodeName();
 }
-char* AxisCPPConfigDefaults::getListenPort ()
+const char* AxisCPPConfigDefaults::getListenPort ()
 {
-    return(char*)m_pImpl->getListenPort();
+    return m_pImpl->getListenPort();
 }
-char* AxisCPPConfigDefaults::getSecureInfo ()
+const char* AxisCPPConfigDefaults::getSecureInfo ()
 {
-    return(char*)m_pImpl->getSecureInfo();
+    return m_pImpl->getSecureInfo();
 }
-char* AxisCPPConfigDefaults::getAxisHome ()
+const char* AxisCPPConfigDefaults::getAxisHome ()
 {
-    return(char*)m_pImpl->getAxisHome();
+    return m_pImpl->getAxisHome();
 }
 
-/** /todo place some sample code here
-*/
 
 AXIS_CPP_NAMESPACE_END

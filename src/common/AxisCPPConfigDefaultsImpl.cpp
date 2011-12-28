@@ -61,7 +61,7 @@ void AxisCPPConfigDefaultsImpl::apply ()
   /* only allow user to apply once befor initialization and NOT AT ALL after */
   if(!g_pConfig)
   {
-      char *pszValue=0;
+      const char *pszValue=0;
       g_pConfig = new AxisConfig ();
       //todo set each value, if set
       pszValue = getClientLog();
@@ -110,97 +110,97 @@ void AxisCPPConfigDefaultsImpl::apply ()
   }
 }
 
-void AxisCPPConfigDefaultsImpl::setClientLog (char *value)
+void AxisCPPConfigDefaultsImpl::setClientLog (const char *value)
 {
     m_pcClientLog = value;
 }
-void AxisCPPConfigDefaultsImpl::setClientWSDDFile (char *value)
+void AxisCPPConfigDefaultsImpl::setClientWSDDFile (const char *value)
 {
     m_pcClientWSDDFile = value;
 }
-void AxisCPPConfigDefaultsImpl::setXMLParserLibrary (char *value)
+void AxisCPPConfigDefaultsImpl::setXMLParserLibrary (const char *value)
 {
     m_pcXMLParserLibrary = value;
 }
-void AxisCPPConfigDefaultsImpl::setHTTPTransportLibrary (char *value)
+void AxisCPPConfigDefaultsImpl::setHTTPTransportLibrary (const char *value)
 {
     m_pcHTTPTransportLibrary = value;
 }
-void AxisCPPConfigDefaultsImpl::setHTTPChannelLibrary (char *value)
+void AxisCPPConfigDefaultsImpl::setHTTPChannelLibrary (const char *value)
 {
     m_pcHTTPChannelLibrary = value;
 }
-void AxisCPPConfigDefaultsImpl::setHTTPSSLChannelLibrary (char *value)
+void AxisCPPConfigDefaultsImpl::setHTTPSSLChannelLibrary (const char *value)
 {
     m_pcHTTPSSLChannelLibrary = value;
 }
-void AxisCPPConfigDefaultsImpl::setNodeName (char *value)
+void AxisCPPConfigDefaultsImpl::setNodeName (const char *value)
 {
     m_pcNodeName = value;
 }
-void AxisCPPConfigDefaultsImpl::setListenPort (char *value)
+void AxisCPPConfigDefaultsImpl::setListenPort (const char *value)
 {
     m_pcListenPort = value;
 }
-void AxisCPPConfigDefaultsImpl::setSecureInfo (char *value)
+void AxisCPPConfigDefaultsImpl::setSecureInfo (const char *value)
 {
     m_pcSecureInfo = value;
 }
-void AxisCPPConfigDefaultsImpl::setAxisHome (char *value)
+void AxisCPPConfigDefaultsImpl::setAxisHome (const char *value)
 {
     m_pcAxisHome = value;
 }
 
 
-char* AxisCPPConfigDefaultsImpl::getClientLog ()
+const char* AxisCPPConfigDefaultsImpl::getClientLog ()
 {
     if (0 == m_pcClientLog.length()) return NULL;
-    return (char*)(m_pcClientLog.c_str());
+    return m_pcClientLog.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getClientWSDDFile ()
+const char* AxisCPPConfigDefaultsImpl::getClientWSDDFile ()
 {
     if (0 == m_pcClientWSDDFile.length()) return NULL;
-    return (char*)(m_pcClientWSDDFile.c_str());
+    return m_pcClientWSDDFile.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getXMLParserLibrary ()
+const char* AxisCPPConfigDefaultsImpl::getXMLParserLibrary ()
 {
     if (0 == m_pcXMLParserLibrary.length()) return NULL;
-    return (char*)(m_pcXMLParserLibrary.c_str());
+    return m_pcXMLParserLibrary.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getHTTPTransportLibrary ()
+const char* AxisCPPConfigDefaultsImpl::getHTTPTransportLibrary ()
 {
     if (0 == m_pcHTTPTransportLibrary.length()) return NULL;
-    return (char*)(m_pcHTTPTransportLibrary.c_str());
+    return m_pcHTTPTransportLibrary.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getHTTPChannelLibrary ()
+const char* AxisCPPConfigDefaultsImpl::getHTTPChannelLibrary ()
 {
     if (0 == m_pcHTTPChannelLibrary.length()) return NULL;
-    return (char*)(m_pcHTTPChannelLibrary.c_str());
+    return m_pcHTTPChannelLibrary.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getHTTPSSLChannelLibrary ()
+const char* AxisCPPConfigDefaultsImpl::getHTTPSSLChannelLibrary ()
 {
     if (0 == m_pcHTTPSSLChannelLibrary.length()) return NULL;
-    return (char*)(m_pcHTTPSSLChannelLibrary.c_str());
+    return m_pcHTTPSSLChannelLibrary.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getNodeName ()
+const char* AxisCPPConfigDefaultsImpl::getNodeName ()
 {
     if (0 == m_pcNodeName.length()) return NULL;
-    return (char*)(m_pcNodeName.c_str());
+    return m_pcNodeName.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getListenPort ()
+const char* AxisCPPConfigDefaultsImpl::getListenPort ()
 {
     if (0 == m_pcListenPort.length()) return NULL;
-    return (char*)(m_pcListenPort.c_str());
+    return m_pcListenPort.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getSecureInfo ()
+const char* AxisCPPConfigDefaultsImpl::getSecureInfo ()
 {
     if (0 == m_pcSecureInfo.length()) return NULL;
-    return (char*)(m_pcSecureInfo.c_str());
+    return m_pcSecureInfo.c_str();
 }
-char* AxisCPPConfigDefaultsImpl::getAxisHome ()
+const char* AxisCPPConfigDefaultsImpl::getAxisHome ()
 {
     if (0 == m_pcAxisHome.length()) return NULL;
-    return (char*)(m_pcAxisHome.c_str());
+    return m_pcAxisHome.c_str();
 }
 
 AXIS_CPP_NAMESPACE_END
