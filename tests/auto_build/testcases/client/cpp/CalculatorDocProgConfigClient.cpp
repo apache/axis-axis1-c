@@ -104,7 +104,7 @@ int main( int argc, char* argv[])
             config.apply();
             //                              axishome = config.getAxisHome(); cout << "Axis Home = " << axishome << endl;
 
-            char *  wsddfile1 = NULL;
+            const char *  wsddfile1 = (const char *)NULL;
             wsddfile1 = config.getClientWSDDFile();
             cout << "Client Log file name = " << config.getClientLog() << endl;
 
