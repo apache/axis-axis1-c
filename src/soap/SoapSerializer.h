@@ -68,7 +68,29 @@ private:
     AxisChar* m_pNamespace;
     ContentIdSet *m_pContentIdSet;
 
+    /**
+     * Following is for C-binding support. The stub that the serializer object belongs to.
+     */
+    void * m_pStub;
+
+
 public:
+    /**
+     * Set C-binding stub pointer associated with object.
+     * This function was added in support of the c-Binding implementation.
+     *
+     * @param pStub - pointer to C binding stub object.
+     */
+    void setCStub(void *pStub) { m_pStub = pStub; }
+
+    /**
+     * Get C-binding stub pointer.
+     * This function was added in support of the c-Binding implementation.
+     *
+     * @return Pointer to C binding stub object.
+     */
+    void *getCStub() { return m_pStub; }
+
     inline const AxisChar* AXISCALL getNamespace() const {return m_pNamespace;}; 
     inline void AXISCALL setNamespace(const AxisChar* pNamespace) {m_pNamespace = (const_cast<AxisChar*>(pNamespace));}; 
 

@@ -45,12 +45,15 @@ static void processException(Call *c, AxisException& e)
     void *stubExceptionHandler;
     
     StubC *s = (StubC *)c->getCStub();
-    if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
-        exceptionHandler = stubExceptionHandler;
+    if (s)
+    {
+        if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
+            exceptionHandler = stubExceptionHandler;
+
+        s->doNotPerformClientRequest = true;
+    }
     
     c->processSoapFault(&e, exceptionHandler);
-    
-    s->doNotPerformClientRequest = true;
 }
 
 
@@ -100,8 +103,6 @@ AXISC_STORAGE_CLASS_INFO
 void axiscCallSetSOAPVersion(AXISCHANDLE call, 
                              AXISC_SOAP_VERSION version) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -110,13 +111,10 @@ void axiscCallSetSOAPVersion(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -126,8 +124,6 @@ int axiscCallSetTransportProperty(AXISCHANDLE call,
                                   AXISC_TRANSPORT_INFORMATION_TYPE type, 
                                   const char * value) 
 {   
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -136,13 +132,10 @@ int axiscCallSetTransportProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -154,8 +147,6 @@ const char * axiscCallGetTransportProperty(AXISCHANDLE call,
                                            const char *key, 
                                            AxiscBool response) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -164,13 +155,10 @@ const char * axiscCallGetTransportProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -188,13 +176,10 @@ void axiscCloseTransportConnection(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }    
 }
@@ -205,8 +190,6 @@ int axiscCallSetHandlerProperty(AXISCHANDLE call,
                                 void * value, 
                                 int len) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -215,13 +198,10 @@ int axiscCallSetHandlerProperty(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -232,8 +212,6 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSetProtocol(AXISCHANDLE call, 
                          AXISC_PROTOCOL_TYPE protocol) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -242,13 +220,10 @@ int axiscCallSetProtocol(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -258,8 +233,6 @@ int axiscCallSetProtocol(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -268,13 +241,10 @@ AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -284,11 +254,10 @@ AXISC_PROTOCOL_TYPE axiscCallGetProtocol(AXISCHANDLE call)
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallUnInitialize(AXISCHANDLE call) 
 {
-    
-    
     Call *c = (Call*)call;
     StubC *s = (StubC *)c->getCStub();
-    s->doNotPerformClientRequest = false;
+    if (s)
+        s->doNotPerformClientRequest = false;
     
     try
     {
@@ -296,13 +265,10 @@ int axiscCallUnInitialize(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -313,8 +279,6 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallInitialize(AXISCHANDLE call, 
                         AXISC_PROVIDERTYPE nStyle) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -323,13 +287,10 @@ int axiscCallInitialize(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -347,7 +308,7 @@ int axiscCallSendAndReceive(AXISCHANDLE call)
 {
     Call *c = (Call*)call;
     StubC *s = (StubC *)c->getCStub();
-    if (s->doNotPerformClientRequest)
+    if (s && s->doNotPerformClientRequest)
     	return -1;
     
     try
@@ -356,13 +317,10 @@ int axiscCallSendAndReceive(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -372,10 +330,9 @@ int axiscCallSendAndReceive(AXISCHANDLE call)
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallSend(AXISCHANDLE call) 
 {
-    
     Call *c = (Call*)call;
     StubC *s = (StubC *)c->getCStub();
-    if (s->doNotPerformClientRequest)
+    if (s && s->doNotPerformClientRequest)
     	return -1;
     
     try
@@ -384,13 +341,10 @@ int axiscCallSend(AXISCHANDLE call)
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -405,9 +359,10 @@ void axiscCallAddCmplxParameter(AXISCHANDLE call,
                                 const AxiscChar * pName, 
                                 const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return;
     
     try
     {
@@ -420,8 +375,6 @@ void axiscCallAddCmplxParameter(AXISCHANDLE call,
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -434,9 +387,10 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
                                      const AxiscChar * pName, 
                                      const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return;
     
     try
     {
@@ -449,13 +403,10 @@ void axiscCallAddCmplxArrayParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -466,9 +417,10 @@ void axiscCallAddBasicArrayParameter(AXISCHANDLE call,
                                      AXISC_XSDTYPE nType, 
                                      const AxiscChar * pName) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return;
     
     try
     {
@@ -481,13 +433,10 @@ void axiscCallAddBasicArrayParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -498,9 +447,10 @@ void axiscCallAddParameter(AXISCHANDLE call,
                            const char * pchName, 
                            AXISC_XSDTYPE nType) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return;
     
     try
     {
@@ -508,13 +458,10 @@ void axiscCallAddParameter(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -525,9 +472,10 @@ AXISCHANDLE axiscCallCreateAttribute(AXISCHANDLE call,
 	                                 const AxiscChar * pPrefix, 
 	                                 const AxiscChar * pValue)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (AXISCHANDLE)NULL;
     
     try
     {
@@ -535,13 +483,10 @@ AXISCHANDLE axiscCallCreateAttribute(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -553,8 +498,6 @@ void axiscCallSetOperation(AXISCHANDLE call,
                            const char * pchOperation, 
                            const char * pchNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -563,13 +506,10 @@ void axiscCallSetOperation(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -599,8 +539,6 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallSetEndpointURI(AXISCHANDLE call, 
                             const char * pchEndpointURI) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -609,13 +547,10 @@ int axiscCallSetEndpointURI(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -628,9 +563,10 @@ AXISCHANDLE axiscCallCreateHeaderBlock(AXISCHANDLE call,
                                        AxiscChar * pachUri, 
                                        AxiscChar * pachPrefix) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (AXISCHANDLE)NULL;
     
     try
     {
@@ -638,13 +574,10 @@ AXISCHANDLE axiscCallCreateHeaderBlock(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -656,9 +589,10 @@ xsdc__int * axiscCallGetElementAsInt(AXISCHANDLE call,
                                      const AxiscChar * pName, 
                                      const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__int *)NULL;
     
     try
     {
@@ -666,13 +600,10 @@ xsdc__int * axiscCallGetElementAsInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -720,9 +651,10 @@ xsdc__boolean * axiscCallGetElementAsBoolean(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__boolean *)NULL;
     
     try
     {
@@ -730,13 +662,10 @@ xsdc__boolean * axiscCallGetElementAsBoolean(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -748,9 +677,10 @@ xsdc__unsignedInt * axiscCallGetElementAsUnsignedInt(AXISCHANDLE call,
                                                      const AxiscChar * pName, 
                                                      const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedInt *)NULL;
     
     try
     {
@@ -758,13 +688,10 @@ xsdc__unsignedInt * axiscCallGetElementAsUnsignedInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -776,9 +703,10 @@ xsdc__short * axiscCallGetElementAsShort(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__short *)NULL;
     
     try
     {
@@ -786,13 +714,10 @@ xsdc__short * axiscCallGetElementAsShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -804,9 +729,10 @@ xsdc__unsignedShort * axiscCallGetElementAsUnsignedShort(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedShort *)NULL;
     
     try
     {
@@ -814,13 +740,10 @@ xsdc__unsignedShort * axiscCallGetElementAsUnsignedShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -832,9 +755,10 @@ xsdc__byte * axiscCallGetElementAsByte(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__byte *)NULL;
     
     try
     {
@@ -842,13 +766,10 @@ xsdc__byte * axiscCallGetElementAsByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -860,9 +781,10 @@ xsdc__unsignedByte * axiscCallGetElementAsUnsignedByte(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedByte *)NULL;
     
     try
     {
@@ -870,13 +792,10 @@ xsdc__unsignedByte * axiscCallGetElementAsUnsignedByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -888,9 +807,10 @@ xsdc__long * axiscCallGetElementAsLong(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__long *)NULL;
     
     try
     {
@@ -898,13 +818,10 @@ xsdc__long * axiscCallGetElementAsLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -916,9 +833,10 @@ xsdc__integer * axiscCallGetElementAsInteger(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__integer *)NULL;
     
     try
     {
@@ -926,13 +844,10 @@ xsdc__integer * axiscCallGetElementAsInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -944,9 +859,10 @@ xsdc__unsignedLong * axiscCallGetElementAsUnsignedLong(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedLong *)NULL;
     
     try
     {
@@ -954,13 +870,10 @@ xsdc__unsignedLong * axiscCallGetElementAsUnsignedLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -972,9 +885,10 @@ xsdc__float * axiscCallGetElementAsFloat(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__float *)NULL;
     
     try
     {
@@ -982,13 +896,10 @@ xsdc__float * axiscCallGetElementAsFloat(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1000,9 +911,10 @@ xsdc__double * axiscCallGetElementAsDouble(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__double *)NULL;
     
     try
     {
@@ -1010,13 +922,10 @@ xsdc__double * axiscCallGetElementAsDouble(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1028,9 +937,10 @@ xsdc__decimal * axiscCallGetElementAsDecimal(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__decimal *)NULL;
     
     try
     {
@@ -1038,13 +948,10 @@ xsdc__decimal * axiscCallGetElementAsDecimal(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1056,9 +963,10 @@ xsdc__string axiscCallGetElementAsString(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__string)NULL;
     
     try
     {
@@ -1066,13 +974,10 @@ xsdc__string axiscCallGetElementAsString(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1084,9 +989,10 @@ xsdc__anyURI axiscCallGetElementAsAnyURI(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyURI)NULL;
     
     try
     {
@@ -1094,13 +1000,10 @@ xsdc__anyURI axiscCallGetElementAsAnyURI(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -1112,9 +1015,10 @@ xsdc__QName axiscCallGetElementAsQName(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__QName)NULL;
     
     try
     {
@@ -1122,13 +1026,10 @@ xsdc__QName axiscCallGetElementAsQName(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1140,9 +1041,10 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__hexBinary *)NULL;
     
     try
     {
@@ -1152,13 +1054,10 @@ xsdc__hexBinary * axiscCallGetElementAsHexBinary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1170,9 +1069,10 @@ xsdc__base64Binary * axiscCallGetElementAsBase64Binary(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__base64Binary *)NULL;
     
     try
     {
@@ -1182,13 +1082,10 @@ xsdc__base64Binary * axiscCallGetElementAsBase64Binary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1200,9 +1097,10 @@ xsdc__dateTime * axiscCallGetElementAsDateTime(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__dateTime *)NULL;
     
     try
     {
@@ -1210,13 +1108,10 @@ xsdc__dateTime * axiscCallGetElementAsDateTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1228,9 +1123,10 @@ xsdc__date * axiscCallGetElementAsDate(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__date *)NULL;
     
     try
     {
@@ -1238,13 +1134,10 @@ xsdc__date * axiscCallGetElementAsDate(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1256,9 +1149,10 @@ xsdc__time * axiscCallGetElementAsTime(AXISCHANDLE call,
                                        const AxiscChar * pName, 
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__time *)NULL;
     
     try
     {
@@ -1266,13 +1160,10 @@ xsdc__time * axiscCallGetElementAsTime(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1284,9 +1175,10 @@ xsdc__duration * axiscCallGetElementAsDuration(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__duration *)NULL;
     
     try
     {
@@ -1294,13 +1186,10 @@ xsdc__duration * axiscCallGetElementAsDuration(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1314,9 +1203,10 @@ xsdc__gYearMonth * axiscCallGetElementAsGYearMonth(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYearMonth *)NULL;
     
     try
     {
@@ -1324,13 +1214,10 @@ xsdc__gYearMonth * axiscCallGetElementAsGYearMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1342,9 +1229,10 @@ xsdc__gYear * axiscCallGetElementAsGYear(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYear *)NULL;
     
     try
     {
@@ -1352,13 +1240,10 @@ xsdc__gYear * axiscCallGetElementAsGYear(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1370,9 +1255,10 @@ xsdc__gMonthDay * axiscCallGetElementAsGMonthDay(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonthDay *)NULL;
     
     try
     {
@@ -1380,13 +1266,10 @@ xsdc__gMonthDay * axiscCallGetElementAsGMonthDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1398,9 +1281,10 @@ xsdc__gDay * axiscCallGetElementAsGDay(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gDay *)NULL;
     
     try
     {
@@ -1408,13 +1292,10 @@ xsdc__gDay * axiscCallGetElementAsGDay(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1426,9 +1307,10 @@ xsdc__gMonth * axiscCallGetElementAsGMonth(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonth *)NULL;
     
     try
     {
@@ -1436,13 +1318,10 @@ xsdc__gMonth * axiscCallGetElementAsGMonth(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1454,9 +1333,10 @@ xsdc__nonPositiveInteger * axiscCallGetElementAsNonPositiveInteger(AXISCHANDLE c
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonPositiveInteger *)NULL;
     
     try
     {
@@ -1464,13 +1344,10 @@ xsdc__nonPositiveInteger * axiscCallGetElementAsNonPositiveInteger(AXISCHANDLE c
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1482,9 +1359,10 @@ xsdc__negativeInteger * axiscCallGetElementAsNegativeInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName,
                                                              const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__negativeInteger *)NULL;
     
     try
     {
@@ -1492,13 +1370,10 @@ xsdc__negativeInteger * axiscCallGetElementAsNegativeInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1510,9 +1385,10 @@ xsdc__nonNegativeInteger * axiscCallGetElementAsNonNegativeInteger(AXISCHANDLE c
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonNegativeInteger *)NULL;
     
     try
     {
@@ -1520,13 +1396,10 @@ xsdc__nonNegativeInteger * axiscCallGetElementAsNonNegativeInteger(AXISCHANDLE c
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1538,9 +1411,10 @@ xsdc__positiveInteger * axiscCallGetElementAsPositiveInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName, 
                                                              const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__positiveInteger *)NULL;
     
     try
     {
@@ -1548,13 +1422,10 @@ xsdc__positiveInteger * axiscCallGetElementAsPositiveInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1565,9 +1436,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__normalizedString axiscCallGetElementAsNormalizedString(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__normalizedString)NULL;
     
     try
     {
@@ -1575,13 +1447,10 @@ xsdc__normalizedString axiscCallGetElementAsNormalizedString(AXISCHANDLE call, c
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1592,9 +1461,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__token axiscCallGetElementAsToken(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__token)NULL;
     
     try
     {
@@ -1602,13 +1472,10 @@ xsdc__token axiscCallGetElementAsToken(AXISCHANDLE call, const AxiscChar * pName
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1619,9 +1486,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__language axiscCallGetElementAsLanguage(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__language)NULL;
     
     try
     {
@@ -1629,13 +1497,10 @@ xsdc__language axiscCallGetElementAsLanguage(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1646,9 +1511,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__Name axiscCallGetElementAsName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__Name)NULL;
     
     try
     {
@@ -1656,13 +1522,10 @@ xsdc__Name axiscCallGetElementAsName(AXISCHANDLE call, const AxiscChar * pName,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1673,9 +1536,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NCName axiscCallGetElementAsNCName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NCName)NULL;
     
     try
     {
@@ -1683,13 +1547,10 @@ xsdc__NCName axiscCallGetElementAsNCName(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1700,9 +1561,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ID axiscCallGetElementAsID(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ID)NULL;
     
     try
     {
@@ -1710,13 +1572,10 @@ xsdc__ID axiscCallGetElementAsID(AXISCHANDLE call, const AxiscChar * pName,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1727,9 +1586,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREF axiscCallGetElementAsIDREF(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREF)NULL;
     
     try
     {
@@ -1737,13 +1597,10 @@ xsdc__IDREF axiscCallGetElementAsIDREF(AXISCHANDLE call, const AxiscChar * pName
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1754,9 +1611,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREFS axiscCallGetElementAsIDREFS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREFS)NULL;
     
     try
     {
@@ -1764,13 +1622,10 @@ xsdc__IDREFS axiscCallGetElementAsIDREFS(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1781,9 +1636,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITY axiscCallGetElementAsENTITY(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITY)NULL;
     
     try
     {
@@ -1791,13 +1647,10 @@ xsdc__ENTITY axiscCallGetElementAsENTITY(AXISCHANDLE call, const AxiscChar * pNa
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1808,9 +1661,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITIES axiscCallGetElementAsENTITIES(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITIES)NULL;
     
     try
     {
@@ -1818,13 +1672,10 @@ xsdc__ENTITIES axiscCallGetElementAsENTITIES(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1835,23 +1686,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKEN axiscCallGetElementAsNMTOKEN(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKEN)NULL;
+
     try
     {
         return c->getElementAsNMTOKEN(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1862,9 +1711,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKENS axiscCallGetElementAsNMTOKENS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKENS)NULL;
     
     try
     {
@@ -1872,13 +1722,10 @@ xsdc__NMTOKENS axiscCallGetElementAsNMTOKENS(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1889,9 +1736,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NOTATION)NULL;
     
     try
     {
@@ -1899,13 +1747,10 @@ xsdc__NOTATION axiscCallGetElementAsNOTATION(AXISCHANDLE call, const AxiscChar *
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1917,9 +1762,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__anyType axiscCallGetElementAsAnyType(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyType)NULL;
     
     try
     {
@@ -1927,13 +1773,10 @@ xsdc__anyType axiscCallGetElementAsAnyType(AXISCHANDLE call, const AxiscChar * p
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1946,9 +1789,10 @@ xsdc__int * axiscCallGetAttributeAsInt(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__int *)NULL;
     
     try
     {
@@ -1956,13 +1800,10 @@ xsdc__int * axiscCallGetAttributeAsInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -1973,9 +1814,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__boolean * axiscCallGetAttributeAsBoolean(AXISCHANDLE call, 
                                                const AxiscChar * pName, const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__boolean *)NULL;
     
     try
     {
@@ -1988,8 +1830,6 @@ xsdc__boolean * axiscCallGetAttributeAsBoolean(AXISCHANDLE call,
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2001,9 +1841,10 @@ xsdc__unsignedInt * axiscCallGetAttributeAsUnsignedInt(AXISCHANDLE call,
                                                        const AxiscChar * pName, 
                                                        const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedInt *)NULL;
     
     try
     {
@@ -2011,13 +1852,10 @@ xsdc__unsignedInt * axiscCallGetAttributeAsUnsignedInt(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2029,9 +1867,10 @@ xsdc__short * axiscCallGetAttributeAsShort(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__short *)NULL;
     
     try
     {
@@ -2039,13 +1878,10 @@ xsdc__short * axiscCallGetAttributeAsShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2057,9 +1893,10 @@ xsdc__unsignedShort * axiscCallGetAttributeAsUnsignedShort(AXISCHANDLE call,
                                                            const AxiscChar * pName, 
                                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedShort *)NULL;
     
     try
     {
@@ -2067,13 +1904,10 @@ xsdc__unsignedShort * axiscCallGetAttributeAsUnsignedShort(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2085,9 +1919,10 @@ xsdc__byte * axiscCallGetAttributeAsByte(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__byte *)NULL;
     
     try
     {
@@ -2095,13 +1930,10 @@ xsdc__byte * axiscCallGetAttributeAsByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2113,9 +1945,10 @@ xsdc__unsignedByte * axiscCallGetAttributeAsUnsignedByte(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedByte *)NULL;
     
     try
     {
@@ -2123,13 +1956,10 @@ xsdc__unsignedByte * axiscCallGetAttributeAsUnsignedByte(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2141,9 +1971,10 @@ xsdc__long * axiscCallGetAttributeAsLong(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__long *)NULL;
     
     try
     {
@@ -2151,13 +1982,10 @@ xsdc__long * axiscCallGetAttributeAsLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2169,9 +1997,10 @@ xsdc__integer * axiscCallGetAttributeAsInteger(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__integer *)NULL;
     
     try
     {
@@ -2179,13 +2008,10 @@ xsdc__integer * axiscCallGetAttributeAsInteger(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2197,9 +2023,10 @@ xsdc__unsignedLong * axiscCallGetAttributeAsUnsignedLong(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedLong *)NULL;
     
     try
     {
@@ -2207,13 +2034,10 @@ xsdc__unsignedLong * axiscCallGetAttributeAsUnsignedLong(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2225,23 +2049,21 @@ xsdc__float * axiscCallGetAttributeAsFloat(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__float *)NULL;
+
     try
     {
         return c->getAttributeAsFloat(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2253,23 +2075,21 @@ xsdc__double * axiscCallGetAttributeAsDouble(AXISCHANDLE call,
                                              const AxiscChar * pName, 
                                              const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__double *)NULL;
+
     try
     {
         return c->getAttributeAsDouble(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2281,23 +2101,21 @@ xsdc__decimal * axiscCallGetAttributeAsDecimal(AXISCHANDLE call,
                                                const AxiscChar * pName, 
                                                const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__decimal *)NULL;
+
     try
     {
         return c->getAttributeAsDecimal(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2309,23 +2127,21 @@ xsdc__string axiscCallGetAttributeAsString(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__string)NULL;
+
     try
     {
         return c->getAttributeAsString(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2337,23 +2153,21 @@ xsdc__anyURI axiscCallGetAttributeAsAnyURI(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyURI)NULL;
+
     try
     {
         return c->getAttributeAsAnyURI(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2365,23 +2179,21 @@ xsdc__QName axiscCallGetAttributeAsQName(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__QName)NULL;
+
     try
     {
         return c->getAttributeAsQName(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2393,10 +2205,11 @@ xsdc__hexBinary * axiscCallGetAttributeAsHexBinary(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__hexBinary *)NULL;
+
     try
     {
         xsd__hexBinary * pObjCpp = c->getAttributeAsHexBinary(pName, pNamespace);
@@ -2405,13 +2218,10 @@ xsdc__hexBinary * axiscCallGetAttributeAsHexBinary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2423,10 +2233,11 @@ xsdc__base64Binary * axiscCallGetAttributeAsBase64Binary(AXISCHANDLE call,
                                                          const AxiscChar * pName, 
                                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__base64Binary *)NULL;
+
     try
     {
         xsd__base64Binary * pObjCpp = c->getAttributeAsBase64Binary(pName, pNamespace);
@@ -2435,13 +2246,10 @@ xsdc__base64Binary * axiscCallGetAttributeAsBase64Binary(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2453,23 +2261,21 @@ xsdc__dateTime * axiscCallGetAttributeAsDateTime(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__dateTime *)NULL;
+
     try
     {
         return c->getAttributeAsDateTime(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2481,23 +2287,21 @@ xsdc__date * axiscCallGetAttributeAsDate(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__date *)NULL;
+
     try
     {
         return c->getAttributeAsDate(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2509,23 +2313,21 @@ xsdc__time * axiscCallGetAttributeAsTime(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__time *)NULL;
+
     try
     {
         return c->getAttributeAsTime(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     return (xsdc__time *)NULL;
@@ -2536,23 +2338,21 @@ xsdc__duration * axiscCallGetAttributeAsDuration(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__duration *)NULL;
+
     try
     {
         return c->getAttributeAsDuration(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -2564,23 +2364,21 @@ xsdc__gYearMonth * axiscCallGetAttributeAsGYearMonth(AXISCHANDLE call,
                                                    const AxiscChar * pName, 
                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYearMonth *)NULL;
+
     try
     {
         return c->getAttributeAsGYearMonth(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2592,23 +2390,21 @@ xsdc__gYear * axiscCallGetAttributeAsGYear(AXISCHANDLE call,
                                          const AxiscChar * pName, 
                                          const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYear *)NULL;
+
     try
     {
         return c->getAttributeAsGYear(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-
-
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2620,23 +2416,21 @@ xsdc__gMonthDay * axiscCallGetAttributeAsGMonthDay(AXISCHANDLE call,
                                                  const AxiscChar * pName, 
                                                  const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonthDay *)NULL;
+
     try
     {
         return c->getAttributeAsGMonthDay(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2648,23 +2442,21 @@ xsdc__gDay * axiscCallGetAttributeAsGDay(AXISCHANDLE call,
                                        const AxiscChar * pName,
                                        const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gDay *)NULL;
+
     try
     {
         return c->getAttributeAsGDay(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2676,23 +2468,21 @@ xsdc__gMonth * axiscCallGetAttributeAsGMonth(AXISCHANDLE call,
                                            const AxiscChar * pName, 
                                            const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonth *)NULL;
+
     try
     {
         return c->getAttributeAsGMonth(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2704,23 +2494,21 @@ xsdc__nonPositiveInteger * axiscCallGetAttributeAsNonPositiveInteger(AXISCHANDLE
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonPositiveInteger *)NULL;
+
     try
     {
         return c->getAttributeAsNonPositiveInteger(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2732,23 +2520,21 @@ xsdc__negativeInteger * axiscCallGetAttributeAsNegativeInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName,
                                                              const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__negativeInteger *)NULL;
+
     try
     {
         return c->getAttributeAsNegativeInteger(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2760,23 +2546,21 @@ xsdc__nonNegativeInteger * axiscCallGetAttributeAsNonNegativeInteger(AXISCHANDLE
                                                                    const AxiscChar * pName,
                                                                    const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonNegativeInteger *)NULL;
+
     try
     {
         return c->getAttributeAsNonNegativeInteger(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2788,23 +2572,21 @@ xsdc__positiveInteger * axiscCallGetAttributeAsPositiveInteger(AXISCHANDLE call,
                                                              const AxiscChar * pName, 
                                                              const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__positiveInteger *)NULL;
+
     try
     {
         return c->getAttributeAsPositiveInteger(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2815,23 +2597,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__normalizedString axiscCallGetAttributeAsNormalizedString(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__normalizedString)NULL;
+
     try
     {
         return c->getAttributeAsNormalizedString(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2842,23 +2622,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__token axiscCallGetAttributeAsToken(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__token)NULL;
+
     try
     {
         return c->getAttributeAsToken(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2869,23 +2647,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__language axiscCallGetAttributeAsLanguage(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__language)NULL;
+
     try
     {
         return c->getAttributeAsLanguage(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2896,23 +2672,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__Name axiscCallGetAttributeAsName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__Name)NULL;
+
     try
     {
         return c->getAttributeAsName(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2923,23 +2697,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NCName axiscCallGetAttributeAsNCName(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NCName)NULL;
+
     try
     {
         return c->getAttributeAsNCName(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2950,23 +2722,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ID axiscCallGetAttributeAsID(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ID)NULL;
+
     try
     {
         return c->getAttributeAsID(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -2977,23 +2747,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREF axiscCallGetAttributeAsIDREF(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREF)NULL;
+
     try
     {
         return c->getAttributeAsIDREF(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3004,23 +2772,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__IDREFS axiscCallGetAttributeAsIDREFS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREFS)NULL;
+
     try
     {
         return c->getAttributeAsIDREFS(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3031,23 +2797,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITY axiscCallGetAttributeAsENTITY(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITY)NULL;
+
     try
     {
         return c->getAttributeAsENTITY(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3058,23 +2822,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__ENTITIES axiscCallGetAttributeAsENTITIES(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITIES)NULL;
+
     try
     {
         return c->getAttributeAsENTITIES(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3085,23 +2847,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKEN axiscCallGetAttributeAsNMTOKEN(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKEN)NULL;
+
     try
     {
         return c->getAttributeAsNMTOKEN(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3112,23 +2872,21 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NMTOKENS axiscCallGetAttributeAsNMTOKENS(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKENS)NULL;
+
     try
     {
         return c->getAttributeAsNMTOKENS(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
@@ -3139,43 +2897,26 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__NOTATION axiscCallGetAttributeAsNOTATION(AXISCHANDLE call, const AxiscChar * pName, 
 	const AxiscChar * pNamespace)
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NOTATION)NULL;
+
     try
     {
         return c->getAttributeAsNOTATION(pName,pNamespace);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 
     return (xsdc__NOTATION)NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 AXISC_STORAGE_CLASS_INFO 
 void * axiscCallGetCmplxObject(AXISCHANDLE call, 
@@ -3185,23 +2926,21 @@ void * axiscCallGetCmplxObject(AXISCHANDLE call,
                                const AxiscChar * pName, 
                                const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return NULL;
+
     try
     {
         return c->getCmplxObject(pDZFunct,pCreFunct,pDelFunct,pName,pNamespace);    
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3217,10 +2956,11 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
                                     const AxiscChar * pName, 
                                     const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (Axisc_Array *)NULL;
+
     try
     {
     	Axis_Array ObjArray;
@@ -3236,13 +2976,10 @@ Axisc_Array* axiscCallGetCmplxArray(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3255,10 +2992,11 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
                                     const AxiscChar * pName, 
                                     const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (Axisc_Array *)NULL;
+
     try
     {
     	Axis_Array *pObjArray = c->getBasicArray((XSDTYPE)nType, pName, pNamespace);
@@ -3267,13 +3005,10 @@ Axisc_Array* axiscCallGetBasicArray(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3295,20 +3030,20 @@ int axiscCallValidateMessage( AXISCHANDLE call,
                               AxiscBool consumeIt)
 {
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return -1;
+
     try
     {
         return c->validateMessage(pName,pNamespace, (bool)(consumeIt != 0));
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3321,14 +3056,19 @@ void axiscCallGetChardataAs(AXISCHANDLE call,
 		                    AXISC_XSDTYPE type)
 {
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+    {
+        *pValue = NULL;
+        return;
+    }
+
     try
     {
         return c->getChardataAs( pValue,  (XSDTYPE)type);
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
@@ -3342,8 +3082,6 @@ void * axiscCallCheckFault(AXISCHANDLE call,
                            const AxiscChar * pName, 
                            const AxiscChar * pNamespace) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -3352,13 +3090,10 @@ void * axiscCallCheckFault(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3368,8 +3103,6 @@ void * axiscCallCheckFault(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 int axiscCallGetStatus(AXISCHANDLE call) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -3383,8 +3116,6 @@ int axiscCallGetStatus(AXISCHANDLE call)
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3417,8 +3148,6 @@ void axiscCallSetProxy(AXISCHANDLE call,
                        const char * pcProxyHost, 
                        unsigned int uiProxyPort) 
 {
-    
-    
     Call *c = (Call*)call;
     
     try
@@ -3427,13 +3156,10 @@ void axiscCallSetProxy(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
 }
@@ -3441,10 +3167,11 @@ void axiscCallSetProxy(AXISCHANDLE call,
 AXISC_STORAGE_CLASS_INFO 
 AxiscAnyType * axiscCallGetAnyObject(AXISCHANDLE call) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (AxiscAnyType *)NULL;
+
     try
     {
         AnyType * pObjCpp = c->getAnyObject();
@@ -3458,8 +3185,6 @@ AxiscAnyType * axiscCallGetAnyObject(AXISCHANDLE call)
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3470,10 +3195,11 @@ AXISC_STORAGE_CLASS_INFO
 int axiscCallAddAnyObject(AXISCHANDLE call, 
                           AxiscAnyType * pAnyObject) 
 {
-    
-    
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return -1;
+
     try
     {
         AnyType objAnyType;
@@ -3494,13 +3220,10 @@ int axiscCallAddAnyObject(AXISCHANDLE call,
     }
     catch ( AxisException& e  )
     {
-        
         processException(c, e);
     }
     catch ( ... )
     {
-          
-          
         axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
     }
     
@@ -3576,7 +3299,10 @@ AXISC_STORAGE_CLASS_INFO
 xsdc__string axiscCallGetFaultAsXMLString(AXISCHANDLE call) 
 {
     Call *c = (Call*)call;
-    
+    StubC *s = (StubC *)c->getCStub();
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__string)NULL;
+
     try
     {
         return c->getFaultAsXMLString();

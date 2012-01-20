@@ -22,6 +22,7 @@
 #include <axis/AxisException.hpp>
 
 #include "AxisObjectConverter.hpp"
+#include "client/StubC.h"
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
@@ -29,12 +30,37 @@
 #include <axis/BasicNode.h>
 #include <axis/SoapEnvVersions.h>
 #include <axis/IWrapperSoapDeSerializer.h>
+#include <axis/client/Call.hpp>
 
 #include "../common/AxisTrace.h"
+#include "../soap/SoapDeSerializer.h"
 
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+
+static void processException(void *d, AxisException& e)
+{
+    AXIS_EXCEPTION_HANDLER_FUNCT exceptionHandler = axiscAxisInvokeExceptionHandler;
+    void *stubExceptionHandler;
+    Call *c = NULL;
+
+    StubC *s = (StubC *)(((SoapDeSerializer *)d)->getCStub());
+    if (s)
+    {
+        if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
+            exceptionHandler = (AXIS_EXCEPTION_HANDLER_FUNCT)stubExceptionHandler;
+
+        s->doNotPerformClientRequest = true;
+        c = s->getCallStubC();
+    }
+
+    if (c)
+        c->processSoapFault(&e, exceptionHandler);
+    else
+        exceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+}
+
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscSoapDeSerializerDestroy(AXISCHANDLE wrapperSoapDeSerializer) 
@@ -61,6 +87,9 @@ int axiscSoapDeSerializerCheckMessageBody(AXISCHANDLE wrapperSoapDeSerializer,
                           const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -68,7 +97,7 @@ int axiscSoapDeSerializerCheckMessageBody(AXISCHANDLE wrapperSoapDeSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -91,7 +120,7 @@ void * axiscSoapDeSerializerCheckForFault(AXISCHANDLE wrapperSoapDeSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -111,6 +140,9 @@ Axisc_Array* axiscSoapDeSerializerGetCmplxArray(AXISCHANDLE wrapperSoapDeSeriali
                                                         const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (Axisc_Array*)NULL;
 
     try
     {
@@ -126,7 +158,7 @@ Axisc_Array* axiscSoapDeSerializerGetCmplxArray(AXISCHANDLE wrapperSoapDeSeriali
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -143,6 +175,9 @@ Axisc_Array* axiscSoapDeSerializerGetBasicArray(AXISCHANDLE wrapperSoapDeSeriali
                                                         const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (Axisc_Array*)NULL;
 
     try
     {
@@ -152,7 +187,7 @@ Axisc_Array* axiscSoapDeSerializerGetBasicArray(AXISCHANDLE wrapperSoapDeSeriali
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -171,6 +206,9 @@ void * axiscSoapDeSerializerGetCmplxObject(AXISCHANDLE wrapperSoapDeSerializer,
                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (void *)NULL;
 
     try
     {
@@ -178,7 +216,7 @@ void * axiscSoapDeSerializerGetCmplxObject(AXISCHANDLE wrapperSoapDeSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -194,6 +232,9 @@ xsdc__int * axiscSoapDeSerializerGetElementAsInt(AXISCHANDLE wrapperSoapDeSerial
                                                          const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__int *)NULL;
 
     try
     {
@@ -201,7 +242,7 @@ xsdc__int * axiscSoapDeSerializerGetElementAsInt(AXISCHANDLE wrapperSoapDeSerial
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -217,6 +258,9 @@ xsdc__boolean * axiscSoapDeSerializerGetElementAsBoolean(AXISCHANDLE wrapperSoap
                                                                  const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__boolean *)NULL;
 
     try
     {
@@ -224,7 +268,7 @@ xsdc__boolean * axiscSoapDeSerializerGetElementAsBoolean(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -240,6 +284,9 @@ xsdc__unsignedInt * axiscSoapDeSerializerGetElementAsUnsignedInt(AXISCHANDLE wra
                                                                          const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedInt *)NULL;
 
     try
     {
@@ -247,7 +294,7 @@ xsdc__unsignedInt * axiscSoapDeSerializerGetElementAsUnsignedInt(AXISCHANDLE wra
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -263,6 +310,9 @@ xsdc__short * axiscSoapDeSerializerGetElementAsShort(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__short *)NULL;
 
     try
     {
@@ -270,7 +320,7 @@ xsdc__short * axiscSoapDeSerializerGetElementAsShort(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -286,6 +336,9 @@ xsdc__unsignedShort * axiscSoapDeSerializerGetElementAsUnsignedShort(AXISCHANDLE
                                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedShort *)NULL;
 
     try
     {
@@ -293,7 +346,7 @@ xsdc__unsignedShort * axiscSoapDeSerializerGetElementAsUnsignedShort(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -309,6 +362,9 @@ xsdc__byte * axiscSoapDeSerializerGetElementAsByte(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__byte *)NULL;
 
     try
     {
@@ -316,7 +372,7 @@ xsdc__byte * axiscSoapDeSerializerGetElementAsByte(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -332,6 +388,9 @@ xsdc__unsignedByte * axiscSoapDeSerializerGetElementAsUnsignedByte(AXISCHANDLE w
                                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedByte *)NULL;
 
     try
     {
@@ -339,7 +398,7 @@ xsdc__unsignedByte * axiscSoapDeSerializerGetElementAsUnsignedByte(AXISCHANDLE w
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -355,6 +414,9 @@ xsdc__long * axiscSoapDeSerializerGetElementAsLong(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__long *)NULL;
 
     try
     {
@@ -362,7 +424,7 @@ xsdc__long * axiscSoapDeSerializerGetElementAsLong(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -378,6 +440,9 @@ xsdc__integer * axiscSoapDeSerializerGetElementAsInteger(AXISCHANDLE wrapperSoap
                                                                  const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__integer *)NULL;
 
     try
     {
@@ -385,7 +450,7 @@ xsdc__integer * axiscSoapDeSerializerGetElementAsInteger(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -401,6 +466,9 @@ xsdc__unsignedLong * axiscSoapDeSerializerGetElementAsUnsignedLong(AXISCHANDLE w
                                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedLong *)NULL;
 
     try
     {
@@ -408,7 +476,7 @@ xsdc__unsignedLong * axiscSoapDeSerializerGetElementAsUnsignedLong(AXISCHANDLE w
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -424,6 +492,9 @@ xsdc__float * axiscSoapDeSerializerGetElementAsFloat(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__float *)NULL;
 
     try
     {
@@ -431,7 +502,7 @@ xsdc__float * axiscSoapDeSerializerGetElementAsFloat(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -447,6 +518,9 @@ xsdc__double * axiscSoapDeSerializerGetElementAsDouble(AXISCHANDLE wrapperSoapDe
                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__double *)NULL;
 
     try
     {
@@ -454,7 +528,7 @@ xsdc__double * axiscSoapDeSerializerGetElementAsDouble(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -470,6 +544,9 @@ xsdc__decimal * axiscSoapDeSerializerGetElementAsDecimal(AXISCHANDLE wrapperSoap
                                                                  const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__decimal *)NULL;
 
     try
     {
@@ -477,7 +554,7 @@ xsdc__decimal * axiscSoapDeSerializerGetElementAsDecimal(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -493,6 +570,9 @@ xsdc__string axiscSoapDeSerializerGetElementAsString(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__string)NULL;
 
     try
     {
@@ -500,7 +580,7 @@ xsdc__string axiscSoapDeSerializerGetElementAsString(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -516,6 +596,9 @@ xsdc__anyURI axiscSoapDeSerializerGetElementAsAnyURI(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyURI)NULL;
 
     try
     {
@@ -523,7 +606,7 @@ xsdc__anyURI axiscSoapDeSerializerGetElementAsAnyURI(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -539,6 +622,9 @@ xsdc__QName axiscSoapDeSerializerGetElementAsQName(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__QName)NULL;
 
     try
     {
@@ -546,7 +632,7 @@ xsdc__QName axiscSoapDeSerializerGetElementAsQName(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -562,6 +648,9 @@ xsdc__hexBinary * axiscSoapDeSerializerGetElementAsHexBinary(AXISCHANDLE wrapper
                                                                      const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__hexBinary *)NULL;
 
     try
     {
@@ -571,7 +660,7 @@ xsdc__hexBinary * axiscSoapDeSerializerGetElementAsHexBinary(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -587,6 +676,9 @@ xsdc__base64Binary * axiscSoapDeSerializerGetElementAsBase64Binary(AXISCHANDLE w
                                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__base64Binary *)NULL;
 
     try
     {
@@ -596,7 +688,7 @@ xsdc__base64Binary * axiscSoapDeSerializerGetElementAsBase64Binary(AXISCHANDLE w
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -612,6 +704,9 @@ xsdc__dateTime * axiscSoapDeSerializerGetElementAsDateTime(AXISCHANDLE wrapperSo
                                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__dateTime *)NULL;
 
     try
     {
@@ -619,7 +714,7 @@ xsdc__dateTime * axiscSoapDeSerializerGetElementAsDateTime(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -635,6 +730,9 @@ xsdc__date * axiscSoapDeSerializerGetElementAsDate(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__date *)NULL;
 
     try
     {
@@ -642,7 +740,7 @@ xsdc__date * axiscSoapDeSerializerGetElementAsDate(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -658,6 +756,9 @@ xsdc__time * axiscSoapDeSerializerGetElementAsTime(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__time *)NULL;
 
     try
     {
@@ -665,7 +766,7 @@ xsdc__time * axiscSoapDeSerializerGetElementAsTime(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -681,6 +782,9 @@ xsdc__duration * axiscSoapDeSerializerGetElementAsDuration(AXISCHANDLE wrapperSo
                                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__duration *)NULL;
 
     try
     {
@@ -688,7 +792,7 @@ xsdc__duration * axiscSoapDeSerializerGetElementAsDuration(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -704,6 +808,9 @@ xsdc__gYearMonth * axiscSoapDeSerializerGetElementAsGYearMonth(AXISCHANDLE wrapp
                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYearMonth *)NULL;
 
     try
     {
@@ -711,7 +818,7 @@ xsdc__gYearMonth * axiscSoapDeSerializerGetElementAsGYearMonth(AXISCHANDLE wrapp
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -727,6 +834,9 @@ xsdc__gYear * axiscSoapDeSerializerGetElementAsGYear(AXISCHANDLE wrapperSoapDeSe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYear *)NULL;
 
     try
     {
@@ -734,7 +844,7 @@ xsdc__gYear * axiscSoapDeSerializerGetElementAsGYear(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -750,6 +860,9 @@ xsdc__gMonthDay * axiscSoapDeSerializerGetElementAsGMonthDay(AXISCHANDLE wrapper
                                                              const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonthDay *)NULL;
 
     try
     {
@@ -757,7 +870,7 @@ xsdc__gMonthDay * axiscSoapDeSerializerGetElementAsGMonthDay(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -773,6 +886,9 @@ xsdc__gDay * axiscSoapDeSerializerGetElementAsGDay(AXISCHANDLE wrapperSoapDeSeri
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gDay *)NULL;
 
     try
     {
@@ -780,7 +896,7 @@ xsdc__gDay * axiscSoapDeSerializerGetElementAsGDay(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -796,6 +912,9 @@ xsdc__gMonth * axiscSoapDeSerializerGetElementAsGMonth(AXISCHANDLE wrapperSoapDe
                                                        const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonth *)NULL;
 
     try
     {
@@ -803,7 +922,7 @@ xsdc__gMonth * axiscSoapDeSerializerGetElementAsGMonth(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -819,6 +938,9 @@ xsdc__nonPositiveInteger * axiscSoapDeSerializerGetElementAsNonPositiveInteger(A
                                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonPositiveInteger *)NULL;
 
     try
     {
@@ -826,7 +948,7 @@ xsdc__nonPositiveInteger * axiscSoapDeSerializerGetElementAsNonPositiveInteger(A
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -842,6 +964,9 @@ xsdc__negativeInteger * axiscSoapDeSerializerGetElementAsNegativeInteger(AXISCHA
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__negativeInteger *)NULL;
 
     try
     {
@@ -849,7 +974,7 @@ xsdc__negativeInteger * axiscSoapDeSerializerGetElementAsNegativeInteger(AXISCHA
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -865,6 +990,9 @@ xsdc__nonNegativeInteger * axiscSoapDeSerializerGetElementAsNonNegativeInteger(A
                                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonNegativeInteger *)NULL;
 
     try
     {
@@ -872,7 +1000,7 @@ xsdc__nonNegativeInteger * axiscSoapDeSerializerGetElementAsNonNegativeInteger(A
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -888,6 +1016,9 @@ xsdc__positiveInteger * axiscSoapDeSerializerGetElementAsPositiveInteger(AXISCHA
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__positiveInteger *)NULL;
 
     try
     {
@@ -895,7 +1026,7 @@ xsdc__positiveInteger * axiscSoapDeSerializerGetElementAsPositiveInteger(AXISCHA
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -911,6 +1042,9 @@ xsdc__normalizedString axiscSoapDeSerializerGetElementAsNormalizedString(AXISCHA
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__normalizedString)NULL;
 
     try
     {
@@ -918,7 +1052,7 @@ xsdc__normalizedString axiscSoapDeSerializerGetElementAsNormalizedString(AXISCHA
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -934,6 +1068,9 @@ xsdc__token axiscSoapDeSerializerGetElementAsToken(AXISCHANDLE wrapperSoapDeSeri
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__token)NULL;
 
     try
     {
@@ -941,7 +1078,7 @@ xsdc__token axiscSoapDeSerializerGetElementAsToken(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -957,6 +1094,9 @@ xsdc__language axiscSoapDeSerializerGetElementAsLanguage(AXISCHANDLE wrapperSoap
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__language)NULL;
 
     try
     {
@@ -964,7 +1104,7 @@ xsdc__language axiscSoapDeSerializerGetElementAsLanguage(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -980,6 +1120,9 @@ xsdc__Name axiscSoapDeSerializerGetElementAsName(AXISCHANDLE wrapperSoapDeSerial
                                                  const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__Name)NULL;
 
     try
     {
@@ -987,7 +1130,7 @@ xsdc__Name axiscSoapDeSerializerGetElementAsName(AXISCHANDLE wrapperSoapDeSerial
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1003,6 +1146,9 @@ xsdc__NCName axiscSoapDeSerializerGetElementAsNCName(AXISCHANDLE wrapperSoapDeSe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NCName)NULL;
 
     try
     {
@@ -1010,7 +1156,7 @@ xsdc__NCName axiscSoapDeSerializerGetElementAsNCName(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1027,6 +1173,9 @@ xsdc__ID axiscSoapDeSerializerGetElementAsID(AXISCHANDLE wrapperSoapDeSerializer
                                              const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ID)NULL;
 
     try
     {
@@ -1034,7 +1183,7 @@ xsdc__ID axiscSoapDeSerializerGetElementAsID(AXISCHANDLE wrapperSoapDeSerializer
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1050,6 +1199,9 @@ xsdc__IDREF axiscSoapDeSerializerGetElementAsIDREF(AXISCHANDLE wrapperSoapDeSeri
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREF)NULL;
 
     try
     {
@@ -1057,7 +1209,7 @@ xsdc__IDREF axiscSoapDeSerializerGetElementAsIDREF(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1073,6 +1225,9 @@ xsdc__IDREFS axiscSoapDeSerializerGetElementAsIDREFS(AXISCHANDLE wrapperSoapDeSe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREFS)NULL;
 
     try
     {
@@ -1080,7 +1235,7 @@ xsdc__IDREFS axiscSoapDeSerializerGetElementAsIDREFS(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1096,6 +1251,9 @@ xsdc__ENTITY axiscSoapDeSerializerGetElementAsENTITY(AXISCHANDLE wrapperSoapDeSe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITY)NULL;
 
     try
     {
@@ -1103,7 +1261,7 @@ xsdc__ENTITY axiscSoapDeSerializerGetElementAsENTITY(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1119,6 +1277,9 @@ xsdc__ENTITIES axiscSoapDeSerializerGetElementAsENTITIES(AXISCHANDLE wrapperSoap
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITIES)NULL;
 
     try
     {
@@ -1126,7 +1287,7 @@ xsdc__ENTITIES axiscSoapDeSerializerGetElementAsENTITIES(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1142,6 +1303,9 @@ xsdc__NMTOKEN axiscSoapDeSerializerGetElementAsNMTOKEN(AXISCHANDLE wrapperSoapDe
                                                        const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKEN)NULL;
 
     try
     {
@@ -1149,7 +1313,7 @@ xsdc__NMTOKEN axiscSoapDeSerializerGetElementAsNMTOKEN(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1165,6 +1329,9 @@ xsdc__NMTOKENS axiscSoapDeSerializerGetElementAsNMTOKENS(AXISCHANDLE wrapperSoap
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKENS)NULL;
 
     try
     {
@@ -1172,7 +1339,7 @@ xsdc__NMTOKENS axiscSoapDeSerializerGetElementAsNMTOKENS(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1188,6 +1355,9 @@ xsdc__NOTATION axiscSoapDeSerializerGetElementAsNOTATION(AXISCHANDLE wrapperSoap
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NOTATION)NULL;
 
     try
     {
@@ -1195,7 +1365,7 @@ xsdc__NOTATION axiscSoapDeSerializerGetElementAsNOTATION(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1212,6 +1382,9 @@ xsdc__anyType axiscSoapDeSerializerGetElementAsAnyType(AXISCHANDLE wrapperSoapDe
                                                        const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyType)NULL;
 
     try
     {
@@ -1219,7 +1392,7 @@ xsdc__anyType axiscSoapDeSerializerGetElementAsAnyType(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1238,6 +1411,9 @@ xsdc__int * axiscSoapDeSerializerGetAttributeAsInt(AXISCHANDLE wrapperSoapDeSeri
                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__int *)NULL;
 
     try
     {
@@ -1245,7 +1421,7 @@ xsdc__int * axiscSoapDeSerializerGetAttributeAsInt(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1261,6 +1437,9 @@ xsdc__boolean * axiscSoapDeSerializerGetAttributeAsBoolean(AXISCHANDLE wrapperSo
                                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__boolean *)NULL;
 
     try
     {
@@ -1268,7 +1447,7 @@ xsdc__boolean * axiscSoapDeSerializerGetAttributeAsBoolean(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1284,6 +1463,9 @@ xsdc__unsignedInt * axiscSoapDeSerializerGetAttributeAsUnsignedInt(AXISCHANDLE w
                                                                            const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedInt *)NULL;
 
     try
     {
@@ -1291,7 +1473,7 @@ xsdc__unsignedInt * axiscSoapDeSerializerGetAttributeAsUnsignedInt(AXISCHANDLE w
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1307,6 +1489,9 @@ xsdc__short * axiscSoapDeSerializerGetAttributeAsShort(AXISCHANDLE wrapperSoapDe
                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__short *)NULL;
 
     try
     {
@@ -1314,7 +1499,7 @@ xsdc__short * axiscSoapDeSerializerGetAttributeAsShort(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1330,6 +1515,9 @@ xsdc__unsignedShort * axiscSoapDeSerializerGetAttributeAsUnsignedShort(AXISCHAND
                                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedShort *)NULL;
 
     try
     {
@@ -1337,7 +1525,7 @@ xsdc__unsignedShort * axiscSoapDeSerializerGetAttributeAsUnsignedShort(AXISCHAND
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1353,6 +1541,9 @@ xsdc__byte * axiscSoapDeSerializerGetAttributeAsByte(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__byte *)NULL;
 
     try
     {
@@ -1360,7 +1551,7 @@ xsdc__byte * axiscSoapDeSerializerGetAttributeAsByte(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1376,6 +1567,9 @@ xsdc__unsignedByte * axiscSoapDeSerializerGetAttributeAsUnsignedByte(AXISCHANDLE
                                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedByte *)NULL;
 
     try
     {
@@ -1383,7 +1577,7 @@ xsdc__unsignedByte * axiscSoapDeSerializerGetAttributeAsUnsignedByte(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1399,6 +1593,9 @@ xsdc__long * axiscSoapDeSerializerGetAttributeAsLong(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__long *)NULL;
 
     try
     {
@@ -1406,7 +1603,7 @@ xsdc__long * axiscSoapDeSerializerGetAttributeAsLong(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1422,6 +1619,9 @@ xsdc__integer * axiscSoapDeSerializerGetAttributeAsInteger(AXISCHANDLE wrapperSo
                                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__integer *)NULL;
 
     try
     {
@@ -1429,7 +1629,7 @@ xsdc__integer * axiscSoapDeSerializerGetAttributeAsInteger(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1445,6 +1645,9 @@ xsdc__unsignedLong * axiscSoapDeSerializerGetAttributeAsUnsignedLong(AXISCHANDLE
                                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__unsignedLong *)NULL;
 
     try
     {
@@ -1452,7 +1655,7 @@ xsdc__unsignedLong * axiscSoapDeSerializerGetAttributeAsUnsignedLong(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1468,6 +1671,9 @@ xsdc__float * axiscSoapDeSerializerGetAttributeAsFloat(AXISCHANDLE wrapperSoapDe
                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__float *)NULL;
 
     try
     {
@@ -1475,7 +1681,7 @@ xsdc__float * axiscSoapDeSerializerGetAttributeAsFloat(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1491,6 +1697,9 @@ xsdc__double * axiscSoapDeSerializerGetAttributeAsDouble(AXISCHANDLE wrapperSoap
                                                                  const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__double *)NULL;
 
     try
     {
@@ -1498,7 +1707,7 @@ xsdc__double * axiscSoapDeSerializerGetAttributeAsDouble(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1514,6 +1723,9 @@ xsdc__decimal * axiscSoapDeSerializerGetAttributeAsDecimal(AXISCHANDLE wrapperSo
                                                                    const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__decimal *)NULL;
 
     try
     {
@@ -1521,7 +1733,7 @@ xsdc__decimal * axiscSoapDeSerializerGetAttributeAsDecimal(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1537,6 +1749,9 @@ xsdc__string axiscSoapDeSerializerGetAttributeAsString(AXISCHANDLE wrapperSoapDe
                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__string)NULL;
 
     try
     {
@@ -1544,7 +1759,7 @@ xsdc__string axiscSoapDeSerializerGetAttributeAsString(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1560,6 +1775,9 @@ xsdc__anyURI axiscSoapDeSerializerGetAttributeAsAnyURI(AXISCHANDLE wrapperSoapDe
                                                                const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__anyURI)NULL;
 
     try
     {
@@ -1567,7 +1785,7 @@ xsdc__anyURI axiscSoapDeSerializerGetAttributeAsAnyURI(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1583,6 +1801,9 @@ xsdc__QName axiscSoapDeSerializerGetAttributeAsQName(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__QName)NULL;
 
     try
     {
@@ -1590,7 +1811,7 @@ xsdc__QName axiscSoapDeSerializerGetAttributeAsQName(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1606,6 +1827,9 @@ xsdc__hexBinary * axiscSoapDeSerializerGetAttributeAsHexBinary(AXISCHANDLE wrapp
                                                                        const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__hexBinary *)NULL;
 
     try
     {
@@ -1615,7 +1839,7 @@ xsdc__hexBinary * axiscSoapDeSerializerGetAttributeAsHexBinary(AXISCHANDLE wrapp
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1631,6 +1855,9 @@ xsdc__base64Binary * axiscSoapDeSerializerGetAttributeAsBase64Binary(AXISCHANDLE
                                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__base64Binary *)NULL;
 
     try
     {
@@ -1640,7 +1867,7 @@ xsdc__base64Binary * axiscSoapDeSerializerGetAttributeAsBase64Binary(AXISCHANDLE
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1656,6 +1883,9 @@ xsdc__dateTime * axiscSoapDeSerializerGetAttributeAsDateTime(AXISCHANDLE wrapper
                                                                      const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__dateTime *)NULL;
 
     try
     {
@@ -1663,7 +1893,7 @@ xsdc__dateTime * axiscSoapDeSerializerGetAttributeAsDateTime(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1679,6 +1909,9 @@ xsdc__date * axiscSoapDeSerializerGetAttributeAsDate(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__date *)NULL;
 
     try
     {
@@ -1686,7 +1919,7 @@ xsdc__date * axiscSoapDeSerializerGetAttributeAsDate(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1702,6 +1935,9 @@ xsdc__time * axiscSoapDeSerializerGetAttributeAsTime(AXISCHANDLE wrapperSoapDeSe
                                                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__time *)NULL;
 
     try
     {
@@ -1709,7 +1945,7 @@ xsdc__time * axiscSoapDeSerializerGetAttributeAsTime(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1725,6 +1961,9 @@ xsdc__duration * axiscSoapDeSerializerGetAttributeAsDuration(AXISCHANDLE wrapper
                                                                      const AxiscChar * pNamespace) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__duration *)NULL;
 
     try
     {
@@ -1732,7 +1971,7 @@ xsdc__duration * axiscSoapDeSerializerGetAttributeAsDuration(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1748,6 +1987,9 @@ xsdc__gYearMonth * axiscSoapDeSerializerGetAttributeAsGYearMonth(AXISCHANDLE wra
                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYearMonth *)NULL;
 
     try
     {
@@ -1755,7 +1997,7 @@ xsdc__gYearMonth * axiscSoapDeSerializerGetAttributeAsGYearMonth(AXISCHANDLE wra
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1771,6 +2013,9 @@ xsdc__gYear * axiscSoapDeSerializerGetAttributeAsGYear(AXISCHANDLE wrapperSoapDe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gYear *)NULL;
 
     try
     {
@@ -1778,7 +2023,7 @@ xsdc__gYear * axiscSoapDeSerializerGetAttributeAsGYear(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1794,6 +2039,9 @@ xsdc__gMonthDay * axiscSoapDeSerializerGetAttributeAsGMonthDay(AXISCHANDLE wrapp
                                                              const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonthDay *)NULL;
 
     try
     {
@@ -1801,7 +2049,7 @@ xsdc__gMonthDay * axiscSoapDeSerializerGetAttributeAsGMonthDay(AXISCHANDLE wrapp
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1817,6 +2065,9 @@ xsdc__gDay * axiscSoapDeSerializerGetAttributeAsGDay(AXISCHANDLE wrapperSoapDeSe
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gDay *)NULL;
 
     try
     {
@@ -1824,7 +2075,7 @@ xsdc__gDay * axiscSoapDeSerializerGetAttributeAsGDay(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1840,6 +2091,9 @@ xsdc__gMonth * axiscSoapDeSerializerGetAttributeAsGMonth(AXISCHANDLE wrapperSoap
                                                        const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__gMonth *)NULL;
 
     try
     {
@@ -1847,7 +2101,7 @@ xsdc__gMonth * axiscSoapDeSerializerGetAttributeAsGMonth(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1864,6 +2118,9 @@ xsdc__nonPositiveInteger * axiscSoapDeSerializerGetAttributeAsNonPositiveInteger
                                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonPositiveInteger *)NULL;
 
     try
     {
@@ -1871,7 +2128,7 @@ xsdc__nonPositiveInteger * axiscSoapDeSerializerGetAttributeAsNonPositiveInteger
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1887,6 +2144,9 @@ xsdc__negativeInteger * axiscSoapDeSerializerGetAttributeAsNegativeInteger(AXISC
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__negativeInteger *)NULL;
 
     try
     {
@@ -1894,7 +2154,7 @@ xsdc__negativeInteger * axiscSoapDeSerializerGetAttributeAsNegativeInteger(AXISC
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1910,6 +2170,9 @@ xsdc__nonNegativeInteger * axiscSoapDeSerializerGetAttributeAsNonNegativeInteger
                                                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__nonNegativeInteger *)NULL;
 
     try
     {
@@ -1917,7 +2180,7 @@ xsdc__nonNegativeInteger * axiscSoapDeSerializerGetAttributeAsNonNegativeInteger
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1933,6 +2196,9 @@ xsdc__positiveInteger * axiscSoapDeSerializerGetAttributeAsPositiveInteger(AXISC
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__positiveInteger *)NULL;
 
     try
     {
@@ -1940,7 +2206,7 @@ xsdc__positiveInteger * axiscSoapDeSerializerGetAttributeAsPositiveInteger(AXISC
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1956,6 +2222,9 @@ xsdc__normalizedString axiscSoapDeSerializerGetAttributeAsNormalizedString(AXISC
                                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__normalizedString)NULL;
 
     try
     {
@@ -1963,7 +2232,7 @@ xsdc__normalizedString axiscSoapDeSerializerGetAttributeAsNormalizedString(AXISC
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -1979,6 +2248,9 @@ xsdc__token axiscSoapDeSerializerGetAttributeAsToken(AXISCHANDLE wrapperSoapDeSe
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__token)NULL;
 
     try
     {
@@ -1986,7 +2258,7 @@ xsdc__token axiscSoapDeSerializerGetAttributeAsToken(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2002,6 +2274,9 @@ xsdc__language axiscSoapDeSerializerGetAttributeAsLanguage(AXISCHANDLE wrapperSo
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__language)NULL;
 
     try
     {
@@ -2009,7 +2284,7 @@ xsdc__language axiscSoapDeSerializerGetAttributeAsLanguage(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2025,6 +2300,9 @@ xsdc__Name axiscSoapDeSerializerGetAttributeAsName(AXISCHANDLE wrapperSoapDeSeri
                                                  const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__Name)NULL;
 
     try
     {
@@ -2032,7 +2310,7 @@ xsdc__Name axiscSoapDeSerializerGetAttributeAsName(AXISCHANDLE wrapperSoapDeSeri
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2048,6 +2326,9 @@ xsdc__NCName axiscSoapDeSerializerGetAttributeAsNCName(AXISCHANDLE wrapperSoapDe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NCName)NULL;
 
     try
     {
@@ -2055,7 +2336,7 @@ xsdc__NCName axiscSoapDeSerializerGetAttributeAsNCName(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2072,6 +2353,9 @@ xsdc__ID axiscSoapDeSerializerGetAttributeAsID(AXISCHANDLE wrapperSoapDeSerializ
                                                const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ID)NULL;
 
     try
     {
@@ -2079,7 +2363,7 @@ xsdc__ID axiscSoapDeSerializerGetAttributeAsID(AXISCHANDLE wrapperSoapDeSerializ
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2096,6 +2380,9 @@ xsdc__IDREF axiscSoapDeSerializerGetAttributeAsIDREF(AXISCHANDLE wrapperSoapDeSe
                                                    const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREF)NULL;
 
     try
     {
@@ -2103,7 +2390,7 @@ xsdc__IDREF axiscSoapDeSerializerGetAttributeAsIDREF(AXISCHANDLE wrapperSoapDeSe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2119,6 +2406,9 @@ xsdc__IDREFS axiscSoapDeSerializerGetAttributeAsIDREFS(AXISCHANDLE wrapperSoapDe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__IDREFS)NULL;
 
     try
     {
@@ -2126,7 +2416,7 @@ xsdc__IDREFS axiscSoapDeSerializerGetAttributeAsIDREFS(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2142,6 +2432,9 @@ xsdc__ENTITY axiscSoapDeSerializerGetAttributeAsENTITY(AXISCHANDLE wrapperSoapDe
                                                      const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITY)NULL;
 
     try
     {
@@ -2149,7 +2442,7 @@ xsdc__ENTITY axiscSoapDeSerializerGetAttributeAsENTITY(AXISCHANDLE wrapperSoapDe
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2165,6 +2458,9 @@ xsdc__ENTITIES axiscSoapDeSerializerGetAttributeAsENTITIES(AXISCHANDLE wrapperSo
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__ENTITIES)NULL;
 
     try
     {
@@ -2172,7 +2468,7 @@ xsdc__ENTITIES axiscSoapDeSerializerGetAttributeAsENTITIES(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2188,6 +2484,9 @@ xsdc__NMTOKEN axiscSoapDeSerializerGetAttributeAsNMTOKEN(AXISCHANDLE wrapperSoap
                                                        const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKEN)NULL;
 
     try
     {
@@ -2195,7 +2494,7 @@ xsdc__NMTOKEN axiscSoapDeSerializerGetAttributeAsNMTOKEN(AXISCHANDLE wrapperSoap
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2211,6 +2510,9 @@ xsdc__NMTOKENS axiscSoapDeSerializerGetAttributeAsNMTOKENS(AXISCHANDLE wrapperSo
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NMTOKENS)NULL;
 
     try
     {
@@ -2218,7 +2520,7 @@ xsdc__NMTOKENS axiscSoapDeSerializerGetAttributeAsNMTOKENS(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2234,6 +2536,9 @@ xsdc__NOTATION axiscSoapDeSerializerGetAttributeAsNOTATION(AXISCHANDLE wrapperSo
                                                          const AxiscChar * pNamespace)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (xsdc__NOTATION)NULL;
 
     try
     {
@@ -2241,7 +2546,7 @@ xsdc__NOTATION axiscSoapDeSerializerGetAttributeAsNOTATION(AXISCHANDLE wrapperSo
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2250,17 +2555,6 @@ xsdc__NOTATION axiscSoapDeSerializerGetAttributeAsNOTATION(AXISCHANDLE wrapperSo
 
     return (xsdc__NOTATION)NULL;      
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 AXISC_STORAGE_CLASS_INFO 
@@ -2274,7 +2568,7 @@ int axiscSoapDeSerializerGetStatus(AXISCHANDLE wrapperSoapDeSerializer)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2295,7 +2589,7 @@ AXISC_BINDING_STYLE axiscSoapDeSerializerGetStyle(AXISCHANDLE wrapperSoapDeSeria
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2318,7 +2612,7 @@ void axiscSoapDeSerializerSetStyle(AXISCHANDLE wrapperSoapDeSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2337,7 +2631,7 @@ int axiscSoapDeSerializerGetVersion(AXISCHANDLE wrapperSoapDeSerializer)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2351,6 +2645,9 @@ AXISC_STORAGE_CLASS_INFO
 int axiscSoapDeSerializerGetHeader(AXISCHANDLE wrapperSoapDeSerializer) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -2358,7 +2655,7 @@ int axiscSoapDeSerializerGetHeader(AXISCHANDLE wrapperSoapDeSerializer)
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2372,6 +2669,9 @@ AXISC_STORAGE_CLASS_INFO
 AxiscAnyType * axiscSoapDeSerializerGetAnyObject(AXISCHANDLE wrapperSoapDeSerializer) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (AxiscAnyType *)NULL;
 
     try
     {
@@ -2381,7 +2681,7 @@ AxiscAnyType * axiscSoapDeSerializerGetAnyObject(AXISCHANDLE wrapperSoapDeSerial
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2397,6 +2697,12 @@ void axiscSoapDeSerializerGetChardataAs(AXISCHANDLE wrapperSoapDeSerializer,
                         AXISC_XSDTYPE type) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+    {
+        *pValue = NULL;
+        return;
+    }
 
     try
     {
@@ -2404,7 +2710,7 @@ void axiscSoapDeSerializerGetChardataAs(AXISCHANDLE wrapperSoapDeSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2417,6 +2723,9 @@ AXISCHANDLE axiscSoapDeSerializerGetAttachmentSoapAttachment(AXISCHANDLE wrapper
                                              const char * pcAttachmentid) 
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (AXISCHANDLE)NULL;
 
     try
     {
@@ -2424,7 +2733,7 @@ AXISCHANDLE axiscSoapDeSerializerGetAttachmentSoapAttachment(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {
@@ -2438,6 +2747,9 @@ AXISC_STORAGE_CLASS_INFO
 const char * axiscSoapDeSerializerPeekNextElementName(AXISCHANDLE wrapperSoapDeSerializer)
 {
     IWrapperSoapDeSerializer *dz = (IWrapperSoapDeSerializer*)wrapperSoapDeSerializer;
+    StubC *s = (StubC *)(((SoapDeSerializer *)dz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return "";
 
     try
     {
@@ -2445,7 +2757,7 @@ const char * axiscSoapDeSerializerPeekNextElementName(AXISCHANDLE wrapperSoapDeS
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(wrapperSoapDeSerializer, e);
     }
     catch ( ... )
     {

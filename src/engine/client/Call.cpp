@@ -290,6 +290,11 @@ int Call::initialize( PROVIDERTYPE nStyle)
                 m_pIWSSZ->reset();
                 m_pIWSDZ->init();
 
+                // Set the C stub that the serializer and deserializer is associated with.
+                // This is needed for C-stub exception handling.
+                m_pIWSSZ->setCStub(m_pStub);
+                m_pIWSDZ->setCStub(m_pStub);
+
                 switch (nStyle)
                 {
                     case C_RPC_PROVIDER:

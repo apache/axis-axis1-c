@@ -65,6 +65,12 @@ private:
 
     bool m_doNotSkip;
 
+    /**
+     * Following is for C-binding support. The stub that the deserializer belongs to.
+     */
+    void * m_pStub;
+
+
 private:
     int AXISCALL getArraySize();
 public:
@@ -75,7 +81,22 @@ public:
     int getBody();
     const char* getMethodNameToInvoke();
     void setMethodNameToInvoke(const char*);
-    
+    /**
+     * Set C-binding stub pointer associated with object.
+     * This function was added in support of the c-Binding implementation.
+     *
+     * @param pStub - pointer to C binding stub object.
+     */
+     void setCStub(void *pStub) { m_pStub = pStub; }
+
+    /**
+     * Get C-binding stub pointer.
+     * This function was added in support of the c-Binding implementation.
+     *
+     * @return Pointer to C binding stub object.
+     */
+     void *getCStub() { return m_pStub; }
+
     /**
     * This method allows to peek for the name of the next element in XML stream.
     * Useful in supporting "all" & "choice" WSDL constructs.

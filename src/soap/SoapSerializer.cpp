@@ -1590,6 +1590,8 @@ reset()
     if( m_pSoapEnvelope )
         m_pSoapEnvelope->reset();
     
+    m_pStub = NULL;
+
     logExit()
 }
 

@@ -75,6 +75,7 @@ SoapDeSerializer ()
     m_nSoapVersion = VERSION_LAST;
     
     m_doNotSkip = false;
+    m_pStub = NULL;
 
     logExit()
 }
@@ -683,6 +684,8 @@ init ()
 
     m_nSoapVersion = VERSION_LAST;
     m_nStatus = AXIS_SUCCESS;
+
+    m_pStub = NULL;
 
     logExitWithReturnCode(m_nStatus)
 

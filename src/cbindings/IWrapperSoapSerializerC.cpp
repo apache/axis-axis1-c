@@ -22,6 +22,7 @@
 #include <axis/AxisException.hpp>
 
 #include "../soap/SoapSerializer.h"
+#include "client/StubC.h"
 
 #include <axis/Axis.h>
 #include <axis/GDefine.h>
@@ -37,6 +38,23 @@
 AXIS_CPP_NAMESPACE_USE
 
 extern "C" {
+
+static void processException(void *ser, int exceptionCode, const char *whatString)
+{
+    AXIS_EXCEPTION_HANDLER_FUNCT exceptionHandler = axiscAxisInvokeExceptionHandler;
+    void *stubExceptionHandler;
+
+    StubC *s = (StubC *)(((SoapSerializer *)ser)->getCStub());
+    if (s)
+    {
+        if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
+            exceptionHandler = (AXIS_EXCEPTION_HANDLER_FUNCT)stubExceptionHandler;
+
+        s->doNotPerformClientRequest = true;
+    }
+
+    exceptionHandler(exceptionCode, whatString, NULL, NULL);
+}
 
 AXISC_STORAGE_CLASS_INFO 
 void axiscSoapSerializerDestroy(AXISCHANDLE wrapperSoapSerializer) 
@@ -63,6 +81,9 @@ int axiscSoapSerializerCreateSoapMethod(AXISCHANDLE wrapperSoapSerializer,
                           const AxiscChar * sURI) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -70,11 +91,11 @@ int axiscSoapSerializerCreateSoapMethod(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -88,6 +109,9 @@ int axiscSoapSerializerCreateSoapFault(AXISCHANDLE wrapperSoapSerializer,
                          const AxiscChar * sFaultString) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -95,11 +119,11 @@ int axiscSoapSerializerCreateSoapFault(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -130,11 +154,11 @@ const AxiscChar * axiscSoapSerializerGetNamespacePrefix(AXISCHANDLE wrapperSoapS
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
     
     return (const AxiscChar *)NULL;
@@ -152,11 +176,11 @@ void axiscSoapSerializerRemoveNamespacePrefix(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -167,6 +191,9 @@ int axiscSoapSerializerAddOutputParam(AXISCHANDLE wrapperSoapSerializer,
                         AXISC_XSDTYPE type) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -174,11 +201,11 @@ int axiscSoapSerializerAddOutputParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -193,6 +220,9 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
                                   const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -205,11 +235,11 @@ int axiscSoapSerializerAddOutputCmplxArrayParam(AXISCHANDLE wrapperSoapSerialize
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -222,6 +252,9 @@ int axiscSoapSerializerAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerialize
                                   const AxiscChar * pName) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -234,11 +267,11 @@ int axiscSoapSerializerAddOutputBasicArrayParam(AXISCHANDLE wrapperSoapSerialize
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -253,6 +286,9 @@ int axiscSoapSerializerAddOutputCmplxParam(AXISCHANDLE wrapperSoapSerializer,
                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -260,11 +296,11 @@ int axiscSoapSerializerAddOutputCmplxParam(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -279,6 +315,9 @@ int axiscSoapSerializerAddFaultDetail(AXISCHANDLE wrapperSoapSerializer,
                         const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -286,11 +325,11 @@ int axiscSoapSerializerAddFaultDetail(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -305,6 +344,9 @@ int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
                              const AxiscChar * pNamespace) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -317,11 +359,11 @@ int axiscSoapSerializerSerializeCmplxArray(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -335,6 +377,9 @@ int axiscSoapSerializerSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer,
                              const AxiscChar * pName)
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -348,11 +393,11 @@ int axiscSoapSerializerSerializeBasicArray(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -365,6 +410,9 @@ int axiscSoapSerializerSerializeAsElement(AXISCHANDLE wrapperSoapSerializer,
                             void * pValue, AXISC_XSDTYPE type) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {                
@@ -404,11 +452,11 @@ int axiscSoapSerializerSerializeAsElement(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
     
     return AXISC_FAIL;
@@ -422,6 +470,9 @@ int axiscSoapSerializerSerializeAsAttribute(AXISCHANDLE wrapperSoapSerializer,
                               AXISC_XSDTYPE type) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -429,11 +480,11 @@ int axiscSoapSerializerSerializeAsAttribute(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -446,6 +497,9 @@ void axiscSoapSerializerSerializeStartElementOfType(AXISCHANDLE wrapperSoapSeria
                                       const AxiscChar * pPrefix) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -453,11 +507,11 @@ void axiscSoapSerializerSerializeStartElementOfType(AXISCHANDLE wrapperSoapSeria
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -466,6 +520,9 @@ void axiscSoapSerializerSerializeEndElementOfType(AXISCHANDLE wrapperSoapSeriali
                                     const AxiscChar * pName) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -473,11 +530,11 @@ void axiscSoapSerializerSerializeEndElementOfType(AXISCHANDLE wrapperSoapSeriali
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -492,11 +549,11 @@ AXISC_PROVIDERTYPE axiscSoapSerializerGetCurrentProviderType(AXISCHANDLE wrapper
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
     
     return ::UNKNOWN_PROVIDER;
@@ -514,11 +571,11 @@ void axiscSoapSerializerSetCurrentProviderType(AXISCHANDLE wrapperSoapSerializer
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -527,6 +584,9 @@ int axiscSoapSerializerAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer,
                             AxiscAnyType * pAnyObject) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -548,11 +608,11 @@ int axiscSoapSerializerAddOutputAnyObject(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -563,6 +623,9 @@ int axiscSoapSerializerSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer,
                             AxiscAnyType * pAnyObject) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -584,11 +647,11 @@ int axiscSoapSerializerSerializeAnyObject(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -600,6 +663,9 @@ int axiscSoapSerializerSerializeAsChardata(AXISCHANDLE wrapperSoapSerializer,
                              AXISC_XSDTYPE type) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return AXISC_FAIL;
 
     try
     {
@@ -607,11 +673,11 @@ int axiscSoapSerializerSerializeAsChardata(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return AXISC_FAIL;
@@ -623,6 +689,9 @@ void axiscSoapSerializerAddAttachment(AXISCHANDLE wrapperSoapSerializer,
                         AXISCHANDLE objAttach) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -630,11 +699,11 @@ void axiscSoapSerializerAddAttachment(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -644,6 +713,9 @@ void axiscSoapSerializerAddAttachmentBody(AXISCHANDLE wrapperSoapSerializer,
                             xsdc__base64Binary * pAttchBody) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -651,11 +723,11 @@ void axiscSoapSerializerAddAttachmentBody(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -666,6 +738,9 @@ void axiscSoapSerializerAddAttachmentHeader(AXISCHANDLE wrapperSoapSerializer,
                               const AxiscChar * achHeaderValue) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -673,11 +748,11 @@ void axiscSoapSerializerAddAttachmentHeader(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
@@ -685,6 +760,9 @@ AXISC_STORAGE_CLASS_INFO
 AXISCHANDLE axiscSoapSerializerCreateSoapAttachmentSoapAttachment(AXISCHANDLE wrapperSoapSerializer) 
 {
     IWrapperSoapSerializer *sz = (IWrapperSoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return (AXISCHANDLE)NULL;
 
     try
     {
@@ -692,11 +770,11 @@ AXISCHANDLE axiscSoapSerializerCreateSoapAttachmentSoapAttachment(AXISCHANDLE wr
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 
     return (AXISCHANDLE)NULL;
@@ -708,6 +786,9 @@ void axiscSoapSerializerSerialize(AXISCHANDLE wrapperSoapSerializer,
                                   ...) 
 {
     SoapSerializer *sz = (SoapSerializer*)wrapperSoapSerializer;
+    StubC *s = (StubC *)(((SoapSerializer *)sz)->getCStub());
+    if (s && s->doNotPerformClientRequest)
+        return;
 
     try
     {
@@ -719,11 +800,11 @@ void axiscSoapSerializerSerialize(AXISCHANDLE wrapperSoapSerializer,
     }
     catch ( AxisException& e  )
     {
-        axiscAxisInvokeExceptionHandler(e.getExceptionCode(), e.what(), NULL, NULL);
+        processException(sz, e.getExceptionCode(), e.what());
     }
     catch ( ... )
     {
-        axiscAxisInvokeExceptionHandler(-1, "Unrecognized exception thrown.", NULL, NULL);
+        processException(sz, -1, "Unrecognized exception thrown.");
     }
 }
 
