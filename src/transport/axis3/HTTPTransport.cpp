@@ -2032,7 +2032,7 @@ addCookie(const string name, const string value)
     
     logExit()
     
-    return true;
+    return AXIS_SUCCESS;
 }
 
 int HTTPTransport::
@@ -2045,18 +2045,24 @@ addCookie(const string nameValuePair)
     // And discards stuff after first ';'
     // This is the same assumption used in Axis Java
 
+    string nameValue = nameValuePair;
     string::size_type ulKeyEndsAt = nameValuePair.find( ";");
 
-    string nameValue;
     if( ulKeyEndsAt != std::string::npos)
         nameValue = nameValuePair.substr( 0, ulKeyEndsAt);
 
     // Now split the nameValue up
     string::size_type nameEndsAt = nameValue.find("=");
     
+    string value = "";
+    if (nameEndsAt != std::string::npos)
+        value = nameValue.substr(nameEndsAt+1);
+
+    int rc = addCookie(nameValue.substr(0, nameEndsAt), value);
+
     logExit()
     
-    return addCookie(nameValue.substr(0, nameEndsAt), nameValue.substr(nameEndsAt+1));
+    return rc;
 }
 
 int HTTPTransport::
