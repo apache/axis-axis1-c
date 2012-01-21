@@ -32,8 +32,6 @@
  * @class Handler
  * @brief interface for handlers.
  *
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 /*

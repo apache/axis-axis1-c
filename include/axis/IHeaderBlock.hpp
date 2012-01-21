@@ -86,11 +86,6 @@ typedef enum
 /**
  *  @class IHeaderBlock
  *  @brief interface for the IHeaderBlock class.
- *
- *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- *  @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *
  */
 
 

@@ -52,7 +52,6 @@ class IHeaderBlock;
   * }
   * </PRE>
   * 
-  * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
   */
 class IHandlerSoapSerializer : public IWrapperSoapSerializer
 

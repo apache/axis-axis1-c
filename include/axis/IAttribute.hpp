@@ -42,8 +42,6 @@ AXIS_CPP_NAMESPACE_START
  *   @class IAttribute
  *   @brief interface for the IAttribute class.
  *
- *   @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- *
  */
 
 class IAttribute

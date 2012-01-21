@@ -15,8 +15,6 @@
  *   limitations under the License.
  *
  *
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcs.slt.lk)
- *
  */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */

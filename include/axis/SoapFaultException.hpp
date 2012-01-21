@@ -50,7 +50,6 @@ AXIS_CPP_NAMESPACE_START
  * can clean it's own storage in its destructor so the client application
  * doesn't have to.
  * 
- * @author Mark Whitlock
  */
 
 class STORAGE_CLASS_INFO SoapFaultException :public AxisException

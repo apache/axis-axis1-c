@@ -41,7 +41,6 @@ AXIS_CPP_NAMESPACE_START
  * This file contains the API functions that are implemented by the WSDL2Ws
  * tool generated code to manipulate C/C++ type for each complex type in a xml
  * schema.
- * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
  */
  
 /**

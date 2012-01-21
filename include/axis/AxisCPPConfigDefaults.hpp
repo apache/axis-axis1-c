@@ -19,8 +19,6 @@
  /**
  * @file AxisCPPConfigDefaults.hpp
  *
- * @author John Kelly (john_kelly@uk.ibm.com)
- *
  */
  
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */

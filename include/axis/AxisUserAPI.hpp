@@ -41,7 +41,6 @@ AXIS_CPP_NAMESPACE_START
   * This file contains types defined in Axis C++. The mapping of basic xsd types
   * to the C language types.
   * 
-  * @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
   */
 
 /**

@@ -32,8 +32,6 @@
   * @file AxisUserAPIArrays.hpp
   * This file contains arrays defined for the basic types declared in AxisUserAPI.hpp
   * 
-  * 
-  * @author Adrian DIck (adrian.dick@uk.ibm.com)
   */
 
 #include <time.h>

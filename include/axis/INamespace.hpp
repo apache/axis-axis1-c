@@ -22,9 +22,6 @@
 /**
  *   @class INamespace
  *   @brief interface for the Namespace.
- *
- *   @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com, roshan_444@yahoo.com)
- *
  */
 
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */

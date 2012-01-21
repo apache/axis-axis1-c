@@ -14,12 +14,6 @@
  *   limitations under the License.
  */
 
-/*
- * @author Nithyakala Thangarajah (nithya@opensource.lk)
- * @author Rangika Mendis (rangika@opensource.lk) 
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshan@jkcsworld.com)
- *
- */
 
 /**
  * @file ISoapAttachment.hpp

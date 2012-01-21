@@ -20,8 +20,6 @@
 /**
  * @file BasicHandler.hpp
  *
- * @author Susantha Kumara (skumara@virtusa.com)
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com) *
  */
   
 #if !defined(_BASICHANDLER_H__OF_AXIS_INCLUDED_)

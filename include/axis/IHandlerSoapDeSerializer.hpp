@@ -31,8 +31,6 @@
  *  @class IHandlerSoapDeSerializer
  *  @brief interface for the IHandlerSoapDeSerializer class.
  *
- *
- *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 /*

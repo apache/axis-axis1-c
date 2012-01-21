@@ -40,10 +40,6 @@
 /**
     @class IWrapperSoapDeSerializer
     @brief interface for the IWrapperSoapDeSerializer class.
-
-
-    @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
-    @author Roshan Weerasuriya (roshan@jkcs.slt.lk, roshan@opensource.lk)
 */
 
 AXIS_CPP_NAMESPACE_START
