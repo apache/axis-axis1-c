@@ -26,19 +26,22 @@
 #include <axis/AxisWrapperAPI.hpp>
 #include <axis/UnknownElementException.hpp>
 #include <axis/client/Stub.hpp>
+#include <axis/IAttribute.hpp>
 
 #include "../../transport/SOAPTransport.h"
 #include "../../soap/SoapSerializer.h"
 #include "../../common/AxisUtils.h"
 #include "../../common/AxisConfig.h"
 #include "../../common/AxisGenException.h"
+#include "../../soap/Attribute.h"
 
 #include "../../common/AxisTrace.h"
 
 extern AXIS_CPP_NAMESPACE_PREFIX AxisConfig* g_pConfig;
 
 AXIS_CPP_NAMESPACE_USE
-    Stub::Stub (const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol):
+
+Stub::Stub (const char *pcEndPointUri, AXIS_PROTOCOL_TYPE eProtocol):
 m_proxyUsername (NULL),
 m_proxyPassword (NULL), 
 m_pExceptionHandler(NULL)
@@ -322,12 +325,140 @@ Stub::setSOAPHeaders ()
 }
 
 void
+Stub::addNamespaceToSOAPHeader(const AxisChar * pUri, const AxisChar * pPrefix)
+{
+    std::list<Attribute*> attributeList;
+    Attribute * pAttribute = new Attribute( attributeList, "", pPrefix, pUri, "");
+
+    m_vSOAPHeaderNamespaces.push_back ((IAttribute *)pAttribute);
+}
+
+
+void
+Stub::clearSOAPHeaderNamespaces()
+{
+    unsigned int j = 0;
+    for (j = 0; j < m_vSOAPHeaderNamespaces.size (); j++)
+    {
+        delete m_vSOAPHeaderNamespaces[j];
+        m_vSOAPHeaderNamespaces[j] = NULL;
+    }
+    m_vSOAPHeaderNamespaces.clear();
+}
+
+
+void
+Stub::addAttributeToSOAPHeader(const AxisChar * pLocalname,
+                              const AxisChar * pPrefix,
+                              const AxisChar * pValue)
+{
+    std::list<Attribute*> attributeList;
+    Attribute * pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
+
+    m_vSOAPHeaderAttributes.push_back ((IAttribute *)pAttribute);
+}
+
+
+void
+Stub::clearSOAPHeaderAttributes()
+{
+    unsigned int j = 0;
+    for (j = 0; j < m_vSOAPHeaderAttributes.size (); j++)
+    {
+        delete m_vSOAPHeaderAttributes[j];
+        m_vSOAPHeaderAttributes[j] = NULL;
+    }
+    m_vSOAPHeaderAttributes.clear();
+}
+
+
+void
+Stub::addNamespaceToSOAPBody(const AxisChar * pUri, const AxisChar * pPrefix)
+{
+    std::list<Attribute*> attributeList;
+    Attribute * pAttribute = new Attribute( attributeList, "", pPrefix, pUri, "");
+
+    m_vSOAPBodyNamespaces.push_back ((IAttribute *)pAttribute);
+}
+
+
+void
+Stub::clearSOAPBodyNamespaces()
+{
+    unsigned int j = 0;
+    for (j = 0; j < m_vSOAPBodyNamespaces.size (); j++)
+    {
+        delete m_vSOAPBodyNamespaces[j];
+        m_vSOAPBodyNamespaces[j] = NULL;
+    }
+    m_vSOAPBodyNamespaces.clear();
+}
+
+
+void
+Stub::addAttributeToSOAPBody(const AxisChar * pLocalname,
+                            const AxisChar * pPrefix,
+                            const AxisChar * pValue)
+{
+    std::list<Attribute*> attributeList;
+    Attribute * pAttribute = new Attribute( attributeList, pLocalname, pPrefix, pValue);
+
+    m_vSOAPBodyAttributes.push_back ((IAttribute *)pAttribute);
+}
+
+
+void
+Stub::clearSOAPBodyAttributes()
+{
+    unsigned int j = 0;
+    for (j = 0; j < m_vSOAPBodyAttributes.size (); j++)
+    {
+        delete m_vSOAPBodyAttributes[j];
+        m_vSOAPBodyAttributes[j] = NULL;
+    }
+    m_vSOAPBodyAttributes.clear();
+}
+
+
+void
 Stub::applyUserPreferences ()
 {
       logEntryEngine("Stub::applyUserPreferences")
 
     setSOAPHeaders ();
       
+    // Set SOAP body and SOAP header attributes
+    SoapSerializer *pSerializer = NULL;
+    if (m_pCall)
+        pSerializer = m_pCall->getSOAPSerializer ();
+
+    if (pSerializer)
+    {
+        unsigned int i;
+
+        // add user-specified namespaces to SOAP header
+        for (i = 0; i < m_vSOAPHeaderNamespaces.size (); i++)
+            pSerializer->addNamespaceToSOAPHeader(m_vSOAPHeaderNamespaces[i]->getURI(),
+                                                  m_vSOAPHeaderNamespaces[i]->getPrefix());
+
+        // Add user-specified attributes to SOAP header
+        for (i = 0; i < m_vSOAPHeaderAttributes.size (); i++)
+            pSerializer->addAttributeToSOAPHeader(m_vSOAPHeaderAttributes[i]->getLocalName(),
+                                                  m_vSOAPHeaderAttributes[i]->getPrefix(),
+                                                  m_vSOAPHeaderAttributes[i]->getValue());
+
+        // add user-specified namespaces to SOAP body
+        for (i = 0; i < m_vSOAPBodyNamespaces.size (); i++)
+            pSerializer->addNamespaceToSOAPBody(m_vSOAPBodyNamespaces[i]->getURI(),
+                                                m_vSOAPBodyNamespaces[i]->getPrefix());
+
+        // Add user-specified attributes to SOAP body
+        for (i = 0; i < m_vSOAPBodyAttributes.size (); i++)
+            pSerializer->addAttributeToSOAPBody(m_vSOAPBodyAttributes[i]->getLocalName(),
+                                                m_vSOAPBodyAttributes[i]->getPrefix(),
+                                                m_vSOAPBodyAttributes[i]->getValue());
+    }
+
     logExit()
 }
 

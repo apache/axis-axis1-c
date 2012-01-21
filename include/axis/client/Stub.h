@@ -565,10 +565,83 @@ void axiscStubCheckForExtraneousElements(AXISCHANDLE stub);
  * @param maxCount how many redirects to follow.  Default is 1.  A value less than 1
  *                 is the same as setting handleRedirect to false.
  *
- * @return 0=success; non-zero is failure.
  */
 AXISC_STORAGE_CLASS_INFO
 void axiscStubSetTransportAutoRedirect(AXISCHANDLE stub, AxiscBool handleRedirect, int maxCount);
+
+/**
+ * Add namespace to SOAP header.
+ *
+ * @param pUri The namespace uri .
+ * @param pPrefix The prefix to associate with the uri.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddNamespaceToSOAPHeader(AXISCHANDLE stub,
+        const AxiscChar * pUri,
+        const AxiscChar * pPrefix);
+
+/**
+ * Clears SOAP header namespaces.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPHeaderNamespaces(AXISCHANDLE stub);
+
+/**
+ * Add attribute to SOAP header.
+ *
+ * @param pLocalname The local name of the Attribute.
+ * @param pPrefix The prefix of the Attribute.
+ * @param pValue The value of the Attribute.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddAttributeToSOAPHeader(AXISCHANDLE stub,
+        const AxiscChar * pLocalname,
+        const AxiscChar * pPrefix,
+        const AxiscChar * pValue);
+
+/**
+ * Clears SOAP header attributes.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPHeaderAttributes(AXISCHANDLE stub);
+
+/**
+ * Add namespace to SOAP body.
+ *
+ * @param pUri The namespace uri .
+ * @param pPrefix The prefix to associate with the uri.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddNamespaceToSOAPBody(AXISCHANDLE stub,
+        const AxiscChar * pUri,
+        const AxiscChar * pPrefix);
+
+/**
+ * Clears SOAP body namespaces.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPBodyNamespaces(AXISCHANDLE stub);
+
+/**
+ * Add attribute to SOAP body.
+ *
+ * @param pLocalname The local name of the Attribute.
+ * @param pPrefix The prefix of the Attribute.
+ * @param pUri The namespace uri of the Attribute.
+ * @param pValue The value of the Attribute.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddAttributeToSOAPBody(AXISCHANDLE stub,
+        const AxiscChar * pLocalname,
+        const AxiscChar * pPrefix,
+        const AxiscChar * pValue);
+
+/**
+ * Clears SOAP body attributes.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPBodyAttributes(AXISCHANDLE stub);
+
 
 #ifdef __cplusplus
  }

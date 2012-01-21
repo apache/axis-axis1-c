@@ -897,6 +897,172 @@ void axiscStubSetTransportAutoRedirect(AXISCHANDLE stub, AxiscBool handleRedirec
     }
 }
 
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddNamespaceToSOAPHeader(AXISCHANDLE stub,
+        const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->addNamespaceToSOAPHeader(pachNamespaceURI, pachPrefix);
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPHeaderNamespaces(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->clearSOAPHeaderNamespaces();
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddAttributeToSOAPHeader(AXISCHANDLE stub,
+        const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->addAttributeToSOAPHeader(pLocalname, pPrefix, pValue);
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPHeaderAttributes(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->clearSOAPHeaderAttributes();
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddNamespaceToSOAPBody(AXISCHANDLE stub,
+        const AxisChar *pachNamespaceURI, const AxisChar* pachPrefix)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->addNamespaceToSOAPBody(pachNamespaceURI, pachPrefix);
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPBodyNamespaces(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->clearSOAPBodyNamespaces();
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubAddAttributeToSOAPBody(AXISCHANDLE stub,
+        const AxisChar *pLocalname, const AxisChar *pPrefix, const AxisChar *pValue)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->addAttributeToSOAPBody(pLocalname, pPrefix, pValue);
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubClearSOAPBodyAttributes(AXISCHANDLE stub)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        s->clearSOAPBodyAttributes();
+    }
+    catch ( AxisException& e  )
+    {
+
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
 }
 
 
