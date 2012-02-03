@@ -52,6 +52,11 @@ public abstract class ParamCPPFileWriter extends ParamWriter
 
     public void writeSource() throws WrapperFault
     {
+        // TODO Makes no sense to write out restriction checking function that is incomplete
+        //      AND that we do not use.  So for now, do not write  out it out. 
+        if (type.isSimpleType())
+            return;
+
         try
         {
             c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));

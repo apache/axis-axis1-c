@@ -674,10 +674,10 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 c_writer.write("\tparam->" + extensionBaseAttrib.getParamNameAsMember() + " = ");
                 
                 if (CUtils.isPointerType(typeName))
-                    c_writer.write("(" + typeName + ") pCharDataAs;\n");
+                    c_writer.write("(" + CUtils.sanitizeString(typeName) + ") pCharDataAs;\n");
                 else
                 {
-                    c_writer.write(" *(" + typeName + "*) pCharDataAs;\n");
+                    c_writer.write(" *(" + CUtils.sanitizeString(typeName) + "*) pCharDataAs;\n");
                     c_writer.write("\tAxis::AxisDelete( pCharDataAs, " + xsdType + ");\n");
                 }    
             }

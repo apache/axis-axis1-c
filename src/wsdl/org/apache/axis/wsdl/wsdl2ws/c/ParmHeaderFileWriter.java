@@ -296,7 +296,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
                 c_writer.write("\t"
-                             + getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib)
+                             + CUtils.sanitizeString(getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib))
                              + "  "
                              + extensionBaseAttrib.getParamNameAsMember() + ";\n");
             }            
@@ -426,7 +426,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     extBaseType = extBaseType.substring(0, extBaseType.lastIndexOf("*"));
 
                 if (!CUtils.isPrimitiveType(extBaseType))
-                    typeSet.add(extBaseType);
+                    typeSet.add(CUtils.sanitizeString(extBaseType));
             }            
             
             Iterator itr = typeSet.iterator();
