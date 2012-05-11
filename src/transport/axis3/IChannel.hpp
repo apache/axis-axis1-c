@@ -87,6 +87,7 @@ public:
     virtual int                 setSecureProperties( const char *) {return true;};
     virtual const char *        getSecureProperties() {return NULL;};
     virtual void                setTimeout( long lSeconds)=0;
+    virtual void                setConnectTimeout( long lSeconds)=0;
     virtual void                setSocket( unsigned int uiNewSocket)=0;
     virtual int                 getSocket()=0;
     virtual bool                setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char* value)=0;

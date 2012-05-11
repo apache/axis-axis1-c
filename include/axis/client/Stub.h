@@ -434,6 +434,17 @@ AXISC_STORAGE_CLASS_INFO
 void axiscStubSetTransportTimeout(AXISCHANDLE stub, long lSeconds);
 
 /**
+ * Set transport connect timeout.
+ *
+ * @param lSeconds Timeout in seconds.
+ *                 If lSeconds is 0, then the transport will assume no
+ *                 timeout. Hence you want to reset a timeout already set
+ *                 use 0.
+ */
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetTransportConnectTimeout(AXISCHANDLE stub, long lSeconds);
+
+/**
  * Get the status of the stub to see any error situation
  */
 AXISC_STORAGE_CLASS_INFO

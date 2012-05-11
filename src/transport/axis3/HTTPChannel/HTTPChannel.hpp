@@ -30,6 +30,10 @@
 #include <ws2tcpip.h>
 #endif
 
+#ifndef EINPROGRESS
+#define EINPROGRESS WSAEINPROGRESS
+#endif
+
 // What version of WinSock is required
 const int    WS_VERSION_REQD    = 0x0101;
 
@@ -43,14 +47,13 @@ inline int WS_VERSION_MINOR() {return LOBYTE(WS_VERSION_REQD);}
 #include "../HTTPTransportException.hpp"
 
 #include <unistd.h>
-#include <sys/types.h>        // basic system data types
-#include <sys/socket.h>        // basic socket definitions
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <netinet/tcp.h>
-#include <fcntl.h>            // for nonblocking if need
 #include <sys/time.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>        // inet(3) functions
+#include <arpa/inet.h>
 
 const int          INVALID_SOCKET = -1;
 const int          SOCKET_ERROR   = -1;
@@ -68,15 +71,16 @@ public:
 
     const char *        getURL();
     virtual void        setURL( const char * cpURL);
-    virtual URL &        getURLObject();
+    virtual URL &       getURLObject();
     bool                open();
     bool                close();
-    const std::string &    GetLastErrorMsg();
+    const std::string & GetLastErrorMsg();
     int                 readBytes(char *buf, int bufLen);
     int                 writeBytes(const char *buf, int numBytes);
     void                setTimeout( long lSeconds);
+    void                setConnectTimeout( long lSeconds);
     void                setSocket( unsigned int uiNewSocket);
-    int                    getSocket() {return m_Sock;}
+    int                 getSocket() {return m_Sock;}
     bool                setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char * value);
     const char *        getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type);
     void                setProxy( const char * pcProxyHost, unsigned int uiProxyPort);
@@ -90,21 +94,22 @@ protected:
     void                CloseChannel();
     bool                StartSockets();
     void                StopSockets();
-    int                    applyTimeout();
-    void                ReportError();
+    int                 applyTimeout(long seconds, bool isRead);
+    void                ReportError(bool isConnectError=false);
 
 private:
-    URL                m_URL;                // URL
-    string            m_LastError;        // Last error
+    URL             m_URL;                      // URL
+    string          m_LastError;                // Last error
 #ifdef WIN32
     unsigned 
 #endif
-    int                m_Sock;                        // Socket descriptor
+    int             m_Sock;                     // Socket descriptor
     bool            m_bUseProxy;                // Use a Proxy?
-    std::string        m_strProxyHost;                // Proxy server name.
-    unsigned int    m_uiProxyPort;                // Proxy server port.
-    long            m_lTimeoutSeconds;            // Timeout in seconds
-    bool            bNoExceptionOnForceClose;    // If the socket is forcably closed, usually an
+    std::string     m_strProxyHost;             // Proxy server name.
+    unsigned int    m_uiProxyPort;              // Proxy server port.
+    long            m_lTimeoutSeconds;          // Timeout in seconds
+    long            m_lConnectTimeoutSeconds;   // Connect timeout in seconds
+    bool            bNoExceptionOnForceClose;   // If the socket is forcably closed, usually an
                                                 // exception is thrown.  When this flag is set,
                                                 // nothing happens (but the m_Sock is set to 0).
 };

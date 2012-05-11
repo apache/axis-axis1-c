@@ -484,6 +484,17 @@ Stub::setTransportTimeout (long lSeconds)
     logExit()
 }
 
+void
+Stub::setTransportConnectTimeout (long lSeconds)
+{
+      logEntryEngine("Stub::setTransportConnectTimeout")
+
+    if (m_pTransport)
+        m_pTransport->setConnectTimeout (lSeconds);
+
+    logExit()
+}
+
 int
 Stub::getStatus ()
 {

@@ -183,11 +183,22 @@ typedef enum
     AXISC_ENABLE_AUTOMATIC_REDIRECT,
 
     /**
-     * Maximum number of automatic redirects to follow.  Property should be a numeric string.
+     * Maximum number of automatic redirects to follow.  Property should be a string representing a numeric value.
      * Default is 1. If "0" is specified, it will be as if AXISC_ENABLE_AUTOMATIC_REDIRECT is set to
      * false.
      */
-    AXISC_MAX_AUTOMATIC_REDIRECT
+    AXISC_MAX_AUTOMATIC_REDIRECT,
+
+    /**
+     * I/O timeout in seconds.  Property should be a string representing a numeric value.
+     */
+    AXISC_IO_TIMEOUT,
+
+    /**
+     * Connect timeout in seconds.  Property should be a string representing a numeric value.
+     */
+    AXISC_CONNECT_TIMEOUT
+
 } AXISC_TRANSPORT_INFORMATION_TYPE;
 
 #define AXISC_SOAPACTIONHEADER "SOAPAction"

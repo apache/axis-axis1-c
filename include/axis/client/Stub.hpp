@@ -568,6 +568,16 @@ class STORAGE_CLASS_INFO Stub
     */
     void setTransportTimeout(long lSeconds);
     
+    /**
+      * Set transport connect timeout.
+      *
+      * @param lSeconds Timeout in seconds.
+      *                 If lSeconds is 0, then the transport will assume no
+      *                 timeout. Hence you want to reset a timeout already set
+      *                 use 0.
+      */
+     void setTransportConnectTimeout(long lSeconds);
+
   /**
     * Get the status of the stub to see any error situation
     */

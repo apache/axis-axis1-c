@@ -30,6 +30,7 @@
 #include <unistd.h>     // access()
 #include <string>  
 
+
 #define DIR_SEPARATOR   '/'
 #define DIR_SEPARATOR_S "/"
 
@@ -109,6 +110,22 @@ extern char PLATFORM_XML_ENTITY_REFERENCE_CHARS_S[];
 #include <pthread.h> 
 #include <unistd.h>
 #include <errno.h>
+#include <fcntl.h>      // for nonblocking
+
+#define PLATFORM_SET_SOCKET_BLOCKING(x)           \
+{                                                 \
+    int fcntlArg = fcntl(x, F_GETFL, NULL);       \
+    fcntlArg &= (~O_NONBLOCK);                    \
+    fcntl(x, F_SETFL, fcntlArg);                  \
+}
+
+#define PLATFORM_SET_SOCKET_NONBLOCKING(x)        \
+{                                                 \
+    int fcntlArg = fcntl(x, F_GETFL, NULL);       \
+    fcntlArg |= O_NONBLOCK;                       \
+    fcntl(x, F_SETFL, fcntlArg);                  \
+}
+
 #define PLATFORM_SLEEP(x) sleep(x)
 
 

@@ -100,6 +100,22 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <errno.h>
+#include <fcntl.h>      // for nonblocking
+
+#define PLATFORM_SET_SOCKET_BLOCKING(x)           \
+{                                                 \
+    int fcntlArg = fcntl(x, F_GETFL, NULL);       \
+    fcntlArg &= (~O_NONBLOCK);                    \
+    fcntl(x, F_SETFL, fcntlArg);                  \
+}
+
+#define PLATFORM_SET_SOCKET_NONBLOCKING(x)        \
+{                                                 \
+    int fcntlArg = fcntl(x, F_GETFL, NULL);       \
+    fcntlArg |= O_NONBLOCK;                       \
+    fcntl(x, F_SETFL, fcntlArg);                  \
+}
+
 #define PLATFORM_SLEEP(x) sleep(x)
 
 /**

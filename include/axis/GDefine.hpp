@@ -202,11 +202,21 @@ typedef enum
     ENABLE_AUTOMATIC_REDIRECT,
 
     /**
-     * Maximum number of automatic redirects to follow.  Property should be a numeric string.
+     * Maximum number of automatic redirects to follow.  Property should be a string representing a numeric value.
      * Default is 1. If "0" is specified, it will be as if ENABLE_AUTOMATIC_REDIRECT is set to
      * false.
      */
-    MAX_AUTOMATIC_REDIRECT
+    MAX_AUTOMATIC_REDIRECT,
+
+    /**
+     * I/O timeout in seconds.  Property should be a string representing a numeric value.
+     */
+    IO_TIMEOUT,
+
+    /**
+     * Connect timeout in seconds.  Property should be a string representing a numeric value.
+     */
+    CONNECT_TIMEOUT
 
 } AXIS_TRANSPORT_INFORMATION_TYPE;
 

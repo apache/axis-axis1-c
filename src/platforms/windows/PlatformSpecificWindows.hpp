@@ -127,6 +127,18 @@
 // =============================================================
 // Miscellaneous
 // =============================================================
+#define PLATFORM_SET_SOCKET_BLOCKING(x)           \
+{                                                 \
+    u_long iMode = 0;                             \
+    ioctlsocket(x, FIONBIO, &iMode);              \
+}
+
+#define PLATFORM_SET_SOCKET_NONBLOCKING(x)        \
+{                                                 \
+    u_long iMode = 1;                             \
+    ioctlsocket(x, FIONBIO, &iMode);              \
+}
+
 #define PLATFORM_SLEEP(x) Sleep(x)
 
 /**

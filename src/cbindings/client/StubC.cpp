@@ -32,6 +32,7 @@
 
 #include "StubC.h"
 
+#include "../../transport/SOAPTransport.h"
 #include "../../common/AxisTrace.h"
 
 AXIS_CPP_NAMESPACE_USE
@@ -528,6 +529,31 @@ void axiscStubSetTransportTimeout(AXISCHANDLE stub,
     catch ( AxisException& e  )
     {
         
+        processException(s, e.getExceptionCode(), e.what());
+    }
+    catch ( ... )
+    {
+        processException(s, -1, "Unrecognized exception thrown.");
+    }
+}
+
+
+AXISC_STORAGE_CLASS_INFO
+void axiscStubSetTransportConnectTimeout(AXISCHANDLE stub,
+                                         long lSeconds)
+{
+    StubC *s = (StubC*)stub;
+
+    try
+    {
+        Call *c = s->getCallStubC();
+        SOAPTransport *t = c->getTransport();
+        if (t)
+            t->setConnectTimeout (lSeconds);
+    }
+    catch ( AxisException& e  )
+    {
+
         processException(s, e.getExceptionCode(), e.what());
     }
     catch ( ... )

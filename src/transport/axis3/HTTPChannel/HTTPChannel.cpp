@@ -46,7 +46,8 @@ HTTPChannel()
 #else
     m_lTimeoutSeconds = 0;
 #endif
-
+    m_lConnectTimeoutSeconds = 0;
+    
     bNoExceptionOnForceClose = false;
 
     if( !StartSockets())
@@ -140,22 +141,15 @@ open()
 {
     logEntryTransport("HTTPChannel::open")
 
-    bool    bSuccess = (bool) AXIS_FAIL;
-
     CloseChannel();
 
     m_LastError = "No Errors";
 
-    if( (bSuccess = OpenChannel()) != AXIS_SUCCESS)
-    {
-        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CONNECT_ERROR", m_LastError.c_str())
-
-        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, m_LastError.c_str());
-    }
+    OpenChannel();
 
     logExit()
     
-    return bSuccess;
+    return AXIS_SUCCESS;
 }
 
 /**
@@ -196,16 +190,16 @@ GetLastErrorMsg()
 /**
  * HTTPChannel::readBytes()
  *
- * This method attempts to read a message from the curently open channel.  If
+ * This method attempts to read a message from the currently open channel.  If
  * there is no currently open channel, then the method throws an exception.  If
- * there is an open channel, but nothing to recieve, then then method will
- * timeout and throw an exception.  If the mesage is interrupted or the
+ * there is an open channel, but nothing to receive, then then method will
+ * timeout and throw an exception.  If the message is interrupted or the
  * transmitting side closes then an exception is thrown.
  *
  * @param character pointer containing an array of character that can be filled
- * by the reieved message (NB: The maximum message length is BUF_SIZE).
+ * by the received message (NB: The maximum message length is BUF_SIZE).
  * @return character pointer pointing to the array of character containing the
- * recieved message.
+ * received message.
  */
 
 int HTTPChannel::
@@ -226,9 +220,9 @@ readBytes(char *buf, int bufLen)
     int     iBufSize = bufLen - 10;
 
     // If timeout set then wait for maximum amount of time for data
-    if( m_lTimeoutSeconds)
+    if( m_lTimeoutSeconds > 0)
     {
-        int iTimeoutStatus = applyTimeout();
+        int iTimeoutStatus = applyTimeout(m_lTimeoutSeconds, true);
 
         // Handle timeout outcome
         if( iTimeoutStatus < 0)
@@ -349,6 +343,24 @@ setTimeout( long lSeconds)
 }
 
 /**
+ * HTTPChannel::setConnectTimeout( const long lSeconds)
+ *
+ * Set the connect timeout (in seconds)
+ *
+ * @param long containing timeout value in seconds
+ */
+
+void HTTPChannel::
+setConnectTimeout( long lSeconds)
+{
+    logEntryTransport("HTTPChannel::setConnectTimeout")
+
+    m_lConnectTimeoutSeconds = lSeconds;
+    
+    logExit()
+}
+
+/**
  * HTTPChannel::setSocket( unsigned int uiNewSocket)
  *
  * This is used by the server side to change the server socket.
@@ -456,10 +468,8 @@ OpenChannel()
 {
     logEntryTransport("HTTPChannel::OpenChannel")
 
-    // This method is common to all channel implementations
-    bool    bSuccess = (bool) AXIS_FAIL;
+    int     rc = 0;
 
-    // Create the Client (Rx) side first.
 #ifdef IPV6
     struct addrinfo     aiHints;
     struct addrinfo *   paiAddrInfo;
@@ -506,17 +516,10 @@ OpenChannel()
         if( connect( m_Sock, paiAddrInfo->ai_addr, paiAddrInfo->ai_addrlen) < 0)
         {
             // This must be done first thing to get proper error. Generate full message.
-            ReportError();
-            char buffer[100];
-            sprintf(buffer, "%d", m_URL.getPort());
-            string fullMessage = "Failed to open connection to server at host " +
-                                 string(m_URL.getHostName()) + 
-                                 " and port " +  string(buffer) + ".\n" + m_LastError;
-
+            ReportError(true);
             CloseChannel();
+
             freeaddrinfo( paiAddrInfo0);
-            
-            m_LastError = fullMessage;
 
             logThrowExceptionWithData("HTTPTransportException - CLIENT_TRANSPORT_OPEN_CONNECTION_FAILED", m_LastError.c_str())
 
@@ -538,47 +541,20 @@ OpenChannel()
 
         throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
-
-    bSuccess = AXIS_SUCCESS;
-
+    
 #else // IPV6 not defined
+
     if( (m_Sock = socket( PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
     {
         ReportError();
-        
-        logExitWithBoolean(bSuccess)
-
-        return bSuccess;
-    }
-
-    // If the transport was initilised, then create client and server sockets.
-    sockaddr_in clAddr;
-    memset(&clAddr, 0, sizeof(sockaddr_in));
-
-    clAddr.sin_family = AF_INET;    // AF_INET (address family Internet).
-    clAddr.sin_port = 0;            // No Specify Port required.
-    clAddr.sin_addr.s_addr = INADDR_ANY;
-
-    // Attempt to bind the client to the client socket.
-    if( bind( m_Sock, (struct sockaddr *) &clAddr, sizeof( clAddr)) == SOCKET_ERROR)
-    {
-        ReportError();        
         CloseChannel();
-        
-        logExitWithBoolean(bSuccess)
+          
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CREATE_ERROR", m_LastError.c_str())
 
-        return bSuccess;
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CREATE_ERROR, m_LastError.c_str());
     }
 
-    // Although the above fragment makes use of the bind() API, it would be
-    // just as effective to skip over this call as there are no specific
-    // local port ID requirements for this client. The only advantage that
-    // bind() offers is the accessibility of the port which the system 
-    // chose via the .sin_port member of the cli_addr structure which will 
-    // be set upon success of the bind() call.
-
-    // Create the Server (Tx) side.
-
+    // Connect to server.
     sockaddr_in         svAddr;
     struct hostent *    pHostEntry = NULL;
     const char *        host = m_URL.getHostName();
@@ -616,34 +592,91 @@ OpenChannel()
 #endif
             svAddr.sin_addr.s_addr = ((struct in_addr *) pHostEntry->h_addr)->s_addr;
     }
-
-    // Attempt to connect to the remote server.
-    if( connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr)) == SOCKET_ERROR)
+        
+    // If connect timeout specified do non-blocking connect.
+    if (m_lConnectTimeoutSeconds > 0)
     {
-        // This must be done first thing to get proper error. Generate full message.
-        ReportError();
-        char buffer[100];
-        sprintf(buffer, "%d", m_URL.getPort());
-        string fullMessage = "Failed to open connection to server at host " +
-                             string(m_URL.getHostName()) + 
-                             " and port " +  string(buffer) + ".\n" + m_LastError;
+       // Make socket non-blocking
+       PLATFORM_SET_SOCKET_NONBLOCKING(m_Sock);
 
-        CloseChannel();
+       rc = connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr));
+       
+       if (rc == SOCKET_ERROR && GETLASTERROR == EINPROGRESS)
+       { 
+            int iTimeoutStatus = applyTimeout(m_lConnectTimeoutSeconds, false);
 
-        m_LastError = fullMessage;
+            // Set to blocking mode again... 
+            PLATFORM_SET_SOCKET_BLOCKING(m_Sock);
+            
+            // Handle timeout outcome
+            if( iTimeoutStatus < 0)
+            {
+                CloseChannel();
+            
+                logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_TIMEOUT_EXCEPTION", m_LastError.c_str())
 
-        logExitWithBoolean(bSuccess)
+                throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXCEPTION, m_LastError.c_str());
+            }
+            else if( iTimeoutStatus == 0)
+            {
+                CloseChannel();
+                char buffer[100];
+                sprintf(buffer, "%d", m_URL.getPort());
+                m_LastError = 
+                  "Failed to open connection to server at host " +
+                   string(m_URL.getHostName()) + " and port " +  string(buffer) + ".\nConnect operation timed-out.";
+        
+                logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_TIMEOUT_EXPIRED", m_LastError.c_str())
 
-        return bSuccess;
+                throw HTTPTransportException( SERVER_TRANSPORT_TIMEOUT_EXPIRED, m_LastError.c_str() );
+            }
+            else
+            {
+                // Otherwise, the socket either connected or there is an error.  If there is an error, we will
+                // get the error when we write to the socket so assume everything is OK.
+            
+                rc = 0;
+            }
+       }
+       else if (rc == SOCKET_ERROR)
+       {
+            // This must be done first thing to get proper error. Generate full message.
+            ReportError(true);
+            PLATFORM_SET_SOCKET_BLOCKING(m_Sock);
+            CloseChannel();
+       }
+       else
+       {
+            // Connected...
+            // Set to blocking mode again... 
+            PLATFORM_SET_SOCKET_BLOCKING(m_Sock);
+       }
     }
     else
-        bSuccess = AXIS_SUCCESS;
+    {
+        rc = connect( m_Sock, (struct sockaddr *) &svAddr, sizeof (svAddr));
+
+        // This must be done first thing to get proper error. Generate full message.
+        if (rc  == SOCKET_ERROR)
+        {
+            ReportError(true);  
+            CloseChannel();
+        }      
+    }
+
+    // If errors on connect, throw an exception.
+    if (rc == SOCKET_ERROR)
+    {
+        logThrowExceptionWithData("HTTPTransportException - SERVER_TRANSPORT_SOCKET_CONNECT_ERROR", m_LastError.c_str())
+
+        throw HTTPTransportException( SERVER_TRANSPORT_SOCKET_CONNECT_ERROR, m_LastError.c_str());
+    }
 
 #endif // IPV6
 
-    /* Turn off the Nagle algorithm - Patch by Steve Hardy */
-
-    /* This is needed, because our TCP stack would otherwise wait at most
+    /* Turn off the Nagle algorithm
+     *
+     * This is needed, because our TCP stack would otherwise wait at most
      * 200 ms before actually sending data to the server (while waiting for
      * a full packet). This limits performance to around 5 requests per
      * second, which is not acceptable. Turning off the Nagle algorithm
@@ -654,9 +687,9 @@ OpenChannel()
     int one = 1;
     setsockopt( m_Sock, IPPROTO_TCP, TCP_NODELAY, (char *) &one, sizeof( int));
 
-    logExitWithBoolean(bSuccess)
+    logExitWithBoolean(AXIS_SUCCESS)
 
-    return bSuccess;
+    return AXIS_SUCCESS;
 }
 
 /**
@@ -770,23 +803,30 @@ StopSockets()
  */
 
 int HTTPChannel::
-applyTimeout()
+applyTimeout(long seconds, bool isRead)
 {
     logEntryTransport("HTTPChannel::applyTimeout")
 
     fd_set          set;
+    fd_set          eset;
     struct timeval  timeout;
 
     // Initialize the file descriptor set.
     FD_ZERO( &set);
+    FD_ZERO( &eset);
     FD_SET( m_Sock, &set);
+    FD_SET( m_Sock, &eset);
 
     /* Initialize the timeout data structure. */
-    timeout.tv_sec = m_lTimeoutSeconds;
+    timeout.tv_sec = seconds;
     timeout.tv_usec = 0;
 
     /* select returns 0 if timeout, 1 if input available, -1 if error. */
-    int rc = select( FD_SETSIZE, &set, NULL, NULL, &timeout);
+    int rc;
+    if (isRead)
+        rc = select( FD_SETSIZE, &set, NULL, &eset, &timeout);
+    else
+        rc = select( FD_SETSIZE, NULL, &set, &eset, &timeout);
     
     if (rc < 0)
         ReportError();
@@ -797,12 +837,22 @@ applyTimeout()
 }
 
 void HTTPChannel::
-ReportError()
+ReportError(bool isConnectError)
 {
     long dwError = GETLASTERROR;
     char pcErr[100];
     sprintf(pcErr,"Error is %d - ",(int)dwError);
     m_LastError = string(pcErr) + PLATFORM_GET_ERROR_MESSAGE(dwError);
+    
+    if (isConnectError)
+    {
+        char buffer[100];
+        sprintf(buffer, "%d", m_URL.getPort());
+        string fullMessage = 
+                "Failed to open connection to server at host " +
+                string(m_URL.getHostName()) + " and port " +  string(buffer) + ".\n" + m_LastError;            
+        m_LastError = fullMessage;
+    }
 }
 
 void HTTPChannel::

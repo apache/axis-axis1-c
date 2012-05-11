@@ -15,11 +15,6 @@
 *   limitations under the License.
 */
 
-/*
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
-
 // !!! This include file must be first thing in file !!!
 #include "../../platforms/PlatformAutoSense.hpp"
 
@@ -70,9 +65,13 @@ m_bMaintainSession (false)
     m_pcPassword=NULL;
 #ifdef WIN32
     m_lChannelTimeout = 10;
+    m_strChannelTimeout = "10";
 #else
     m_lChannelTimeout = 0;
+    m_strChannelTimeout = "0";
 #endif
+    m_lChannelConnectTimeout = 0;
+    m_strChannelConnectTimeout = "0";
     m_strResponseLocationURI = "";
     m_bPerformAutoRedirect = false;
     m_iMaximumAutoRedirects = 1;
@@ -220,7 +219,10 @@ setEndpointUri( const char * pcEndpointUri) throw (HTTPTransportException)
     // channel was created, then it may not have the correct timeout. By setting it here, 
     // the channel is sure to have the correct timeout value next time the channel is read.
     if( m_pActiveChannel != NULL)
+    {
         m_pActiveChannel->setTimeout( m_lChannelTimeout);
+        m_pActiveChannel->setConnectTimeout( m_lChannelConnectTimeout);
+    }
     
     logExit()
 }
@@ -993,6 +995,22 @@ setTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE type, const char *value) t
             break;
         }
 
+        case IO_TIMEOUT:
+        {
+            if (value)
+                setTimeout((long)atoi(value));
+
+            break;
+        }
+
+        case CONNECT_TIMEOUT:
+        {
+            if (value)
+                setConnectTimeout((long)atoi(value));
+
+            break;
+        }
+
         default:
         {
             break;
@@ -1136,6 +1154,21 @@ getTransportProperty( AXIS_TRANSPORT_INFORMATION_TYPE eType) throw (HTTPTranspor
             pszPropValue = m_strMaximumAutoRedirects.c_str();
             break;
         }
+
+
+        case IO_TIMEOUT:
+        {
+            pszPropValue = m_strChannelTimeout.c_str();
+
+            break;
+        }
+
+        case CONNECT_TIMEOUT:
+        {
+            pszPropValue = m_strChannelConnectTimeout.c_str();
+
+            break;
+        }
     }
 
     logExitWithString(pszPropValue)
@@ -1259,11 +1292,41 @@ setTimeout( long lSeconds)
 {
     logEntryTransport("HTTPTransport::setTimeout")
 
+    logDebugArg1("I/O timeout: %d", lSeconds)
+
     if( m_pActiveChannel != NULL)
         m_pActiveChannel->setTimeout( lSeconds);
 
     m_lChannelTimeout = lSeconds;
     
+    char buffer[100];
+    sprintf(buffer, "%d", m_lChannelTimeout);
+    m_strChannelTimeout = (const char *)buffer;
+
+    logExit()
+}
+
+/* HTTPTransport::setConnectTimeout( Timeout) Is a public method for setting the
+ * current maximum connect timeout.
+ *
+ * @param long Timeout is a long value in seconds.
+ */
+void HTTPTransport::
+setConnectTimeout( long lSeconds)
+{
+    logEntryTransport("HTTPTransport::setConnectTimeout")
+
+    logDebugArg1("Connect timeout: %d", lSeconds)
+
+    if( m_pActiveChannel != NULL)
+        m_pActiveChannel->setConnectTimeout( lSeconds);
+
+    m_lChannelConnectTimeout = lSeconds;
+
+    char buffer[100];
+    sprintf(buffer, "%d", m_lChannelConnectTimeout);
+    m_strChannelConnectTimeout = (const char *)buffer;
+
     logExit()
 }
 

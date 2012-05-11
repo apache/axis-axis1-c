@@ -14,19 +14,6 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  *
- * @author Susantha Kumara (skumara@virtusa.com, susantha@opensource.lk)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
-
-/*
- * Revision 1.1  2004/05/31 samisa
- * Added setProxy
- */
-
-/*
- * Revision 1.2  2004/06/08 samisa
- * Added setTimeout
  */
 
 #if !defined(AXIS_SOAPTRANSPORT_H__OF_AXIS_INCLUDED_)
@@ -162,7 +149,7 @@ public:
      *
      * @brief Gets a part of or full SOAP message.
      * @pre   Transport connection should have been established by calling
-     *        Openconnection of the SOAPTransport's implementaion.
+     *        Openconnection of the SOAPTransport's implementation.
      * @param pcBuffer The character buffer provided by the caller to be
      *        filled by the transport layer. The size of the buffer is given
      *        by the value of second parameter piRetSize. The transport layer
@@ -420,6 +407,13 @@ public:
     */
     virtual void setTimeout(long lSeconds) = 0;
     
+    /**
+      * Set transport connect timeout.
+      *
+      * @param lSeconds Timeout in seconds
+      */
+    virtual void setConnectTimeout(long lSeconds) = 0;
+
   /**    
     * Iterator initiatior for transport property keys
     *

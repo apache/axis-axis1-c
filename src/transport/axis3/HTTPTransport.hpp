@@ -16,9 +16,6 @@
  */
 
 /*
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- * @author hawkeye (hawkinsj@uk.ibm.com) - improved cookie support
- * 
  * KNOWN LIMITATIONS: 
  * Cookie support: 
  * 1) Cookies are maintained over the life time of a connection only and are not persisted.
@@ -89,6 +86,7 @@ class HTTPTransport:public SOAPTransport
     AXIS_TRANSPORT_STATUS   flushOutput() throw (AxisException, HTTPTransportException);
     void                    setProxy( const char *pcProxyHost, unsigned int uiProxyPort);
     void                    setTimeout( long lSeconds);
+    void                    setConnectTimeout( long lSeconds);
     const char *            getHTTPProtocol();
     const char *            getHTTPMethod();
     void                    setHTTPMethod( const char *);
@@ -320,7 +318,10 @@ class HTTPTransport:public SOAPTransport
 
     char *    m_pszRxBuffer;
 
-    long    m_lChannelTimeout;
+    long        m_lChannelTimeout;
+    std::string m_strChannelTimeout;
+    long        m_lChannelConnectTimeout;
+    std::string m_strChannelConnectTimeout;
 
     std::string    m_strBuffered;
 
