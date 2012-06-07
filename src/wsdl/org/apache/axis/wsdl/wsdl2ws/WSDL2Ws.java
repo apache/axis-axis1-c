@@ -254,6 +254,22 @@ public class WSDL2Ws
             bindingEntry    = c_symbolTable.getBindingEntry(port.getBinding().getQName());
         }
         
+        // Ensure that binding entry is document/literal or RPC encoded since that is all that is supported.
+        if (bindingEntry != null)
+        {
+            String style = bindingEntry.getBindingStyle().getName();
+            if (style == null)
+                style = "document";
+
+            if ((style.equals("document") && !bindingEntry.hasLiteral())
+                    || (style.equals("rpc") && bindingEntry.hasLiteral()))
+                throw new WrapperFault("Binding style not supported.  Supported binding styles: document/literal, rpc/encoded");
+            
+            // If C-stubs currently supports document/literal only
+            if (style.equals("rpc") && c_cmdLineArgs.getTargetLanguage().equalsIgnoreCase("c"))
+                throw new WrapperFault("Cannot generate C stubs for rpc/encoded.");
+        }
+        
         // ==================================================
         // Build the context that is needed by the code generators.
         // ==================================================            

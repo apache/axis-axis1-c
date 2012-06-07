@@ -510,7 +510,7 @@ public class WSDLInfo
             {
                 String style = be.getBindingStyle().getName();
                 if (style == null)
-                    style = "rpc"; // TODO need to revisit.
+                    style = "document";
                 
                 if ((styleDocument && style.equalsIgnoreCase("document"))
                         || (!styleDocument && style.equalsIgnoreCase("rpc")))
