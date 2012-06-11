@@ -625,22 +625,19 @@ public class WSDLInfo
         
         if (-1 != type.getQName().getLocalPart().indexOf('['))
         { 
-            /* it seems that this is an array */
-            if (null == type.getRefType())
-                throw new WrapperFault("Array type found without a Ref type");
+            // An array...
             
-            // Handle array that references an element
-            QName qn = type.getRefType().getQName();
-            // TODO
-//            if (type.getRefType().getRefType() != null)
-//                qn = type.getRefType().getRefType().getQName();
-           
-            if (null == qn)
-                throw new WrapperFault("Array type found without a Ref type");
+            // Get referenced type
+            TypeEntry typeEntryOfRefType = getActualRefType(type);
+            if (null == typeEntryOfRefType || typeEntryOfRefType.getQName() == null)
+                throw new WrapperFault("Array type found without a Ref type: " + type.getQName());
             
+            // If referenced type is primitive, we are done...
+            QName qn = typeEntryOfRefType.getQName();
             if (CUtils.isPrimitiveType(qn))
                 return null;
             
+            // Create array 
             QName newqn;
             if (useCounter)
             {
@@ -651,7 +648,7 @@ public class WSDLInfo
             else
                 newqn = new QName(type.getQName().getNamespaceURI(), qn.getLocalPart() + "_Array");
             
-            // type is a inbuilt type or a already created type?
+            // type is a inbuilt type or an already created type?
             typedata = c_typeMap.getType(newqn);
             if (typedata != null)
             {
@@ -897,6 +894,29 @@ public class WSDLInfo
         return typedata;
     }    
     
+    /**
+     * Returns the actual referenced type (i.e. a defined type or base type)
+     *  
+     * @param type
+     * @return
+     */
+    private TypeEntry getActualRefType(TypeEntry type)
+    {
+        if (type == null)
+            return null;
+        
+        TypeEntry rt = type.getRefType();
+        
+        if (rt != null)
+        {
+            if (rt instanceof org.apache.axis.wsdl.symbolTable.DefinedType 
+                    || rt instanceof org.apache.axis.wsdl.symbolTable.BaseType)
+                return rt;
+        }
+        
+        return getActualRefType(rt);
+    }
+
     /**
      * If the specified node represents a supported JAX-RPC restriction,
      * a Vector is returned which contains the base type and the values (enumerations etc).
