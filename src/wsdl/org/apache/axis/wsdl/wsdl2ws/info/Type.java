@@ -313,10 +313,9 @@ public class Type
         {
             str = str + "Elements[\n";
             Iterator c = elements.values().iterator();
-            java.util.Enumeration k = elements.keys(); //.iterator();
             while (c.hasNext())
             {
-                str = str + "," + k.toString() + ":" + c.next() + "\n";
+                str = str + "," + c.next() + "\n";
             }
             str = str + "]\n";
 
@@ -552,25 +551,16 @@ public class Type
         return isUnwrappedInputType;
     }
 
-    /**
-     * @return the c_isSchemaReference
-     */
-    public boolean isSchemaRefernce()
+    public boolean isSchemaReference()
     {
         return c_isSchemaReference;
     }
     
-    /**
-     * @return the c_isAnyType
-     */
     public boolean isAnyType()
     {
         return c_isAnyType;
     }
     
-    /**
-     * @return the c_isAnyType
-     */
     public boolean isAnyElement()
     {
         return c_isAnyElement;
