@@ -17,6 +17,8 @@
 
 package org.apache.axis.wsdl.symbolTable;
 
+import java.text.MessageFormat;
+
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
@@ -205,5 +207,10 @@ public class CElementDecl //extends ElementDecl
     public void setDocumentation(String documentation)
     {
         this.documentation = documentation;
+    }
+
+    public String toString()
+    {
+        return MessageFormat.format("CElementDecl [name={0}, type={1}]", new Object[] {name, type.getName()});
     }
 }
