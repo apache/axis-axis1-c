@@ -735,6 +735,13 @@ public class WSDLInfo
 
         if (type.isSimpleType())
         {
+            // Currently we do not support union or list
+            if (CSchemaUtils.getListNode(type.getNode()) != null 
+                    || CSchemaUtils.getUnionNode(type.getNode()) != null)
+            {
+                throw new WrapperFault("The union or list element is not supported in type: " + type.getQName()); 
+            }
+            
             //check for extended types
             TypeEntry base = CSchemaUtils.getComplexElementExtensionBase(type.getNode(), c_symbolTable);
             if (base != null)
