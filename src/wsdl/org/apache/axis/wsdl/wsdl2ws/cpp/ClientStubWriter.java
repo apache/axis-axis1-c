@@ -818,15 +818,10 @@ public class ClientStubWriter extends CPPClassWriter
                 langName = par.getLangName ();
                 faultType = CUtils.getClassNameFromParamInfoConsideringArrays (par,wscontext);
                 if (j > 1)
-                {
                     c_writer.write ("\t\t\telse if");
-                    writeExceptions (faultType, faultInfoName, paramName, langName);
-                }
                 else
-                {
                     c_writer.write ("\t\t\tif");
-                    writeExceptions (faultType,faultInfoName, paramName, langName);
-                }
+                writeExceptions (faultType, faultInfoName, paramName, langName);
             }
         }
         
@@ -877,31 +872,53 @@ public class ClientStubWriter extends CPPClassWriter
     {
         try
         {
-            c_writer.write("(0 == strcmp(\"" + faultInfoName + "\", pcCmplxFaultName))\n");
-            c_writer.write("\t\t\t{\n");
-            c_writer.write("\t\t\t\t" + faulttype + " pFaultDetail = \n");
-            c_writer.write("\t\t\t\t\t(" + faulttype + ")pSoapFault->getCmplxFaultObject(\n");
-            c_writer.write("\t\t\t\t\t\t(void*) Axis_DeSerialize_" + langName + ",\n");
-            c_writer.write("\t\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
-            c_writer.write("\t\t\t\t\t\t(void*) Axis_Delete_" + langName + ",\n");
-            c_writer.write("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
-            c_writer.write("\t\t\t\t\t\t0);\n\n");
-            c_writer.write("\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode());\n");
-            c_writer.write("\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring());\n");
-            c_writer.write("\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor());\n");
-            c_writer.write("\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
-            c_writer.write("\t\t\t\tm_pCall->unInitialize();\n");
-            c_writer.write ("\t\t\t\tdelete pSoapFault;\n");
-            
             String faultTypeName;
             if (faulttype.lastIndexOf('*') != -1)
                 faultTypeName = faulttype.substring(0, faulttype.lastIndexOf('*'));
             else
                 faultTypeName = faulttype;
-    
-            c_writer.write ("\t\t\t\t" + faultTypeName + " fault = *pFaultDetail;\n");
-            c_writer.write ("\t\t\t\tdelete pFaultDetail;\n");
-            c_writer.write ("\t\t\t\tthrow fault;\n");
+
+            c_writer.write("(0 == strcmp(\"" + faultInfoName + "\", pcCmplxFaultName))\n");
+            c_writer.write("\t\t\t{\n");
+            
+            boolean issimple = CUtils.isSimpleType (faultTypeName);
+            
+            // Simple type we convert to string....reason being that this "fix" is being done 
+            // after the fact - that is, we never handled simple types as SOAP fault correctly.
+            if (issimple)
+            {
+                c_writer.write("\t\t\t\t" + "xsd__string pFaultDetail =  m_pCall->getElementAsString(\n");
+                c_writer.write("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
+                c_writer.write("\t\t\t\t\t\t0);\n\n");
+                c_writer.write ("\t\t\t\tOtherFaultException ofe(pSoapFault->getFaultcode(),\n");
+                c_writer.write ("\t\t\t\t\tpSoapFault->getFaultstring(), pSoapFault->getFaultactor(),\n");
+                c_writer.write ("\t\t\t\t\tpFaultDetail, iExceptionCode);\n\n");
+                c_writer.write ("\t\t\t\tAxis::AxisDelete( (void *) pFaultDetail, XSD_STRING);\n");
+                c_writer.write ("\n");
+                c_writer.write ("\t\t\t\tm_pCall->unInitialize();\n");
+                c_writer.write ("\t\t\t\tdelete pSoapFault;\n");
+                c_writer.write ("\t\t\t\tthrow ofe;\n");
+            }
+            else
+            {
+                c_writer.write("\t\t\t\t" + faulttype + " pFaultDetail = \n");
+                c_writer.write("\t\t\t\t\t(" + faulttype + ")pSoapFault->getCmplxFaultObject(\n");
+                c_writer.write("\t\t\t\t\t\t(void*) Axis_DeSerialize_" + langName + ",\n");
+                c_writer.write("\t\t\t\t\t\t(void*) Axis_Create_" + langName + ",\n");
+                c_writer.write("\t\t\t\t\t\t(void*) Axis_Delete_" + langName + ",\n");
+                c_writer.write("\t\t\t\t\t\t\"" + faultInfoName + "\",\n");
+                c_writer.write("\t\t\t\t\t\t0);\n\n");
+                c_writer.write("\t\t\t\tpFaultDetail->setFaultCode(pSoapFault->getFaultcode());\n");
+                c_writer.write("\t\t\t\tpFaultDetail->setFaultString(pSoapFault->getFaultstring());\n");
+                c_writer.write("\t\t\t\tpFaultDetail->setFaultActor(pSoapFault->getFaultactor());\n");
+                c_writer.write("\t\t\t\tpFaultDetail->setExceptionCode(e.getExceptionCode());\n");
+                c_writer.write("\t\t\t\tm_pCall->unInitialize();\n");
+                c_writer.write ("\t\t\t\tdelete pSoapFault;\n");
+                c_writer.write ("\t\t\t\t" + faultTypeName + " fault = *pFaultDetail;\n");
+                c_writer.write ("\t\t\t\tdelete pFaultDetail;\n");
+                c_writer.write ("\t\t\t\tthrow fault;\n");            
+            }
+            
             c_writer.write("\t\t\t}\n");
         } 
         catch (IOException e)
