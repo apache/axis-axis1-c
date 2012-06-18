@@ -659,9 +659,9 @@ public class ClientStubWriter extends CFileWriter
             FaultInfo info = (FaultInfo) paramsFault.next ();
             faultInfoName = info.getFaultInfo ();
 
-            // FJP - D0004 > Looking through the list of attributes for the 'error' part of
-            //               the fault message.  If found, update the faultInfoName with the
-            //               'localname' of the qname of the attribute.                         
+            // Looking through the list of attributes for the 'error' part of
+            // the fault message.  If found, update the faultInfoName with the
+            // 'localname' of the qname of the attribute.                         
             Iterator infoArrayListIterator = info.getParams ().iterator ();
             boolean found = false;
 
@@ -682,6 +682,14 @@ public class ClientStubWriter extends CFileWriter
             {
                 ParameterInfo par = (ParameterInfo) paramInfo.get (i);
                 langName = par.getLangName ();
+                String faultType  = CUtils.getClassNameFromParamInfoConsideringArrays (par,wscontext);
+                String faultTypeName = faultType;
+                if (faultType.lastIndexOf('*') != -1)
+                    faultTypeName = faultType.substring(0, faultType.lastIndexOf('*'));
+                
+                // TODO Currently we do not create exception classes for simple types!
+                if (CUtils.isSimpleType (faultTypeName))
+                    continue;
 
                 c_writer.write ("\taxiscCallAddSoapFaultToList(call, \"" 
                         + faultInfoName + "\", "
