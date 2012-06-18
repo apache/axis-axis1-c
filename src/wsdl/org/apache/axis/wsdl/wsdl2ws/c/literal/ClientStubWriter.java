@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Kanchana Welagedara(kanchana@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
 
 import java.io.IOException;
@@ -119,11 +114,11 @@ public class ClientStubWriter
             c_writer.write(outparamType + "*");
    
         // Method name may conflict with a C type, so if it does, need to make method unique.
-        String methodName = minfo.getMethodname();
+        String methodName = minfo.getSanitizedMethodName();
         int ii = 0;
         while (wscontext.getTypemap().doesTypeExist(methodName))
         {
-            methodName = minfo.getMethodname() + ii++;
+            methodName = minfo.getSanitizedMethodName() + ii++;
         }
 
         c_writer.write(" " + methodName + "(AXISCHANDLE stub");

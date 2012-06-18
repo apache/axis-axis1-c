@@ -15,12 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- */
-
-
 /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
 /* NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE NOTE   */
 /* ----------------------------------------------------------------   */
@@ -85,7 +79,6 @@ public class ClientStubWriter
             isAllTreatedAsOutParams = true;
 
         Collection params = minfo.getInputParameterTypes();
-        String methodName = minfo.getMethodname();
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
@@ -118,7 +111,7 @@ public class ClientStubWriter
         // Generate method prototype
         //=============================================================================        
 
-        CUtils.printMethodComment(c_writer, "This method wraps the service method " + methodName + ".");
+        CUtils.printMethodComment(c_writer, "This method wraps the service method " + minfo.getMethodname() + ".");
         
         //method signature
         String paramTypeName;
@@ -137,7 +130,7 @@ public class ClientStubWriter
         else 
             c_writer.write(outparamType + "*");
 
-        c_writer.write (" " + c_classname + "::\n" + methodName + "(");
+        c_writer.write (" " + c_classname + "::\n" + minfo.getSanitizedMethodName() + "(");
         ArrayList paramsB = (ArrayList) params;
         ParameterInfo paramtype = null;
         if (0 < paramsB.size ())

@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.IOException;
@@ -182,7 +177,7 @@ public class WrapWriter extends CPPClassWriter
             //if conditions (if parts)		
             c_writer.write(
                 "\tif( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
-            c_writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
+            c_writer.write("\t\treturn " + minfo.getSanitizedMethodName() + "(mc);\n");
             //(else if parts)
             if (methods.size() > 1)
             {
@@ -191,7 +186,7 @@ public class WrapWriter extends CPPClassWriter
                     minfo = (MethodInfo) methods.get(i);
                     c_writer.write(
                         "\telse if ( (0 == strcmp(method, \"" + minfo.getInputMessage().getLocalPart() + "\")) || (0 == strcmp(method, \"" + minfo.getMethodname() + "\")) )\n");
-                    c_writer.write("\t\treturn " + minfo.getMethodname() + "(mc);\n");
+                    c_writer.write("\t\treturn " + minfo.getSanitizedMethodName() + "(mc);\n");
                 }
             }
             //(else part)
@@ -236,7 +231,6 @@ public class WrapWriter extends CPPClassWriter
             }
         }
         Collection params = minfo.getInputParameterTypes();
-        String methodName = minfo.getMethodname();
         Type retType = null;
         String outparamType = null;
         String outparamTypeName = null;
@@ -264,7 +258,7 @@ public class WrapWriter extends CPPClassWriter
         c_writer.write(" */\n");
         //method signature
         c_writer.write(
-            "int " + c_classname + "::\n" + methodName + "(void* pMsg)\n{\n");
+            "int " + c_classname + "::\n" + minfo.getSanitizedMethodName() + "(void* pMsg)\n{\n");
         c_writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
         c_writer.write("\tint nStatus;\n");
         c_writer.write("\tIWrapperSoapSerializer* pIWSSZ = NULL;\n");
@@ -509,7 +503,7 @@ public class WrapWriter extends CPPClassWriter
         	}
             c_writer.write(" ret = "
                     + "pWs->"
-                    + methodName
+                    + minfo.getSanitizedMethodName()
                     + "(");
             if (0 < paramsB.size())
             {
@@ -528,7 +522,7 @@ public class WrapWriter extends CPPClassWriter
             	{
             		c_writer.write(
     	                    "\t\treturn pIWSSZ->addOutputParam(\""
-    	                        + methodName
+    	                        + minfo.getMethodname()
     	                        + "Return\", (void*)ret, "
     	                        + CUtils.getXSDEnumeratorForType(outparamTypeName)
     	                        + ");\n");
@@ -537,7 +531,7 @@ public class WrapWriter extends CPPClassWriter
             	{
 	                c_writer.write(
 	                    "\t\treturn pIWSSZ->addOutputParam(\""
-	                        + methodName
+	                        + minfo.getMethodname()
 	                        + "Return\", (void*)&ret, "
 	                        + CUtils.getXSDEnumeratorForType(outparamTypeName)
 	                        + ");\n");
@@ -555,7 +549,7 @@ public class WrapWriter extends CPPClassWriter
                             "\t\tnStatus = pIWSSZ->addOutputBasicArrayParam(ret,"
                                 + CUtils.getXSDEnumeratorForType(containedType)
                                 + ", \""
-                                + methodName
+                                + minfo.getMethodname()
                                 + "Return\");\n");
                         c_writer.write("\t\tdelete ret;\n");
                         c_writer.write("\t\t return nStatus;\n");
@@ -570,7 +564,7 @@ public class WrapWriter extends CPPClassWriter
                                 + ", (void*) Axis_Delete_"
                                 + containedType
                                 + ", \""
-                                + methodName
+                                + minfo.getMethodname()
                                 + "Return\", Axis_URI_"
                                 + containedType
                                 + ");\n");
@@ -589,7 +583,7 @@ public class WrapWriter extends CPPClassWriter
                             + ", (void*)Axis_Delete_"
                             + outparamTypeName
                             + ", \""
-                            + methodName
+                            + minfo.getMethodname()
                             + "Return\", Axis_URI_"
                             + outparamTypeName
                             + ");\n");
@@ -598,7 +592,7 @@ public class WrapWriter extends CPPClassWriter
         else
             if (isAllTreatedAsOutParams)
             {
-                c_writer.write("\t\tpWs->" + methodName + "(");
+                c_writer.write("\t\tpWs->" + minfo.getSanitizedMethodName() + "(");
                 if (0 < paramsB.size())
                 {
                     for (int i = 0; i < paramsB.size(); i++)
@@ -738,7 +732,7 @@ public class WrapWriter extends CPPClassWriter
             else
             { //method does not return anything
                 /* Invoke the service when return type is void */
-                c_writer.write("\t\tpWs->" + methodName + "(");
+                c_writer.write("\t\tpWs->" + minfo.getSanitizedMethodName() + "(");
                 if (0 < paramsB.size())
                 {
                     for (int i = 0; i < paramsB.size() - 1; i++)

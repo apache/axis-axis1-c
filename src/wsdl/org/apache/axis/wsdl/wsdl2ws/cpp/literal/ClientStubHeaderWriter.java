@@ -15,17 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- */
-
-/*
- * Revision 1.1  2004/05/26 samisa
- * Added Stub base class into code generation
- */
-
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 
 import java.io.IOException;
@@ -86,7 +75,7 @@ public class ClientStubHeaderWriter
                     c_writer.write("\tSTORAGE_CLASS_INFO void ");
                 }
                 //write return type
-                c_writer.write(minfo.getMethodname() + "(");
+                c_writer.write(minfo.getSanitizedMethodName() + "(");
 
                 //write parameter names 
                 boolean hasInputParms = false;

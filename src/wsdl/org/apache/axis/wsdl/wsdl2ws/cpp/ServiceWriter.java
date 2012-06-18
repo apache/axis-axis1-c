@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.IOException;
@@ -178,7 +173,7 @@ public class ServiceWriter extends CPPClassWriter
                         c_writer.write("void ");
                     }
                 }
-                c_writer.write(c_classname + "::\n" + minfo.getMethodname() + "(");
+                c_writer.write(c_classname + "::\n" + minfo.getSanitizedMethodName() + "(");
                 //write parameter names 
                 
                 boolean hasInputParms = false;

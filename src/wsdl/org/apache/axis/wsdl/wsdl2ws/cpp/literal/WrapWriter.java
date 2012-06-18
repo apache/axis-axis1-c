@@ -66,9 +66,8 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             returntype = (ParameterInfo) minfo.getOutputParameterTypes().iterator().next();
         else
             isAllTreatedAsOutParams = true;
-
+        
         Collection params = minfo.getInputParameterTypes();
-        String methodName = minfo.getMethodname();
         Type retType = null;
         String outparamType = null;
         boolean returntypeissimple = false;
@@ -106,10 +105,10 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
             }
         }
         
-        CUtils.printMethodComment(c_writer, "This method wraps the service method " + methodName + ".");
+        CUtils.printMethodComment(c_writer, "This method wraps the service method " + minfo.getMethodname() + ".");
 
         //method signature
-        c_writer.write("int " + c_classname + "::" + methodName + "(void* pMsg)\n{\n");
+        c_writer.write("int " + c_classname + "::" + minfo.getSanitizedMethodName() + "(void* pMsg)\n{\n");
         c_writer.write("\tIMessageData* mc = (IMessageData*)pMsg;\n");
         c_writer.write("\tint nStatus;\n\n");
         
@@ -342,7 +341,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
                                             && !(CUtils.isPointerType(retType.getLanguageSpecificName()))))))
                 c_writer.write(" *");
             
-            c_writer.write(" ret = " + "pWs->" + methodName + "(");
+            c_writer.write(" ret = " + "pWs->" + minfo.getSanitizedMethodName() + "(");
             if (0 < paramsB.size())
             {
                 for (int i = 0; i < paramsB.size() - 1; i++)
@@ -429,7 +428,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         }
         else if (isAllTreatedAsOutParams)
         {
-            c_writer.write("\tpWs->" + methodName + "(");
+            c_writer.write("\tpWs->" + minfo.getSanitizedMethodName() + "(");
             if (0 < paramsB.size())
                 for (int i = 0; i < paramsB.size(); i++)
                     c_writer.write("v" + i + ",");
@@ -560,7 +559,7 @@ public class WrapWriter extends org.apache.axis.wsdl.wsdl2ws.cpp.WrapWriter
         else
         { 
             //method does not return anything Invoke the service when return type is void
-            c_writer.write("\tpWs->" + methodName + "(");
+            c_writer.write("\tpWs->" + minfo.getSanitizedMethodName() + "(");
             if (0 < paramsB.size())
             {
                 for (int i = 0; i < paramsB.size() - 1; i++)

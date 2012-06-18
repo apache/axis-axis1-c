@@ -17,7 +17,6 @@
 /**
  * This Class represents a method (operation is wsdl) in a web service 
  * class.
- * @author Srinath Perera(hemapani@opensource.lk)
  */
 package org.apache.axis.wsdl.wsdl2ws.info;
 
@@ -27,10 +26,12 @@ import java.util.Collection;
 import javax.xml.namespace.QName;
 
 import org.apache.axis.wsdl.symbolTable.Parameters;
+import org.apache.axis.wsdl.wsdl2ws.CUtils;
 
 public class MethodInfo
 {
     private String methodname;
+    private String sanitizedMethodName;
     private Parameters operationParameters;
     private ArrayList inputParameters;
     private ArrayList outputParameters;
@@ -47,6 +48,7 @@ public class MethodInfo
     public MethodInfo(String methodname)
     {
         this.methodname = methodname;
+        sanitizedMethodName = CUtils.sanitizeString(methodname);
         inputParameters = new ArrayList(101);
         outputParameters = new ArrayList(101);
         faultType = new ArrayList(102);
@@ -57,6 +59,11 @@ public class MethodInfo
         return methodname;
     }
 
+    public String getSanitizedMethodName()
+    {
+        return sanitizedMethodName;
+    }
+    
     public Collection getInputParameterTypes()
     {
         return this.inputParameters;

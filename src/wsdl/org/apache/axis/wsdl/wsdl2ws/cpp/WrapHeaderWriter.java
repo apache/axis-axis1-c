@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.cpp;
 
 import java.io.IOException;
@@ -127,7 +122,7 @@ public class WrapHeaderWriter extends HeaderFileWriter
             {
                 minfo = (MethodInfo) methods.get(i);
                 c_writer.write(
-                    "\tint " + minfo.getMethodname() + "(void* pMsg);");
+                    "\tint " + minfo.getSanitizedMethodName() + "(void* pMsg);");
                 c_writer.write("\n");
             }
 

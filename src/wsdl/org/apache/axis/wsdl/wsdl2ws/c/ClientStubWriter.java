@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Kanchana Welagedara(kanchana@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.IOException;
@@ -151,15 +146,11 @@ public class ClientStubWriter extends CFileWriter
 
     /**
      * This method genarate methods that wraps the each method of the service
-     * @param methodName
-     * @param params
-     * @param outparam
+     * @param minfo
      * @throws IOException
      */
-
     public void writeMethodInWrapper(MethodInfo minfo)  throws WrapperFault, IOException
     {
-
         boolean isAllTreatedAsOutParams = false;
         ParameterInfo returntype = null;
         int noOfOutParams = minfo.getOutputParameterTypes().size();
@@ -172,7 +163,6 @@ public class ClientStubWriter extends CFileWriter
         
         Collection params = minfo.getInputParameterTypes();
 
-        String methodName = minfo.getMethodname();
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
@@ -190,7 +180,7 @@ public class ClientStubWriter extends CFileWriter
             }
         }
 
-        CUtils.printMethodComment(c_writer, "This function wraps the service method " + methodName + ".");
+        CUtils.printMethodComment(c_writer, "This function wraps the service method " + minfo.getMethodname() + ".");
         
         //method signature
         String paramTypeName;
@@ -212,7 +202,7 @@ public class ClientStubWriter extends CFileWriter
 
         }
         
-        c_writer.write(" " + methodName + "(AXISCHANDLE stub");
+        c_writer.write(" " + minfo.getSanitizedMethodName() + "(AXISCHANDLE stub");
         ArrayList paramsB = (ArrayList) params;
         for (int i = 0; i < paramsB.size(); i++)
         {

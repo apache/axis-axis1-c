@@ -15,10 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
 package org.apache.axis.wsdl.wsdl2ws.c.literal;
 
 import java.io.IOException;
@@ -94,11 +90,11 @@ public class ClientStubHeaderWriter
                 
                 // write operation prototype
                 // Operation name may conflict with a C type, so if it does, need to make unique.
-                String methodName = minfo.getMethodname();
+                String methodName = minfo.getSanitizedMethodName();
                 int ii = 0;
                 while (wscontext.getTypemap().doesTypeExist(methodName))
                 {
-                    methodName = minfo.getMethodname() + ii++;
+                    methodName = minfo.getSanitizedMethodName() + ii++;
                 }
                 c_writer.write(methodName + "(AXISCHANDLE pStub");                
 

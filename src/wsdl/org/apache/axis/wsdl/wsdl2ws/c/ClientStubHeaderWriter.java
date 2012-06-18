@@ -15,11 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani@openource.lk)
- * @author Susantha Kumara(susantha@opensource.lk, skumara@virtusa.com)
- */
-
 package org.apache.axis.wsdl.wsdl2ws.c;
 
 import java.io.IOException;
@@ -130,7 +125,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
                 }
                 
                 //write return type
-                c_writer.write(minfo.getMethodname() + "(AXISCHANDLE pStub");                
+                c_writer.write(minfo.getSanitizedMethodName() + "(AXISCHANDLE pStub");                
 
                 //write parameter names 
                 Iterator params = minfo.getInputParameterTypes().iterator();

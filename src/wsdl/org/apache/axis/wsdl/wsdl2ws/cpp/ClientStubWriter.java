@@ -195,7 +195,6 @@ public class ClientStubWriter extends CPPClassWriter
         
         Collection params = minfo.getInputParameterTypes();
 
-        String methodName = minfo.getMethodname();
         Type retType = null;
         boolean returntypeissimple = false;
         boolean returntypeisarray = false;
@@ -228,7 +227,7 @@ public class ClientStubWriter extends CPPClassWriter
         // Generate method prototype
         //=============================================================================        
 
-        CUtils.printMethodComment(c_writer, "This method wraps the service method " + methodName + ".");
+        CUtils.printMethodComment(c_writer, "This method wraps the service method " + minfo.getMethodname() + ".");
 
         //method signature
         String paramTypeName;
@@ -247,7 +246,7 @@ public class ClientStubWriter extends CPPClassWriter
             else
                 c_writer.write (outparamType + "*");
 
-        c_writer.write(" " + c_classname + "::\n" + methodName + "(");
+        c_writer.write(" " + c_classname + "::\n" + minfo.getSanitizedMethodName() + "(");
         ArrayList paramsB = (ArrayList) params;
         for (int i = 0; i < paramsB.size(); i++)
         {
@@ -750,7 +749,6 @@ public class ClientStubWriter extends CPPClassWriter
         Iterator paramsFault = minfo.getFaultType ().iterator ();
         String faultInfoName = null;
         boolean flag = false;
-        int j = 0;
         if (!paramsFault.hasNext ())
             writeOtherFaultException("");
         else
@@ -761,13 +759,12 @@ public class ClientStubWriter extends CPPClassWriter
         
         while (paramsFault.hasNext ())
         {
-            j = j + 1;
             FaultInfo info = (FaultInfo) paramsFault.next ();
             faultInfoName = info.getFaultInfo ();
     
-            // FJP - D0004 > Looking through the list of attributes for the 'error' part of
-            //               the fault message.  If found, update the faultInfoName with the
-            //               'localname' of the qname of the attribute.                         
+            // Looking through the list of attributes for the 'error' part of
+            // the fault message.  If found, update the faultInfoName with the
+            // 'localname' of the qname of the attribute.                         
             Iterator infoArrayListIterator = info.getParams ().iterator ();
             while (infoArrayListIterator.hasNext ())
             {
@@ -779,8 +776,7 @@ public class ClientStubWriter extends CPPClassWriter
                         faultInfoName = paramInfo.getElementName ().getLocalPart ();
                         break;
                     }
-            }
-            // FJP - D0004 <                            
+            }                          
     
             ArrayList paramInfo = info.getParams ();
             boolean printedIF = false;
