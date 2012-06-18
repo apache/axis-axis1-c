@@ -757,6 +757,7 @@ public class ClientStubWriter extends CPPClassWriter
             c_writer.write ("\t\t\tpcCmplxFaultName = pSoapFault->getCmplxFaultObjectName();\n");
         }
         
+        boolean printedIF = false;
         while (paramsFault.hasNext ())
         {
             FaultInfo info = (FaultInfo) paramsFault.next ();
@@ -779,7 +780,6 @@ public class ClientStubWriter extends CPPClassWriter
             }                          
     
             ArrayList paramInfo = info.getParams ();
-            boolean printedIF = false;
             for (int i = 0; i < paramInfo.size (); i++)
             {
                 ParameterInfo par = (ParameterInfo) paramInfo.get (i);
@@ -806,12 +806,18 @@ public class ClientStubWriter extends CPPClassWriter
         
         if (flag == true)
         {
-            c_writer.write ("\t\t\telse\n");
-            c_writer.write ("\t\t\t{\n");
+            String tab = "";
+            if (printedIF)
+            {
+                c_writer.write ("\t\t\telse\n");
+                c_writer.write ("\t\t\t{\n");
+                tab = "\t";
+            }
             
-            writeOtherFaultException("\t");
+            writeOtherFaultException(tab);
 
-            c_writer.write ("\t\t\t}\n");
+            if (printedIF)
+                c_writer.write ("\t\t\t}\n");
         }
         
         c_writer.write ("\t\t}\n");
