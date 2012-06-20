@@ -628,12 +628,16 @@ public class WSDLInfo
             // An array...
             
             // Get referenced type
-            TypeEntry typeEntryOfRefType = getActualRefType(type);
-            if (null == typeEntryOfRefType || typeEntryOfRefType.getQName() == null)
+            if (null == type.getRefType() || null == type.getRefType().getQName())
                 throw new WrapperFault("Array type found without a Ref type: " + type.getQName());
             
+            
+            // TODO not sure what we should do if array references an element following commented code is not correct 
+	        //  if (type.getRefType().getRefType() != null) 	 
+	        //     qn = type.getRefType().getRefType().getQName();
+            QName qn = type.getRefType().getQName();
+            
             // If referenced type is primitive, we are done...
-            QName qn = typeEntryOfRefType.getQName();
             if (CUtils.isPrimitiveType(qn))
                 return null;
             
