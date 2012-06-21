@@ -15,10 +15,6 @@
  *   limitations under the License.
  */
 
-/**
- * @author Srinath Perera(hemapani
- */
-
 package org.apache.axis.wsdl.wsdl2ws;
 
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
@@ -42,6 +38,9 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
 
         if (WrapperConstants.LANGUAGE_CPP.equalsIgnoreCase(language))
         {
+            // Generate objects common to Client and Server - MUST BE FIRST THING DONE!
+            (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,wscontext)).generate();
+            
             if (WrapperConstants.SERVER.equals(wscontext.getWrapperInfo().getTargetEngine()))
             {
                 // Generate Server objects
@@ -60,12 +59,12 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
                 (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_CPP,wscontext)).generate();
                 (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_HPP,wscontext)).generate();
             }
-            
-            // Generate objects common to Client and Server
-            (new Generator(WrapperConstants.GENERATOR_PARAM_CPP_ALL,wscontext)).generate();
         }
         else if (WrapperConstants.LANGUAGE_C.equalsIgnoreCase(language))
         {
+            // Generate objects common to Client and Server - MUST BE FIRST THING DONE!
+            (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,wscontext)).generate();
+            
             if (WrapperConstants.SERVER.equals(wscontext.getWrapperInfo().getTargetEngine()))
             {
                 // Generate Server objects
@@ -83,8 +82,6 @@ public class WebServiceGeneratorImpl implements WebServiceGenerator
                 (new Generator(WrapperConstants.GENERATOR_CLIENT_STUB_H,wscontext)).generate();
 
             }
-            // Generate objects common to Client and Server
-            (new Generator(WrapperConstants.GENERATOR_PARAM_C_ALL,wscontext)).generate();
         }
         else
         {

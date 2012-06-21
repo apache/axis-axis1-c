@@ -17,15 +17,20 @@
 
 package org.apache.axis.wsdl.wsdl2ws.cpp.literal;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis.wsdl.wsdl2ws.CUtils;
+import org.apache.axis.wsdl.wsdl2ws.WSDL2Ws;
 import org.apache.axis.wsdl.wsdl2ws.WrapperFault;
 import org.apache.axis.wsdl.wsdl2ws.info.MethodInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.ParameterInfo;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
+import org.apache.axis.wsdl.wsdl2ws.info.TypeMap;
 import org.apache.axis.wsdl.wsdl2ws.info.WebServiceContext;
 
 public class ClientStubHeaderWriter
@@ -173,6 +178,7 @@ public class ClientStubHeaderWriter
             c_writer.write("AXIS_CPP_NAMESPACE_USE\n");
             c_writer.write("\n");
             
+            // TODO - There should be a better way to determine what types are being generated!
             Type atype;
             Iterator types = this.wscontext.getTypemap().getTypes().iterator();
             HashSet typeSet = new HashSet();
@@ -185,13 +191,33 @@ public class ClientStubHeaderWriter
                     continue;
 
                 if (atype.isArray())
+                {
+                    // TODO not sure about "string" check, whether it is needed....
                     if (atype.getElementType().equals("string"))
                         removeSet.add(atype.getLanguageSpecificName());
+
+                    // NOTE: There is similar check in AllParamWriter.java.  
+                    String elementType = atype.getElementType();
+                    if (elementType != null)
+                    {
+                        if (TypeMap.isAnonymousType(elementType))
+                            elementType = CUtils.sanitizeString(elementType);
+                        
+                        QName elementQname = new QName(atype.getName().getNamespaceURI(), elementType);                       
+                        Type currentType = wscontext.getTypemap().getType(elementQname);
+                        
+                        if (currentType != null)
+                            if ( currentType.isSimpleType())
+                                continue;
+                    }
+                }
                 
+                // TODO not sure about "string" check, whther it is needed...
                 if (atype.getBaseType() != null)
                     if (atype.getBaseType().getLocalPart().equals("string"))
                         removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));
                 
+                   
                 if (atype.isRestriction())
                     removeSet.add(CUtils.getArrayNameForType(atype.getLanguageSpecificName()));
 
@@ -203,9 +229,17 @@ public class ClientStubHeaderWriter
                 typeSet.remove(ritr.next());
 
             Iterator itr = typeSet.iterator();
+            String targetLocation = wscontext.getWrapperInfo().getTargetOutputLocation();
+            if (!targetLocation.endsWith(File.separator))
+                targetLocation += File.separator;
+          
             while (itr.hasNext())
             {
-                c_writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
+                String fn = itr.next().toString() + CUtils.getHeaderFileExtension();
+                        
+                // Not pretty but it works...this ensures we include generated types.
+                if (new File(targetLocation  + fn).exists())
+                    c_writer.write("#include \"" + fn + "\"\n");
             }
             
             //    Method to print the Fault Exception headers
