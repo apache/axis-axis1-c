@@ -502,11 +502,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     arrayType = attribs[i].getTypeName();
                     
-                    if (attribs[i].getNsQualified())
-                        namespace = "Axis_URI_" + arrayType;
-                    else
-                        namespace = "NULL";
-                    
                     c_writer.write("\tpSZ->serializeCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_Serialize_" + arrayType 
                             + ", (void*)Axis_Delete_" + arrayType 

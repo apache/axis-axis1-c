@@ -289,11 +289,6 @@ public class BeanParamWriter extends ParamCFileWriter
                 {
                     arrayType = attribs[i].getTypeName();
                     
-                    if (attribs[i].getNsQualified())
-                        namespace = "Axis_URI_" + arrayType;
-                    else
-                        namespace = "NULL";
-                    
                     c_writer.write("\taxiscSoapSerializerSerializeCmplxArray(pSZ, (const Axisc_Array *)param->"
                             + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_Serialize_" + arrayType 
