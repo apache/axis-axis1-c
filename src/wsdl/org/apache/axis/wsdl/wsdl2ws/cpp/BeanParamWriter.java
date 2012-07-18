@@ -445,7 +445,14 @@ public class BeanParamWriter extends ParamCPPFileWriter
         {
             String namespace = "NULL";
             if (attribs[i].getNsQualified())
+            {
                 namespace = "Axis_URI_" + c_classname;
+                
+                // Elements can reference other elements in different schema...need to handle.
+                QName elementName = attribs[i].getElementName();
+                if (elementName != null)
+                   namespace = "\"" + elementName.getNamespaceURI() + "\"";
+            }
             
             // if the attribute is a choice following should do
             boolean ifCheckPrinted = false;
@@ -537,15 +544,6 @@ public class BeanParamWriter extends ParamCPPFileWriter
             else
             {
                 //if complex type
-                namespace = type.getName().getNamespaceURI();
-                
-                String elm = attribs[i].getParamNameAsSOAPString();
-                QName elementName = attribs[i].getElementName();
-                if (elementName != null)
-                   namespace = elementName.getNamespaceURI();
-
-                if (attribs[i].isReference())
-                    elm = attribs[i].getTypeName();
                 
                 String tab = "";
                 if (ifCheckPrinted)
@@ -556,8 +554,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     c_writer.write("\tif (param->" + attribs[i].getParamNameAsMember() + " != NULL)\n\t{\n\t");
                 }
                 
+                String elm = attribs[i].getParamNameAsSOAPString();
+                if (attribs[i].isReference())
+                    elm = attribs[i].getTypeName();
+
                 if (attribs[i].getNsQualified())
                 {
+                    namespace = type.getName().getNamespaceURI();
+                    QName elementName = attribs[i].getElementName();
+                    if (elementName != null)
+                       namespace = elementName.getNamespaceURI();
+
                     c_writer.write("\tsPrefix = pSZ->getNamespacePrefix(\"" + namespace + "\", blnIsNewSubElemPrefix);\n");
                     c_writer.write(tab + "\tpSZ->serialize(\"<\", sPrefix, \":\", \"" + elm + "\", 0);\n");
                     c_writer.write(tab + "\tif (blnIsNewSubElemPrefix)\n");
