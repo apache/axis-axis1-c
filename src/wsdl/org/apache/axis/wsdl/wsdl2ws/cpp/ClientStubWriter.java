@@ -152,7 +152,7 @@ public class ClientStubWriter extends CPPClassWriter
                         + CUtils.getHeaderFileExtension() + "\"\n\n");
             }
             else
-                c_writer.write("#include \"" + c_classname + CUtils.getHeaderFileExtension() + "\"\n\n");
+                c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(c_classname) + CUtils.getHeaderFileExtension() + "\"\n\n");
 
             c_writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             c_writer.write ("#include <axis/Axis.hpp>\n");

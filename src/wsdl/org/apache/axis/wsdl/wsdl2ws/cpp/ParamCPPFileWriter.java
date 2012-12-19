@@ -109,7 +109,7 @@ public abstract class ParamCPPFileWriter extends ParamWriter
             c_writer.write("#include <axis/UnknownElementException.hpp>\n");
             c_writer.write("#include <axis/AxisWrapperAPI.hpp>\n");
             c_writer.write("#include <axis/Axis.hpp>\n\n");
-            c_writer.write("#include \"" + this.c_classname + CUtils.getHeaderFileExtension() + "\"\n");
+            c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(this.c_classname) + CUtils.getHeaderFileExtension() + "\"\n");
         }
         catch (IOException e)
         {

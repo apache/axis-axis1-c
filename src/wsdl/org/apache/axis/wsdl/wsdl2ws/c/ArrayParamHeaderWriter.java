@@ -101,7 +101,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
                        + "\tstruct " + attribs[0].getTypeName() + "Tag **   m_Array;\n"
                        + "\tint   m_Size;\n"
                        + "\tAXISC_XSDTYPE   m_Type;\n"
-                       + "} " + c_classname + ";\n"); 
+                       + "} " + CUtils.resolveWSDL2LanguageNameClashes(c_classname) + ";\n"); 
             
             c_writer.write("\n");
             c_writer.write("/* ********************************************************************* */\n");

@@ -66,7 +66,7 @@ public class ArrayParamHeaderWriter extends ParamWriter
             QName qname = CUtils.getArrayType(type).getName();
 
             if (!CUtils.isSimpleType(qname))
-                c_writer.write("#include \""+ attribs[0].getTypeName() + ".hpp\"\n");
+                c_writer.write("#include \""+ CUtils.resolveWSDL2LanguageNameClashes(attribs[0].getTypeName()) + ".hpp\"\n");
 
             c_writer.write("#include <axis/AxisUserAPI.hpp>\n\n");
 

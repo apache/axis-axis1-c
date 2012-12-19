@@ -217,7 +217,7 @@ public class ClientStubHeaderWriter extends HeaderFileWriter
             Iterator itr = typeSet.iterator();
             while (itr.hasNext())
             {
-                c_writer.write("#include \"" + itr.next().toString() + CUtils.getHeaderFileExtension() + "\"\n");
+                c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(itr.next().toString()) + CUtils.getHeaderFileExtension() + "\"\n");
             }
             
             //Method to print the Fault Exception headers

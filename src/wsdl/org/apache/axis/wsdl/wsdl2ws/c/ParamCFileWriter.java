@@ -121,7 +121,7 @@ public abstract class ParamCFileWriter extends ParamWriter
             c_writer.write("#include <string.h>\n");
             c_writer.write("\n");
             
-            c_writer.write("#include \"" + this.c_classname + CUtils.getHeaderFileExtension() + "\"\n");
+            c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(this.c_classname) + CUtils.getHeaderFileExtension() + "\"\n");
             c_writer.write("\n");
 
             c_writer.write("#include <axis/client/Stub.h>\n");

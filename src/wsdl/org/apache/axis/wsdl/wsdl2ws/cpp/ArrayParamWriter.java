@@ -53,7 +53,7 @@ public class ArrayParamWriter extends ParamWriter
             c_writer = new BufferedWriter(new FileWriter(getFilePath(false), false));
             
             writeClassComment();            
-            c_writer.write("#include \"" + c_classname + ".hpp\"\n\n");
+            c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(c_classname) + ".hpp\"\n\n");
             this.writeMethods();
             c_writer.flush();
             c_writer.close();

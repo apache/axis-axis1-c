@@ -1115,10 +1115,14 @@ public class CUtils
         for(i=0; i < Array.getLength(c_invalidCChars); i++)
             sanitisedName = sanitisedName.replace((char)c_invalidCChars[i], '_'); 
         
+        // Now ensure that string does not conflict with language constructs
+        sanitisedName = resolveWSDL2LanguageNameClashes(sanitisedName);
+        
         return sanitisedName;
     }
     
     /**
+     * NOT CURRENTLY USED.
      * This routine is used to basically handle anonymous type naming.  Anonymous types
      * have names such as '>type' and '>>type>type2', the latter being a nested type. 
      * When generating classes, we want to use the simplist name, which is the name after

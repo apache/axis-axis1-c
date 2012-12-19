@@ -289,7 +289,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 }
 
                 // Print out field.
-                c_writer.write("\t" + paramType + " " + paramName + ";\n");
+                c_writer.write("\t" + CUtils.resolveWSDL2LanguageNameClashes(paramType) + " " + paramName + ";\n");
             }
             
             if (extensionBaseAttrib != null &&
@@ -438,7 +438,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 // Do not want to include the header file we are generating!
                 String includeFile = itr.next().toString();
                 if (!includeFile.equals(c_classname))
-                   c_writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
+                   c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(includeFile) + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
             c_writer.write("\n");

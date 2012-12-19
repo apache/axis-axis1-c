@@ -692,7 +692,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     
                     c_writer.write(tab2 + "{\n"); // start local scope
                     
-                    c_writer.write(tab2 + "\t" + attribs[i].getTypeName() + " * "
+                    c_writer.write(tab2 + "\t" + CUtils.resolveWSDL2LanguageNameClashes(attribs[i].getTypeName()) + " * "
                         + attribs[i].getParamNameAsMember() + " = " 
                         + "axiscSoapDeSerializer"
                         + CUtils.getDeserializerMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 

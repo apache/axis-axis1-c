@@ -338,7 +338,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     c_writer.write("\t");
 
                 // Print out field.
-                c_writer.write(paramType + " " + paramName + ";\n");
+                c_writer.write(CUtils.resolveWSDL2LanguageNameClashes(paramType) + " " + paramName + ";\n");
             }
             
             // Handle extension 
@@ -391,10 +391,10 @@ public class ParmHeaderFileWriter extends ParamWriter
                 c_writer.write("\n");
                 
                 // Generate getter prototype
-                c_writer.write("\t" + paramType + " get" + methodName + "();\n");
+                c_writer.write("\t" + CUtils.resolveWSDL2LanguageNameClashes(paramType) + " get" + methodName + "();\n");
                 
                 // Generate setter prototype - need to consider deep copies
-                c_writer.write("\t" + "void set" + methodName + "(" + paramType + " InValue");
+                c_writer.write("\t" + "void set" + methodName + "(" + CUtils.resolveWSDL2LanguageNameClashes(paramType) + " InValue");
                 
                 Type type = attribs[i].getType();
                 boolean isPointerType;                
@@ -559,7 +559,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 // Do not want to include the header file we are generating!
                 String includeFile = itr.next().toString();
                 if (!includeFile.equals(c_classname))                
-                    c_writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
+                    c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(includeFile) + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
             c_writer.write("\n");

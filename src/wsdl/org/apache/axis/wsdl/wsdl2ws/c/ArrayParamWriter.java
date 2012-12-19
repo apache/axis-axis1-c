@@ -73,7 +73,7 @@ public class ArrayParamWriter extends ParamWriter
             // include header file for the contained type
             QName qname = CUtils.getArrayType(type).getName();
             if (!CUtils.isSimpleType(qname))
-                c_writer.write("#include \"" + attribs[0].getTypeName() + CUtils.getHeaderFileExtension() + "\"\n");
+                c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(attribs[0].getTypeName()) + CUtils.getHeaderFileExtension() + "\"\n");
             c_writer.write("\n");
             
             c_writer.write("\n");
