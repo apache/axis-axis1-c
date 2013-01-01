@@ -645,14 +645,14 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write("\n");
                  
                     c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() 
-                            + " = (" + containedTypeArrayName + " *)" 
+                            + " = (" + CUtils.sanitizeString(containedTypeArrayName) + " *)" 
                             + "axiscSoapDeSerializerGetBasicArray(pDZ, " 
                             + CUtils.getXSDEnumeratorForType(baseTypeName) + ", \"" 
                             + attribs[i].getParamNameAsSOAPString() + "\",0);\n");
                 }
                 else
                 {
-                    arrayType = attribs[i].getTypeName();
+                    arrayType = CUtils.sanitizeString(attribs[i].getTypeName());
                     c_writer.write(tab1 + "axiscSoapDeSerializerGetCmplxArray(pDZ, (Axisc_Array *)param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_"  + arrayType 
                             + ", (void*)Axis_Create_" + arrayType 
@@ -692,7 +692,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     
                     c_writer.write(tab2 + "{\n"); // start local scope
                     
-                    c_writer.write(tab2 + "\t" + CUtils.resolveWSDL2LanguageNameClashes(attribs[i].getTypeName()) + " * "
+                    c_writer.write(tab2 + "\t" + CUtils.sanitizeString((attribs[i].getTypeName())) + " * "
                         + attribs[i].getParamNameAsMember() + " = " 
                         + "axiscSoapDeSerializer"
                         + CUtils.getDeserializerMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 
@@ -851,7 +851,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     containedTypeArrayName = CUtils.getArrayNameForType(baseTypeName);
                     
                     c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() 
-                            + " = (" + containedTypeArrayName + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
+                            + " = (" + CUtils.sanitizeString(containedTypeArrayName) + " *)axiscAxisNew(XSDC_ARRAY, 0);\n");
                     
                     c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + "->m_Type = " 
                             + CUtils.getXSDEnumeratorForType(baseTypeName) + ";\n");
@@ -861,7 +861,7 @@ public class BeanParamWriter extends ParamCFileWriter
                     containedTypeArrayName = CUtils.getArrayNameForType(attribs[i].getTypeName());
 
                     c_writer.write("\t\tpTemp->" + attribs[i].getParamNameAsMember() + " = "
-                            + "Axis_Create_" + containedTypeArrayName + "(0);\n");
+                            + "Axis_Create_" + CUtils.sanitizeString(containedTypeArrayName) + "(0);\n");
                 }     
             }
         }
@@ -961,10 +961,10 @@ public class BeanParamWriter extends ParamCFileWriter
                 
                 if (attribs[i].isArray())
                     c_writer.write("\t\t\tAxis_Delete_" 
-                            + CUtils.getArrayNameForType(attribs[i].getTypeName())  
+                            + CUtils.sanitizeString(CUtils.getArrayNameForType(attribs[i].getTypeName()))  
                             + "(param->" + attribs[i].getParamNameAsMember() + ", 0);\n");  
                 else
-                    c_writer.write("\t\t\tAxis_Delete_" + attribs[i].getTypeName() 
+                    c_writer.write("\t\t\tAxis_Delete_" + CUtils.sanitizeString(attribs[i].getTypeName()) 
                             + "(param->" + attribs[i].getParamNameAsMember() + ", 0);\n");     
             }
         }

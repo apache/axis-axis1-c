@@ -124,6 +124,9 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     methodName = methodName + Integer.toString(anyCounter);
                 }
                 
+                properParamType = CUtils.sanitizeStringWithSplats(properParamType);
+                type            = CUtils.sanitizeString(type);
+                
                 //=============================================================================
                 // Write getter method
                 //=============================================================================      
@@ -131,8 +134,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 CUtils.printMethodComment(c_writer, "Getter method for class member field " 
                         + parameterName + ".");
                 
-                c_writer.write(CUtils.resolveWSDL2LanguageNameClashes(properParamType) + asterisk + c_classname
-                        + "::\nget" + methodName + "()\n{\n");
+                c_writer.write(properParamType + asterisk + c_classname + "::\nget" + methodName + "()\n{\n");
 
                 c_writer.write("\t" + "return " + parameterName + "; \n}\n");
 
@@ -165,7 +167,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 {
                     // Setter method
                     c_writer.write("void " + c_classname + "::\nset"
-                            + methodName + "(" + CUtils.resolveWSDL2LanguageNameClashes(properParamType)  
+                            + methodName + "(" + properParamType  
                             + " pInValue, bool deep, bool makeCopy)\n{\n");
                     
                     if (attribs[i].getChoiceElement())
@@ -183,7 +185,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     c_writer.write("\t\tif (deep && makeCopy)\n");
                     c_writer.write("\t\t{\n");
                     
-                    c_writer.write("\t\t\t" + parameterName + " = new " + CUtils.resolveWSDL2LanguageNameClashes(type) + "();\n");
+                    c_writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
 
                     c_writer.write("\t\t\t*" + parameterName + " = *pInValue;\n");
                     c_writer.write("\t\t}\n");
@@ -198,7 +200,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 else
                 {
                     c_writer.write("void " + c_classname + "::\nset"
-                            + methodName + "(" + CUtils.resolveWSDL2LanguageNameClashes(properParamType) + " InValue");
+                            + methodName + "(" + properParamType + " InValue");
                                         
                     Type attributeType = attribs[i].getType();
                     
@@ -250,7 +252,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                         c_writer.write("\t{\n");
                         c_writer.write("\t\tif (deep && makeCopy)\n");
                         c_writer.write("\t\t{\n");
-                        c_writer.write("\t\t\t" + parameterName + " = new " + CUtils.resolveWSDL2LanguageNameClashes(type) + "();\n");
+                        c_writer.write("\t\t\t" + parameterName + " = new " + type + "();\n");
                         c_writer.write("\t\t\t*" + parameterName + " = *InValue;\n");
                         c_writer.write("\t\t}\n");
                         c_writer.write("\t\telse\n");
@@ -869,17 +871,17 @@ public class BeanParamWriter extends ParamCPPFileWriter
                             + attribs[i].getParamNameAsSOAPString()
                             + "\",0);\n");
                     c_writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + containedTypeArrayName + "();\n");
+                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + CUtils.sanitizeString(containedTypeArrayName) + "();\n");
                     c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember() + "->clone( *array" + arrayCount + ");\n");
                     c_writer.write(tab2 + "Axis::AxisDelete((void*) array" + arrayCount + ", XSD_ARRAY);\n\n");
                 }
                 else
                 {
-                    arrayType = attribs[i].getTypeName();
+                    arrayType = CUtils.sanitizeString(attribs[i].getTypeName());
                     containedTypeArrayName = CUtils.getArrayNameForType(arrayType);
                     
                     c_writer.write(tab2 + "if(param->" + attribs[i].getParamNameAsMember() + " == NULL)\n");
-                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + containedTypeArrayName + "();\n");
+                    c_writer.write(tab2 + "\tparam->" + attribs[i].getParamNameAsMember() + " = new " + CUtils.sanitizeString(containedTypeArrayName) + "();\n");
                     c_writer.write(tab2 + "pIWSDZ->getCmplxArray(param->" + attribs[i].getParamNameAsMember() 
                             + ", (void*)Axis_DeSerialize_" + arrayType
                             + ", (void*)Axis_Create_" + arrayType 
@@ -907,13 +909,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 
                 if( isPointerType)
                 {
-                    c_writer.write(tab2 + CUtils.resolveWSDL2LanguageNameClashes(typeName) + " pValue" + i + " = pIWSDZ->" +
+                    c_writer.write(tab2 + CUtils.sanitizeString(typeName) + " pValue" + i + " = pIWSDZ->" +
                             CUtils.getDeserializerMethodName(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
                 else
                 {
-                    c_writer.write(tab2 + CUtils.resolveWSDL2LanguageNameClashes(typeName) + " * pValue" + i + " = pIWSDZ->" +
+                    c_writer.write(tab2 + CUtils.sanitizeString(typeName) + " * pValue" + i + " = pIWSDZ->" +
                             CUtils.getDeserializerMethodName(baseTypeName, attribs[i].isAttribute()) +
                             "(\"" + soapTagName + "\", 0);\n");
                 }
@@ -947,11 +949,11 @@ public class BeanParamWriter extends ParamCPPFileWriter
                 String soapTagName = attribs[i].getParamNameAsSOAPString();
 
                 c_writer.write(tab2 + "param->" + attribs[i].getParamNameAsMember()
-                        + " = (" + attribs[i].getTypeName()
-                        + "*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_" + attribs[i].getTypeName()
-                        + ", (void*)Axis_Create_" + attribs[i].getTypeName() 
-                        + ", (void*)Axis_Delete_" + attribs[i].getTypeName() 
-                        + ", \"" + soapTagName + "\", Axis_URI_" + attribs[i].getTypeName() + ");\n");
+                        + " = (" + CUtils.sanitizeString(attribs[i].getTypeName())
+                        + "*)pIWSDZ->getCmplxObject((void*)Axis_DeSerialize_" + CUtils.sanitizeString(attribs[i].getTypeName())
+                        + ", (void*)Axis_Create_" + CUtils.sanitizeString(attribs[i].getTypeName())
+                        + ", (void*)Axis_Delete_" + CUtils.sanitizeString(attribs[i].getTypeName())
+                        + ", \"" + soapTagName + "\", Axis_URI_" + CUtils.sanitizeString(attribs[i].getTypeName()) + ");\n");
             }
 
             if (attribs[i].getChoiceElement() || attribs[i].getAllElement())
@@ -1145,13 +1147,13 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     String fieldName  = "any" + Integer.toString(anyCounter);
                     
                     c_writer.write("\tif (original." + fieldName + " != NULL)\n");
-                    c_writer.write("\t\t" + fieldName + " = new " + attribs[i].getTypeName() + "(*(original." + fieldName + "));\n");
+                    c_writer.write("\t\t" + fieldName + " = new " + CUtils.sanitizeString(attribs[i].getTypeName()) + "(*(original." + fieldName + "));\n");
                 }
                 else if (attribs[i].isArray())
                 {    
                     c_writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
                     c_writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
-                            + CUtils.getArrayNameForType(attribs[i].getTypeName()) + "(*original." 
+                            + CUtils.sanitizeString(CUtils.getArrayNameForType(attribs[i].getTypeName())) + "(*original." 
                             + attribs[i].getParamNameAsMember() + ");\n");
                 }
                 else
@@ -1174,7 +1176,7 @@ public class BeanParamWriter extends ParamCPPFileWriter
                     {
                         c_writer.write("\tif (original." + attribs[i].getParamNameAsMember() + " != NULL)\n");
                         c_writer.write("\t\t" + attribs[i].getParamNameAsMember() + " = new " 
-                                + attribs[i].getTypeName() + "(*(original." 
+                                + CUtils.sanitizeString(attribs[i].getTypeName()) + "(*(original." 
                                 + attribs[i].getParamNameAsMember() + "));\n");
                     }
                 }

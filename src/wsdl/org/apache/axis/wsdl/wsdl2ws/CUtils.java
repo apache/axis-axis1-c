@@ -1122,6 +1122,32 @@ public class CUtils
     }
     
     /**
+     * Sanitizes a string so that it can be used in generated code. 
+     * The '*' character is not touched.
+     * 
+     */
+    public static String sanitizeStringWithSplats( String name)
+    {
+        if (name == null)
+            return name;
+        
+        String sanitisedName=name.trim();
+        int i = -1;
+        if (sanitisedName.endsWith("*"))
+            i = sanitisedName.lastIndexOf('*');
+        String suffix = "";
+        String prefix = sanitisedName;
+        
+        if (i != -1)
+        {
+            suffix = sanitisedName.substring(i);
+            prefix = sanitisedName.substring(0, i).trim();
+        }
+        
+        sanitisedName = sanitizeString(prefix) + suffix;
+        return sanitisedName;
+    }
+    /**
      * NOT CURRENTLY USED.
      * This routine is used to basically handle anonymous type naming.  Anonymous types
      * have names such as '>type' and '>>type>type2', the latter being a nested type. 

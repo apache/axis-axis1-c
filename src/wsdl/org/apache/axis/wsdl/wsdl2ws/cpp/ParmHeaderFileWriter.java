@@ -338,7 +338,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                     c_writer.write("\t");
 
                 // Print out field.
-                c_writer.write(CUtils.resolveWSDL2LanguageNameClashes(paramType) + " " + paramName + ";\n");
+                c_writer.write(CUtils.sanitizeStringWithSplats(paramType) + " " + paramName + ";\n");
             }
             
             // Handle extension 
@@ -346,7 +346,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib) != null)
             {
                 c_writer.write("\t"
-                             + CUtils.sanitizeString(getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib))
+                             + CUtils.sanitizeStringWithSplats(getCorrectParmNameConsideringArraysAndComplexTypes(extensionBaseAttrib))
                              + " "
                              + extensionBaseAttrib.getParamNameAsMember() + ";\n");
             }
@@ -391,10 +391,10 @@ public class ParmHeaderFileWriter extends ParamWriter
                 c_writer.write("\n");
                 
                 // Generate getter prototype
-                c_writer.write("\t" + CUtils.resolveWSDL2LanguageNameClashes(paramType) + " get" + methodName + "();\n");
+                c_writer.write("\t" + CUtils.sanitizeStringWithSplats(paramType) + " get" + methodName + "();\n");
                 
                 // Generate setter prototype - need to consider deep copies
-                c_writer.write("\t" + "void set" + methodName + "(" + CUtils.resolveWSDL2LanguageNameClashes(paramType) + " InValue");
+                c_writer.write("\t" + "void set" + methodName + "(" + CUtils.sanitizeStringWithSplats(paramType) + " InValue");
                 
                 Type type = attribs[i].getType();
                 boolean isPointerType;                
@@ -526,13 +526,13 @@ public class ParmHeaderFileWriter extends ParamWriter
                 Type theType = attribs[i].getType();
                 
                 if (theType.isRestriction() && !CUtils.isPrimitiveType(basicType))
-                    typeSet.add(basicType);
+                    typeSet.add(CUtils.sanitizeString(basicType));
                 else if (!attribs[i].isSimpleType() && !attribs[i].isAnyElement())
                 {
                     if ((attribs[i].isArray()) && !theType.isSimpleType())
-                        typeSet.add(CUtils.getArrayNameForType(basicType));
+                        typeSet.add(CUtils.sanitizeString(CUtils.getArrayNameForType(basicType)));
     
-                    typeSet.add(basicType);
+                    typeSet.add(CUtils.sanitizeString(basicType));
                 }
             }
             
@@ -559,7 +559,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                 // Do not want to include the header file we are generating!
                 String includeFile = itr.next().toString();
                 if (!includeFile.equals(c_classname))                
-                    c_writer.write("#include \"" + CUtils.resolveWSDL2LanguageNameClashes(includeFile) + CUtils.getHeaderFileExtension() + "\"\n");
+                    c_writer.write("#include \"" + includeFile + CUtils.getHeaderFileExtension() + "\"\n");
             }
 
             c_writer.write("\n");
@@ -579,7 +579,7 @@ public class ParmHeaderFileWriter extends ParamWriter
                         !(attribs[i].isSimpleType() || attribs[i].getType().isSimpleType())
                         && !attribs[i].isAnyElement())
 				{
-                    typeSet.add(attribs[i].getTypeName());
+                    typeSet.add(CUtils.sanitizeString(attribs[i].getTypeName()));
                 } 
             }
             

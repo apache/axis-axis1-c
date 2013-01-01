@@ -647,10 +647,10 @@ public class WSDLInfo
             {
                 newqn = CUtils.getArrayQNameForType(qn);
                 if (newqn == null)
-                    newqn = new QName(type.getQName().getNamespaceURI(), CUtils.resolveWSDL2LanguageNameClashes(qn.getLocalPart()) + "_Array" + typeCounter++);      
+                    newqn = new QName(type.getQName().getNamespaceURI(), CUtils.sanitizeString(qn.getLocalPart()) + "_Array" + typeCounter++);      
             }
             else
-                newqn = new QName(type.getQName().getNamespaceURI(), CUtils.resolveWSDL2LanguageNameClashes(qn.getLocalPart()) + "_Array");
+                newqn = new QName(type.getQName().getNamespaceURI(), CUtils.sanitizeString(qn.getLocalPart()) + "_Array");
             
             // type is a inbuilt type or an already created type?
             typedata = c_typeMap.getType(newqn);
@@ -672,7 +672,7 @@ public class WSDLInfo
                     {
                         do 
                         {
-                            newqn = new QName(type.getQName().getNamespaceURI(), CUtils.resolveWSDL2LanguageNameClashes(qn.getLocalPart())  + "_Array" + typeCounter++);
+                            newqn = new QName(type.getQName().getNamespaceURI(), CUtils.sanitizeString(qn.getLocalPart())  + "_Array" + typeCounter++);
                             typedata = c_typeMap.getType(newqn);
                         }
                         while (typedata != null && !typedata.isArray());
