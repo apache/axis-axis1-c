@@ -34,14 +34,6 @@
  *
  */
 
-/*
- * Revision 1.1  2004/06/14 roshan
- * Added doxygen comments to help autobuild API docs
- * Added the implementations of getOption(const string& sArg) and 
- *  setOptionList(const map<string, string>* OptionList), because these methods
- *  are not needed to be implemented by the users. These are generic methods.
- */
-
 AXIS_CPP_NAMESPACE_START
 
 class Handler : public HandlerBase

@@ -33,13 +33,6 @@
  *
  */
 
-/*
- * Revision 1.1  2004/06/14 roshan
- * Removed virtual int AXISCALL addHeaderBlock(IHeaderBlock* pBlk)=0; method
- * from this interface, because a user should not be able to add any thing
- * to the DeSerialzer.
- */
-
 AXIS_CPP_NAMESPACE_START
 
 class IHandlerSoapDeSerializer : public IWrapperSoapDeSerializer
@@ -48,21 +41,13 @@ public:
     virtual ~IHandlerSoapDeSerializer() {};
     
     /*
-     * The soap body may be encrypted/compressed and a 
-     * handler in the request message 
-     * path may decode and then decrypt and/or decompress 
-     * whole soap body and set the
-     * XML to the Deserializer. In such a case a handler 
-     * will use following functions 
-     * to get soap body and set back the XML. 
-     * If this process goes throgh several
-     * handlers the intermediate binary data 
-     * (unencrypted/uncompressed body) may be kept 
-     * in the IMessageData until it is converted to XML. 
-     * A handler usually converts it 
-     * to XML and use SetNewSoapBody(..) function to set 
-     * the new SoapBody back to the 
-     * Deserializer.
+     * The soap body may be encrypted/compressed and a handler in the request message
+     * path may decode and then decrypt and/or decompress whole soap body and set the
+     * XML to the Deserializer. In such a case a handler will use following functions
+     * to get soap body and set back the XML. If this process goes throgh several
+     * handlers the intermediate binary data (unencrypted/uncompressed body) may be kept
+     * in the IMessageData until it is converted to XML. A handler usually converts it
+     * to XML and use SetNewSoapBody(..) function to set the new SoapBody back to the Deserializer.
      */
 
     /**
@@ -105,8 +90,7 @@ public:
      * @param pNamespace namespare URI of header block.
      * @return HeaderBlock
      */
-    virtual IHeaderBlock* getHeaderBlock(const AxisChar* pName, 
-        const AxisChar* pNamespace) = 0;
+    virtual IHeaderBlock* getHeaderBlock(const AxisChar* pName, const AxisChar* pNamespace) = 0;
 };
 
 AXIS_CPP_NAMESPACE_END
