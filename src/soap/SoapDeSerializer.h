@@ -39,8 +39,6 @@ using namespace std;
 /*
  *  @class SoapDeSerializer
  *  @brief interface for the SoapDeSerializer class.
- *  @author Susantha Kumara (susantha@opensource.lk, skumara@virtusa.com)
- *  @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
  */
 
 class SoapDeSerializer : public IHandlerSoapDeSerializer
@@ -142,189 +140,99 @@ public:
         void* pDelFunct, const AxisChar* pName, const AxisChar* pNamespace, bool isFault=false);
 
     /* Methods used by wrappers to get a deserialized value of basic types */
-    void getElement (const AxisChar* pName, const AxisChar* pNamespace, 
-        IAnySimpleType* pSimpleType, bool isArrayElement = false);
-    xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__short * AXISCALL getElementAsShort(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__long * AXISCALL getElementAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__string AXISCALL getElementAsString(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__QName AXISCALL getElementAsQName(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__date * AXISCALL getElementAsDate(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__time * AXISCALL getElementAsTime(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gYearMonth * AXISCALL getElementAsGYearMonth(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gYear * AXISCALL getElementAsGYear(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gMonthDay * AXISCALL getElementAsGMonthDay(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gDay* AXISCALL getElementAsGDay(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gMonth * AXISCALL getElementAsGMonth(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__negativeInteger * AXISCALL getElementAsNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__positiveInteger * AXISCALL getElementAsPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__normalizedString AXISCALL getElementAsNormalizedString(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__token AXISCALL getElementAsToken(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__language AXISCALL getElementAsLanguage(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__Name AXISCALL getElementAsName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NCName AXISCALL getElementAsNCName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ID AXISCALL getElementAsID(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREF AXISCALL getElementAsIDREF(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREFS AXISCALL getElementAsIDREFS(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITY AXISCALL getElementAsENTITY(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ENTITIES AXISCALL getElementAsENTITIES(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKEN AXISCALL getElementAsNMTOKEN(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__anyType AXISCALL getElementAsAnyType(const AxisChar* pName,
-        const AxisChar* pNamespace);
+    void getElement (const AxisChar* pName, const AxisChar* pNamespace, IAnySimpleType* pSimpleType, bool isArrayElement = false);
+    xsd__int * AXISCALL getElementAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__boolean * AXISCALL getElementAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedInt * AXISCALL getElementAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__short * AXISCALL getElementAsShort(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedShort * AXISCALL getElementAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__byte * AXISCALL getElementAsByte(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedByte * AXISCALL getElementAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__long * AXISCALL getElementAsLong(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__integer * AXISCALL getElementAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedLong * AXISCALL getElementAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__float * AXISCALL getElementAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__double * AXISCALL getElementAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__decimal * AXISCALL getElementAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__string AXISCALL getElementAsString(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__anyURI AXISCALL getElementAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__QName AXISCALL getElementAsQName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__hexBinary * AXISCALL getElementAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__base64Binary * AXISCALL getElementAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__dateTime * AXISCALL getElementAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__date * AXISCALL getElementAsDate(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__time * AXISCALL getElementAsTime(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__duration * AXISCALL getElementAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gYearMonth * AXISCALL getElementAsGYearMonth(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gYear * AXISCALL getElementAsGYear(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gMonthDay * AXISCALL getElementAsGMonthDay(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gDay* AXISCALL getElementAsGDay(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gMonth * AXISCALL getElementAsGMonth(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__nonPositiveInteger * AXISCALL getElementAsNonPositiveInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__negativeInteger * AXISCALL getElementAsNegativeInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__nonNegativeInteger * AXISCALL getElementAsNonNegativeInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__positiveInteger * AXISCALL getElementAsPositiveInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__normalizedString AXISCALL getElementAsNormalizedString(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__token AXISCALL getElementAsToken(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__language AXISCALL getElementAsLanguage(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__Name AXISCALL getElementAsName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NCName AXISCALL getElementAsNCName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ID AXISCALL getElementAsID(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__IDREF AXISCALL getElementAsIDREF(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__IDREFS AXISCALL getElementAsIDREFS(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ENTITY AXISCALL getElementAsENTITY(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ENTITIES AXISCALL getElementAsENTITIES(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NMTOKEN AXISCALL getElementAsNMTOKEN(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NMTOKENS AXISCALL getElementAsNMTOKENS(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NOTATION AXISCALL getElementAsNOTATION(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__anyType AXISCALL getElementAsAnyType(const AxisChar* pName, const AxisChar* pNamespace);
 
-    void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace,
-        IAnySimpleType* pSimpleType);
-    xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__NOTATION AXISCALL getAttributeAsNOTATION(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__normalizedString AXISCALL getAttributeAsNormalizedString(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__token AXISCALL getAttributeAsToken(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__language AXISCALL getAttributeAsLanguage(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__Name AXISCALL getAttributeAsName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__NCName AXISCALL getAttributeAsNCName(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__ID AXISCALL getAttributeAsID(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__IDREF AXISCALL getAttributeAsIDREF(const AxisChar* pName,
-        const AxisChar* pNamespace);    
-    xsd__IDREFS AXISCALL getAttributeAsIDREFS(const AxisChar* pName,
-        const AxisChar* pNamespace);    
-    xsd__ENTITY AXISCALL getAttributeAsENTITY(const AxisChar* pName,
-        const AxisChar* pNamespace);    
-    xsd__ENTITIES AXISCALL getAttributeAsENTITIES(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__base64Binary * AXISCALL getAttributeAsBase64Binary
-        (const AxisChar* pName, const AxisChar* pNamespace);
-    xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, 
-        const AxisChar* pNamespace);
-    xsd__gDay* AXISCALL getAttributeAsGDay(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonth* AXISCALL getAttributeAsGMonth(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gMonthDay* AXISCALL getAttributeAsGMonthDay(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYear* AXISCALL getAttributeAsGYear(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__gYearMonth* AXISCALL getAttributeAsGYearMonth(const AxisChar* pName,
-        const AxisChar* pNamespace);
-    xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, 
-        const AxisChar* pNamespace);
+    void *getAttribute(const AxisChar* pName, const AxisChar* pNamespace, IAnySimpleType* pSimpleType);
+    xsd__int * AXISCALL getAttributeAsInt(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__boolean * AXISCALL getAttributeAsBoolean(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedInt * AXISCALL getAttributeAsUnsignedInt(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__short * AXISCALL getAttributeAsShort(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedShort * AXISCALL getAttributeAsUnsignedShort(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__byte * AXISCALL getAttributeAsByte(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedByte * AXISCALL getAttributeAsUnsignedByte(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__long * AXISCALL getAttributeAsLong(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__integer * AXISCALL getAttributeAsInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__nonPositiveInteger * AXISCALL getAttributeAsNonPositiveInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__negativeInteger * AXISCALL getAttributeAsNegativeInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__nonNegativeInteger * AXISCALL getAttributeAsNonNegativeInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__positiveInteger * AXISCALL getAttributeAsPositiveInteger(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__unsignedLong * AXISCALL getAttributeAsUnsignedLong(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__float * AXISCALL getAttributeAsFloat(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__double * AXISCALL getAttributeAsDouble(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__decimal * AXISCALL getAttributeAsDecimal(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NOTATION AXISCALL getAttributeAsNOTATION(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__string AXISCALL getAttributeAsString(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__normalizedString AXISCALL getAttributeAsNormalizedString(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__token AXISCALL getAttributeAsToken(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__language AXISCALL getAttributeAsLanguage(const AxisChar* pName,  const AxisChar* pNamespace);
+    xsd__NMTOKEN AXISCALL getAttributeAsNMTOKEN(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NMTOKENS AXISCALL getAttributeAsNMTOKENS(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__Name AXISCALL getAttributeAsName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__NCName AXISCALL getAttributeAsNCName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ID AXISCALL getAttributeAsID(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__IDREF AXISCALL getAttributeAsIDREF(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__IDREFS AXISCALL getAttributeAsIDREFS(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ENTITY AXISCALL getAttributeAsENTITY(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__ENTITIES AXISCALL getAttributeAsENTITIES(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__anyURI AXISCALL getAttributeAsAnyURI(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__QName AXISCALL getAttributeAsQName(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__hexBinary * AXISCALL getAttributeAsHexBinary(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__base64Binary * AXISCALL getAttributeAsBase64Binary(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__dateTime * AXISCALL getAttributeAsDateTime(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__date * AXISCALL getAttributeAsDate(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__time * AXISCALL getAttributeAsTime(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gDay* AXISCALL getAttributeAsGDay(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gMonth* AXISCALL getAttributeAsGMonth(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gMonthDay* AXISCALL getAttributeAsGMonthDay(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gYear* AXISCALL getAttributeAsGYear(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__gYearMonth* AXISCALL getAttributeAsGYearMonth(const AxisChar* pName, const AxisChar* pNamespace);
+    xsd__duration * AXISCALL getAttributeAsDuration(const AxisChar* pName, const AxisChar* pNamespace);
+
     
     void setStyle(AXIS_BINDING_STYLE nStyle){ m_nStyle = nStyle;};
     AXIS_BINDING_STYLE getStyle(){return m_nStyle;};    
