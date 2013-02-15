@@ -1717,10 +1717,17 @@ public class CSchemaUtils extends SchemaUtils
             CContainedAttribute attr = new CContainedAttribute(type, attributeName);
 
             String useValue = Utils.getAttribute(child, "use");
-    
             if (useValue != null) 
                 attr.setOptional(useValue.equalsIgnoreCase("optional"));
-    
+            
+            String fixedValue = Utils.getAttribute(child, "fixed");
+            if (fixedValue != null)
+                attr.setFixedValue(fixedValue);
+            
+            String defaultValue = Utils.getAttribute(child, "default");
+            if (defaultValue != null)
+                attr.setDefaultValue(defaultValue);
+
             v.add(attr);
         }
     }

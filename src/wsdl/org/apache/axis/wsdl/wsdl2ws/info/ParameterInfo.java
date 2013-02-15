@@ -41,7 +41,9 @@ public class ParameterInfo
     private boolean isAttribute = false;
     private boolean isNillable = false;
     private boolean isOptional = false;
-    
+    private String  attributeDefaultValue = null;
+    private String  attributeFixedValue = null;
+
     private boolean isSimpleType = true;
 
     private int maxOccurs = 1;
@@ -360,5 +362,37 @@ public class ParameterInfo
     public void setMinOccurs(int minOccurs)
     {
         this.minOccurs = minOccurs;
+    }
+
+    /**
+     * @return default or fixed attribute value
+     */
+    public String getAttributeDefaultValue()
+    {
+        return attributeDefaultValue;
+    }
+    
+    /**
+     * @param s attribute default or fixed value
+     */
+    public void setAttributeDefaultValue(String s)
+    {
+        attributeDefaultValue = s;
+    }
+    
+    /**
+     * @return default or fixed attribute value
+     */
+    public String getAttributeFixedValue()
+    {
+        return attributeFixedValue;
+    }
+    
+    /**
+     * @param s attribute default or fixed value
+     */
+    public void setAttributeFixedValue(String s)
+    {
+        attributeFixedValue = s;
     }
 }

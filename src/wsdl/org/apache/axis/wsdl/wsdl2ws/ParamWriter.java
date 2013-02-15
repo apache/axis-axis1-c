@@ -142,7 +142,9 @@ public abstract class ParamWriter extends BasicFileWriter
             this.attribs[i].setType(attr.getType());
             this.attribs[i].setAttribute(true);
             this.attribs[i].setElementName(attr.getType().getName());
-            this.attribs[i].setOptional(attr.isOptional());           
+            this.attribs[i].setOptional(attr.isOptional()); 
+            this.attribs[i].setAttributeFixedValue(attr.getFixedValue());
+            this.attribs[i].setAttributeDefaultValue(attr.getDefaultValue());
         }
 
         for (int i = intAttrFieldSz; i < intAttrFieldSz + intEleFieldSz; i++)

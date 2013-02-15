@@ -22,6 +22,10 @@ import org.apache.axis.wsdl.symbolTable.TypeEntry;
 import org.apache.axis.wsdl.symbolTable.SymbolTable;
 import org.apache.axis.wsdl.wsdl2ws.info.Type;
 
+/**
+ * 
+ *
+ */
 public class CContainedAttribute 
 {
     /** Field qname - the qname. Immutable, no setter for  it. */
@@ -38,6 +42,12 @@ public class CContainedAttribute
     
     /** Field optional - is attribute optional? */
     private boolean optional = false;
+    
+    /** Field fixedValue - corresponds to fixed attribute value */
+    private String fixedValue = null;
+    
+    /** Field defaultValue - corresponds to default attribute value */
+    private String defaultValue = null;
 
     protected CContainedAttribute(TypeEntry typeEntry, QName qname) {
         this.qname     = qname;
@@ -76,4 +86,31 @@ public class CContainedAttribute
         return optional;
     }
 
+    /**
+     * @param s fixed value
+     */
+    public void setFixedValue(String s) {
+        fixedValue = s;        
+    }
+
+    /**
+     * @return the fixedValue
+     */
+    public String getFixedValue() {
+        return fixedValue;
+    }
+    
+    /**
+     * @param s default value
+     */
+    public void setDefaultValue(String s) {
+        defaultValue = s;
+    }
+
+    /**
+     * @return the default value if there is one, or null;
+     */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
 }

@@ -682,9 +682,8 @@ public class BeanParamWriter extends ParamCFileWriter
                     c_writer.write(tab2 + "param->"
                             + attribs[i].getParamNameAsMember() + " = "
                             + "axiscSoapDeSerializer"
-                            + CUtils.getDeserializerMethodName(
-                                    attribs[i].getTypeName(), attribs[i].isAttribute()) + "(pDZ, \""
-                            + soapTagName + "\",0);\n");
+                            + CUtils.getDeserializerMethodName(attribs[i].getTypeName(), attribs[i].isAttribute()) 
+                            + "(pDZ, \"" + soapTagName + "\",0);\n");                    
                 }                
                 else
                 {

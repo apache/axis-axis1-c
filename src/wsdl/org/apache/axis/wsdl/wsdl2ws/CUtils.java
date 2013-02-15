@@ -877,6 +877,15 @@ public class CUtils
     public static String getDeserializerMethodName(String typeName, boolean isAttrib)
     {
         String methodname = (String)c_simpleTypeToMethodSuffixMapper.get(typeName);
+        
+        // for attributes that are not defined with a type, just treat as string. Here
+        // is an example: 
+        //   <s:attribute fixed="http://tempuri.org/DStruttura.xsd" name="namespace" />
+        // The above translates to anyType, but since we do not have such a method
+        // for attributes, just treat as a string.
+        if (isAttrib && methodname.equals("AnyType"))
+            methodname = "String";
+        
         methodname = (isAttrib ? c_getAttributeAs : c_getElementAs) + methodname;
         return methodname;
     }
