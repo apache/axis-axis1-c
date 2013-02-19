@@ -15,14 +15,6 @@
  *   limitations under the License.
  */
 
-/*
- *
- * @author Susantha Kumara (skumara@virtusa.com)
- * @author Damitha Kumarage (damitha@opensource.lk, damitha@jkcsworld.com)
- * @author Roshan Weerasuriya (roshan@opensource.lk, roshanw@jkcsworld.com)
- * @author Samisa Abeysinghe (sabeysinghe@virtusa.com)
- *
- */
 
 // !!! This include file must be first thing in file !!!
 #include "../platforms/PlatformAutoSense.hpp"
@@ -1962,6 +1954,9 @@ getFaultAsXMLString()
         return NULL;
         
     AnyType *any = getAnyObject();
+    if (any == NULL)
+        return (xsd__string)NULL;
+
     int len = 1, i; // Add 1 for the null terminator
     for (i=0; i<any->_size; i++)
         if (any->_array[i])
@@ -2196,22 +2191,9 @@ getAnyObject (const AxisChar* pName, const AxisChar* pNamespace)
     logEntryEngine("SoapDeSerializer::getAnyObject")
 
     // If pname is passed, then we need to move the parser pointer for RPC.
-    if (pName != NULL && RPC_ENCODED == m_nStyle)
+    if ((pName != NULL && RPC_ENCODED == m_nStyle) || (m_pNode == NULL))
     {
-        m_pNode = m_pParser->anyNext();
-        if (m_pNode == NULL)
-        {
-            logExitWithPointer(NULL)
-
-            return (AnyType *)NULL;
-        }
-    }
-
-    // Parser will throw an exception on a parser exception, that is ok...
-    if (!m_pNode)
-    {
-        m_pNode = m_pParser->anyNext();
-
+        getNextNode(false, false);
         if (m_pNode == NULL)
         {
             logExitWithPointer(NULL)
@@ -2224,14 +2206,22 @@ getAnyObject (const AxisChar* pName, const AxisChar* pNamespace)
     int lstSize = 0;
     bool bContinue = true;
     bool bElementFound = false;
-
     AxisString xmlStr = "";
-
-    // There may have been namespace declarations that were previously processed....get it from
-    // the node and reset the node variable.
     AxisString nsDecls = "";
+
     if (m_pNode)
     {
+        // If this is an end-element node, simply return, there is no element to parse. Note
+        // we do not consume the node.
+        if (END_ELEMENT == m_pNode->m_type)
+        {
+            logExitWithPointer(NULL)
+
+            return (AnyType *)NULL;
+        }
+
+        // There may have been namespace declarations that were previously processed....get it from
+        // the node and reset the node variable.
         nsDecls = ((AnyElement*)m_pNode)->m_strXMLNSDeclsForAnyObject.c_str();
         ((AnyElement*)m_pNode)->m_strXMLNSDeclsForAnyObject.clear();
     }
