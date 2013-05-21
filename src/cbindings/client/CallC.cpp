@@ -46,14 +46,20 @@ static void processException(Call *c, AxisException& e)
     
     StubC *s = (StubC *)c->getCStub();
     if (s)
-    {
         if ((stubExceptionHandler = s->getCExceptionHandler()) != NULL)
             exceptionHandler = stubExceptionHandler;
 
-        s->doNotPerformClientRequest = true;
+    try
+    {
+        c->processSoapFault(&e, exceptionHandler);
     }
-    
-    c->processSoapFault(&e, exceptionHandler);
+    catch ( AxisException& e  )
+    {
+        // already processing exception...ignore
+    }
+
+    if (s)
+        s->doNotPerformClientRequest = true;
 }
 
 

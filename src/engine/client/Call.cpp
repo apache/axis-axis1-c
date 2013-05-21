@@ -1278,11 +1278,19 @@ void Call::processSoapFault(AxisException *e,
         
         if (faultIsDefined)
         {
-            pFaultDetail = pSoapFault->getCmplxFaultObject(fi->m_deserializerFp, 
-                                                           fi->m_createFp,
-                                                           fi->m_deleteFp, 
-                                                           fi->m_faultName, 
-                                                           0);
+            try
+            {
+               pFaultDetail = pSoapFault->getCmplxFaultObject(fi->m_deserializerFp,
+                                                              fi->m_createFp,
+                                                              fi->m_deleteFp,
+                                                              fi->m_faultName,
+                                                              0);
+            }
+            catch (AxisException& e1)
+            {
+                // Just fall through since we are already dealing with some exception.
+                pFaultDetail = NULL;
+            }
         }
         else
         {
