@@ -73,45 +73,37 @@ public class CSchemaUtils extends SchemaUtils
         return false;
     }
 
-    public static Node getUnionNode(Node node) 
+    public static Node getListOrUnionNode(Node node) 
     {
         // Expecting a schema complexType
         if (isXSDNode(node, "simpleType")) 
         {
-            // Under the simpleType there could be union
+            // Under the simpleType there could be union or list
             NodeList children = node.getChildNodes();
             for (int j = 0; j < children.getLength(); j++) 
             {
                 Node kid = children.item(j);
-                if (isXSDNode(kid, "union")) 
+                if (isXSDNode(kid, "union") || isXSDNode(kid, "list")) 
                     return kid;
+                else if (isXSDNode(kid, "restriction"))
+                {
+                    NodeList rchildren = kid.getChildNodes();
+                    for (int i = 0; i < rchildren.getLength(); i++) 
+                    {
+                        Node rkid = rchildren.item(i);
+                        if (isXSDNode(rkid, "simpleType"))
+                        {
+                            Node unode = getListOrUnionNode(rkid);
+                            if (unode != null)
+                                return unode;
+                        }
+                    }
+                }
             }
         }
         return null;
     }
-
-    public static Node getListNode(Node node) 
-    {
-        // Expecting a schema simpleType
-        if (isXSDNode(node, "simpleType")) 
-        {
-            // Under the simpleType there could be list
-            NodeList children = node.getChildNodes();
-            for (int j = 0; j < children.getLength(); j++) 
-            {
-                Node kid = children.item(j);
-                if (isXSDNode(kid, "list")) 
-                    return kid;
-            }
-        }
-        return null;
-    }
-
-    public static boolean isSimpleTypeWithUnion(Node node) 
-    {
-        return (getUnionNode(node) != null);
-    }
-
+    
     /**
      * This method checks out if the given node satisfies the 3rd condition
      * of the "wrapper" style:

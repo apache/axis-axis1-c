@@ -738,14 +738,7 @@ public class WSDLInfo
         Node node = type.getNode();
 
         if (type.isSimpleType())
-        {
-            // Currently we do not support union or list
-            if (CSchemaUtils.getListNode(type.getNode()) != null 
-                    || CSchemaUtils.getUnionNode(type.getNode()) != null)
-            {
-                throw new WrapperFault("The union or list element is not supported in type: " + type.getQName()); 
-            }
-            
+        {            
             //check for extended types
             TypeEntry base = CSchemaUtils.getComplexElementExtensionBase(type.getNode(), c_symbolTable);
             if (base != null)
@@ -968,26 +961,45 @@ public class WSDLInfo
             nodeKind.getLocalPart().equals("simpleType") &&
             Constants.isSchemaXSD(nodeKind.getNamespaceURI())) 
         {
-            // Under the simpleType there should be a restriction.
-            // (There may be other #text nodes, which we will ignore).
-            NodeList children = node.getChildNodes();
+             
+            // Under the simpleType there may be a restriction, list, or union.
+            // (There may be other #text nodes, which we will ignore).            
+            // We do something special for unions and lists.  We treat them
+            // as strings and ignore the processing of restriction nodes.
             Node restrictionNode = null;
-            for (int j = 0; j < children.getLength() && restrictionNode == null; j++) 
+            boolean isListOrUnionNode = false;
+            restrictionNode = CSchemaUtils.getListOrUnionNode(node);
+            
+            if (restrictionNode != null)
+                isListOrUnionNode = true;
+
+            if (!isListOrUnionNode)
             {
-                QName restrictionKind = Utils.getNodeQName(children.item(j));
-                if (restrictionKind != null &&
-                    restrictionKind.getLocalPart().equals("restriction") &&
-                    Constants.isSchemaXSD(restrictionKind.getNamespaceURI()))
-                    restrictionNode = children.item(j);
+                NodeList children = node.getChildNodes();
+                for (int j = 0; j < children.getLength() && restrictionNode == null; j++) 
+                {
+                    QName restrictionKind = Utils.getNodeQName(children.item(j));
+                    if (restrictionKind != null &&
+                        restrictionKind.getLocalPart().equals("restriction") &&
+                        Constants.isSchemaXSD(restrictionKind.getNamespaceURI()))
+                        restrictionNode = children.item(j);
+                }
             }
             
-            // If no restriction node, just return
+            // If no restriction or union or list node, just return
             if (restrictionNode == null)
                 return;
 
             // The restriction node indicates the type being restricted
-            // (the base attribute contains this type).
-            QName baseType = Utils.getTypeQName(restrictionNode, new BooleanHolder(), false);
+            // (the base attribute contains this type). For list or union types, 
+            // treat as xsd:string.
+            QName baseType;
+            
+            if (!isListOrUnionNode)
+                baseType = Utils.getTypeQName(restrictionNode, new BooleanHolder(), false);
+            else
+                baseType = new QName("http://www.w3.org/2001/XMLSchema", "string");
+            
             TypeEntry baseEType = c_symbolTable.getType(baseType);
             
             if (baseEType != null) 
@@ -1104,19 +1116,22 @@ public class WSDLInfo
                 }         
                 
                 // Process the enumeration elements underneath the restriction node
-                Vector v = new Vector();                
-                NodeList enums = restrictionNode.getChildNodes();
-                for (int i=0; i < enums.getLength(); i++) 
+                Vector v = new Vector();  
+                if (!isListOrUnionNode)
                 {
-                    QName enumKind = Utils.getNodeQName(enums.item(i));
-                    if (enumKind != null && Constants.isSchemaXSD(enumKind.getNamespaceURI())) 
+                    NodeList enums = restrictionNode.getChildNodes();
+                    for (int i=0; i < enums.getLength(); i++) 
                     {
-                        Node enumNode = enums.item(i);
-                        String value = Utils.getAttribute(enumNode, "value");
-    
-                        if (value.indexOf(':')>0)                                                        
-                                value=value.substring(value.indexOf(':')+1,value.length());
-                        v.add(new QName(value, enumKind.getLocalPart()));
+                        QName enumKind = Utils.getNodeQName(enums.item(i));
+                        if (enumKind != null && Constants.isSchemaXSD(enumKind.getNamespaceURI())) 
+                        {
+                            Node enumNode = enums.item(i);
+                            String value = Utils.getAttribute(enumNode, "value");
+        
+                            if (value.indexOf(':')>0)                                                        
+                                    value=value.substring(value.indexOf(':')+1,value.length());
+                            v.add(new QName(value, enumKind.getLocalPart()));
+                        }
                     }
                 }
                 
