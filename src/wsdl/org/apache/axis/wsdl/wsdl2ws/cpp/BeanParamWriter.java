@@ -976,10 +976,18 @@ public class BeanParamWriter extends ParamCPPFileWriter
         //=============================================================================                           
         c_writer.write("\n");
         
-        CUtils.printBlockComment(c_writer, "Ensure no extraneous elements.");            
-        c_writer.write("\tpeekedElementName = pIWSDZ->peekNextElementName();\n");
-        c_writer.write("\tif (0x00 != *peekedElementName)\n");
-        c_writer.write("\t\tthrow UnknownElementException(peekedElementName);\n");
+        // Due to partial support of extensions, we need to add this hack in not
+        // performing a peek - due to the fact that on empty elements the extension
+        // deserialization will consume the end element, and then the peek will 
+        // return next element causing it to mistakenly throw an exception.  
+        if (extensionBaseAttrib == null
+                || extensionBaseAttrib.getTypeName() == null)
+        {
+            CUtils.printBlockComment(c_writer, "Ensure no extraneous elements.");            
+            c_writer.write("\tpeekedElementName = pIWSDZ->peekNextElementName();\n");
+            c_writer.write("\tif (0x00 != *peekedElementName)\n");
+            c_writer.write("\t\tthrow UnknownElementException(peekedElementName);\n");
+        }
         
         c_writer.write("\n");
         c_writer.write("\treturn pIWSDZ->getStatus();\n");

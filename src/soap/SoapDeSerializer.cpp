@@ -1,3 +1,4 @@
+
 /*
  *   Copyright 2003-2004 The Apache Software Foundation.
 // (c) Copyright IBM Corp. 2004, 2005 All Rights Reserved
@@ -1035,6 +1036,7 @@ getCmplxObject (void *pDZFunct, void *pCreFunct, void *pDelFunct,
             {
                 if (!m_doNotSkip)
                   skipNode();
+                m_doNotSkip = false;
             }
             else
             {
