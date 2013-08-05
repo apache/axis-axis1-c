@@ -659,11 +659,11 @@ createSoapMethod( const AxisChar * sLocalName,
 	    pMethod->setPrefix( getNamespacePrefix(sURI) );
 	    pMethod->setURI( sURI);
 	    
-	    // Since we want the bean to define the namespace for non-wrapper style, we need to reset
-	    // the counter.  See SoapMethod::serialize() for further information.
+        // Add initial namespace to envelope. This needs to be added to envelop
+        // since we do not get the oppurtunity to add the namespace to the element.
 	    if (!bIsWrapperStyle)
-	        m_nCounter = 0;
-	    
+	        addNamespaceToEnvelope((AxisChar * )pMethod->getUri().c_str(), (AxisChar * )pMethod->getPrefix().c_str() );
+
 	    iStatus = AXIS_SUCCESS;
     }
 
@@ -980,15 +980,7 @@ addOutputParam( const AxisChar * pchName,  // prefix and element name
         pParam->setValue(type, xsdValue);
         
         m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->addOutputParam( pParam );
-        
-        // if non-wrapper then we need to add namespace to envelope since it will not get added
-        // any other way.  non-wrapper support was added later so that is why we are in this mess.
-        if (!(m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->isWrapperStyle()))
-        {
-            addNamespaceToEnvelope((AxisChar * )m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getUri().c_str(), 
-                                   (AxisChar * )m_pSoapEnvelope->m_pSoapBody->m_pSoapMethod->getPrefix().c_str());
-        }
-            
+
         iStatus = AXIS_SUCCESS;
     }
 

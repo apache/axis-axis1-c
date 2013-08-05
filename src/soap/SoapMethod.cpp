@@ -160,14 +160,8 @@ serialize(SoapSerializer& pSZ)
             	// We are doing non-wrapper style.  
             	
             	if (!m_OutputParams.empty())
-            	{	
-            		// Serialize parameters....
-	                
-	                // remove the current NS from the NS stack - we want the bean to define the namespace.
-            		// We could have added initial namespace to envelope, but for complex types
-            		// it seemed best to declare namespace as part of root element of xml document.
-	                pSZ.removeNamespacePrefix(m_strUri.c_str());
-	                
+            	{
+                    // Serialize parameters....
 	                iStatus= serializeOutputParam(pSZ);
 	                	                
 	                if(iStatus==AXIS_FAIL)
