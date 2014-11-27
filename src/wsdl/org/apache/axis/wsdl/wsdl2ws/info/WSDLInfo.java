@@ -929,7 +929,7 @@ public class WSDLInfo
      * NEEDS WORK - CURRENTLY THE ONLY THING WE DO IS GENERATE ENUMERATOR CONSTANTS AND CREATE
      * AN EMPTY RESTRICTOR FUNCTION WHEN DOING CODE GENERATION STEP.
      */
-    private void setRestrictionBaseAndValues(Type typedata, Node node) 
+    private void setRestrictionBaseAndValues(Type typedata, Node node)  throws WrapperFault
     {
         if (node == null)
             return;
@@ -1053,7 +1053,19 @@ public class WSDLInfo
                 else
                     primitiveBaseTypeQName = baseEType.getQName();
                 
+                if (c_verbose)
+                    System.out.println("primitiveBaseTypeQName=" + primitiveBaseTypeQName);
+                
                 classForPrimitiveType =  CUtils.getSimpleType(primitiveBaseTypeQName);
+                while (classForPrimitiveType == null)
+                {
+                    createTypeInfo(primitiveBaseTypeQName);
+                    classForPrimitiveType =  CUtils.getSimpleType(primitiveBaseTypeQName);
+                }
+                
+                if (c_verbose)
+                    System.out.println("classForPrimitiveType=" + classForPrimitiveType);
+
                 initValueForType      =  CUtils.getInitValueForType(classForPrimitiveType);
                 
                 // Set the base type for Type
