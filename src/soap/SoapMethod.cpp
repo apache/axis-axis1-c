@@ -125,7 +125,7 @@ serialize(SoapSerializer& pSZ)
                 if(iStatus==AXIS_FAIL)
                     break;
                 
-                pSZ.serialize(">\n", NULL);
+                pSZ.serialize(">", NULL);
     
                 // push the current NS to the NS stack
                 pSZ.getNamespacePrefix(m_strUri.c_str());

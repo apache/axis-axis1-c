@@ -74,8 +74,10 @@ serializeAsElement (const AxisChar* pName,
 {
     logEntryEngine("BasicTypeSerializer::serializeAsElement")
 
+    bool hasPrefix = (NULL != pPrefix && *pPrefix != 0x00);
+
     m_sSZ = "<";
-    if (NULL != pPrefix) 
+    if (hasPrefix)
     { 
         m_sSZ += pPrefix;
         m_sSZ += ":";
@@ -85,8 +87,12 @@ serializeAsElement (const AxisChar* pName,
 
     if (NULL != pNamespace)
     {
-        m_sSZ += " xmlns:";
-        m_sSZ += pPrefix;
+        m_sSZ += " xmlns";
+        if (hasPrefix)
+        {
+            m_sSZ += ":";
+            m_sSZ += pPrefix;
+        }
         m_sSZ += "=";
         m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
         m_sSZ += pNamespace;
@@ -109,7 +115,7 @@ serializeAsElement (const AxisChar* pName,
          * It is a null value not an empty value.
          */
         m_sSZ = "<";
-        if (NULL != pPrefix)
+        if (hasPrefix)
         { 
             m_sSZ += pPrefix;
             m_sSZ += ":";
@@ -118,8 +124,12 @@ serializeAsElement (const AxisChar* pName,
         
         if (NULL != pNamespace)
         {
-            m_sSZ += " xmlns:";
-            m_sSZ += pPrefix;
+            m_sSZ += " xmlns";
+            if (hasPrefix)
+            {
+                m_sSZ += ":";
+                m_sSZ += pPrefix;
+            }
             m_sSZ += "=";
             m_sSZ += PLATFORM_DOUBLE_QUOTE_S;
             m_sSZ += pNamespace;
@@ -135,7 +145,7 @@ serializeAsElement (const AxisChar* pName,
         m_sSZ += pSimpleType->serialize();
     
     m_sSZ += "</";
-    if (NULL != pPrefix) 
+    if (hasPrefix)
     {
         m_sSZ += pPrefix;
         m_sSZ += ":";
@@ -156,7 +166,7 @@ serializeAsAttribute (const AxisChar* pName,
     logEntryEngine("BasicTypeSerializer::serializeAsAttribute")
 
     m_sSZ = ' ';
-    if (pPrefix)
+    if (pPrefix && *pPrefix != 0x00)
     {
         m_sSZ += pPrefix;
         m_sSZ += ':';
