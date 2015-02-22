@@ -2,7 +2,7 @@ POST /axis/Attachment1 HTTP/1.1
 Host: localhost:13260
 SOAPAction: ""
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<8>"
-Content-Length: 2036
+Content-Length: 2035
 
 
 --------=MIME_BOUNDARY
@@ -13,8 +13,7 @@ Content-Id: <8>
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:put xmlns:ns1="http://attachment1">
-<ns1:arg1 href="cid:1"
+<ns1:put xmlns:ns1="http://attachment1"><ns1:arg1 href="cid:1"
    xsi:type="ns2:Image"
    xmlns:ns2="http://xml.apache.org/xml-soap"/>
 <ns1:arg2 href="cid:2"
