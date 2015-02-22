@@ -2,7 +2,7 @@ POST /DynamicAttachment/services/DynamicAttachment HTTP/1.1
 Host: localhost:13260
 SOAPAction: "Trash"
 Content-Type: multipart/related; type="text/xml"; boundary="------=MIME_BOUNDARY"; start="<5>"
-Content-Length: 1443
+Content-Length: 1442
 
 
 --------=MIME_BOUNDARY
@@ -13,8 +13,7 @@ Content-Id: <5>
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:put xmlns:ns1="http://localhost/axis/DynamicAttachment">
-<arg_attachment_1 href="cid:1"/>
+<ns1:put xmlns:ns1="http://localhost/axis/DynamicAttachment"><arg_attachment_1 href="cid:1"/>
 <arg_attachment_2 href="cid:12"/>
 <arg_attachment_3 href="cid:3"
    mypfx1:myname1="http://dynamicattachment/test.axis.apache.org"

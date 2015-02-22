@@ -2,13 +2,12 @@ POST /axis/SameComplexTypeAndElementName HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 474
+Content-Length: 473
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:aBeanPortTypeBase xmlns:ns1="SameComplexTypeAndElementName">
-<Element xmlns:ns2="SameComplexTypeAsElement"><ns2:SampleBeanBoolean>false</ns2:SampleBeanBoolean>
+<ns1:aBeanPortTypeBase xmlns:ns1="SameComplexTypeAndElementName"><Element xmlns:ns2="SameComplexTypeAsElement"><ns2:SampleBeanBoolean>false</ns2:SampleBeanBoolean>
 </Element>
 </ns1:aBeanPortTypeBase>
 </SOAP-ENV:Body>
@@ -18,13 +17,12 @@ POST /axis/SameComplexTypeAndElementName HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: ""
-Content-Length: 460
+Content-Length: 459
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:aBeanPortTypeComplex xmlns:ns1="SameComplexTypeAndElementName">
-<Element xmlns:ns2="SameComplexTypeAsElement"><ns2:Boolean>false</ns2:Boolean>
+<ns1:aBeanPortTypeComplex xmlns:ns1="SameComplexTypeAndElementName"><Element xmlns:ns2="SameComplexTypeAsElement"><ns2:Boolean>false</ns2:Boolean>
 </Element>
 </ns1:aBeanPortTypeComplex>
 </SOAP-ENV:Body>

@@ -2,13 +2,12 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#test1"
-Content-Length: 802
+Content-Length: 801
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:test1 xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
+<ns1:test1 xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"><ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
 <ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
 <ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
 <ns2:arg:WithAColon>4</ns2:arg:WithAColon>
@@ -24,13 +23,12 @@ POST /axis/ValidXMLCharIsInterpretedAsCPPCommand HTTP/1.1
 Host: 127.0.0.1:13260
 Content-Type: text/xml; charset=UTF-8
 SOAPAction: "ValidXMLCharIsInterpretedAsCPPCommand#Test1WithComplexResponse"
-Content-Length: 840
+Content-Length: 839
 
 <?xml version='1.0' encoding='utf-8' ?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <SOAP-ENV:Body>
-<ns1:Test1WithComplexResponse xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand">
-<ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
+<ns1:Test1WithComplexResponse xmlns:ns1="http://localhost/axis/ValidXMLCharIsInterpretedAsCPPCommand"><ns1:Element xmlns:ns2="ValidXMLCharIsInterpretedAsCPPCommandTypes"><ns2:arg.WithADot>1</ns2:arg.WithADot>
 <ns2:arg_WithAnUnderscore>2</ns2:arg_WithAnUnderscore>
 <ns2:arg-WithAHyphen>3</ns2:arg-WithAHyphen>
 <ns2:arg:WithAColon>4</ns2:arg:WithAColon>

@@ -2,7 +2,7 @@ Calling calculator for the first time and expecting Set-Cookie back
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 ----------------------------------------------------------
 Properties that were received
 Server=WebSphere Application Server/5.1
@@ -18,7 +18,7 @@ Calling calculator for the second time and expecting to send the cookies back
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 ----------------------------------------------------------
 Properties that were received
@@ -31,7 +31,7 @@ Use a new instance of calculator and ensure that the old cookies are lost
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 ----------------------------------------------------------
 Properties that were received
 Server=WebSphere Application Server/5.1
@@ -45,7 +45,7 @@ Call the calculator service twice and ensure that the cookies remain
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 ----------------------------------------------------------
 Properties that were received
@@ -57,7 +57,7 @@ Transfer-Encoding=chunked
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 Cookie=LtpaToken2=1234567890abcdefghijklmnopqrstuvwxyz;LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 ----------------------------------------------------------
 Properties that were received
@@ -71,7 +71,7 @@ Calling the service and not expecting the LtpaToken2 in the cookie header
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 Cookie=LtpaToken==+yOkBBuvLtTaiuBDkfgy3W6mZraGn7V5Dzp;JSESSIONID=0000EyvJyGOS-2e9nlRijFiwKSR:-1
 ----------------------------------------------------------
 Properties that were received
@@ -85,7 +85,7 @@ Calling the service and expecting no cookies to be there
 ----------------------------------------------------------
 Properties that were sent out
 SOAPAction="CalculatorDoc#add"
-Content-Length=397
+Content-Length=396
 ----------------------------------------------------------
 Properties that were received
 Server=WebSphere Application Server/5.1
